@@ -29,6 +29,7 @@ function Header() {
                     isMenu &&
                     <div className='bg-white shadow-md p-2 absolute right-2  w-60 h-48 rounded-md mt-4'>
                         <ul>
+                            <Link to={"/AdminProfile"}>
                             <li onClick={() => setismenu(false)}
                                 className="flex items-center justify-between px-3 my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
                                 <div className="flex items-center space-x-3">
@@ -39,7 +40,8 @@ function Header() {
                                 </div>
                                 <ion-icon name="chevron-forward-outline"></ion-icon>
                             </li>
-                            <Link to={""}>
+                            </Link>
+                            <Link to={"/ForgetPassword"}>
                                 <li onClick={() => setismenu(false)}
                                     className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
                                     <div className="flex items-center space-x-3">

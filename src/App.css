@@ -2,3 +2,7 @@
     background: rgb(191 219 254);
     color: rgb(59 130 246);
 }
+
+.search-div:hover {
+    transform: scale(1.1); 
+}
