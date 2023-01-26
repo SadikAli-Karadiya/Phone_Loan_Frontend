@@ -11,6 +11,7 @@ import Report from '../Pages/Report'
 import Search from '../Pages/Search'
 import Login from "../Pages/Login"
 import PrivatLayout from '../Layout/PrivatLayout'
+import ForgetPassword from '../Pages/ForgetPassword/Forgetpassword'
 
 function PrivateRoutes() {
   return (
@@ -24,6 +25,7 @@ function PrivateRoutes() {
             <Route path='/Reciept' element={<Reciept />}  />
             <Route path='/Addnew' element={<Addnew />}  />
             <Route path='/Search' element={<Search />}  />
+            <Route path='/ForgetPassword' element={<ForgetPassword />}  />
             <Route path='/Report' element={<Report />}  />            
             <Route index element={<Dashboard />} />
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import image from "../../../public/user.png"
+import { Link } from 'react-router-dom'
 
 
 function Header() {
@@ -38,26 +39,30 @@ function Header() {
                                 </div>
                                 <ion-icon name="chevron-forward-outline"></ion-icon>
                             </li>
-                            <li onClick={() => setismenu(false)}
-                                className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
-                                <div className="flex items-center space-x-3">
-                                    <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
-                                        <ion-icon name="key-outline"></ion-icon>
+                            <Link to={""}>
+                                <li onClick={() => setismenu(false)}
+                                    className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
+                                            <ion-icon name="key-outline"></ion-icon>
+                                        </div>
+                                        <h1>Change Password</h1>
                                     </div>
-                                    <h1>Change Password</h1>
-                                </div>
-                                <ion-icon name="chevron-forward-outline"></ion-icon>
-                            </li>
-                            <li onClick={() => setismenu(false)}
-                                className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
-                                <div className="flex items-center space-x-3">
-                                    <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
-                                        <ion-icon name="log-out-outline"></ion-icon>
+                                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                                </li>
+                            </Link>
+                            <Link>
+                                <li onClick={() => setismenu(false)}
+                                    className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
+                                    <div className="flex items-center space-x-3">
+                                        <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
+                                            <ion-icon name="log-out-outline"></ion-icon>
+                                        </div>
+                                        <h1>Logout</h1>
                                     </div>
-                                    <h1>Logout</h1>
-                                </div>
-                                <ion-icon name="chevron-forward-outline"></ion-icon>
-                            </li>
+                                    <ion-icon name="chevron-forward-outline"></ion-icon>
+                                </li>
+                            </Link>
                         </ul>
                     </div>
                 }

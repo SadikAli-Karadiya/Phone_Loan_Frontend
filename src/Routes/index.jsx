@@ -18,10 +18,10 @@ function AppRoutes() {
                         <Route path='*' element={<Navigate to='/' />} />
                     </>
                 )} */}
-                {/* <Route path='/*' element={<PrivateRoutes />} />
+                <Route path='/*' element={<PrivateRoutes />} />
+                <Route path='*' element={<Navigate to='/' />} />
+                {/* <Route path='/*' element={<PublicRoutes />} />
                 <Route path='*' element={<Navigate to='/' />} /> */}
-                <Route path='/' element={<PublicRoutes />} />
-                <Route path='*' element={<Navigate to='/Login' />} />
 
             </Routes>
         </BrowserRouter>

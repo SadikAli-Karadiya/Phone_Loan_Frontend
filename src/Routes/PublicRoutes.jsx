@@ -1,17 +1,21 @@
 import React from 'react'
-import ForgetPassword from '../Pages/ForgetPassword'
+import ForgetPassword from '../Pages/ForgetPassword/Forgetpassword'
 import Login from '../Pages/Login'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import {Route, Routes } from 'react-router-dom'
 import PublicLayout from '../Layout/PublicLayout'
+import Registration from '../Pages/Register'
+import NewPassword from '../Pages/ForgetPassword/NewPassword'
 
 function PublicRoutes() {
   return (
     <div>
       <Routes>
         <Route element={<PublicLayout />}>
-          <Route path='/Login' element={<Login />} />
-          {/* <Route path='/ForgetPassword' element={<ForgetPassword />} /> */}
-          <Route index element={<Navigate to='/Login' />} />
+          <Route path='/' element={<Login />} />
+          <Route path='/ForgetPassword' element={<ForgetPassword />} />
+          <Route path='/NewPassword' element={<NewPassword />} />
+          <Route path='/Registration' element={<Registration />} />
+          <Route index element={<Login />} />
 
         </Route>
       </Routes>
