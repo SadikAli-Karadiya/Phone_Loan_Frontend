@@ -4,12 +4,13 @@ import "../App.css"
 import Dashboard from '../Pages/Dashboard'
 import Reciept from '../Pages/Reciept'
 import Report from '../Pages/Report'
-import Search from '../Pages/Product'
 import PrivatLayout from '../Layout/PrivatLayout'
 import Customers from '../Pages/Customers'
 import PayEMI from '../Pages/PayEMI'
 import EMI from "../Pages/EMI"
 import Product from '../Pages/Product'
+import Search from '../Pages/Search'
+import AddCustomer from '../Pages/AddCustomer'
 
 function PrivateRoutes() {
   return (
@@ -24,6 +25,8 @@ function PrivateRoutes() {
             <Route path='/Reciept' element={<Reciept />}  />
             <Route path='/Report' element={<Report />}  />            
             <Route path='/Product' element={<Product />}  />
+            <Route path='/Search' element={<Search />}  />
+            <Route path='/AddCustomer' element={<AddCustomer />}  />
             <Route path='/' element={<Navigate to='/dashboard' />} />
 
         </Route>

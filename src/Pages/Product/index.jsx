@@ -112,7 +112,7 @@ function Product() {
         {model && (
           <div className="w-full h-full bg-black  ">
             <div className="flex justify-center shadow-2xl  ">
-              <div className="absolute sm:mx-0 w-[90%] xl:w-[40%] opacity-100 shadow-2xl rounded top-5 sm:top-2 md:top-4 lg:top-10 xl:top-10 bg-white z-50 ">
+              <div className="absolute sm:mx-0 w-[90%] xl:w-[35%] opacity-100 shadow-2xl rounded top-5 sm:top-2 md:top-4 lg:top-10 xl:top-10 bg-white z-50 ">
                 <div className="">
                   <div className="flex justify-end ">
                     <button
@@ -126,7 +126,7 @@ function Product() {
                     </button>
                   </div>
                   <div className="  rounded-md  my-5 xl:py-4  px-5 xl:px-10">
-                    <h1 className="font-semibold text-blue-500 text-lg lg:text-xl pb-5 ">
+                    <h1 className="font-semibold text-[#000080] text-lg lg:text-xl pb-5 ">
                       Add Product
                     </h1>
                     <form
@@ -217,20 +217,20 @@ function Product() {
         )}
         <div className={`bg-slate-100 ${model && "opacity-10"}`}>
           <div className=" xl:px-10 h-full">
-            <div  className='w-full justify-between items-center flex py-8'>
-              <h1 className='text-blue-500 text-xl font-semibold'>All Product</h1>
+            <div  className='w-full justify-between items-center flex py-8 px-5'>
+              <h1 className='text-[#0d0d48] text-2xl font-bold'>All Product</h1>
               <button onClick={() => {
                 setModel(true);
-              }} className='bg-blue-500 text-white rounded-full  text-sm px-4 py-2 font-semibold hover:scale-105 duration-150 hover:shadow-lg'>
+              }} className='bg-[#0d0d48] hover:bg-blue-900 text-white rounded-full  text-sm px-4 py-2 font-semibold '>
                 Add New Product
               </button>
             </div>
-            <div className=' flex items-center justify-between w-full py-3 '>
+            <div className=' flex items-center justify-between w-full py-3 px-10 '>
               <div className='flex  items-center space-x-5  w-1/2'>
                 <input
                   type="search"
                   placeholder='Search..'
-                  className='border px-4 py-2 focus:outline-none rounded-full w-full shadow-md'
+                  className='border px-4 py-[6px] focus:outline-none rounded-md w-full shadow-md'
                 />
               </div>
 
@@ -244,66 +244,70 @@ function Product() {
               </div>
 
             </div>
-            <div className="py-5">
-              <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-100 md:rounded-lg py-[10px] shadow-sm text-black font-medium px-2 ">
-                <li className="w-20 text-center text-sm ">
-                  Sr No
-                </li>
-                <li className="w-20 text-left text-sm ">
-                  Company
-                </li>
-                <li className="w-28 text-left text-sm ">
-                  Model Name
-                </li>
-                <li className="w-20 text-left text-sm ">
-                  Description
-                </li>
-                <li className="w-20 text-left text-sm ">
-                  Action
-                </li>
-              </ul>
-              {/* {PhoneInfo?.length > 0 ? (
+          
+            <div className='px-10 py-5'>
+          <div className="bg-white shadow-md">
+            <h1 className='font-bold p-6 text-lg'>Customer List</h1>
+            <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50  py-4 shadow-sm text-black font-medium px-2 ">
+              <li className="w-20 text-center text-sm  ">
+                Sr No
+              </li>
+              <li className="w-20 text-center text-sm  ">
+                Company
+              </li>
+              <li className="w-28 text-left text-sm ">
+                Model Name
+              </li>
+              <li className="w-20 text-left text-sm ">
+                Description
+              </li>
+              <li className="w-20 text-left text-sm ">
+                Action
+              </li>
+            </ul>
+            {/* {PhoneInfo?.length > 0 ? (
                 PhoneInfo.map((data, index) => {
                   console.log(data , "data")
                   return ( */}
-              <ul
-                // key={index}
-                className="flex items-center space-x-2 justify-between font-normal md:px-2  py-3 my-3 rounded-lg cursor-pointer  hover:bg-white shadow-sm "
-              >
-                <li className="w-20 text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                  1
-                </li>
-                <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                  Oppo
-                </li>
-                <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                  F17 Pro
-                </li>
-                <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm">
-                  4/64 Red
-                </li>
-                <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                  <FiEdit
-                    className="text-[11px] md:text-sm lg:text-[19px] "
-                  // onClick={() => handleUpdate(News?.id ? News?.id : "")}
-                  />
-                  <MdDelete
-                    className="text-[11px] md:text-sm lg:text-[21px] text-red-500"
-                  // onClick={() => handleDelete(News?.id ? News?.id : "")}
-                  />
-                </li>
-              </ul>
-              {/* );
+            <ul
+              // key={index}
+              className="flex items-center space-x-2 justify-between font-normal md:px-2  py-5 my-3 rounded-lg cursor-pointer  hover:bg-white shadow-sm "
+            >
+              <li className="w-20 text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
+                01
+              </li>
+              <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
+                Oppo
+              </li>
+              <li className="w-28 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                F17 Pro
+              </li>
+              <li className="w-20  py-[2px] text-cente rounded-md text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                jhbdvjb
+              </li>
+              <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
+                <FiEdit
+                  className="text-[11px] md:text-sm lg:text-[19px] "
+                // onClick={() => handleUpdate(News?.id ? News?.id : "")}
+                />
+                <MdDelete
+                  className="text-[11px] md:text-sm lg:text-[21px] text-red-500"
+                // onClick={() => handleDelete(News?.id ? News?.id : "")}
+                />
+              </li>
+            </ul>
+            {/* );
                 })
               ) : ( */}
-              {/* <div className="flex justify-center items-center w-full py-10">
+            {/* <div className="flex justify-center items-center w-full py-10">
                 <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
                 <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
                   Product Not Found
                 </p>
               </div> */}
-              {/* )} */}
-            </div>
+            {/* )} */}
+          </div>
+        </div>
 
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
               <Pagination

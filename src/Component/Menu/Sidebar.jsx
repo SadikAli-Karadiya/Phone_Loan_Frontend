@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import Control from "../../../public/Icons/control.png"
 import Logo from "../../../public/Icons/Logo.png"
 import { NavLink, Outlet } from 'react-router-dom'
-import {MdShoppingCart} from "react-icons/md"
+import {MdShoppingCart , MdDashboard} from "react-icons/md"
+import {BiRupee} from "react-icons/bi"
 import {HiUsers} from "react-icons/hi"
+import {FaUserPlus} from "react-icons/fa"
+import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 
 
@@ -13,7 +16,7 @@ const Sidebar = () => {
   return (
     <div className="flex">
 
-      <div className="w-20 lg:w-44 xl:w-52 2xl:w-60 
+      <div className="w-64
            h-screen p-3 lg:p-5 shadow-2xl lg:pt-8 bg-white border relative duration-300"
       >
 
@@ -31,11 +34,13 @@ const Sidebar = () => {
           </h1>
         </div>
         <ul className="lg:pt-3 ">
-          <li >
-            <NavLink to={"/"} className="flex pl-3 xl:pl-6 2xl:pl-8 my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="grid"></ion-icon>
-                <h1 className="text-base hidden lg:block">
+        
+          <li>
+            <NavLink to={"/"}
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <MdDashboard className="text-base"/>
+                <h1 className="text-sm hidden lg:block">
                   Dashboard
                 </h1>
 
@@ -44,10 +49,10 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink to={"/Customers"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <HiUsers/>
-                <h1 className="text-base hidden lg:block">
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <HiUsers className="text-base"/>
+                <h1 className="text-sm hidden lg:block">
                   Customers
                 </h1>
 
@@ -55,23 +60,11 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/EMI"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-               
-                <h1 className="text-base hidden lg:block">
-                  EMI
-                </h1>
-
-              </div>
-            </NavLink>
-          </li>
-          <li>
             <NavLink to={"/PayEMI"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-              <ion-icon name="cash"></ion-icon>
-                <h1 className="text-base hidden lg:block">
+              <BiRupee/>
+                <h1 className="text-sm hidden lg:block">
                   Pay EMI
                 </h1>
 
@@ -80,10 +73,10 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink to={"/Reciept"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="receipt"></ion-icon>
-                <h1 className="text-base hidden lg:block">
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <ion-icon name="receipt" className="text-base"></ion-icon>
+                <h1 className="text-sm hidden lg:block">
                   Reciept
                 </h1>
 
@@ -91,11 +84,35 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/Report"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+            <NavLink to={"/AddCustomer"}
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="podium"></ion-icon>
-                <h1 className="text-base hidden lg:block">
+                <FaUserPlus/>
+                <h1 className="text-sm hidden lg:block">
+                  Add Cust.
+                </h1>
+
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/Search"}
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <BiSearch/>
+                <h1 className="text-sm hidden lg:block">
+                  Search
+                </h1>
+
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/Report"}
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <ion-icon name="podium" className="text-base"></ion-icon>
+                <h1 className="text-sm hidden lg:block">
                   Report
                 </h1>
 
@@ -104,10 +121,10 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink to={"/Product"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8 my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <MdShoppingCart/>
-                <h1 className="text-base hidden lg:block">
+              className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
+                <MdShoppingCart className="text-base"/>
+                <h1 className="text-sm hidden lg:block">
                   Product
                 </h1>
 
@@ -118,7 +135,7 @@ const Sidebar = () => {
       </div>
       <div className="flex flex-col w-full">
         <Header />
-        <div className='w-full'>
+        <div className='w-full bg-slate-100'>
           <Outlet />
         </div>
       </div>
