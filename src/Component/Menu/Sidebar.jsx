@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Control from "../../../public/Icons/control.png"
 import Logo from "../../../public/Icons/Logo.png"
 import { NavLink, Outlet } from 'react-router-dom'
+import {MdShoppingCart} from "react-icons/md"
+import {HiUsers} from "react-icons/hi"
 import Header from "./Header";
 
 
@@ -34,19 +36,19 @@ const Sidebar = () => {
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
                 <ion-icon name="grid"></ion-icon>
                 <h1 className="text-base hidden lg:block">
-                  Home
+                  Dashboard
                 </h1>
 
               </div>
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/Company"}
+            <NavLink to={"/Customers"}
               className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="folder-open"></ion-icon>
+                <HiUsers/>
                 <h1 className="text-base hidden lg:block">
-                  Company
+                  Customers
                 </h1>
 
               </div>
@@ -56,9 +58,21 @@ const Sidebar = () => {
             <NavLink to={"/EMI"}
               className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="cash"></ion-icon>
+               
                 <h1 className="text-base hidden lg:block">
                   EMI
+                </h1>
+
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/PayEMI"}
+              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
+              <ion-icon name="cash"></ion-icon>
+                <h1 className="text-base hidden lg:block">
+                  Pay EMI
                 </h1>
 
               </div>
@@ -77,36 +91,24 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/Addnew"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="person-add"></ion-icon>
-                <h1 className="text-base hidden lg:block">
-                  Add New
-                </h1>
-
-              </div>
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to={"/Search"}
-              className="flex pl-3 xl:pl-6 2xl:pl-8 my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
-              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <ion-icon name="search"></ion-icon>
-                <h1 className="text-base hidden lg:block">
-                  Search
-                </h1>
-
-              </div>
-            </NavLink>
-          </li>
-          <li>
             <NavLink to={"/Report"}
               className="flex pl-3 xl:pl-6 2xl:pl-8  my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
                 <ion-icon name="podium"></ion-icon>
                 <h1 className="text-base hidden lg:block">
                   Report
+                </h1>
+
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to={"/Product"}
+              className="flex pl-3 xl:pl-6 2xl:pl-8 my-5 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
+              <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
+                <MdShoppingCart/>
+                <h1 className="text-base hidden lg:block">
+                  Product
                 </h1>
 
               </div>

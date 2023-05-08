@@ -2,12 +2,11 @@ import React from 'react'
 import {BiSearch} from "react-icons/bi"
 import "../../App.css"
 
-function Search() {
+function PayEMI() {
   return (
-    <>
-       <div className=' px-10 py-5 h-full'>
+    <div className=' px-10 py-5 h-full'>
          <div className=' py-5 px-5'>
-          <h1 className='text-2xl font-medium'>Search Customer</h1>
+         <h1 className='text-blue-500 text-xl font-semibold'>Pay EMI</h1>
           <div className='flex justify-center items-center my-10 space-x-5'>
             <input 
             type="search"
@@ -21,8 +20,7 @@ function Search() {
           </div>
          </div>
     </div>
-    </>
   )
 }
 
-export default Search
+export default PayEMI

@@ -9,7 +9,7 @@ function PublicLayout() {
    return (
      <>
       <div>
-      <div className="bg-black">
+      {/* <div className="bg-black">
         <nav className="flex ">
           <Link to="/" className="text-white">
           <li>Login</li>
@@ -25,7 +25,7 @@ function PublicLayout() {
 
         </nav>
 
-      </div>
+      </div> */}
         <div>
           <Outlet/>
         </div>

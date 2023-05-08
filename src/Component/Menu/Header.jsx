@@ -8,7 +8,7 @@ function Header() {
     const [isMenu, setismenu] = React.useState(false)
 
     return (
-        <div className="h-14 lg:h-16 w-full flex justify-end items-center px-3 lg:px-5 shadow-2xl">
+        <div className="h-14 lg:h-16 w-full flex justify-end items-center bg-white px-3 lg:px-5 shadow-2xl">
             <div>
                 <div
                     onClick={() => setismenu(true)}
