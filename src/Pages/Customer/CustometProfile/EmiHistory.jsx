@@ -1,34 +1,22 @@
 import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
-import "../../App.css"
+import "../../../App.css"
 import { useNavigate } from "react-router-dom";
 
 
-function PayEMI() {
+function EMIHistory() {
   const navigate = useNavigate();
 
   return (
     <>
       <div className=' px-10 py-5 h-full'>
         <div className=' py-5 px-5'>
-          <h1 className='text-[#0d0d48] text-2xl font-bold'>Pay EMI</h1>
-          <div className='flex justify-center items-center mt-10 '>
-            <input
-              type="search"
-              placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
-              className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
-            />
-            <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
-            shadow-xl cursor-pointer text-white text-2xl '>
-              <BiSearch className='search group-hover:scale-125 duration-300' />
-            </div>
-          </div>
+          <h1 className='text-[#0d0d48] text-2xl font-bold'>EMI History</h1>
         </div>
         <div className='px-10 py-5'>
           <div className="bg-white shadow-md">
-            <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-            <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50 py-4 shadow-sm text-black font-medium px-2 ">
+            <ul className="flex md:px-2 2xl:px-10 justify-between bg-[#0d0d48] py-4 shadow-sm text-white  font-medium px-5 ">
               <li className="w-20 text-center text-sm  ">
                 Customer ID
               </li>
@@ -123,4 +111,4 @@ function PayEMI() {
   )
 }
 
-export default PayEMI
+export default EMIHistory

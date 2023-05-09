@@ -2,8 +2,10 @@ import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../App.css"
 import { AiFillEye } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 function Reciept() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className='px-10 py-5 h-full'>
@@ -82,7 +84,8 @@ function Reciept() {
               <li className="w-20 text-[11px] text-center items-center flex justify-center md:text-sm lg:text-[19px]">
                 <AiFillEye
                   className=" "
-                // onClick={() => handleUpdate(News?.id ? News?.id : "")}
+                  onClick={() =>
+                    navigate(`/Customer/profile-detail`)}
                 />
               </li>
             </ul>

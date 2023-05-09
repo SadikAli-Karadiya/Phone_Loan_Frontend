@@ -1,51 +1,49 @@
 import React from 'react'
 import { BiSearch } from "react-icons/bi"
-import "../../App.css"
-import { useNavigate, useLocation } from "react-router-dom";
+import { AiFillEye } from "react-icons/ai";
+import { BiFolderPlus } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
-import '../../Component/Pagination/pagination.css'
+import '../../../Component/Pagination/pagination.css'
 
 
+function CustomersList() {
 
-function Product() {
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [model, setModel] = React.useState(false);
-  const [pageNo, setPageNo] = React.useState(1);
-  const [PhoneInfo, setPhoneInfo] = React.useState([])
-
-  const productSchema = Yup.object({
-    company: Yup.string().required("Please Enter Company"),
-    model: Yup.string().required("Please Enter Model"),
-    price: Yup.string().required("Please Enter Price"),
+  const installmentSchema = Yup.object({
+    installment: Yup.string().required("Please Enter Company"),
+    dp: Yup.string().required("Please Enter Model"),
+    charge: Yup.string().required("Please Enter Price"),
   });
 
   const initialValues = {
-    company: "",
-    model: "",
-    price: "",
+    installment: "",
+    dp: "",
+    charge: "",
     description: "",
   }
 
   const [value, setValue] = React.useState({
-    company: "",
-    model: "",
-    price: "",
+    installment: "",
+    dp: "",
+    charge: "",
     description: "",
   });
+
+  const [model, setModel] = React.useState(false);
+  const navigate = useNavigate();
+
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues: value ? value : initialValues,
-      validationSchema: productSchema,
+      validationSchema: installmentSchema,
       onSubmit(data) {
         try {
           const fd = new FormData();
@@ -67,49 +65,9 @@ function Product() {
       },
     });
 
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this news?',
-      text: "The news will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await deleteNewsDetails(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        refetch()
-      }
-    })
-  };
-
-
-  // const handleUpdate = (id) => {
-  //   let updatenews = data?.AllNews?.find((n) => {
-  //     return n?.id == id;
-  //   });
-
-  //   setValue(updatenews)
-  //   setModel(true);
-  // };
-
   return (
     <>
-      {/* <div className=' px-10 py-5 h-full'>
-       
-    </div> */}
-      <div className="relative">
+      <div className='relative'>
         {model && (
           <div className="w-full h-full bg-black  ">
             <div className="flex justify-center shadow-2xl  ">
@@ -128,7 +86,7 @@ function Product() {
                   </div>
                   <div className="  rounded-md  my-5 xl:py-4  px-5 xl:px-10">
                     <h1 className="font-semibold text-[#000080] text-lg lg:text-xl pb-5 ">
-                      Add Product
+                      Add Installment
                     </h1>
                     <form
                       action=""
@@ -138,60 +96,57 @@ function Product() {
                       <div className="flex flex-col  items-center space-y-5 md:space-y-8">
                         <div className=' flex items-center w-full space-x-5'>
                           <div className="flex flex-col space-y-2  w-full ">
-                            <label htmlFor="company">Company *</label>
-                            <select
+                            <label htmlFor="company">Installment *</label>
+                            <input
+                              type='text'
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              name="company"
-                              id="company"
+                              name="installment"
+                              id="installment"
+                              placeholder='Enter Install'
                               className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
-                            >
-                              <option value="">Select Company</option>
-                              <option value="Oppo">Oppo</option>
-                              <option value="Techno">Techno</option>
-                              <option value="Vivo">Vivo</option>
-                            </select>
-                            {errors.company && touched.company ? (
+                            />
+                            {errors.installment && touched.installment ? (
                               <p className="form-error text-red-600 text-sm font-semibold">
-                                {errors.company}
+                                {errors.installment}
                               </p>
                             ) : null}
                           </div>
                           <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Model Name *</label>
+                            <label htmlFor="model name ">Down Payment *</label>
                             <input
                               type="text"
-                              name="model"
-                              id="model"
-                              value={value.model ? value.model : values.model}
+                              name="dp"
+                              id="dp"
+                              value={value.dp ? value.dp : values.dp}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Model Name "
+                              placeholder="Enter Down Payment "
                             />
-                            {errors.model && touched.model
+                            {errors.dp && touched.dp
                               ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
+                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.dp}</p>
                               :
                               null}
                           </div>
                         </div>
                         <div className='flex items-center w-full space-x-5'>
                           <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Price * </label>
+                            <label htmlFor="model name ">Charge * </label>
                             <input
                               type="text"
-                              name="price"
-                              id="price"
-                              value={value.price ? value.price : values.price}
+                              name="charge"
+                              id="charge"
+                              value={value.charge ? value.charge : values.charge}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Model Name "
+                              placeholder="Enter Charge Amount "
                             />
-                            {errors.price && touched.price
+                            {errors.charge && touched.charge
                               ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
+                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
                               :
                               null}
                           </div>
@@ -239,110 +194,159 @@ function Product() {
           </div>
         )}
         <div className={`bg-slate-100 ${model && "opacity-10"}`}>
-          <div className=" xl:px-10 h-full">
-            <div className='w-full justify-between items-center flex py-8 px-5'>
-              <h1 className='text-[#0d0d48] text-2xl font-bold'>All Product</h1>
-              <button
-                onClick={() => {
-                  setModel(true);
-                }}
-                className='bg-[#0d0d48] hover:bg-blue-900 text-white rounded-full  text-sm px-4 py-2 font-semibold '>
-                Add New Product
-              </button>
-            </div>
-            <div className=' flex items-center justify-between w-full py-3 px-10 '>
-              <div className='flex  items-center space-x-5  w-1/2'>
+          <div className=' px-10  h-full'>
+            <div className='py-5 px-5'>
+              <div className='flex items-center justify-between'>
+                <div>
+                  <select name="" id="" className='text-base  bg-white border px-3 py-[6px] rounded-lg'>
+                    <option value="">Select Installment</option>
+                    <option value="2">For 3 Month</option>
+                    <option value="3">For 2 Month</option>
+                  </select>
+                </div>
+                <div
+                  onClick={() => {
+                    setModel(true);
+                  }}
+                  className=' bg-white border  text-[#0d0d48] rounded-full h-11 w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                  <BiFolderPlus className='text-xl' />
+                </div>
+              </div>
+              <div className='py-4 px-10 mt-7 flex w-full bg-white drop-shadow-sm justify-start space-x-10 items-center'>
+                <div className='flex flex-col w-full'>
+                  <label htmlFor="Installment">Month</label>
+                  <input type="text"
+                    name='installment'
+                    placeholder='Enter Month'
+                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                  />
+                </div>
+                <div className='flex flex-col w-full'>
+                  <label htmlFor="Installment">Down Payment</label>
+                  <input type="text"
+                    name='dp'
+                    placeholder='Enter Installment'
+                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                  />
+                </div>
+                <div className='flex flex-col w-full'>
+                  <label htmlFor="Installment">Charge</label>
+                  <input type="text"
+                    name='charge'
+                    placeholder='Enter Installment'
+                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                  />
+                </div>
+                <div className=' space-y-3'>
+                  <FiEdit className='text-lg hover:cursor-pointer text-green-600 hover:text-black' />
+                  <MdDelete className='text-xl text-red-600 hover:cursor-pointer hover:text-black' />
+                </div>
+              </div>
+              <div className='flex justify-center items-center mt-10'>
                 <input
                   type="search"
-                  placeholder='Search..'
-                  className='border px-4 py-[6px] focus:outline-none rounded-md w-full shadow-md'
+                  placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
+                  className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
                 />
+                <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+            shadow-xl cursor-pointer text-white text-2xl '>
+                  <BiSearch className='search group-hover:scale-125 duration-300' />
+                </div>
               </div>
-
-              <div>
-                <select name="" id="" className='text-base  bg-white shadow-md px-3 py-[6px] rounded-lg'>
-                  <option value="">Select Company</option>
-                  <option value="Oppo">Oppo</option>
-                  <option value="Vivo">Vivo</option>
-                  <option value="Techno">Techno</option>
-                </select>
-              </div>
-
             </div>
-
             <div className='px-10 py-5'>
               <div className="bg-white shadow-md">
                 <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-                <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50  py-4 shadow-sm text-black font-medium px-2 ">
+                <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50 py-4 shadow-sm text-black font-medium px-2 ">
                   <li className="w-20 text-center text-sm  ">
-                    Sr No
+                    Customer ID
                   </li>
                   <li className="w-20 text-center text-sm  ">
+                    Name
+                  </li>
+                  <li className="w-20 text-left text-sm  ">
+                    Mobile
+                  </li>
+                  <li className="w-20 text-left text-sm ">
                     Company
                   </li>
                   <li className="w-28 text-left text-sm ">
-                    Model Name
+                    Model
                   </li>
                   <li className="w-20 text-left text-sm ">
                     Description
+                  </li>
+                  <li className="w-20 text-left text-sm ">
+                    Net Amount
+                  </li>
+                  <li className="w-20 text-left text-sm ">
+                    Pedding
+                  </li>
+                  <li className="w-20 text-left text-sm ">
+                    Profile
                   </li>
                   <li className="w-20 text-left text-sm ">
                     Action
                   </li>
                 </ul>
                 {/* {PhoneInfo?.length > 0 ? (
-                PhoneInfo.map((data, index) => {
-                  console.log(data , "data")
-                  return ( */}
+              PhoneInfo.map((data, index) => {
+                console.log(data , "data")
+                return ( */}
                 <ul
                   // key={index}
-                  className="flex items-center space-x-2 justify-between font-normal md:px-2  py-5 my-3 rounded-lg cursor-pointer  hover:bg-white shadow-sm "
+                  className="flex items-center space-x-2 bg-red-100 justify-between font-normal md:px-2 py-6 cursor-pointer shadow-sm "
                 >
-                  <li className="w-20 text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                    01
+                  <li className="w-20 text-[6px] font-bold sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
+                    001
                   </li>
                   <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
-                    Oppo
+                    Shad
+                  </li>
+                  <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                    1234567890
+                  </li>
+                  <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                    Vivo
                   </li>
                   <li className="w-28 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
                     F17 Pro
                   </li>
-                  <li className="w-20  py-[2px] text-cente rounded-md text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    jhbdvjb
+                  <li className="w-20 py-[2px] text-start text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                    jsbdh
+                  </li>
+                  <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                    15000
+                  </li>
+                  <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
+                    5000
                   </li>
                   <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                    <FiEdit
+                    <AiFillEye
                       className="text-[11px] md:text-sm lg:text-[19px] "
-                    // onClick={() => handleUpdate(News?.id ? News?.id : "")}
-                    />
-                    <MdDelete
-                      className="text-[11px] md:text-sm lg:text-[21px] text-red-500"
-                    // onClick={() => handleDelete(News?.id ? News?.id : "")}
+                      onClick={() =>
+                        navigate(`/Customer/profile-detail`)}
                     />
                   </li>
+                  <li className="w-20  text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
+                    <button className='bg-[#0d0d48] hover:bg-blue-900 px-6 text-white py-1 text-sm font-semibold rounded-md'>
+                      Pay
+                    </button>
+                  </li>
+
                 </ul>
                 {/* );
-                })
-              ) : ( */}
+              })
+            ) : ( */}
                 {/* <div className="flex justify-center items-center w-full py-10">
-                <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-                <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-                  Product Not Found
-                </p>
-              </div> */}
+              <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
+              <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
+                Product Not Found
+              </p>
+            </div> */}
                 {/* )} */}
               </div>
             </div>
-
-            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
-              <Pagination
-              // total={data && data.pageCount ? data.pageCount : 0}
-              // current={pageNo}
-              // onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
-              />
-            </div>
-
           </div>
         </div>
       </div>
@@ -350,4 +354,4 @@ function Product() {
   )
 }
 
-export default Product
+export default CustomersList

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Control from "../../../public/Icons/control.png"
 import Logo from "../../../public/Icons/Logo.png"
 import { NavLink, Outlet } from 'react-router-dom'
-import {MdShoppingCart , MdDashboard} from "react-icons/md"
-import {BiRupee} from "react-icons/bi"
-import {HiUsers} from "react-icons/hi"
-import {FaUserPlus} from "react-icons/fa"
+import { MdShoppingCart, MdDashboard } from "react-icons/md"
+import { BiRupee } from "react-icons/bi"
+import { HiUsers } from "react-icons/hi"
+import { FaUserPlus } from "react-icons/fa"
 import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 
@@ -34,12 +34,12 @@ const Sidebar = () => {
           </h1>
         </div>
         <ul className="lg:pt-3 ">
-        
+
           <li>
             <NavLink to={"/"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
               <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
-                <MdDashboard className="text-base"/>
+                <MdDashboard className="text-lg" />
                 <h1 className="text-sm hidden lg:block">
                   Dashboard
                 </h1>
@@ -48,10 +48,10 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/Customers"}
+            <NavLink to={"/Customer/list"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4" >
               <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
-                <HiUsers className="text-base"/>
+                <HiUsers className="text-lg" />
                 <h1 className="text-sm hidden lg:block">
                   Customers
                 </h1>
@@ -63,7 +63,7 @@ const Sidebar = () => {
             <NavLink to={"/PayEMI"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-              <BiRupee/>
+                <BiRupee />
                 <h1 className="text-sm hidden lg:block">
                   Pay EMI
                 </h1>
@@ -84,14 +84,13 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to={"/AddCustomer"}
+            <NavLink to={"/Customer/add-edit"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-xl space-x-3 font-roboto">
-                <FaUserPlus/>
+                <FaUserPlus />
                 <h1 className="text-sm hidden lg:block">
                   Add Cust.
                 </h1>
-
               </div>
             </NavLink>
           </li>
@@ -99,7 +98,7 @@ const Sidebar = () => {
             <NavLink to={"/Search"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
-                <BiSearch/>
+                <BiSearch />
                 <h1 className="text-sm hidden lg:block">
                   Search
                 </h1>
@@ -123,7 +122,7 @@ const Sidebar = () => {
             <NavLink to={"/Product"}
               className="flex my-5 pl-10 hover:bg-blue-200 hover:text-blue-500 duration-100 w-full justify-start items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-sm gap-x-4">
               <div className="flex justify-center items-center text-lg space-x-3 font-roboto">
-                <MdShoppingCart className="text-base"/>
+                <MdShoppingCart className="text-lg" />
                 <h1 className="text-sm hidden lg:block">
                   Product
                 </h1>
