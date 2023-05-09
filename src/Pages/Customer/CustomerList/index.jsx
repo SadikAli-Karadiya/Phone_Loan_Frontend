@@ -36,10 +36,10 @@ function CustomersList() {
     description: "",
   });
 
+  const [PhoneInfo, setPhoneInfo] = React.useState([]);
   const [model, setModel] = React.useState(false);
+  const [EMI, setEMI] = React.useState();
   const navigate = useNavigate();
-
-
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues: value ? value : initialValues,
@@ -57,7 +57,8 @@ function CustomersList() {
           //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
           // } else {
           // newsRegistration(fd).then();
-          setPhoneInfo(data)
+          setPhoneInfo([...PhoneInfo, data])
+          setModel(false)
           // }
         } catch (err) {
           toast.error(err.message);
@@ -199,9 +200,22 @@ function CustomersList() {
               <div className='flex items-center justify-between'>
                 <div>
                   <select name="" id="" className='text-base  bg-white border px-3 py-[6px] rounded-lg'>
-                    <option value="">Select Installment</option>
-                    <option value="2">For 3 Month</option>
-                    <option value="3">For 2 Month</option>
+                    {
+                      PhoneInfo && PhoneInfo[0] ? (
+                        PhoneInfo.map((iteam, index) => {
+                          return (
+                            <option key={index} value={iteam.installment}>
+                              For {iteam.installment} Month
+                            </option>
+
+                          )
+                        })
+                      ) :
+                        (
+                          <option value="">Select Installment</option>
+                        )
+                    }
+
                   </select>
                 </div>
                 <div
@@ -212,7 +226,7 @@ function CustomersList() {
                   <BiFolderPlus className='text-xl' />
                 </div>
               </div>
-              <div className='py-4 px-10 mt-7 flex w-full bg-white drop-shadow-sm justify-start space-x-10 items-center'>
+              <div className='py-4 px-10 mt-7 rounded-lg flex w-full bg-white drop-shadow-sm justify-start space-x-10 items-center'>
                 <div className='flex flex-col w-full'>
                   <label htmlFor="Installment">Month</label>
                   <input type="text"
