@@ -113,7 +113,7 @@ function Product() {
         {model && (
           <div className="w-full h-full bg-black  ">
             <div className="flex justify-center shadow-2xl  ">
-              <div className="absolute sm:mx-0 w-[90%] xl:w-[50%] opacity-100 shadow-2xl rounded top-5 sm:top-2 md:top-4 lg:top-10 xl:top-10 bg-white z-50 ">
+              <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[50%] lg:w-[70%] opacity-100 shadow-2xl rounded xs:top-5 lg:top-10 bg-white z-50 ">
                 <div className="">
                   <div className="flex justify-end ">
                     <button
@@ -132,82 +132,65 @@ function Product() {
                     </h1>
                     <form
                       action=""
-                      className=" space-y-5 xl:space-y-10 "
+                      className="space-y-5 xl:space-y-10 "
                       onSubmit={handleSubmit}
                     >
-                      <div className="flex flex-col  items-center space-y-5 md:space-y-8">
-                        <div className=' flex items-center w-full space-x-5'>
-                          <div className="flex flex-col space-y-2  w-full ">
-                            <label htmlFor="company">Company *</label>
-                            <select
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name="company"
-                              id="company"
-                              className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
-                            >
-                              <option value="">Select Company</option>
-                              <option value="Oppo">Oppo</option>
-                              <option value="Techno">Techno</option>
-                              <option value="Vivo">Vivo</option>
-                            </select>
-                            {errors.company && touched.company ? (
-                              <p className="form-error text-red-600 text-sm font-semibold">
-                                {errors.company}
-                              </p>
-                            ) : null}
-                          </div>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Model Name *</label>
-                            <input
-                              type="text"
-                              name="model"
-                              id="model"
-                              value={value.model ? value.model : values.model}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Model Name "
-                            />
-                            {errors.model && touched.model
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
-                              :
-                              null}
-                          </div>
+                      <div className="flex xs:flex-col lg:flex-row lg:space-y-0 lg:space-x-8 items-center space-y-5 md:space-y-8">
+                        <div className="flex flex-col space-y-2  w-full ">
+                          <label htmlFor="company">Company *</label>
+                          <select
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            name="company"
+                            id="company"
+                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
+                          >
+                            <option value="">Select Company</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="Techno">Techno</option>
+                            <option value="Vivo">Vivo</option>
+                          </select>
+                          {errors.company && touched.company ? (
+                            <p className="form-error text-red-600 text-sm font-semibold">
+                              {errors.company}
+                            </p>
+                          ) : null}
                         </div>
-                        <div className='flex items-center w-full space-x-5'>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Price * </label>
-                            <input
-                              type="text"
-                              name="price"
-                              id="price"
-                              value={value.price ? value.price : values.price}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Model Name "
-                            />
-                            {errors.price && touched.price
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                              :
-                              null}
-                          </div>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="description">Description</label>
-                            <input
-                              type="text"
-                              name="description"
-                              id="description"
-                              value={value.description ? value.description : values.description}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Description "
-                            />
-                          </div>
+                        <div className="flex flex-col space-y-2 w-full ">
+                          <label htmlFor="model name ">Model Name *</label>
+                          <input
+                            type="text"
+                            name="model"
+                            id="model"
+                            value={value.model ? value.model : values.model}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
+                            placeholder="Enter Model Name "
+                          />
+                          {errors.model && touched.model
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
+                            :
+                            null}
+                        </div>
+                        <div className="flex flex-col space-y-2 w-full ">
+                          <label htmlFor="model name ">Price * </label>
+                          <input
+                            type="text"
+                            name="price"
+                            id="price"
+                            value={value.price ? value.price : values.price}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
+                            placeholder="Enter Model Name "
+                          />
+                          {errors.price && touched.price
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
+                            :
+                            null}
                         </div>
                       </div>
                       <div className="flex justify-center items-center w-full space-x-5 ">
@@ -241,107 +224,102 @@ function Product() {
         <div className={`bg-slate-100 ${model && "opacity-10"}`}>
           <div className=" xl:px-10 h-full">
             <div className='w-full justify-between items-center flex py-8 px-5'>
-              <h1 className='text-[#0d0d48] text-2xl font-bold'>All Product</h1>
+              <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>All Product</h1>
               <button
                 onClick={() => {
                   setModel(true);
                 }}
-                className='bg-[#0d0d48] hover:bg-blue-900 text-white rounded-full  text-sm px-4 py-2 font-semibold '>
+                className='bg-[#0d0d48] hover:bg-blue-900 text-white rounded-full xs:px-3 xs:py-[6px] xs:text-xs xl:text-sm xl:px-4 xl:py-2 font-semibold '>
                 Add New Product
               </button>
             </div>
-            <div className=' flex items-center justify-between w-full py-3 px-10 '>
-              <div className='flex  items-center space-x-5  w-1/2'>
-                <input
-                  type="search"
-                  placeholder='Search..'
-                  className='border px-4 py-[6px] focus:outline-none rounded-md w-full shadow-md'
-                />
-              </div>
-
-              <div>
-                <select name="" id="" className='text-base  bg-white shadow-md px-3 py-[6px] rounded-lg'>
-                  <option value="">Select Company</option>
-                  <option value="Oppo">Oppo</option>
-                  <option value="Vivo">Vivo</option>
-                  <option value="Techno">Techno</option>
-                </select>
-              </div>
-
-            </div>
-
-            <div className='px-10 py-5'>
-              <div className="bg-white shadow-md">
-                <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-                <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50  py-4 shadow-sm text-black font-medium px-2 ">
-                  <li className="w-20 text-center text-sm  ">
-                    Sr No
-                  </li>
-                  <li className="w-20 text-center text-sm  ">
-                    Company
-                  </li>
-                  <li className="w-28 text-left text-sm ">
-                    Model Name
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Description
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Action
-                  </li>
-                </ul>
-                {/* {PhoneInfo?.length > 0 ? (
-                PhoneInfo.map((data, index) => {
-                  console.log(data , "data")
-                  return ( */}
-                <ul
-                  // key={index}
-                  className="flex items-center space-x-2 justify-between font-normal md:px-2  py-5 my-3 rounded-lg cursor-pointer  hover:bg-white shadow-sm "
-                >
-                  <li className="w-20 text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                    01
-                  </li>
-                  <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
-                    Oppo
-                  </li>
-                  <li className="w-28 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    F17 Pro
-                  </li>
-                  <li className="w-20  py-[2px] text-cente rounded-md text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    jhbdvjb
-                  </li>
-                  <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                    <FiEdit
-                      className="text-[11px] md:text-sm lg:text-[19px] "
-                    // onClick={() => handleUpdate(News?.id ? News?.id : "")}
-                    />
-                    <MdDelete
-                      className="text-[11px] md:text-sm lg:text-[21px] text-red-500"
-                    // onClick={() => handleDelete(News?.id ? News?.id : "")}
-                    />
-                  </li>
-                </ul>
-                {/* );
-                })
-              ) : ( */}
-                {/* <div className="flex justify-center items-center w-full py-10">
-                <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-                <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-                  Product Not Found
-                </p>
-              </div> */}
-                {/* )} */}
+            <div className='flex justify-center items-center xs:py-3'>
+              <input
+                type="search"
+                placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
+                className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
+              />
+              <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+            shadow-xl cursor-pointer text-white text-2xl '>
+                <BiSearch className='search group-hover:scale-125 duration-300' />
               </div>
             </div>
 
-            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
+            <div className='py-5'>
+              <div className=' flex items-end justify-end w-full xs:px-5'>
+                <div>
+                  <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
+                    <option value="">Select Company</option>
+                    <option value="Oppo">Oppo</option>
+                    <option value="Vivo">Vivo</option>
+                    <option value="Techno">Techno</option>
+                  </select>
+                </div>
+
+              </div>
+              <div className='px-5 py-5'>
+                <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
+                  <h1 className='font-bold p-6 text-lg'>Product List</h1>
+                  <table
+                    className="w-full bg-blue-50 text-sm text-center "
+                    id="table-to-xls"
+                  >
+                    <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
+                      <tr className="text-black text-sm ">
+                        <th scope="col" className="pl-3 py-4">
+                          Sr No
+                        </th>
+                        <th scope="col" className="px-6 py-4">
+                          Company
+                        </th>
+                        <th scope="col" className="px-6 py-4">
+                          Model
+                        </th>
+                        <th scope="col" className="px-6 py-4">
+                          Price
+                        </th>
+                        <th scope="col" className="px-6 py-4">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                      <tr className=" border-b">
+                        <td className="px-6 py-5 font-bold">
+                          001
+                        </td>
+                        <td className="px-6 py-5 capitalize">
+                          Vivo
+                        </td>
+                        <td className="px-6 py-5">
+                          F11 Pro
+                        </td>
+                        <td className="px-6 py-5">
+                          15000
+                        </td>
+                        <td className="px-6 py-5">
+                          <div className="flex justify-center items-center space-x-2">
+                            <FiEdit className='text-lg cursor-pointer ' onClick={() => {
+                              setModel(true);
+                            }} />
+                            <MdDelete className='text-xl text-red-600 cursor-pointer' />
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
               <Pagination
               // total={data && data.pageCount ? data.pageCount : 0}
               // current={pageNo}
               // onPageChange={(page) => setPageNo(page)}
               // previousLabel="Previous" nextLabel="Next"
               />
-            </div>
+            </div> */}
 
           </div>
         </div>

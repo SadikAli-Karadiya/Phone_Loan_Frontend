@@ -102,7 +102,7 @@ function CustomersList() {
         {model && (
           <div className="w-full h-full bg-black  ">
             <div className="flex justify-center shadow-2xl  ">
-              <div className="absolute sm:mx-0 w-[90%] xl:w-[50%] opacity-100 shadow-2xl rounded top-5 sm:top-2 md:top-4 lg:top-10 xl:top-10 bg-white z-50 ">
+              <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[60%] lg:w-[65%] 2xl:w-[40%] opacity-100 shadow-2xl rounded xs:top-14 sm:top-10 md:top-10 lg:top-10 xl:top-10 bg-white z-50 ">
                 <div className="">
                   <div className="flex justify-end ">
                     <button
@@ -110,8 +110,7 @@ function CustomersList() {
                         resetForm()
                         setModel(false);
                       }}
-                      className="absolute translate-x-4 -translate-y-4 font-bold text-2xl p-2 text-[#571217] "
-                    >
+                      className="absolute translate-x-4 -translate-y-4 font-bold text-2xl p-2 text-[#571217] ">
                       <AiFillCloseCircle />
                     </button>
                   </div>
@@ -122,78 +121,61 @@ function CustomersList() {
                     <form
                       action=""
                       className=" space-y-5 xl:space-y-10 "
-                      onSubmit={handleSubmit}
-                    >
-                      <div className="flex flex-col  items-center xs:space-y-4 md:space-y-8">
-                        <div className=' xs:flex-col xs:space-x-0 xs:space-y-4 flex items-center w-full space-x-5'>
-                          <div className="flex flex-col space-y-2  w-full ">
-                            <label htmlFor="company">Installment *</label>
-                            <input
-                              type='text'
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              name="installment"
-                              id="installment"
-                              placeholder='Enter Install'
-                              className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
-                            />
-                            {errors.installment && touched.installment ? (
-                              <p className="form-error text-red-600 text-sm font-semibold">
-                                {errors.installment}
-                              </p>
-                            ) : null}
-                          </div>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Down Payment *</label>
-                            <input
-                              type="text"
-                              name="dp"
-                              id="dp"
-                              value={value.dp ? value.dp : values.dp}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Down Payment "
-                            />
-                            {errors.dp && touched.dp
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.dp}</p>
-                              :
-                              null}
-                          </div>
+                      onSubmit={handleSubmit} >
+                      <div className="flex xs:flex-col lg:flex-row lg:space-y-0 lg:space-x-5 items-center xs:space-y-4">
+                        <div className="flex flex-col space-y-2  w-full ">
+                          <label htmlFor="company">Installment *</label>
+                          <input
+                            type='text'
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            name="installment"
+                            id="installment"
+                            placeholder='Enter Install'
+                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
+                          />
+                          {errors.installment && touched.installment ? (
+                            <p className="form-error text-red-600 text-sm font-semibold">
+                              {errors.installment}
+                            </p>
+                          ) : null}
                         </div>
-                        <div className='xs:flex-col xs:space-x-0 xs:space-y-4 flex items-center w-full space-x-5'>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="model name ">Charge * </label>
-                            <input
-                              type="text"
-                              name="charge"
-                              id="charge"
-                              value={value.charge ? value.charge : values.charge}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Charge Amount "
-                            />
-                            {errors.charge && touched.charge
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
-                              :
-                              null}
-                          </div>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <label htmlFor="description">Description</label>
-                            <input
-                              type="text"
-                              name="description"
-                              id="description"
-                              value={value.description ? value.description : values.description}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Description "
-                            />
-                          </div>
+                        <div className="flex flex-col space-y-2 w-full ">
+                          <label htmlFor="model name ">Down Payment *</label>
+                          <input
+                            type="text"
+                            name="dp"
+                            id="dp"
+                            value={value.dp ? value.dp : values.dp}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
+                            placeholder="Enter Down Payment "
+                          />
+                          {errors.dp && touched.dp
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.dp}</p>
+                            :
+                            null}
+                        </div>
+
+                        <div className="flex flex-col space-y-2 w-full ">
+                          <label htmlFor="model name ">Charge * </label>
+                          <input
+                            type="text"
+                            name="charge"
+                            id="charge"
+                            value={value.charge ? value.charge : values.charge}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
+                            placeholder="Enter Charge Amount "
+                          />
+                          {errors.charge && touched.charge
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
+                            :
+                            null}
                         </div>
                       </div>
                       <div className="flex justify-center items-center w-full space-x-5 ">
@@ -258,7 +240,7 @@ function CustomersList() {
               </div>
               {
                 EMI.length > 0 ?
-                  <div className='py-4 px-10 xs:mt-4 sm:mt-7 xs:space-y-3 rounded-lg xs:flex-col sm:flex-col  w-full bg-white drop-shadow-sm justify-start  items-center'>
+                  <div className='py-4 px-10 xs:mt-4 sm:mt-7 xs:space-y-3 rounded-lg flex xs:flex-col sm:flex-col md:flex-row md:space-y-0 md:space-x-5 w-full bg-white drop-shadow-sm justify-start'>
                     <div className='flex flex-col w-full'>
                       <label htmlFor="Installment">Month</label>
                       <input type="text"
@@ -283,7 +265,7 @@ function CustomersList() {
                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                     </div>
-                    <div className='flex  xs:py-2  xs:space-x-5 sm:space-x-5'>
+                    <div className='flex  xs:py-2  xs:space-x-5 sm:space-x-5 sm:justify-start md:justify-end md:items-end'>
                       <FiEdit className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-lg hover:cursor-pointer text-green-600 hover:text-black' />
                       <MdDelete className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-xl text-red-600 hover:cursor-pointer hover:text-black' />
                     </div>
@@ -306,7 +288,7 @@ function CustomersList() {
             {
               EMI.length > 0 ?
                 <div className='px-5 py-5 '>
-                  <div className="bg-white shadow-md overflow-x-scroll">
+                  <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
                     <h1 className='font-bold p-6 text-lg'>Customer List</h1>
                     <table
                       className="w-full bg-blue-50 text-sm text-center "
@@ -343,7 +325,7 @@ function CustomersList() {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white items-center  overflow-x-scroll">
+                      <tbody className="bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                         <tr className=" border-b">
                           <th className="py-5 px-6">
                             01
@@ -369,7 +351,7 @@ function CustomersList() {
                           <td className="px-6 py-5">
                             <div className="flex justify-center items-center">
                               <AiFillEye
-                                className="xs:text-base md:text-sm lg:text-[19px] "
+                                className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                 onClick={() =>
                                   navigate(`/Customer/profile-detail`)}
                               />

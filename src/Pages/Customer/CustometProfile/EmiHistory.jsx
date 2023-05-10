@@ -10,67 +10,58 @@ function EMIHistory() {
 
     return (
         <>
-            <div className=' px-20 py-5 h-full'>
-                <div className=' py-5'>
+            <div className='xs:px-5 sm:px-10 sm:py-5 h-full'>
+                <div className='sm:py-5'>
                     <h1 className='text-[#0d0d48] text-2xl font-bold'>EMI History</h1>
                 </div>
-                <div className='px-16 py-10 bg-white shadow-2xl rounded-md'>
-                    <div className="bg-white shadow-md">
-                        <ul className="flex px-5 justify-between bg-[#0d0d48] py-4 uppercase shadow-sm text-white  font-medium ">
-                            <li className="w-20 text-center text-sm  ">
-                                RECIEPT NO
-                            </li>
-                            <li className="w-20 text-center text-sm  ">
-                                Amount
-                            </li>
-                            <li className="w-20 text-center text-sm ">
-                                Date
-                            </li>
-                            <li className="w-20 text-center text-sm ">
-                                Installment
-                            </li>
-                            <li className="w-20 text-center text-sm ">
-                                Action
-                            </li>
-                        </ul>
-                        {/* {PhoneInfo?.length > 0 ? (
-              PhoneInfo.map((data, index) => {
-                console.log(data , "data")
-                return ( */}
-                        <ul
-                            // key={index}
-                            className="flex items-center space-x-2 justify-between font-normal md:px-2 py-4 cursor-pointer  "
-                        >
-                            <li className="w-20 text-[6px] font-bold sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                                001
-                            </li>
-                            <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
-                                5000
-                            </li>
-                            <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                12/05/2023
-                            </li>
-                            <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                1
-                            </li>
-                            <li className="w-20 text-center flex justify-center">
-                                <AiFillEye
-                                    className="text-[11px] md:text-sm lg:text-[19px] "
-                                // onClick={() =>
-                                //     navigate(`/Customer/profile-detail`)}
-                                />
-                            </li>
-                        </ul>
-                        {/* );
-              })
-            ) : ( */}
-                        {/* <div className="flex justify-center items-center w-full py-10">
-              <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-              <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-                Product Not Found
-              </p>
-            </div> */}
-                        {/* )} */}
+                <div className='xs:px-0 xs:py-5 xl:px-20'>
+                    <div className="bg-white xs:overflow-x-scroll xl:overflow-x-hidden">
+                        <table className="w-full bg-[#0d0d48] text-sm text-center  " id="table-to-xls" >
+                            <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
+                                <tr className="text-white text-xs ">
+                                    <th scope="col" className="pl-3 py-4">
+                                        Receipt No
+                                    </th>
+                                    <th scope="col" className="px-6 py-4">
+                                        Date
+                                    </th>
+                                    <th scope="col" className="px-6 py-4">
+                                        Amount
+                                    </th>
+                                    <th scope="col" className="px-6 py-4">
+                                        Installment
+                                    </th>
+                                    <th scope="col" className="px-6 py-4">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                <tr className=" border-b">
+                                    <th className="py-5 px-6">
+                                        01
+                                    </th>
+                                    <td className="px-6 py-5 ">
+                                        05/01/2023
+                                    </td>
+                                    <td className="px-6 py-5 capitalize">
+                                        5000
+                                    </td>
+                                    <td className="px-6 py-5">
+                                        2
+                                    </td>
+                                    <td className="px-6 py-5">
+                                        <div className="flex justify-center items-center">
+                                            <AiFillEye
+                                                className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                onClick={() =>
+                                                    navigate(`/Customer/EMI-History`)}
+                                            />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

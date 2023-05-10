@@ -29,7 +29,7 @@ function CustomerProfile() {
     }
     return (
         <>
-            <div className="py-5 ">
+            <div className="py-5">
                 <div className="px-10">
                     <h1 className=" font-bold text-[#0d0d48] text-2xl lg:text-3xl">
                         Customer Details
@@ -37,7 +37,7 @@ function CustomerProfile() {
                 </div>
 
 
-                <div className="px-10 py-5">
+                <div className="xs:px-5 sm:px-10 py-5">
                     <div className="bg-white shadow-2xl rounded-md">
                         <form className="flex justify-center items-center pt-5 px-10">
                             <div className="w-full rounded-lg truncate py-9  ">
@@ -457,28 +457,10 @@ function CustomerProfile() {
                                             </div>
                                         </div>
                                         <div className="flex py-2 ">
-                                            {/* <div>
-                                        <button
-                                            className="bg-[#0d0d48] border-2  text-sm border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[8px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                                        // onClick={(e) => {
-                                        //     handleSubmit();
-                                        //     // setIndex(2);
-                                        // }}
-                                        >
-                                            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                            <span className="relative">
-                                                CLEAR
-                                            </span>
-                                        </button>
-                                    </div> */}
                                             <div>
                                                 <button
                                                     type="button"
                                                     className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                                                    onClick={(e) => {
-                                                        handleSubmit();
-                                                        // setIndex(2);
-                                                    }}
                                                 >
                                                     <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
                                                     <span className="relative flex items-center gap-2 text-base">
@@ -492,88 +474,86 @@ function CustomerProfile() {
                                 </div>
                             </div>
                         </form>
-                        <div className='px-10 py-10'>
-                            <div className="bg-white shadow-md">
-                                <h1 className='font-bold pb-4 text-xl'>Phone Detail</h1>
-                                <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50 py-4 shadow-sm text-black font-medium px-2 ">
-                                    <li className="w-20 text-center text-sm  ">
-                                        Customer ID
-                                    </li>
-                                    <li className="w-20 text-center text-sm  ">
-                                        Name
-                                    </li>
-                                    <li className="w-20 text-left text-sm  ">
-                                        Mobile
-                                    </li>
-                                    <li className="w-20 text-left text-sm ">
-                                        Company
-                                    </li>
-                                    <li className="w-28 text-left text-sm ">
-                                        Model
-                                    </li>
-                                    <li className="w-20 text-left text-sm ">
-                                        Description
-                                    </li>
-                                    <li className="w-20 text-left text-sm ">
-                                        Net Amount
-                                    </li>
-                                    <li className="w-20 text-left text-sm ">
-                                        Pedding
-                                    </li>
-                                    <li className="w-20 text-left text-sm ">
-                                        Profile
-                                    </li>
-                                </ul>
-                                {/* {PhoneInfo?.length > 0 ? (
-              PhoneInfo.map((data, index) => {
-                console.log(data , "data")
-                return ( */}
-                                <ul
-                                    // key={index}
-                                    className="flex items-center space-x-2 bg-red-100 justify-between font-normal md:px-2 py-6 cursor-pointer shadow-sm "
+                        <div className='xs:px-0 md:px-5 xl:px-10 py-10 '>
+                            <div className="bg-white xs:overflow-x-scroll xl:overflow-x-hidden">
+                                <h1 className='font-bold xs:p-3 sm:p-6 text-lg'>Phone Details</h1>
+                                <table
+                                    className="w-full bg-slate-100 text-sm text-center "
+                                    id="table-to-xls"
                                 >
-                                    <li className="w-20 text-[6px] font-bold sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                                        001
-                                    </li>
-                                    <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
-                                        Shad
-                                    </li>
-                                    <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        1234567890
-                                    </li>
-                                    <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        Vivo
-                                    </li>
-                                    <li className="w-28 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        F17 Pro
-                                    </li>
-                                    <li className="w-20 py-[2px] text-start text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        jsbdh
-                                    </li>
-                                    <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        15000
-                                    </li>
-                                    <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                                        5000
-                                    </li>
-                                    <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                                        <AiFillEye
-                                            className="text-[11px] md:text-sm lg:text-[19px] "
-                                            onClick={() =>
-                                                navigate(`/Customer/EMI-History`)}
-                                        />
-                                    </li>
-                                </ul>
-                                {/* );
-              })
-            ) : ( */}
-                                {/* <div className="flex justify-center items-center w-full py-10">
-              <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-              <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-                Product Not Found
-              </p>
-            </div> */}
-                                {/* )} */}
+                                    <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
+                                        <tr className="text-black text-sm ">
+                                            <th scope="col" className="pl-3 py-4">
+                                                Customer ID
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Company
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Model
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Installment
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Total
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Paidup
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Pending
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Profile
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                        <tr className=" border-b">
+                                            <th className="py-5 px-6">
+                                                01
+                                            </th>
+                                            <td className="px-6 py-5 ">
+                                                Vivo
+                                            </td>
+                                            <td className="px-6 py-5 capitalize">
+                                                F17 Pro
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                2
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                15000
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                5000
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                10000
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <div className="flex justify-center items-center">
+                                                    <AiFillEye
+                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                        onClick={() =>
+                                                            navigate(`/Customer/EMI-History`)}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-5 ">
+                                                <div className="flex justify-center space-x-3">
+                                                    <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                                        Pay
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
