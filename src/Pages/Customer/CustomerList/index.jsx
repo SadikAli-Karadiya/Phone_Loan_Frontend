@@ -124,8 +124,8 @@ function CustomersList() {
                       className=" space-y-5 xl:space-y-10 "
                       onSubmit={handleSubmit}
                     >
-                      <div className="flex flex-col  items-center space-y-5 md:space-y-8">
-                        <div className=' flex items-center w-full space-x-5'>
+                      <div className="flex flex-col  items-center xs:space-y-4 md:space-y-8">
+                        <div className=' xs:flex-col xs:space-x-0 xs:space-y-4 flex items-center w-full space-x-5'>
                           <div className="flex flex-col space-y-2  w-full ">
                             <label htmlFor="company">Installment *</label>
                             <input
@@ -162,7 +162,7 @@ function CustomersList() {
                               null}
                           </div>
                         </div>
-                        <div className='flex items-center w-full space-x-5'>
+                        <div className='xs:flex-col xs:space-x-0 xs:space-y-4 flex items-center w-full space-x-5'>
                           <div className="flex flex-col space-y-2 w-full ">
                             <label htmlFor="model name ">Charge * </label>
                             <input
@@ -224,12 +224,12 @@ function CustomersList() {
             </div>
           </div>
         )}
-        <div className={`bg-slate-100 ${model && "opacity-10"}`}>
-          <div className=' px-10  h-full'>
+        <div className={` ${model && "opacity-10"}`}>
+          <div className=' xl:px-10  h-full'>
             <div className='py-5 px-5'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <select name="" id="" className='text-base  bg-white border px-3 py-[6px] rounded-lg' onChange={handleSelectEMI}>
+                  <select name="" id="" className='xs:text-xs sm:text-base bg-white border xs:px-2 xs:py-1 sm:px-3 sm:py-[6px] rounded-lg' onChange={handleSelectEMI}>
                     {
                       PhoneInfo && PhoneInfo[0] ? (
                         PhoneInfo.map((iteam, index) => {
@@ -252,13 +252,13 @@ function CustomersList() {
                   onClick={() => {
                     setModel(true);
                   }}
-                  className=' bg-white border  text-[#0d0d48] rounded-full h-11 w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
-                  <BiFolderPlus className='text-xl' />
+                  className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                  <BiFolderPlus className='xs:text-base sm:text-xl' />
                 </div>
               </div>
               {
                 EMI.length > 0 ?
-                  <div className='py-4 px-10 mt-7 rounded-lg flex flex-col space-x-0 w-full bg-white drop-shadow-sm justify-start sm:space-x-10 items-center'>
+                  <div className='py-4 px-10 xs:mt-4 sm:mt-7 xs:space-y-3 rounded-lg xs:flex-col sm:flex-col  w-full bg-white drop-shadow-sm justify-start  items-center'>
                     <div className='flex flex-col w-full'>
                       <label htmlFor="Installment">Month</label>
                       <input type="text"
@@ -283,9 +283,9 @@ function CustomersList() {
                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                     </div>
-                    <div className=' sm:space-y-3 flex space-y-0'>
-                      <FiEdit className='text-lg hover:cursor-pointer text-green-600 hover:text-black' />
-                      <MdDelete className='text-xl text-red-600 hover:cursor-pointer hover:text-black' />
+                    <div className='flex  xs:py-2  xs:space-x-5 sm:space-x-5'>
+                      <FiEdit className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-lg hover:cursor-pointer text-green-600 hover:text-black' />
+                      <MdDelete className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-xl text-red-600 hover:cursor-pointer hover:text-black' />
                     </div>
                   </div>
                   :
@@ -366,10 +366,10 @@ function CustomersList() {
                           <td className="px-6 py-5">
                             10000
                           </td>
-                          <td className="px-6 py-5 ">
-                            <div className="flex justify-center space-x-3">
+                          <td className="px-6 py-5">
+                            <div className="flex justify-center items-center">
                               <AiFillEye
-                                className="text-[11px] md:text-sm lg:text-[19px] "
+                                className="xs:text-base md:text-sm lg:text-[19px] "
                                 onClick={() =>
                                   navigate(`/Customer/profile-detail`)}
                               />
@@ -402,94 +402,3 @@ function CustomersList() {
 
 export default CustomersList
 
-
-  // < div className = 'px-10 py-5' >
-  //   <div className="bg-white shadow-md">
-  //     <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-  //     <ul className="flex px-5 justify-between bg-blue-50 py-4 text-xs uppercase shadow-sm text-black font-medium">
-  //       <li className="">
-  //         Customer ID
-  //       </li>
-  //       <li className="">
-  //         Name
-  //       </li>
-  //       <li className="">
-  //         Mobile
-  //       </li>
-  //       <li className="">
-  //         Company
-  //       </li>
-  //       <li className="">
-  //         Model
-  //       </li>
-  //       <li className="">
-  //         Total
-  //       </li>
-  //       <li className="">
-  //         Paidup
-  //       </li>
-  //       <li className="">
-  //         Pedding
-  //       </li>
-  //       <li className="">
-  //         Profile
-  //       </li>
-  //       <li className="">
-  //         Action
-  //       </li>
-  //     </ul>
-  //     {/* {PhoneInfo?.length > 0 ? (
-  //             PhoneInfo.map((data, index) => {
-  //               console.log(data , "data")
-  //               return ( */}
-  //     <ul
-  //       // key={index}
-  //       className="flex px-5 justify-between bg-red-100 py-4 text-sm shadow-sm text-black "
-  //     >
-  //       <li className="text-center">
-  //         001
-  //       </li>
-  //       <li className="text-center">
-  //         Shad
-  //       </li>
-  //       <li className="text-center">
-  //         1234567890
-  //       </li>
-  //       <li className="text-center">
-  //         Vivo
-  //       </li>
-  //       <li className="text-center">
-  //         F17 Pro
-  //       </li>
-  //       <li className="text-center">
-  //         15000
-  //       </li>
-  //       <li className="text-center">
-  //         5000
-  //       </li>
-  //       <li className="">
-  //         <AiFillEye
-  //           className="text-[11px] md:text-sm lg:text-[19px] "
-  //           onClick={() =>
-  //             navigate(`/Customer/profile-detail`)}
-  //         />
-  //       </li>
-  //       <li className="">
-  //         <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-  //           Pay
-  //         </button>
-  //       </li>
-
-  //     </ul>
-  //     {/* );
-  //             })
-  //           ) : ( */}
-  //     {/* <div className="flex justify-center items-center w-full py-10">
-  //             <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-  //             <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-  //               Product Not Found
-  //             </p>
-  //           </div> */}
-  //     {/* )} */}
-  //   </div>
-  //               </div >
