@@ -1,3 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500&family=Roboto&display=swap');@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Sidebar active */
+ul .active{
+    border-radius: 5px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    background-color: rgb(191 219 254 / var(--tw-bg-opacity));
+    color: #3b82f6
+  }
+

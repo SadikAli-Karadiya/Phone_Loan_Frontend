@@ -4,14 +4,16 @@ import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
+import { FaUsers } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
+
 
 
 function CustomersList() {
@@ -36,9 +38,33 @@ function CustomersList() {
     description: "",
   });
 
-  const [PhoneInfo, setPhoneInfo] = React.useState([]);
+  const [PhoneInfo, setPhoneInfo] = React.useState([
+    {
+      id: 1,
+      installment: 2,
+      dp: 50,
+      description: "skjdbvjhdb",
+      CustomersList: [
+        {
+
+        }
+      ]
+    },
+    {
+      id: 2,
+      installment: 4,
+      dp: 30,
+      description: "skjdbvjhdb"
+    },
+    {
+      id: 3,
+      installment: 3,
+      dp: 40,
+      description: "skjdbvjhdb"
+    }
+  ]);
   const [model, setModel] = React.useState(false);
-  const [EMI, setEMI] = React.useState();
+  const [EMI, setEMI] = React.useState("");
   const navigate = useNavigate();
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
@@ -65,6 +91,10 @@ function CustomersList() {
         }
       },
     });
+
+  function handleSelectEMI(event) {
+    setEMI(event.target.value)
+  }
 
   return (
     <>
@@ -199,12 +229,12 @@ function CustomersList() {
             <div className='py-5 px-5'>
               <div className='flex items-center justify-between'>
                 <div>
-                  <select name="" id="" className='text-base  bg-white border px-3 py-[6px] rounded-lg'>
+                  <select name="" id="" className='text-base  bg-white border px-3 py-[6px] rounded-lg' onChange={handleSelectEMI}>
                     {
                       PhoneInfo && PhoneInfo[0] ? (
                         PhoneInfo.map((iteam, index) => {
                           return (
-                            <option key={index} value={iteam.installment}>
+                            <option key={index} value={iteam.installment} >
                               For {iteam.installment} Month
                             </option>
 
@@ -226,36 +256,41 @@ function CustomersList() {
                   <BiFolderPlus className='text-xl' />
                 </div>
               </div>
-              <div className='py-4 px-10 mt-7 rounded-lg flex w-full bg-white drop-shadow-sm justify-start space-x-10 items-center'>
-                <div className='flex flex-col w-full'>
-                  <label htmlFor="Installment">Month</label>
-                  <input type="text"
-                    name='installment'
-                    placeholder='Enter Month'
-                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                  />
-                </div>
-                <div className='flex flex-col w-full'>
-                  <label htmlFor="Installment">Down Payment</label>
-                  <input type="text"
-                    name='dp'
-                    placeholder='Enter Installment'
-                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                  />
-                </div>
-                <div className='flex flex-col w-full'>
-                  <label htmlFor="Installment">Charge</label>
-                  <input type="text"
-                    name='charge'
-                    placeholder='Enter Installment'
-                    className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                  />
-                </div>
-                <div className=' space-y-3'>
-                  <FiEdit className='text-lg hover:cursor-pointer text-green-600 hover:text-black' />
-                  <MdDelete className='text-xl text-red-600 hover:cursor-pointer hover:text-black' />
-                </div>
-              </div>
+              {
+                EMI.length > 0 ?
+                  <div className='py-4 px-10 mt-7 rounded-lg flex flex-col space-x-0 w-full bg-white drop-shadow-sm justify-start sm:space-x-10 items-center'>
+                    <div className='flex flex-col w-full'>
+                      <label htmlFor="Installment">Month</label>
+                      <input type="text"
+                        name='installment'
+                        placeholder='Enter Month'
+                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                      />
+                    </div>
+                    <div className='flex flex-col w-full'>
+                      <label htmlFor="Installment">Down Payment</label>
+                      <input type="text"
+                        name='dp'
+                        placeholder='Enter Installment'
+                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                      />
+                    </div>
+                    <div className='flex flex-col w-full'>
+                      <label htmlFor="Installment">Charge</label>
+                      <input type="text"
+                        name='charge'
+                        placeholder='Enter Installment'
+                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                      />
+                    </div>
+                    <div className=' sm:space-y-3 flex space-y-0'>
+                      <FiEdit className='text-lg hover:cursor-pointer text-green-600 hover:text-black' />
+                      <MdDelete className='text-xl text-red-600 hover:cursor-pointer hover:text-black' />
+                    </div>
+                  </div>
+                  :
+                  null
+              }
               <div className='flex justify-center items-center mt-10'>
                 <input
                   type="search"
@@ -268,99 +303,96 @@ function CustomersList() {
                 </div>
               </div>
             </div>
-            <div className='px-10 py-5'>
-              <div className="bg-white shadow-md">
-                <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-                <ul className="flex md:px-2 2xl:px-10 justify-between bg-blue-50 py-4 shadow-sm text-black font-medium px-2 ">
-                  <li className="w-20 text-center text-sm  ">
-                    Customer ID
-                  </li>
-                  <li className="w-20 text-center text-sm  ">
-                    Name
-                  </li>
-                  <li className="w-20 text-left text-sm  ">
-                    Mobile
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Company
-                  </li>
-                  <li className="w-28 text-left text-sm ">
-                    Model
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Description
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Net Amount
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Pedding
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Profile
-                  </li>
-                  <li className="w-20 text-left text-sm ">
-                    Action
-                  </li>
-                </ul>
-                {/* {PhoneInfo?.length > 0 ? (
-              PhoneInfo.map((data, index) => {
-                console.log(data , "data")
-                return ( */}
-                <ul
-                  // key={index}
-                  className="flex items-center space-x-2 bg-red-100 justify-between font-normal md:px-2 py-6 cursor-pointer shadow-sm "
-                >
-                  <li className="w-20 text-[6px] font-bold sm:text-[8.5px] md:text-[12px] 2xl:text-sm text-center">
-                    001
-                  </li>
-                  <li className="w-20 text-center text-[6px] sm:text-[8.5px] md:text-sm ">
-                    Shad
-                  </li>
-                  <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    1234567890
-                  </li>
-                  <li className="w-20 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    Vivo
-                  </li>
-                  <li className="w-28 text-left text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    F17 Pro
-                  </li>
-                  <li className="w-20 py-[2px] text-start text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    jsbdh
-                  </li>
-                  <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    15000
-                  </li>
-                  <li className="w-20 py-[2px] text-start  text-[6px] sm:text-[8.5px] md:text-[12px] 2xl:text-sm ">
-                    5000
-                  </li>
-                  <li className="w-20 text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                    <AiFillEye
-                      className="text-[11px] md:text-sm lg:text-[19px] "
-                      onClick={() =>
-                        navigate(`/Customer/profile-detail`)}
-                    />
-                  </li>
-                  <li className="w-20  text-left flex flex-col md:flex-row items-center justify-start space-y-2 md:space-y-0 md:space-x-3">
-                    <button className='bg-[#0d0d48] hover:bg-blue-900 px-6 text-white py-1 text-sm font-semibold rounded-md'>
-                      Pay
-                    </button>
-                  </li>
-
-                </ul>
-                {/* );
-              })
-            ) : ( */}
-                {/* <div className="flex justify-center items-center w-full py-10">
-              <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
-              <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
-                Product Not Found
-              </p>
-            </div> */}
-                {/* )} */}
-              </div>
-            </div>
+            {
+              EMI.length > 0 ?
+                <div className='px-5 py-5 '>
+                  <div className="bg-white shadow-md overflow-x-scroll">
+                    <h1 className='font-bold p-6 text-lg'>Customer List</h1>
+                    <table
+                      className="w-full bg-blue-50 text-sm text-center "
+                      id="table-to-xls"
+                    >
+                      <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
+                        <tr className="text-black text-sm ">
+                          <th scope="col" className="pl-3 py-4">
+                            Serial No
+                          </th>
+                          <th scope="col" className="pl-3 py-4">
+                            Customer Id
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Name
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Phone
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Total
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Paidup
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Pending
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Profile
+                          </th>
+                          <th scope="col" className="px-6 py-4">
+                            Action
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white items-center  overflow-x-scroll">
+                        <tr className=" border-b">
+                          <th className="py-5 px-6">
+                            01
+                          </th>
+                          <td className="px-6 py-5 text-gray-500">
+                            001
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            Shad
+                          </td>
+                          <td className="px-6 py-5">
+                            1234567890
+                          </td>
+                          <td className="px-6 py-5">
+                            15000
+                          </td>
+                          <td className="px-6 py-5">
+                            5000
+                          </td>
+                          <td className="px-6 py-5">
+                            10000
+                          </td>
+                          <td className="px-6 py-5 ">
+                            <div className="flex justify-center space-x-3">
+                              <AiFillEye
+                                className="text-[11px] md:text-sm lg:text-[19px] "
+                                onClick={() =>
+                                  navigate(`/Customer/profile-detail`)}
+                              />
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 ">
+                            <div className="flex justify-center space-x-3">
+                              <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                Pay
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                :
+                <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
+                  <FaUsers className='text-3xl' />
+                  <h1 className=' font-semibold'>Customer Not Found</h1>
+                </div>
+            }
           </div>
         </div>
       </div>
@@ -369,3 +401,95 @@ function CustomersList() {
 }
 
 export default CustomersList
+
+
+  // < div className = 'px-10 py-5' >
+  //   <div className="bg-white shadow-md">
+  //     <h1 className='font-bold p-6 text-lg'>Customer List</h1>
+  //     <ul className="flex px-5 justify-between bg-blue-50 py-4 text-xs uppercase shadow-sm text-black font-medium">
+  //       <li className="">
+  //         Customer ID
+  //       </li>
+  //       <li className="">
+  //         Name
+  //       </li>
+  //       <li className="">
+  //         Mobile
+  //       </li>
+  //       <li className="">
+  //         Company
+  //       </li>
+  //       <li className="">
+  //         Model
+  //       </li>
+  //       <li className="">
+  //         Total
+  //       </li>
+  //       <li className="">
+  //         Paidup
+  //       </li>
+  //       <li className="">
+  //         Pedding
+  //       </li>
+  //       <li className="">
+  //         Profile
+  //       </li>
+  //       <li className="">
+  //         Action
+  //       </li>
+  //     </ul>
+  //     {/* {PhoneInfo?.length > 0 ? (
+  //             PhoneInfo.map((data, index) => {
+  //               console.log(data , "data")
+  //               return ( */}
+  //     <ul
+  //       // key={index}
+  //       className="flex px-5 justify-between bg-red-100 py-4 text-sm shadow-sm text-black "
+  //     >
+  //       <li className="text-center">
+  //         001
+  //       </li>
+  //       <li className="text-center">
+  //         Shad
+  //       </li>
+  //       <li className="text-center">
+  //         1234567890
+  //       </li>
+  //       <li className="text-center">
+  //         Vivo
+  //       </li>
+  //       <li className="text-center">
+  //         F17 Pro
+  //       </li>
+  //       <li className="text-center">
+  //         15000
+  //       </li>
+  //       <li className="text-center">
+  //         5000
+  //       </li>
+  //       <li className="">
+  //         <AiFillEye
+  //           className="text-[11px] md:text-sm lg:text-[19px] "
+  //           onClick={() =>
+  //             navigate(`/Customer/profile-detail`)}
+  //         />
+  //       </li>
+  //       <li className="">
+  //         <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+  //           Pay
+  //         </button>
+  //       </li>
+
+  //     </ul>
+  //     {/* );
+  //             })
+  //           ) : ( */}
+  //     {/* <div className="flex justify-center items-center w-full py-10">
+  //             <MdShoppingCart className=" text-2xl sm:text-3xl md:text-[30px] text-gray-400 mr-2" />
+  //             <p className="text-xs xs:text-sm sm:text-lg 2xl:text-[20px] font-medium text-gray-400">
+  //               Product Not Found
+  //             </p>
+  //           </div> */}
+  //     {/* )} */}
+  //   </div>
+  //               </div >
