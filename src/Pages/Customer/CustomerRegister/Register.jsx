@@ -31,10 +31,10 @@ function CustomerRegister() {
                         Customer Registration
                     </h1>
                 </div>
-                <form className="flex justify-center items-center pt-5 px-14">
+                <form className="flex justify-center items-center pt-5 xs:px-5 xl:px-14">
                     <div className="w-full rounded-lg truncate bg-white py-9 shadow-2xl ">
-                        <div className="w-full flex space-x-12 px-14 ">
-                            <div className="flex flex-col justify-center items-center w-full gap-1">
+                        <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
+                            <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                 <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                     <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
                                         <img
@@ -58,7 +58,7 @@ function CustomerRegister() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 mt-8 w-full ">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
                                     <div className="firtname w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -102,7 +102,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="whatsappno w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -146,95 +146,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
-                                    <div className="dateofbirth w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Date Of Birth *
-                                            </span>
-                                            <input
-                                                type="date"
-                                                name="dob"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.dob}
-                                                className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '                                         />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.dob && touched.dob ? errors.dob : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="gender w-full ">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Gender
-                                            </span>
-                                            <div className='border w-full border-slate-300 mt-1 rounded-md h-10 flex justify-center items-center space-x-5 '>
-                                                <div className="male ">
-
-                                                    <label htmlFor="gender" className="m-2">
-                                                        Male
-                                                    </label>
-                                                    <input
-                                                        type="radio"
-                                                        id="male"
-                                                        name="gender"
-                                                        className="hover:cursor-pointer"
-                                                        checked={values.gender == "m"}
-                                                        value={"m"}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-                                                <div className="female">
-                                                    <label htmlFor="gender" className="m-2">
-                                                        Female
-                                                    </label>
-                                                    <input
-                                                        type="radio"
-                                                        id="female"
-                                                        name="gender"
-                                                        className="hover:cursor-pointer"
-                                                        checked={values.gender == "f"}
-                                                        value={"f"}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    />
-                                                </div>
-
-                                            </div>
-                                        </label>
-                                        <span
-                                            className={`text-xs font-semibold  text-red-600 px-1 ${errors.gender && touched.gender ? "" : "hidden  "
-                                                }`}
-                                        >
-                                            {errors.gender && touched.gender ? errors.gender : null}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="flex flex-1 2xl:w-full  w-full">
-                                    <div className="Addresss w-full">
-                                        <label className=" flex flex-col">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Address *
-                                            </span>
-                                            <textarea name="address"
-                                                className='w-[420px] mt-1 rounded-md px-3 py-2 outline-none border  border-slate-300 text-sm shadow-sm placeholder-slate-400'
-                                                placeholder="Enter Address"
-                                                id=""
-                                                value={values.address}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                            ></textarea>
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.address && touched.address ? errors.address : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-col justify-center items-center w-full gap-1">
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="reference w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -277,7 +189,10 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                            </div>
+                            <div className="flex flex-col justify-center items-center w-full xl:gap-1">
+
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="date w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -318,7 +233,7 @@ function CustomerRegister() {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="selectinst w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -361,7 +276,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="selectinst w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -403,7 +318,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="discount w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
@@ -451,30 +366,12 @@ function CustomerRegister() {
                                 <div className="flex py-2 ">
                                     <div>
                                         <button
-                                            className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[7px] overflow-hidden text-white rounded-lg cursor-pointer group mr-3"
-                                        // onClick={(e) => {
-                                        //     handleSubmit();
-                                        //     // setIndex(2);
-                                        // }}
-                                        >
-                                            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                            <span className="relative">
-                                                CLEAR
-                                            </span>
-                                        </button>
-                                    </div>
-                                    <div>
-                                        <button
                                             type="button"
-                                            className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[7px] overflow-hidden text-white rounded-lg cursor-pointer group mr-3"
-                                            onClick={(e) => {
-                                                handleSubmit();
-                                                // setIndex(2);
-                                            }}
+                                            className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
                                         >
                                             <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                            <span className="relative">
-                                                SUBMIT
+                                            <span className="relative flex items-center gap-2 text-base">
+                                                Next
                                             </span>
                                         </button>
                                     </div>

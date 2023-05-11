@@ -8,20 +8,23 @@ import { FaUsers } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
+import ReactToPrint from "react-to-print";
+import { MdLocalPrintshop } from 'react-icons/md';
+
 
 
 
 function CustomersList() {
 
   const installmentSchema = Yup.object({
-    installment: Yup.string().required("Please Enter Company"),
-    dp: Yup.string().required("Please Enter Model"),
-    charge: Yup.string().required("Please Enter Price"),
+    installment: Yup.string().required("Please Enter Installment"),
+    dp: Yup.string().required("Please Enter Down Payment"),
+    charge: Yup.string().required("Please Enter Charges"),
   });
 
   const initialValues = {
@@ -96,6 +99,15 @@ function CustomersList() {
     setEMI(event.target.value)
   }
 
+  const Exportstudent = () => {
+    const res = true;
+    if (res) {
+      Toaster();
+    } else {
+      errtoast();
+    }
+  };
+
   return (
     <>
       <div className='relative'>
@@ -115,7 +127,7 @@ function CustomersList() {
                     </button>
                   </div>
                   <div className="  rounded-md  my-5 xl:py-4  px-5 xl:px-10">
-                    <h1 className="font-semibold text-[#000080] text-lg lg:text-xl pb-5 ">
+                    <h1 className="font-semibold text-[#0d0d48] text-lg lg:text-xl pb-5 ">
                       Add Installment
                     </h1>
                     <form
@@ -207,7 +219,7 @@ function CustomersList() {
           </div>
         )}
         <div className={` ${model && "opacity-10"}`}>
-          <div className=' xl:px-10  h-full'>
+          <div className='xl:px-5  h-full'>
             <div className='py-5 px-5'>
               <div className='flex items-center justify-between'>
                 <div>
@@ -273,59 +285,105 @@ function CustomersList() {
                   :
                   null
               }
-              <div className='flex justify-center items-center mt-10'>
-                <input
-                  type="search"
-                  placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
-                  className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
-                />
-                <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
-            shadow-xl cursor-pointer text-white text-2xl '>
-                  <BiSearch className='search group-hover:scale-125 duration-300' />
-                </div>
-              </div>
             </div>
-            {
-              EMI.length > 0 ?
-                <div className='px-5 py-5 '>
-                  <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
-                    <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-                    <table
-                      className="w-full bg-blue-50 text-sm text-center "
-                      id="table-to-xls"
+
+            <div className='px-5 py-5 '>
+              <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
+                <h1 className='font-bold pt-4 px-4 text-lg'>Customer List</h1>
+                <div className='flex justify-between items-center px-3 py-5'>
+                  <div className='flex justify-start items-center w-1/3 '>
+                    <input
+                      type="search"
+                      placeholder='Search Receipt (BY : Name , Whatsapp Number)'
+                      className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+                    />
+                    <div className='bg-blue-500 px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+                         shadow-xl cursor-pointer text-white text-2xl '>
+                      <BiSearch className='search group-hover:scale-125 duration-300' />
+                    </div>
+                  </div>
+                  <div className="right flex items-center space-x-3 pr-6">
+                    <button
+                      id="year-btn"
+                      className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
+                      <select
+                        name=""
+                        id=""
+                        className="cursor-pointer text-darkblue-500 text-base outline-none"
+                      >
+                        <option value={0}>All</option>
+                        <option value={1}>Pending</option>
+                        <option value={2}>Paidup</option>
+                      </select>
+                    </button>
+
+                    <span>
+                      <ReactToPrint
+                        trigger={() => (
+                          <Link
+                            to="#"
+                            id="print"
+                            className="text-3xl bg-[#0d0d48] rounded-md text-white w-10 h-8 flex justify-center  "
+                          >
+                            <MdLocalPrintshop />
+                          </Link>
+                        )}
+                        content={() => componentRef.current}
+                        onBeforeGetContent={() => {
+                          return new Promise((resolve) => {
+                            setIsPrint(true);
+                            resolve();
+                          });
+                        }}
+                        onAfterPrint={() => setIsPrint(false)}
+                      />
+                    </span>
+                    <button
+                      onClick={Exportstudent}
+                      className="text-blue-500 bg-blue-200 font-semibold shadow-2xl py-[6px] px-3 rounded-lg text-sm"
                     >
-                      <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
-                        <tr className="text-black text-sm ">
-                          <th scope="col" className="pl-3 py-4">
-                            Serial No
-                          </th>
-                          <th scope="col" className="pl-3 py-4">
-                            Customer Id
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Name
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Phone
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Total
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Paidup
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Pending
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Profile
-                          </th>
-                          <th scope="col" className="px-6 py-4">
-                            Action
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                      Export
+                    </button>
+                  </div>
+                </div>
+                <table
+                  className="w-full items-center text-sm text-center "
+                  id="table-to-xls"
+                >
+                  <thead className="text-xs bg-blue-50 text-gray-700 bg-class3-50 uppercase  ">
+                    <tr className="text-black text-sm ">
+                      <th scope="col" className="pl-3 py-4">
+                        Serial No
+                      </th>
+                      <th scope="col" className="pl-3 py-4">
+                        Customer Id
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Name
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Phone
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Total
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Paidup
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Pending
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Profile
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  {
+                    EMI.length > 0 ?
+                      <tbody className="bg-white items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                         <tr className=" border-b">
                           <th className="py-5 px-6">
                             01
@@ -359,22 +417,25 @@ function CustomersList() {
                           </td>
                           <td className="px-6 py-5 ">
                             <div className="flex justify-center space-x-3">
-                              <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                              <button
+                                onClick={() =>
+                                  navigate(`/Receipt/Generate`)}
+                                className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
                                 Pay
                               </button>
                             </div>
                           </td>
                         </tr>
                       </tbody>
-                    </table>
-                  </div>
-                </div>
-                :
-                <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
-                  <FaUsers className='text-3xl' />
-                  <h1 className=' font-semibold'>Customer Not Found</h1>
-                </div>
-            }
+                      :
+                      <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
+                        <FaUsers className='text-3xl' />
+                        <h1 className=' font-semibold'>Customer Not Found</h1>
+                      </div>
+                  }
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

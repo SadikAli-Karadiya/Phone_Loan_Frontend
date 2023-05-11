@@ -36,7 +36,7 @@ function EMIHistory() {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                            <tbody className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                 <tr className=" border-b">
                                     <th className="py-5 px-6">
                                         01

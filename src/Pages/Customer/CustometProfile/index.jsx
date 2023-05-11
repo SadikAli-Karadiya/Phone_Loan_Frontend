@@ -39,10 +39,10 @@ function CustomerProfile() {
 
                 <div className="xs:px-5 sm:px-10 py-5">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 px-10">
-                            <div className="w-full rounded-lg truncate py-9  ">
-                                <div className="w-full flex space-x-12 px-10 ">
-                                    <div className="flex flex-col justify-center items-center w-full gap-1">
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14">
+                            <div className="w-full rounded-lg truncate py-9 ">
+                                <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
+                                    <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                         <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                             <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
                                                 <img
@@ -66,7 +66,7 @@ function CustomerProfile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 mt-8 w-full ">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
                                             <div className="firtname w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -110,7 +110,7 @@ function CustomerProfile() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="whatsappno w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -154,95 +154,7 @@ function CustomerProfile() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
-                                            <div className="dateofbirth w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Date Of Birth *
-                                                    </span>
-                                                    <input
-                                                        type="date"
-                                                        name="dob"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.dob}
-                                                        className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none ' />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.dob && touched.dob ? errors.dob : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div className="gender w-full ">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Gender
-                                                    </span>
-                                                    <div className='border w-full border-slate-300 mt-1 rounded-md h-10 flex justify-center items-center space-x-5 '>
-                                                        <div className="male ">
-
-                                                            <label htmlFor="gender" className="m-2">
-                                                                Male
-                                                            </label>
-                                                            <input
-                                                                type="radio"
-                                                                id="male"
-                                                                name="gender"
-                                                                className="hover:cursor-pointer"
-                                                                checked={values.gender == "m"}
-                                                                value={"m"}
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                            />
-                                                        </div>
-                                                        <div className="female">
-                                                            <label htmlFor="gender" className="m-2">
-                                                                Female
-                                                            </label>
-                                                            <input
-                                                                type="radio"
-                                                                id="female"
-                                                                name="gender"
-                                                                className="hover:cursor-pointer"
-                                                                checked={values.gender == "f"}
-                                                                value={"f"}
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                            />
-                                                        </div>
-
-                                                    </div>
-                                                </label>
-                                                <span
-                                                    className={`text-xs font-semibold  text-red-600 px-1 ${errors.gender && touched.gender ? "" : "hidden  "
-                                                        }`}
-                                                >
-                                                    {errors.gender && touched.gender ? errors.gender : null}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-1 2xl:w-full  w-full">
-                                            <div className="Addresss w-full">
-                                                <label className=" flex flex-col">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Address *
-                                                    </span>
-                                                    <textarea name="address"
-                                                        className='w-[420px] mt-1 rounded-md px-3 py-2 outline-none border  border-slate-300 text-sm shadow-sm placeholder-slate-400'
-                                                        placeholder="Enter Address"
-                                                        id=""
-                                                        value={values.address}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                    ></textarea>
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.address && touched.address ? errors.address : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col justify-center items-center w-full gap-1">
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="reference w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -285,7 +197,10 @@ function CustomerProfile() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                    </div>
+                                    <div className="flex flex-col justify-center items-center w-full xl:gap-1">
+
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="date w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -326,7 +241,7 @@ function CustomerProfile() {
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="selectinst w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -369,7 +284,7 @@ function CustomerProfile() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="selectinst w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -411,7 +326,7 @@ function CustomerProfile() {
                                                 </label>
                                             </div>
                                         </div>
-                                        <div className="flex lg:flex-row md:flex-col gap-4 w-full">
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="discount w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">

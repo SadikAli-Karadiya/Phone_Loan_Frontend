@@ -1,18 +1,16 @@
 import React from 'react'
 import { BiSearch } from "react-icons/bi"
+import "../../../App.css"
 import { AiFillEye } from "react-icons/ai";
-import "../../App.css"
 import { useNavigate } from "react-router-dom";
 
-
-function PayEMI() {
+function SearchReciept() {
   const navigate = useNavigate();
-
   return (
     <>
       <div className=' sm:px-5 xl:px-10 py-5 h-full'>
         <div className=' py-5 px-5'>
-          <h1 className='text-[#0d0d48] text-2xl font-bold'>Pay EMI</h1>
+          <h1 className='text-[#0d0d48] text-2xl font-bold'>Search Receipt</h1>
           <div className='flex justify-center items-center mt-10 '>
             <input
               type="search"
@@ -35,13 +33,13 @@ function PayEMI() {
               <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
                 <tr className="text-black text-sm ">
                   <th scope="col" className="pl-3 py-4">
-                    Customer Id
+                    Date
+                  </th>
+                  <th scope="col" className="pl-3 py-4">
+                    Receipt No
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Name
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                    Phone
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Company
@@ -50,29 +48,29 @@ function PayEMI() {
                     Model
                   </th>
                   <th scope="col" className="px-6 py-4">
-                    Total
+                    Installment
                   </th>
                   <th scope="col" className="px-6 py-4">
-                    Pending
+                    Paid
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Total
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Profile
                   </th>
-                  <th scope="col" className="px-6 py-4">
-                    Action
-                  </th>
                 </tr>
               </thead>
-              <tbody className="bg-red-100 items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+              <tbody className="bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                 <tr className=" border-b">
-                  <td className="px-6 py-5 font-bold">
+                  <td className="px-6 py-5">
                     001
                   </td>
-                  <td className="px-6 py-5 capitalize">
-                    Shad
+                  <td className="px-6 py-5 font-bold">
+                    01
                   </td>
                   <td className="px-6 py-5">
-                    1234567890
+                    Shad
                   </td>
                   <td className="px-6 py-5">
                     Vivo
@@ -81,28 +79,25 @@ function PayEMI() {
                     F17
                   </td>
                   <td className="px-6 py-5">
-                    15000
+                    5
                   </td>
                   <td className="px-6 py-5">
-                    5000
+                    <h1 className='bg-green-300 text-green-900 font-bold py-[2px] rounded-md'>
+                      5000
+                    </h1>
+                  </td>
+                  <td className="px-6 py-5">
+                    <h1 className='bg-blue-200 text-blue-900 font-bold py-[2px] rounded-md'>
+                      5000
+                    </h1>
                   </td>
                   <td className="px-6 py-5">
                     <div className="flex justify-center items-center">
                       <AiFillEye
                         className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                         onClick={() =>
-                          navigate(`/Customer/profile-detail`)}
+                          navigate(`/Receipt/Receipt`)}
                       />
-                    </div>
-                  </td>
-                  <td className="px-6 py-5 ">
-                    <div className="flex justify-center space-x-3">
-                      <button
-                        onClick={() =>
-                          navigate(`/Receipt/Generate`)}
-                        className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                        Pay
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -115,4 +110,4 @@ function PayEMI() {
   )
 }
 
-export default PayEMI
+export default SearchReciept

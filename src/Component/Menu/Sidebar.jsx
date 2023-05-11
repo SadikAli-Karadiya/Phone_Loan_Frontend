@@ -55,17 +55,17 @@ const Sidebar = () => {
               <li className="xs:px-3 xl:px-5 my-3">
                 <NavLink
                   activeclassname="active"
-                  to="/PayEMI">
+                  to="/EMI">
                   <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                     <BiRupee className="text-lg" />
-                    <h1 className="text-sm hidden xl:block">Pay EMI</h1>
+                    <h1 className="text-sm hidden xl:block">EMI</h1>
                   </div>
                 </NavLink>
               </li>
               <li className="xs:px-3 xl:px-5 my-3">
                 <NavLink
                   activeclassname="active"
-                  to="/Reciept">
+                  to="/Receipt/Search">
                   <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                     <FaUserPlus className="text-lg" />
                     <h1 className="text-sm hidden xl:block">Receipt</h1>
