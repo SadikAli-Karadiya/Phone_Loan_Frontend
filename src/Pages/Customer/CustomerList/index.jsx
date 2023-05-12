@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useRef , useState } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
@@ -24,12 +24,13 @@ import { IoMdInformationCircle } from "react-icons/io";
 
 
 function CustomersList() {
-  const [model, setModel] = React.useState(false);
-  const [isHoverEdit, setIsHoverEdit] = React.useState(false);
-  const [isHoverDelete, setIsHoverDelete] = React.useState(false);
-  const [selectedEMI, setSelectedEMI] = React.useState(0);
+  const [model, setModel] = useState(false);
+  const [isHoverEdit, setIsHoverEdit] = useState(false);
+  const [isHoverDelete, setIsHoverDelete] = useState(false);
+  const [selectedEMI, setSelectedEMI] = useState(0);
   const navigate = useNavigate();
-  const [data, setdata] = React.useState([
+  const componentRef = useRef();
+  const [data, setdata] = useState([
     {
       id: 1,
       installment: 1,
@@ -164,7 +165,7 @@ function CustomersList() {
     charge: "",
   }
 
-  const [value, setValue] = React.useState({
+  const [value, setValue] = useState({
     installment: "",
     dp: "",
     charge: "",

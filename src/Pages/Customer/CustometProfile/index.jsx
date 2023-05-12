@@ -37,10 +37,10 @@ function CustomerProfile() {
                 </div>
 
 
-                <div className="xs:px-5 sm:px-10 py-5">
+                <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
                         <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14">
-                            <div className="w-full rounded-lg truncate py-9 ">
+                            <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                         <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
@@ -389,17 +389,16 @@ function CustomerProfile() {
                                 </div>
                             </div>
                         </form>
-                        <div className='xs:px-0 md:px-5 xl:px-10 py-10 '>
+                        <div className='xs:px-0 md:px-5 xl:px-10 py-10  '>
                             <div className="bg-white xs:overflow-x-scroll xl:overflow-x-hidden">
                                 <h1 className='font-bold xs:p-3 sm:p-6 text-lg'>Phone Details</h1>
                                 <table
                                     className="w-full bg-slate-100 text-sm text-center "
-                                    id="table-to-xls"
-                                >
+                                    id="table-to-xls">
                                     <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
                                         <tr className="text-black text-sm ">
                                             <th scope="col" className="pl-3 py-4">
-                                                Customer ID
+                                                Date
                                             </th>
                                             <th scope="col" className="px-6 py-4">
                                                 Company
@@ -408,19 +407,13 @@ function CustomerProfile() {
                                                 Model
                                             </th>
                                             <th scope="col" className="px-6 py-4">
-                                                Installment
+                                                Total EMI
                                             </th>
                                             <th scope="col" className="px-6 py-4">
-                                                Total
-                                            </th>
-                                            <th scope="col" className="px-6 py-4">
-                                                Paidup
+                                                Down Payment
                                             </th>
                                             <th scope="col" className="px-6 py-4">
                                                 Pending
-                                            </th>
-                                            <th scope="col" className="px-6 py-4">
-                                                Profile
                                             </th>
                                             <th scope="col" className="px-6 py-4">
                                                 Action
@@ -429,9 +422,10 @@ function CustomerProfile() {
                                     </thead>
                                     <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                         <tr className=" border-b">
-                                            <th className="py-5 px-6">
-                                                01
-                                            </th>
+                                          
+                                            <td className="px-6 py-5 ">
+                                                12 / 02 / 2023
+                                            </td>
                                             <td className="px-6 py-5 ">
                                                 Vivo
                                             </td>
@@ -448,22 +442,12 @@ function CustomerProfile() {
                                                 5000
                                             </td>
                                             <td className="px-6 py-5">
-                                                10000
-                                            </td>
-                                            <td className="px-6 py-5">
                                                 <div className="flex justify-center items-center">
                                                     <AiFillEye
                                                         className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                                         onClick={() =>
                                                             navigate(`/Customer/EMI-History`)}
                                                     />
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5 ">
-                                                <div className="flex justify-center space-x-3">
-                                                    <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                                        Pay
-                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
