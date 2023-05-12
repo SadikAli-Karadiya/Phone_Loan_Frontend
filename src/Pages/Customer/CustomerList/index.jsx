@@ -3,9 +3,7 @@ import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import { FaUsers } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, NavLink, Link } from "react-router-dom";
@@ -15,11 +13,139 @@ import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
 import ReactToPrint from "react-to-print";
 import { MdLocalPrintshop } from 'react-icons/md';
+import { RiFolderUserFill } from "react-icons/ri";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { IoMdInformationCircle } from "react-icons/io";
+
+
 
 
 
 
 function CustomersList() {
+
+  const data = [
+    {
+      id: 1,
+      installment: 1,
+      dp: 40,
+      charge: 1500,
+      CustomersList: [
+        {
+          id: 1,
+          customer_id: 1,
+          name: "shad",
+          mobile: 1234567890,
+          total: 15000,
+          paidup: 7500,
+        },
+        {
+          id: 2,
+          customer_id: 2,
+          name: "xyz",
+          mobile: 1234567890,
+          total: 10000,
+          paidup: 7500,
+        }
+      ]
+    },
+    {
+      id: 2,
+      installment: 2,
+      dp: 45,
+      charge: 1600,
+      CustomersList: [
+        {
+          id: 1,
+          customer_id: 1,
+          name: "shad",
+          mobile: 1234567890,
+          total: 15000,
+          paidup: 7500,
+        },
+        {
+          id: 2,
+          customer_id: 2,
+          name: "xyz",
+          mobile: 1234567890,
+          total: 10000,
+          paidup: 7500,
+        }
+      ]
+    },
+    {
+      id: 3,
+      installment: 3,
+      dp: 50,
+      charge: 1800,
+      CustomersList: [
+        {
+          id: 1,
+          customer_id: 1,
+          name: "shad",
+          mobile: 1234567890,
+          total: 15000,
+          paidup: 7500,
+        },
+        {
+          id: 2,
+          customer_id: 2,
+          name: "xyz",
+          mobile: 1234567890,
+          total: 10000,
+          paidup: 7500,
+        }
+      ]
+    },
+    {
+      id: 4,
+      installment: 4,
+      dp: 55,
+      charge: 2000,
+      CustomersList: [
+        {
+          id: 1,
+          customer_id: 1,
+          name: "shad",
+          mobile: 1234567890,
+          total: 15000,
+          paidup: 7500,
+        },
+        {
+          id: 2,
+          customer_id: 2,
+          name: "xyz",
+          mobile: 1234567890,
+          total: 10000,
+          paidup: 7500,
+        }
+      ]
+    },
+  ]
+
+  const bgColors = [
+    "#ffd6d6",
+    "#bfdbfe",
+    "#c1d1d8",
+    "#ffedd5",
+    "#f4d5ff",
+    "#fbc8bd",
+    "#ccfbf1",
+    "#d8bbbc",
+    "#fef9c3",
+  ];
+  const headingBgColor = [
+    "#f3797e",
+    "#3b82f6",
+    "#2f667e",
+    "#9a4947",
+    "#e08aff",
+    "#f24822",
+    "#14b8a6",
+    "#7e1b1f",
+    "#ca8a04",
+  ];
 
   const installmentSchema = Yup.object({
     installment: Yup.string().required("Please Enter Installment"),
@@ -31,43 +157,19 @@ function CustomersList() {
     installment: "",
     dp: "",
     charge: "",
-    description: "",
   }
 
   const [value, setValue] = React.useState({
     installment: "",
     dp: "",
     charge: "",
-    description: "",
   });
 
-  const [PhoneInfo, setPhoneInfo] = React.useState([
-    {
-      id: 1,
-      installment: 2,
-      dp: 50,
-      description: "skjdbvjhdb",
-      CustomersList: [
-        {
-
-        }
-      ]
-    },
-    {
-      id: 2,
-      installment: 4,
-      dp: 30,
-      description: "skjdbvjhdb"
-    },
-    {
-      id: 3,
-      installment: 3,
-      dp: 40,
-      description: "skjdbvjhdb"
-    }
-  ]);
   const [model, setModel] = React.useState(false);
+  const [isHoverEdit, setIsHoverEdit] = React.useState(false);
+  const [isHoverDelete, setIsHoverDelete] = React.useState(false);
   const [EMI, setEMI] = React.useState("");
+  const [edit_EMI_id, setEdit_EMI_id] = React.useState();
   const navigate = useNavigate();
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
@@ -95,9 +197,49 @@ function CustomersList() {
       },
     });
 
-  function handleSelectEMI(event) {
-    setEMI(event.target.value)
-  }
+  const handleMouseEnterEdit = () => {
+    setIsHoverEdit(true);
+  };
+
+  const handleMouseLeaveEdit = () => {
+    setIsHoverEdit(false);
+  };
+
+  const handleMouseEnterDelete = () => {
+    setIsHoverDelete(true);
+  };
+
+  const handleMouseLeaveDelete = () => {
+    setIsHoverDelete(false);
+  };
+
+  const handleEditClass = (id) => {
+    let updateEMI = data?.find((n) => {
+      return n?.id == id;
+    });
+    setModel(true);
+    setValue(updateEMI);
+  };
+
+  const handleDeleteClass = async (class_id) => {
+    Swal.fire({
+      title: "Are you sure to delete class?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteClassResponse = await deleteClass(class_id);
+        if (deleteClassResponse) {
+          setCall(() => !call);
+          return deleteNotify();
+        }
+      }
+    });
+  };
 
   const Exportstudent = () => {
     const res = true;
@@ -221,27 +363,7 @@ function CustomersList() {
         <div className={` ${model && "opacity-10"}`}>
           <div className='xl:px-5  h-full'>
             <div className='py-5 px-5'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <select name="" id="" className='xs:text-xs sm:text-base bg-white border xs:px-2 xs:py-1 sm:px-3 sm:py-[6px] rounded-lg' onChange={handleSelectEMI}>
-                    {
-                      PhoneInfo && PhoneInfo[0] ? (
-                        PhoneInfo.map((iteam, index) => {
-                          return (
-                            <option key={index} value={iteam.installment} >
-                              For {iteam.installment} Month
-                            </option>
-
-                          )
-                        })
-                      ) :
-                        (
-                          <option value="">Select Installment</option>
-                        )
-                    }
-
-                  </select>
-                </div>
+              <div className='flex items-center justify-end pb-5'>
                 <div
                   onClick={() => {
                     setModel(true);
@@ -250,45 +372,104 @@ function CustomersList() {
                   <BiFolderPlus className='xs:text-base sm:text-xl' />
                 </div>
               </div>
-              {
-                EMI.length > 0 ?
-                  <div className='py-4 px-10 xs:mt-4 sm:mt-7 xs:space-y-3 rounded-lg flex xs:flex-col sm:flex-col md:flex-row md:space-y-0 md:space-x-5 w-full bg-white drop-shadow-sm justify-start'>
-                    <div className='flex flex-col w-full'>
-                      <label htmlFor="Installment">Month</label>
-                      <input type="text"
-                        name='installment'
-                        placeholder='Enter Month'
-                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                      />
-                    </div>
-                    <div className='flex flex-col w-full'>
-                      <label htmlFor="Installment">Down Payment</label>
-                      <input type="text"
-                        name='dp'
-                        placeholder='Enter Installment'
-                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                      />
-                    </div>
-                    <div className='flex flex-col w-full'>
-                      <label htmlFor="Installment">Charge</label>
-                      <input type="text"
-                        name='charge'
-                        placeholder='Enter Installment'
-                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                      />
-                    </div>
-                    <div className='flex  xs:py-2  xs:space-x-5 sm:space-x-5 sm:justify-start md:justify-end md:items-end'>
-                      <FiEdit className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-lg hover:cursor-pointer text-green-600 hover:text-black' />
-                      <MdDelete className='text-[25px] border-2 w-10 p-1 border-gray-300 h-8 rounded-md xl:text-xl text-red-600 hover:cursor-pointer hover:text-black' />
+              <div className='bg-white px-5 flex space-x-5 flex-wrap justify-center items-center py-5 rounded-md'>
+                {data?.length > 0 ? (
+                  data?.map((item, index) => {
+                    return (
+                      <div
+                        style={{
+                          backgroundColor: bgColors[index % bgColors.length],
+                        }}
+                        className='px-5 py-3 my-3 w-[23%] hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 ' key={index}>
+                        <div className='flex justify-between items-center '>
+                          <div>
+                            <h1 className='text-gray-900'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
+                          </div>
+                          <div className='flex justify-end items-center space-x-2'>
+                            <div
+                              style={{
+                                color: isHoverEdit
+                                  ? "#fff"
+                                  : headingBgColor[
+                                  index % headingBgColor.length
+                                  ],
+                                backgroundColor: isHoverEdit
+                                  ? headingBgColor[
+                                  index % headingBgColor.length
+                                  ]
+                                  : "#fff",
+                              }}
+                              onMouseEnter={handleMouseEnterEdit}
+                              onMouseLeave={handleMouseLeaveEdit}
+                              onClick={() => handleEditClass(item._id)}
+                              className='edit_delete_btns rounded-md px-[3px] py-[3px] '
+                            >
+                              <MdModeEdit className='' />
+                            </div>
+                            <div
+                              style={{
+                                color: isHoverDelete
+                                  ? "#fff"
+                                  : headingBgColor[
+                                  index % headingBgColor.length
+                                  ],
+                                backgroundColor: isHoverDelete
+                                  ? headingBgColor[
+                                  index % headingBgColor.length
+                                  ]
+                                  : "#fff",
+                              }}
+                              onMouseEnter={handleMouseEnterDelete}
+                              onMouseLeave={handleMouseLeaveDelete}
+                              onClick={() => handleDeleteClass(item._id)}
+                              className='edit_delete_btns rounded-md px-[3px] py-[3px] '>
+                              <MdDelete className=' ' />
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`${item._id} flex items-center justify-start space-x-7`}>
+                          <div className='rounded-md'
+                            style={{
+                              backgroundColor:
+                                headingBgColor[index % headingBgColor.length],
+                            }}
+                          >
+                            <RiFolderUserFill className='text-white text-6xl' />
+                          </div>
+                          <div className=''>
+                            <h1
+                              style={{
+                                color:
+                                  headingBgColor[
+                                  index % headingBgColor.length
+                                  ],
+                              }}
+                              className='text-4xl font-bold'>{item.installment}</h1>
+                          </div>
+                        </div>
+                        <div className='rounded-md px-7 py-1'
+                          style={{
+                            backgroundColor:
+                              headingBgColor[index % headingBgColor.length],
+                          }}
+                        >
+                          <p className='text-white text-center text-sm font-roboto'>Total Customer : {item.CustomersList.length}</p>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className='flex justify-center items-center w-full'>
+                    <div className="bg-red-200 font-bold flex justify-center items-center p-2 rounded mx-3 space-x-2">
+                      <IoMdInformationCircle className="text-xl text-red-600" />
+                      <h1 className="text-red-800 text-sm">EMI not found </h1>
                     </div>
                   </div>
-                  :
-                  null
-              }
+                )}
+              </div>
             </div>
-
             <div className='px-5 py-5 '>
-              <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
+              <div className="bg-white shadow-md rounded-md xs:overflow-x-scroll xl:overflow-x-hidden">
                 <h1 className='font-bold pt-4 px-4 text-lg'>Customer List</h1>
                 <div className='flex justify-between items-center px-3 py-5'>
                   <div className='flex justify-start items-center w-1/3 '>
