@@ -24,8 +24,12 @@ import { IoMdInformationCircle } from "react-icons/io";
 
 
 function CustomersList() {
-
-  const data = [
+  const [model, setModel] = React.useState(false);
+  const [isHoverEdit, setIsHoverEdit] = React.useState(false);
+  const [isHoverDelete, setIsHoverDelete] = React.useState(false);
+  const [selectedEMI, setSelectedEMI] = React.useState(0);
+  const navigate = useNavigate();
+  const [data, setdata] = React.useState([
     {
       id: 1,
       installment: 1,
@@ -38,7 +42,7 @@ function CustomersList() {
           name: "shad",
           mobile: 1234567890,
           total: 15000,
-          paidup: 7500,
+          pending: 7500,
         },
         {
           id: 2,
@@ -46,7 +50,7 @@ function CustomersList() {
           name: "xyz",
           mobile: 1234567890,
           total: 10000,
-          paidup: 7500,
+          pending: 7500,
         }
       ]
     },
@@ -62,7 +66,7 @@ function CustomersList() {
           name: "shad",
           mobile: 1234567890,
           total: 15000,
-          paidup: 7500,
+          pending: 7500,
         },
         {
           id: 2,
@@ -70,7 +74,7 @@ function CustomersList() {
           name: "xyz",
           mobile: 1234567890,
           total: 10000,
-          paidup: 7500,
+          pending: 7500,
         }
       ]
     },
@@ -86,7 +90,7 @@ function CustomersList() {
           name: "shad",
           mobile: 1234567890,
           total: 15000,
-          paidup: 7500,
+          pending: 7500,
         },
         {
           id: 2,
@@ -94,7 +98,7 @@ function CustomersList() {
           name: "xyz",
           mobile: 1234567890,
           total: 10000,
-          paidup: 7500,
+          pending: 7500,
         }
       ]
     },
@@ -110,7 +114,7 @@ function CustomersList() {
           name: "shad",
           mobile: 1234567890,
           total: 15000,
-          paidup: 7500,
+          pending: 7500,
         },
         {
           id: 2,
@@ -118,11 +122,11 @@ function CustomersList() {
           name: "xyz",
           mobile: 1234567890,
           total: 10000,
-          paidup: 7500,
+          pending: 7500,
         }
       ]
     },
-  ]
+  ])
 
   const bgColors = [
     "#ffd6d6",
@@ -135,6 +139,7 @@ function CustomersList() {
     "#d8bbbc",
     "#fef9c3",
   ];
+
   const headingBgColor = [
     "#f3797e",
     "#3b82f6",
@@ -165,12 +170,6 @@ function CustomersList() {
     charge: "",
   });
 
-  const [model, setModel] = React.useState(false);
-  const [isHoverEdit, setIsHoverEdit] = React.useState(false);
-  const [isHoverDelete, setIsHoverDelete] = React.useState(false);
-  const [EMI, setEMI] = React.useState("");
-  const [edit_EMI_id, setEdit_EMI_id] = React.useState();
-  const navigate = useNavigate();
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues: value ? value : initialValues,
@@ -178,7 +177,6 @@ function CustomersList() {
       onSubmit(data) {
         try {
           const fd = new FormData();
-          fd.append("photo", data.photo);
           let ok = JSON.stringify({
             PhoneInfo: data,
           });
@@ -188,7 +186,8 @@ function CustomersList() {
           //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
           // } else {
           // newsRegistration(fd).then();
-          setPhoneInfo([...PhoneInfo, data])
+          // setPhoneInfo([...PhoneInfo, data])
+          setdata(data)
           setModel(false)
           // }
         } catch (err) {
@@ -213,12 +212,32 @@ function CustomersList() {
     setIsHoverDelete(false);
   };
 
-  const handleEditClass = (id) => {
+  const handlePendingPaidUpClick = (e) => {
+    // const filteredCustomer = data?.CustomersList?.filter((data) => {
+    //   if (e.target.value == 2) {
+    //     return data.CustomersList.pending == 0;
+    //   } else if (e.target.value == 1) {
+    //     return data.CustomersList.pending != 0;
+    //   } else {
+    //     return data?.CustomersList;
+    //   }
+    // });
+    // setSelectedEMI(filteredCustomer)
+  };
+
+  const handleEditEMI = (id) => {
     let updateEMI = data?.find((n) => {
       return n?.id == id;
     });
-    setModel(true);
     setValue(updateEMI);
+    setModel(true);
+  };
+
+  const handleSelectEMI = (id) => {
+    let Customer = data?.find((n) => {
+      return n?.id == id;
+    });
+    setSelectedEMI(Customer)
   };
 
   const handleDeleteClass = async (class_id) => {
@@ -285,6 +304,7 @@ function CustomersList() {
                             onBlur={handleBlur}
                             name="installment"
                             id="installment"
+                            value={value.installment ? value.installment : values.installment}
                             placeholder='Enter Install'
                             className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
                           />
@@ -383,7 +403,7 @@ function CustomersList() {
                         className='px-5 py-3 my-3 w-[23%] hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 ' key={index}>
                         <div className='flex justify-between items-center '>
                           <div>
-                            <h1 className='text-gray-900'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
+                            <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
                           </div>
                           <div className='flex justify-end items-center space-x-2'>
                             <div
@@ -401,7 +421,7 @@ function CustomersList() {
                               }}
                               onMouseEnter={handleMouseEnterEdit}
                               onMouseLeave={handleMouseLeaveEdit}
-                              onClick={() => handleEditClass(item._id)}
+                              onClick={() => handleEditEMI(item.id)}
                               className='edit_delete_btns rounded-md px-[3px] py-[3px] '
                             >
                               <MdModeEdit className='' />
@@ -421,13 +441,13 @@ function CustomersList() {
                               }}
                               onMouseEnter={handleMouseEnterDelete}
                               onMouseLeave={handleMouseLeaveDelete}
-                              onClick={() => handleDeleteClass(item._id)}
+                              onClick={() => handleDeleteClass(item.id)}
                               className='edit_delete_btns rounded-md px-[3px] py-[3px] '>
                               <MdDelete className=' ' />
                             </div>
                           </div>
                         </div>
-                        <div className={`${item._id} flex items-center justify-start space-x-7`}>
+                        <div className={`${item._id} flex items-center justify-start space-x-7`} onClick={() => handleSelectEMI(item.id)}>
                           <div className='rounded-md'
                             style={{
                               backgroundColor:
@@ -488,6 +508,7 @@ function CustomersList() {
                       id="year-btn"
                       className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
                       <select
+                        onChange={handlePendingPaidUpClick}
                         name=""
                         id=""
                         className="cursor-pointer text-darkblue-500 text-base outline-none"
@@ -528,9 +549,7 @@ function CustomersList() {
                   </div>
                 </div>
                 <table
-                  className="w-full items-center text-sm text-center "
-                  id="table-to-xls"
-                >
+                  className="w-full items-center text-sm text-center" id="table-to-xls" >
                   <thead className="text-xs bg-blue-50 text-gray-700 bg-class3-50 uppercase  ">
                     <tr className="text-black text-sm ">
                       <th scope="col" className="pl-3 py-4">
@@ -563,57 +582,63 @@ function CustomersList() {
                     </tr>
                   </thead>
                   {
-                    EMI.length > 0 ?
-                      <tbody className="bg-white items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                        <tr className=" border-b">
-                          <th className="py-5 px-6">
-                            01
-                          </th>
-                          <td className="px-6 py-5 text-gray-500">
-                            001
-                          </td>
-                          <td className="px-6 py-5 capitalize">
-                            Shad
-                          </td>
-                          <td className="px-6 py-5">
-                            1234567890
-                          </td>
-                          <td className="px-6 py-5">
-                            15000
-                          </td>
-                          <td className="px-6 py-5">
-                            5000
-                          </td>
-                          <td className="px-6 py-5">
-                            10000
-                          </td>
-                          <td className="px-6 py-5">
-                            <div className="flex justify-center items-center">
-                              <AiFillEye
-                                className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                onClick={() =>
-                                  navigate(`/Customer/profile-detail`)}
-                              />
-                            </div>
-                          </td>
-                          <td className="px-6 py-5 ">
-                            <div className="flex justify-center space-x-3">
-                              <button
-                                onClick={() =>
-                                  navigate(`/Receipt/Generate`)}
-                                className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                Pay
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                      :
-                      <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
-                        <FaUsers className='text-3xl' />
-                        <h1 className=' font-semibold'>Customer Not Found</h1>
+                    selectedEMI?.CustomersList?.length > 0 ? (
+                      selectedEMI?.CustomersList.map((item, index) => {
+                        return (
+                          <tbody className="bg-white items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden" key={index}>
+                            <tr className=" border-b">
+                              <th className="py-5 px-6">
+                                {index + 1}
+                              </th>
+                              <td className="px-6 py-5 text-gray-500">
+                                {item.customer_id}
+                              </td>
+                              <td className="px-6 py-5 capitalize">
+                                {item.name}
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.mobile}
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.total}
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.total - item.pending}
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.pending}
+                              </td>
+                              <td className="px-6 py-5">
+                                <div className="flex justify-center items-center">
+                                  <AiFillEye
+                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                    onClick={() =>
+                                      navigate(`/Customer/profile-detail`)}
+                                  />
+                                </div>
+                              </td>
+                              <td className="px-6 py-5 ">
+                                <div className="flex justify-center space-x-3">
+                                  <button
+                                    onClick={() =>
+                                      navigate(`/Receipt/Generate`)}
+                                    className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                    Pay
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        )
+                      })
+                    ) : (
+                      <div className='flex justify-center items-center w-full'>
+                        <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
+                          <FaUsers className='text-3xl' />
+                          <h1 className=' font-semibold'>Customer Not Found</h1>
+                        </div>
                       </div>
-                  }
+                    )}
                 </table>
               </div>
             </div>
