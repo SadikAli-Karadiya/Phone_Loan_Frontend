@@ -33,9 +33,9 @@ function CustomerRegister() {
                         Customer Registration
                     </h1>
                 </div>
-                <form className="flex justify-center items-center pt-5 xs:px-5 xl:px-14">
-                    <div className="w-full rounded-lg truncate bg-white py-9 shadow-2xl ">
-                        <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
+                <form className="flex justify-center items-center pt-5 xs:px-5 xl:px-14" onSubmit={handleSubmit} >
+                    <div className="w-full rounded-lg truncate bg-white py-9 shadow-2xl  xs:px-5 md:px-7 xl:px-14  ">
+                        <div className="w-full items-end flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8">
                             <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                 <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                     <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
@@ -365,19 +365,96 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                {/* <div className="flex py-2 ">
-                                    <div>
-                                        <button
-                                            type="button"
-                                            className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                                        >
-                                            <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                            <span className="relative flex items-center gap-2 text-base">
-                                                SUBMIT
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div> */}
+                            </div>
+                        </div>
+                        <div className="flex flex-col justify-center items-center w-full xl:gap-1">
+                            <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                                <div className="adhar_front w-full">
+                                    <label className="block">
+                                        <span className="block text-sm font-medium text-slate-700">
+                                            Adhar Card Front *
+                                        </span>
+                                        <input
+                                            type="file"
+                                            name="adhar_front"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.adhar_front}
+                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                        />
+                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                            {errors.adhar_front && touched.adhar_front ? errors.adhar_front : null}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div className="adhar_back w-full">
+                                    <label className="block">
+                                        <span className="block text-sm font-medium text-slate-700">
+                                            Adhar Card Back *
+                                        </span>
+                                        <input
+                                            type="file"
+                                            name="adhar_back"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.adhar_back}
+                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                        />
+                                    </label>
+                                    <span className="text-xs font-semibold text-red-600 px-1">
+                                        {errors.back && touched.back ? errors.back : null}
+                                    </span>
+                                </div>
+                                <div className="pan w-full">
+                                    <label className="block">
+                                        <span className="block text-sm font-medium text-slate-700">
+                                            PAN *
+                                        </span>
+                                        <input
+                                            type="file"
+                                            name="pan"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.pan}
+                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                        />
+                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                            {errors.pan && touched.pan ? errors.pan : null}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div className="lightbill w-full">
+                                    <label className="block">
+                                        <span className="block text-sm font-medium text-slate-700">
+                                            Light Bill
+                                        </span>
+                                        <input
+                                            type="file"
+                                            name="light_bill"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.light_bill}
+                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                        />
+                                    </label>
+                                    <span className="text-xs font-semibold text-red-600 px-1">
+                                        {errors.light_bill && touched.light_bill ? errors.light_bill : null}
+                                    </span>
+                                </div>
+
+                            </div>
+                            <div className="flex py-2 ">
+                                <div>
+                                    <button
+                                        type="button"
+                                        className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
+                                    >
+                                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
+                                        <span className="relative flex items-center gap-2 text-base">
+                                            SUBMIT
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
