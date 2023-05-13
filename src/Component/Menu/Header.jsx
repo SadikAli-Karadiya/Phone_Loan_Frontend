@@ -41,7 +41,7 @@ function Header() {
                 {
                     isMenu && (
                         <div
-                            className={` bottom absolute z-[999] top-20 right-3 bg-white drop-shadow-xl rounded-xl `}
+                            className={` bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl `}
                             id="profileTable"
                         >
                             <div className="">
@@ -56,7 +56,7 @@ function Header() {
                                             </span>
                                         </div>
                                     </NavLink>
-                                    <NavLink className="nav-link" >
+                                    {/* <NavLink className="nav-link" >
                                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6  items-center">
                                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
                                                 <VscKey className="text-blue-500 text-xl" />
@@ -65,7 +65,7 @@ function Header() {
                                                 Change Passoword
                                             </span>
                                         </div>
-                                    </NavLink>
+                                    </NavLink> */}
 
                                     {/* {myData?.is_super_admin ? ( */}
                                     <NavLink to="/admin/Addadmin">

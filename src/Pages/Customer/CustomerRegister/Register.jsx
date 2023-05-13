@@ -10,13 +10,14 @@ function CustomerRegister() {
     const [img, setImg] = React.useState(defaultImage);
     const [photo, setPhoto] = React.useState("");
 
-    const { values, touched, errors, handleChange, handleSubmit, handleBlur } =
+    const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
             onSubmit: (values) => {
                 setIndex(2);
                 dispatch(setBasicInfoForm({ ...values, logo: photo }));
+                resetForm({ values: "" })
             },
         });
 

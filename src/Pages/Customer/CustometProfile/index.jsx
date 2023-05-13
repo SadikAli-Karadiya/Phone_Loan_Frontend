@@ -12,8 +12,11 @@ function CustomerProfile() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = React.useState(defaultImage);
     const [photo, setPhoto] = React.useState("");
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
+    const [toggle, setToggle] = React.useState(false);
+    const [isEnable, setIsEnable] = React.useState(true);
 
-    const { values, touched, errors, handleChange, handleSubmit, handleBlur } =
+    const { values, touched, resetForm , errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
@@ -27,6 +30,22 @@ function CustomerProfile() {
         setPhoto(() => e.target.files[0]);
         setImg(URL.createObjectURL(e.target.files[0]));
     }
+
+    function handleedit(e) {
+        e.preventDefault();
+        resetForm({e : ""})
+        setIsEnable(false);
+        setToggle(true);
+    }
+
+    function handleCancel(e) {
+        e.preventDefault();
+        resetForm({e : ""})
+        setIsEnable(true);
+        setToggle(false);
+    }
+
+
     return (
         <>
             <div className="py-5">
@@ -39,7 +58,7 @@ function CustomerProfile() {
 
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14">
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14"  onSubmit={handleSubmit}>
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
@@ -79,6 +98,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.first_name}
+                                                        disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -100,6 +120,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.last_name}
+                                                        disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -123,6 +144,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.whatsapp_no}
+                                                        disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -144,6 +166,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.alternate_no}
+                                                        disabled={isEnable}
                                                         className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none ${errors.alternate_no && 'border-red-600'}`}
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -166,6 +189,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.refrence}
+                                                        disabled={isEnable}
                                                         placeholder="Enter Refeence Name"
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -187,6 +211,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.refrence_no}
+                                                        disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -199,7 +224,6 @@ function CustomerProfile() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-
                                         <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="date w-full">
                                                 <label className="block">
@@ -209,6 +233,7 @@ function CustomerProfile() {
                                                     <input
                                                         type="date"
                                                         name="dob"
+                                                        disabled={isEnable}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.date}
@@ -230,6 +255,7 @@ function CustomerProfile() {
                                                         value={values.company}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        disabled={isEnable}
                                                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                                                         <option value="">Select Company</option>
                                                         <option value="Oppo">Oppo</option>
@@ -253,9 +279,8 @@ function CustomerProfile() {
                                                         value={values.model}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-
-                                                    >
+                                                        disabled={isEnable}
+                                                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                                                         <option value="">Select Model</option>
                                                         <option value="F17">F17</option>
                                                     </select>
@@ -275,6 +300,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.price}
+                                                        disabled={isEnable}
                                                         placeholder="Enter Down Payment"
                                                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -296,6 +322,7 @@ function CustomerProfile() {
                                                         value={values.installment}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
+                                                        disabled={isEnable}
                                                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                                                         <option value="">Select Installment</option>
                                                         <option value="2">For 2 Month</option>
@@ -317,6 +344,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.dp}
+                                                        disabled={isEnable}
                                                         placeholder="Enter Down Payment"
                                                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -339,6 +367,7 @@ function CustomerProfile() {
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.discount}
+                                                        disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -356,10 +385,10 @@ function CustomerProfile() {
                                                     <input
                                                         type="text" id='totalfee'
                                                         name="net_payable"
-                                                        disabled={true}
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
                                                         value={values.net_payable}
+                                                        disabled={isEnable}
                                                         placeholder="Enter Net Payable Amount"
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -373,16 +402,43 @@ function CustomerProfile() {
                                         </div>
                                         <div className="flex py-2 ">
                                             <div>
-                                                <button
-                                                    type="button"
-                                                    className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                                                >
-                                                    <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                                    <span className="relative flex items-center gap-2 text-base">
-                                                        <FaUserEdit className="text-lg" />
-                                                        Edit
-                                                    </span>
-                                                </button>
+                                                {!toggle ? (
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleedit}
+                                                        className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
+                                                    >
+                                                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
+                                                        <span className="relative flex items-center gap-2 text-base">
+                                                            <FaUserEdit className="text-lg" />
+                                                            Edit
+                                                        </span>
+                                                    </button>
+                                                ) : null}
+                                                {toggle ? (
+                                                    <div className="flex justify-center items-center w-full">
+                                                        <div className="flex w-full justify-center items-center space-x-3">
+                                                            <button
+                                                                type="button"
+                                                                onClick={handleCancel}
+                                                                className="py-2 px-4 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white hover:text-[#0d0d48] font-medium rounded-md tracking-wider flex justify-center items-center"
+                                                            >
+                                                                <FaUserEdit className="text-xl" />
+                                                                Cancel
+                                                            </button>
+                                                            <button
+                                                                type="submit"
+                                                                disabled={isLoadingOnSubmit}
+                                                                className={`py-2 px-3 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white 
+                                                                ${isLoadingOnSubmit ? "opacity-40" : "opacity-100"
+                                                                    } hover:text-[#0d0d48] font-medium rounded-md tracking-wider flex justify-center items-center`}
+                                                            >
+                                                                <FaUserEdit className="text-xl" />
+                                                                {isLoadingOnSubmit ? "Loading..." : "SUBMIT"}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ) : null}
                                             </div>
                                         </div>
                                     </div>
@@ -410,6 +466,9 @@ function CustomerProfile() {
                                                 Total EMI
                                             </th>
                                             <th scope="col" className="px-6 py-4">
+                                                Total Amount
+                                            </th>
+                                            <th scope="col" className="px-6 py-4">
                                                 Down Payment
                                             </th>
                                             <th scope="col" className="px-6 py-4">
@@ -422,7 +481,7 @@ function CustomerProfile() {
                                     </thead>
                                     <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                         <tr className=" border-b">
-                                          
+
                                             <td className="px-6 py-5 ">
                                                 12 / 02 / 2023
                                             </td>
@@ -437,6 +496,9 @@ function CustomerProfile() {
                                             </td>
                                             <td className="px-6 py-5">
                                                 15000
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                5000
                                             </td>
                                             <td className="px-6 py-5">
                                                 5000

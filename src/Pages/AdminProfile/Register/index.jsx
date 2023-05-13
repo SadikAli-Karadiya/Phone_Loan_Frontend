@@ -11,7 +11,7 @@ export const Addadmin = () => {
       initialValues: initialValues,
       validationSchema: adminSchema,
       onSubmit: (values) => {
-        console.log(values)
+        resetForm({values : ""})
       },
     });
 
@@ -193,9 +193,9 @@ export const Addadmin = () => {
                       </span>
                       <input
                         type="date"
-                        name="dateofbirth"
                         className='xl:w-52 2xl:w-60 hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 
                           rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                        name="dateofbirth"
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.dateofbirth}
@@ -247,11 +247,10 @@ export const Addadmin = () => {
                         </div>
                       </div>
                     </label>
-                    <span
-                      className={`text-sm font-semibold  text-red-600 px-1 ${errors.gender && touched.gender ? "" : "hidden  "
-                        }`}
-                    >
-                      {errors.gender && touched.gender ? errors.gender : null}
+                    <span className="text-xs font-semibold text-red-600 px-1">
+                      {errors.gender && touched.gender
+                        ? errors.gender
+                        : null}
                     </span>
                   </div>
                 </div>

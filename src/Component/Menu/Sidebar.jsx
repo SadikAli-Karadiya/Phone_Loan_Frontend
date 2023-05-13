@@ -5,6 +5,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { MdShoppingCart, MdDashboard } from "react-icons/md"
 import { BiRupee } from "react-icons/bi"
 import { FaUserPlus } from "react-icons/fa"
+import { FaReceipt } from "react-icons/fa"
 import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 import "../../App.css"
@@ -67,7 +68,7 @@ const Sidebar = () => {
                   activeclassname="active"
                   to="/Receipt/Search">
                   <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
-                    <FaUserPlus className="text-lg" />
+                    <FaReceipt className="text-lg" />
                     <h1 className="text-sm hidden xl:block">Receipt</h1>
                   </div>
                 </NavLink>

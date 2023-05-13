@@ -94,6 +94,7 @@ export default function AdminList() {
                                             {/* {m.is_super_admin
                               ? "Remove Super Admin"
                               : "Make Super Admin"} */}
+                                            Make Super Admin
                                         </button>
 
                                         <button

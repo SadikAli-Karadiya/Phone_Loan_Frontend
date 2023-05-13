@@ -60,6 +60,8 @@ function Product() {
           // } else {
           // newsRegistration(fd).then();
           setPhoneInfo(data)
+          resetForm({values : ""})
+          setModel(false)
           // }
         } catch (err) {
           toast.error(err.message);

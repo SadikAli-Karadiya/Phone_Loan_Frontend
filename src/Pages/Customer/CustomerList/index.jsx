@@ -6,19 +6,15 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate, NavLink, Link } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
-import ReactToPrint from "react-to-print";
-import { MdLocalPrintshop } from 'react-icons/md';
 import { RiFolderUserFill } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
-
-
 
 
 
@@ -28,8 +24,8 @@ function CustomersList() {
   const [isHoverEdit, setIsHoverEdit] = useState(false);
   const [isHoverDelete, setIsHoverDelete] = useState(false);
   const [selectedEMI, setSelectedEMI] = useState(0);
+  const [pageNo, setPageNo] = useState(1);
   const navigate = useNavigate();
-  const componentRef = useRef();
   const [data, setdata] = useState([
     {
       id: 1,
@@ -189,6 +185,7 @@ function CustomersList() {
           // newsRegistration(fd).then();
           // setPhoneInfo([...PhoneInfo, data])
           setdata(data)
+          resetForm({ values: "" })
           setModel(false)
           // }
         } catch (err) {
@@ -259,15 +256,6 @@ function CustomersList() {
         }
       }
     });
-  };
-
-  const Exportstudent = () => {
-    const res = true;
-    if (res) {
-      Toaster();
-    } else {
-      errtoast();
-    }
   };
 
   return (
@@ -617,6 +605,15 @@ function CustomersList() {
                     )}
                 </table>
               </div>
+            </div>
+
+            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
+              <Pagination
+                total={data && data.pageCount ? data.pageCount : 0}
+                current={pageNo}
+                onPageChange={(page) => setPageNo(page)}
+              // previousLabel="Previous" nextLabel="Next"
+              />
             </div>
           </div>
         </div>
