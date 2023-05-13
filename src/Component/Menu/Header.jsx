@@ -41,13 +41,13 @@ function Header() {
                 {
                     isMenu && (
                         <div
-                            className={` bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl `}
+                            className={` bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl w-1/6 `}
                             id="profileTable"
                         >
                             <div className="">
                                 <div className="mt-3 mb-3 ">
                                     <NavLink to="/admin/Updateprofile">
-                                        <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6 items-center">
+                                        <div className="bg-white hover:bg-slate-200 text-gray-800 h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6 items-center">
                                             <div className="bg-blue-200 p-2.5 flex justify-center items-center rounded-full">
                                                 <FaRegUserCircle className="text-blue-500 text-xl " />
                                             </div>

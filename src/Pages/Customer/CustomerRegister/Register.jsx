@@ -365,7 +365,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                                <div className="flex py-2 ">
+                                {/* <div className="flex py-2 ">
                                     <div>
                                         <button
                                             type="button"
@@ -377,7 +377,7 @@ function CustomerRegister() {
                                             </span>
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

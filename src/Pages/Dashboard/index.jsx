@@ -3,6 +3,7 @@ import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi"
 import { AiOutlineUser } from "react-icons/ai";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 
 
 
@@ -10,6 +11,52 @@ function Dashboard() {
   const navigate = useNavigate();
   return (
     <div className='px-5 py-5 xl:px-10 '>
+      <div className='grid grid-cols-4 my-10 gap-5 '>
+        <div className='bg-[#e55353] py-3 px-3 rounded-md'>
+            <div className='flex justify-between items-start pb-16' >
+              <div>
+                <h1 className="text-white font-roboto font-bold text-2xl">
+                  5000
+                </h1>
+                <p className = "text-white">Total Customer</p>
+              </div>
+              <BiDotsVerticalRounded className='text-white'/>
+            </div>
+        </div>
+        <div className='bg-[#f9b115] py-3 px-3 rounded-md pb-16'>
+            <div className='flex justify-between items-start'>
+              <div>
+                <h1 className="text-white font-roboto font-bold text-2xl">
+                  5000
+                </h1>
+                <p className = "text-white">Total Customer</p>
+              </div>
+              <BiDotsVerticalRounded className='text-white'/>
+            </div>
+        </div>
+        <div className='bg-[#3399ff] py-3 px-3 rounded-md pb-16'>
+            <div className='flex justify-between items-start'>
+              <div>
+                <h1 className="text-white font-roboto font-bold text-2xl">
+                  5000
+                </h1>
+                <p className = "text-white">Total Customer</p>
+              </div>
+              <BiDotsVerticalRounded className='text-white'/>
+            </div>
+        </div>
+        <div className='bg-[#321fdb] py-3 px-3 rounded-md pb-16'>
+            <div className='flex justify-between items-start'>
+              <div>
+                <h1 className="text-white font-roboto font-bold text-2xl">
+                  5000
+                </h1>
+                <p className = "text-white">Total Customer</p>
+              </div>
+              <BiDotsVerticalRounded className='text-white'/>
+            </div>
+        </div>
+      </div>
       <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden">
         <h1 className='font-bold p-6 text-lg'>Customer List</h1>
         <div className='flex justify-between items-center px-3 py-5'>

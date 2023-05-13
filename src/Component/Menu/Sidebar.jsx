@@ -23,11 +23,11 @@ const Sidebar = () => {
     <>
       <div className="h-full flex bg-white sticky left-0 top-0">
         <div className="sidebar h-screen xs:w-20 w-20 xl:w-64">
-          <div className="sidebar-top flex justify-center xl:mr-8 pt-3 xl:pt-1 lg:pb-1 xl:pb-6 ">
+          <div className="sidebar-top flex justify-center  mt-5">
             <img
-              src="/Icons/logo.png"
+              src="/images/logo.png"
               alt=""
-              className="w-24 lg:w- xl:w-10 cursor-pointer hidden xl:block"
+              className="w-28 cursor-pointer hidden xl:block"
               id="logo"
             />
           </div>
