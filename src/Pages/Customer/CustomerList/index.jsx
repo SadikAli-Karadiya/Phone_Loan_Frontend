@@ -1,4 +1,4 @@
-import {React, useRef , useState } from 'react'
+import { React, useRef, useState } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
@@ -401,7 +401,10 @@ function CustomersList() {
                         style={{
                           backgroundColor: bgColors[index % bgColors.length],
                         }}
-                        className='px-5 py-3 my-3 w-[23%] hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 ' key={index}>
+                        className='px-5 py-3 my-3 w-[23%] hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 '
+                        key={index}
+                        onClick={() => handleSelectEMI(item.id)}
+                      >
                         <div className='flex justify-between items-center '>
                           <div>
                             <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
@@ -448,7 +451,7 @@ function CustomersList() {
                             </div>
                           </div>
                         </div>
-                        <div className={`${item._id} flex items-center justify-start space-x-7`} onClick={() => handleSelectEMI(item.id)}>
+                        <div className={`${item._id} flex items-center justify-start space-x-7`}>
                           <div className='rounded-md'
                             style={{
                               backgroundColor:
@@ -518,34 +521,6 @@ function CustomersList() {
                         <option value={1}>Pending</option>
                         <option value={2}>Paidup</option>
                       </select>
-                    </button>
-
-                    <span>
-                      <ReactToPrint
-                        trigger={() => (
-                          <Link
-                            to="#"
-                            id="print"
-                            className="text-3xl bg-[#0d0d48] rounded-md text-white w-10 h-8 flex justify-center  "
-                          >
-                            <MdLocalPrintshop />
-                          </Link>
-                        )}
-                        content={() => componentRef.current}
-                        onBeforeGetContent={() => {
-                          return new Promise((resolve) => {
-                            setIsPrint(true);
-                            resolve();
-                          });
-                        }}
-                        onAfterPrint={() => setIsPrint(false)}
-                      />
-                    </span>
-                    <button
-                      onClick={Exportstudent}
-                      className="text-blue-500 bg-blue-200 font-semibold shadow-2xl py-[6px] px-3 rounded-lg text-sm"
-                    >
-                      Export
                     </button>
                   </div>
                 </div>

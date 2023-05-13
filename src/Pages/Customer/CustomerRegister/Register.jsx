@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
 import { customerSchema, initialValues } from "../../../Component/CustomerSchema";
 import "../../Customer/CustomerRegister/Customerform.css"
 
@@ -371,7 +372,7 @@ function CustomerRegister() {
                                         >
                                             <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
                                             <span className="relative flex items-center gap-2 text-base">
-                                                Next
+                                                SUBMIT
                                             </span>
                                         </button>
                                     </div>

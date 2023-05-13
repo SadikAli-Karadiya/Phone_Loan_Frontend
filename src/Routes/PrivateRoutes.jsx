@@ -9,6 +9,7 @@ import Product from '../Pages/Product'
 import Search from '../Pages/Search'
 import Customer from '../Pages/Customer'
 import Index from '../Pages/Reciept'
+import Admin from '../Pages/AdminProfile'
 
 function PrivateRoutes() {
   return (
@@ -23,6 +24,7 @@ function PrivateRoutes() {
             <Route path='/Product' element={<Product />}  />
             <Route path='/Search' element={<Search />}  />
             <Route path='/Customer/*' element={<Customer />}  />
+            <Route path='/admin/*' element={<Admin />}  />
             <Route path='/' element={<Navigate to='/dashboard' />} />
 
         </Route>

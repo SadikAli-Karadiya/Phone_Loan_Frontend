@@ -16,7 +16,7 @@ function PayEMI() {
           <div className='flex justify-center items-center mt-10 '>
             <input
               type="search"
-              placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
+              placeholder='Search Receipt (BY : Name , Whatsapp Number)'
               className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
             />
             <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center

@@ -1,8 +1,13 @@
 import React from 'react'
 import image from "../../../public/user.png"
 import { BiDotsVerticalRounded } from "react-icons/bi"
-import { Link } from 'react-router-dom'
-
+import { NavLink } from "react-router-dom";
+import { RiLogoutCircleRLine } from "react-icons/ri";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaRegUserCircle } from "react-icons/fa";
+import { BiUserPlus } from "react-icons/bi";
+// import { MdPublishedWithChanges } from "react-icons/md";
+import { VscKey } from "react-icons/vsc";
 
 function Header() {
 
@@ -10,6 +15,9 @@ function Header() {
 
     function handleToggle() {
         setismenu(!isMenu);
+    }
+
+    function handleLogoutButton() {
     }
 
     return (
@@ -32,45 +40,68 @@ function Header() {
 
                 {
                     isMenu && (
-                        <div className='bg-white shadow-md p-2 absolute right-2  w-60 h-48 rounded-md mt-4 z-[999]'>
-                            <ul>
-                                <Link to={"/AdminProfile"}>
-                                    <li onClick={() => setismenu(false)}
-                                        className="flex items-center justify-between px-3 my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
-                                                <ion-icon name="person-outline"></ion-icon>
+                        <div
+                            className={` bottom absolute z-[999] top-20 right-3 bg-white drop-shadow-xl rounded-xl `}
+                            id="profileTable"
+                        >
+                            <div className="">
+                                <div className="mt-3 mb-3 ">
+                                    <NavLink to="/admin/Updateprofile">
+                                        <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6 items-center">
+                                            <div className="bg-blue-200 p-2.5 flex justify-center items-center rounded-full">
+                                                <FaRegUserCircle className="text-blue-500 text-xl " />
                                             </div>
-                                            <h1>Admin Profile</h1>
+                                            <span className="md:text-sm xl:text-base">
+                                                Admin Profile
+                                            </span>
                                         </div>
-                                        <ion-icon name="chevron-forward-outline"></ion-icon>
-                                    </li>
-                                </Link>
-                                <Link to={"/ForgetPassword"}>
-                                    <li onClick={() => setismenu(false)}
-                                        className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
-                                                <ion-icon name="key-outline"></ion-icon>
+                                    </NavLink>
+                                    <NavLink className="nav-link" >
+                                        <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6  items-center">
+                                            <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
+                                                <VscKey className="text-blue-500 text-xl" />
                                             </div>
-                                            <h1>Change Password</h1>
+                                            <span className="md:text-sm xl:text-base">
+                                                Change Passoword
+                                            </span>
                                         </div>
-                                        <ion-icon name="chevron-forward-outline"></ion-icon>
-                                    </li>
-                                </Link>
-                                <Link>
-                                    <li onClick={() => setismenu(false)}
-                                        className="flex items-center justify-between px-3  my-2 cursor-pointer hover:bg-gray-200 py-1 duration-100 rounded-md hover:text-blue-500">
-                                        <div className="flex items-center space-x-3">
-                                            <div className="bg-blue-200 text-blue-500 rounded-full w-9 h-9 flex justify-center items-center text-lg">
-                                                <ion-icon name="log-out-outline"></ion-icon>
+                                    </NavLink>
+
+                                    {/* {myData?.is_super_admin ? ( */}
+                                    <NavLink to="/admin/Addadmin">
+                                        <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
+                                            <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
+                                                <BiUserPlus className="text-blue-500 text-xl" />
                                             </div>
-                                            <h1>Logout</h1>
+                                            <span className="md:text-sm xl:text-base">Add Admin</span>
                                         </div>
-                                        <ion-icon name="chevron-forward-outline"></ion-icon>
-                                    </li>
-                                </Link>
-                            </ul>
+                                    </NavLink>
+                                    {/* ) : null} */}
+
+                                    {/* {myData?.is_super_admin ? ( */}
+                                    <NavLink to="/admin/List">
+                                        <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
+                                            <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
+                                                <BiUserPlus className="text-blue-500 text-xl" />
+                                            </div>
+                                            <span className="md:text-sm xl:text-base">
+                                                Admin List
+                                            </span>
+                                        </div>
+                                    </NavLink>
+                                    {/* ) : null} */}
+                                    <hr></hr>
+                                    <div
+                                        onClick={handleLogoutButton}
+                                        className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6  items-center"
+                                    >
+                                        <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
+                                            <RiLogoutCircleRLine className="text-blue-500 text-xl" />
+                                        </div>
+                                        <span className="md:text-sm xl:text-base">Logout</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { AiFillEye } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
 
 
 function Report() {
@@ -39,10 +40,9 @@ function Report() {
             </div>
           </div>
           <div className="xs:overflow-x-scroll xl:overflow-x-hidden">
-            <table
+            {/* <table
               className="w-full bg-blue-50 text-sm text-center "
-              id="table-to-xls"
-            >
+              id="table-to-xls">
               <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
                 <tr className="text-black text-sm ">
                   <th scope="col" className="pl-3 py-4">
@@ -65,9 +65,6 @@ function Report() {
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Pending
-                  </th>
-                  <th scope="col" className="px-6 py-4">
-                    Profile
                   </th>
                   <th scope="col" className="px-6 py-4">
                     Action
@@ -106,14 +103,79 @@ function Report() {
                       />
                     </div>
                   </td>
-                  <td className="px-6 py-5 ">
-                    <div className="flex justify-center space-x-3">
-                      <button className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                        Pay
-                      </button>
-                    </div>
+                </tr>
+              </tbody>
+            </table> */}
+            <table className="w-full whitespace-nowrap">
+              <thead>
+                <tr className="bg-gray-100 h-16 w-full text-sm leading-none font-bold text-[#0d0d48]">
+                  <th className="font-normal text-left pl-10">Date</th>
+                  <th className="font-normal text-left  px-2 xl:px-0">
+                    Reciept No
+                  </th>
+                  <th className="font-normal text-left px-2 xl:px-0">
+                    Student Name
+                  </th>
+                  <th className="font-normal text-left px-2 xl:px-0">
+                    Class
+                  </th>
+                  <th className="font-normal text-left  px-2 xl:px-0">
+                   Installment
+                  </th>
+                  <th className="font-normal text-left px-2 xl:px-0">
+                    Amount
+                  </th>
+                  <th className="font-normal text-left px-2 xl:px-0">
+                    Admin
+                  </th>
+                  <th className="font-normal text-left px-2 xl:px-0">
+                    Detail
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="w-full">
+                {/* {
+                  currentItems?.map((m, key) => {
+                    return ( */}
+                <tr
+                  // key={key}
+                  className="h-20 text-sm leading-none text-gray-800 border-b border-gray-100"
+                >
+                  <td className="pl-8">
+                    02 / 05 / 2023
+                  </td>
+                  <td className=" px-2 font-bold xl:px-0">
+                    002
+                  </td>
+                  <td className="px-2 xl:px-0 capitalize">
+                    Shad
+                  </td>
+                  <td className="px-2 xl:px-0 capitalize">
+                    Vivo F17 Pro
+                  </td>
+                  <td className=" px-2 xl:px-0">
+                    002
+                  </td>
+                  <td>
+                    <span className="bg-blue-200 px-4 text-darkblue-500 font-bold rounded">
+                      1500
+                    </span>
+                  </td>
+                  <td>
+                    <span className="capitalize">Israil</span>
+                  </td>
+                  <td className="px-5  ">
+                    <span>
+                      <NavLink
+                        to={"/Receipt/Receipt"}>
+                        <AiFillEye className="text-xl cursor-pointer" />
+                      </NavLink>
+                    </span>
                   </td>
                 </tr>
+                {/* );
+                  })
+                } */}
               </tbody>
             </table>
           </div>

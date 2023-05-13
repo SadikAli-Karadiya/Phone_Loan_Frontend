@@ -247,24 +247,27 @@ function Product() {
 
             <div className='py-5'>
               <div className=' flex items-end justify-end w-full xs:px-5'>
-                <div>
-                  <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
-                    <option value="">Select Company</option>
-                    <option value="Oppo">Oppo</option>
-                    <option value="Vivo">Vivo</option>
-                    <option value="Techno">Techno</option>
-                  </select>
-                </div>
+
 
               </div>
               <div className='px-5 py-5'>
                 <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
-                  <h1 className='font-bold p-6 text-lg'>Product List</h1>
+                  <div className='flex justify-between items-center py-5 px-5'>
+                    <h1 className='font-bold  text-lg'>Product List</h1>
+                    <div>
+                      <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
+                        <option value="">Select Company</option>
+                        <option value="Oppo">Oppo</option>
+                        <option value="Vivo">Vivo</option>
+                        <option value="Techno">Techno</option>
+                      </select>
+                    </div>
+                  </div>
                   <table
-                    className="w-full bg-blue-50 text-sm text-center "
+                    className="w-full text-sm text-center "
                     id="table-to-xls"
                   >
-                    <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
+                    <thead className="text-xs text-gray-700 bg-gray-100 uppercase  ">
                       <tr className="text-black text-sm ">
                         <th scope="col" className="pl-3 py-4">
                           Sr No

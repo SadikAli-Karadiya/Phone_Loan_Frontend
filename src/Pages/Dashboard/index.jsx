@@ -1,14 +1,32 @@
 import React from 'react'
 import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import { BiSearch } from "react-icons/bi"
+import { AiOutlineUser } from "react-icons/ai";
+
 
 
 function Dashboard() {
   const navigate = useNavigate();
   return (
     <div className='px-5 py-5 xl:px-10 '>
-      <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
+      <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden">
         <h1 className='font-bold p-6 text-lg'>Customer List</h1>
+        <div className='flex justify-between items-center px-3 py-5'>
+          <div className='flex justify-start items-center w-1/3 '>
+            <input
+              type="search"
+              placeholder='Search Receipt (BY : Name , Whatsapp Number)'
+              className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+            />
+            <div className='bg-blue-500 px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+                         shadow-xl cursor-pointer text-white text-2xl '>
+              <BiSearch className='search group-hover:scale-125 duration-300' />
+            </div>
+          </div>
+          <div className="right flex items-center space-x-3 pr-6">
+          </div>
+        </div>
         <table
           className="w-full bg-blue-50 text-sm text-center "
           id="table-to-xls"
