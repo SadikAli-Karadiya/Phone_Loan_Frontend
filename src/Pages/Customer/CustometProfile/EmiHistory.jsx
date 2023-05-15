@@ -12,7 +12,7 @@ function EMIHistory() {
         <>
             <div className='xs:px-5 sm:px-10 sm:py-5 h-full'>
                 <div className='sm:py-5'>
-                    <h1 className='text-[#0d0d48] text-2xl font-bold'>EMI History</h1>
+                    <h1 className='text-[#0d0d48] text-2xl font-bold'>EMI Details</h1>
                 </div>
                 <div className='xs:px-0 xs:py-5 xl:px-20'>
                     <div className="bg-white xs:overflow-x-scroll xl:overflow-x-hidden">

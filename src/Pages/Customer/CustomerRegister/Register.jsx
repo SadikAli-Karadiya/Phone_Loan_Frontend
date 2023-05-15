@@ -447,6 +447,14 @@ function CustomerRegister() {
                                 <div>
                                     <button
                                         type="button"
+                                        className="text-[#0d0d48] hover:text-white border-2  border-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden rounded-md cursor-pointer group mr-3">
+                                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#0d0d48]  rounded-lg group-hover:w-full group-hover:h-56"></span>
+                                        <span className="relative flex items-center gap-2 text-base">
+                                            CLEAR
+                                        </span>
+                                    </button>
+                                    <button
+                                        type="button"
                                         className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
                                     >
                                         <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>

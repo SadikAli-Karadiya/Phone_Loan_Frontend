@@ -6,7 +6,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
@@ -15,6 +15,8 @@ import { RiFolderUserFill } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 
@@ -373,13 +375,16 @@ function CustomersList() {
           <div className='xl:px-5  h-full'>
             <div className='py-5 px-5'>
               <div className='flex items-center justify-end pb-5'>
-                <div
-                  onClick={() => {
-                    setModel(true);
-                  }}
-                  className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
-                  <BiFolderPlus className='xs:text-base sm:text-xl' />
-                </div>
+                <Tippy content="Add New EMI">
+                  <div
+                    onClick={() => {
+                      setModel(true);
+                    }}
+                    className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                    <BiFolderPlus className='xs:text-base sm:text-xl' />
+                  </div>
+                </Tippy>
+
               </div>
               <div className='bg-white px-5 flex space-x-5 flex-wrap justify-center items-center py-5 rounded-md'>
                 {data?.length > 0 ? (
@@ -389,7 +394,7 @@ function CustomersList() {
                         style={{
                           backgroundColor: bgColors[index % bgColors.length],
                         }}
-                        className='px-5 py-3 my-3 w-[23%] hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 '
+                        className='px-5 py-3 my-3 w-[23%] group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 '
                         key={index}
                         onClick={() => handleSelectEMI(item.id)}
                       >
@@ -414,7 +419,7 @@ function CustomersList() {
                               onMouseEnter={handleMouseEnterEdit}
                               onMouseLeave={handleMouseLeaveEdit}
                               onClick={() => handleEditEMI(item.id)}
-                              className='edit_delete_btns rounded-md px-[3px] py-[3px] '
+                              className='edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block hidden '
                             >
                               <MdModeEdit className='' />
                             </div>
@@ -434,7 +439,7 @@ function CustomersList() {
                               onMouseEnter={handleMouseEnterDelete}
                               onMouseLeave={handleMouseLeaveDelete}
                               onClick={() => handleDeleteClass(item.id)}
-                              className='edit_delete_btns rounded-md px-[3px] py-[3px] '>
+                              className='edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block hidden '>
                               <MdDelete className=' ' />
                             </div>
                           </div>
@@ -487,10 +492,10 @@ function CustomersList() {
                   <div className='flex justify-start items-center w-1/3 '>
                     <input
                       type="search"
-                      placeholder='Search Receipt (BY : Name , Whatsapp Number)'
+                      placeholder='Search Customer'
                       className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                     />
-                    <div className='bg-blue-500 px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+                    <div className='bg-blue-500 px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
                          shadow-xl cursor-pointer text-white text-2xl '>
                       <BiSearch className='search group-hover:scale-125 duration-300' />
                     </div>
@@ -498,7 +503,7 @@ function CustomersList() {
                   <div className="right flex items-center space-x-3 pr-6">
                     <button
                       id="year-btn"
-                      className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
+                      className=" flex items-center drop-shadow-lg border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
                       <select
                         onChange={handlePendingPaidUpClick}
                         name=""

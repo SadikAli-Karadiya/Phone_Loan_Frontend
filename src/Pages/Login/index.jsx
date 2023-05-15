@@ -7,102 +7,110 @@ import { useNavigate } from "react-router-dom";
 import image from "../../../public/7xm.xyz861683.jpg"
 
 const signUpSchema = Yup.object({
-  email: Yup.string().email().required("Please enter your email"),
-  password: Yup.string().required("Please enter password")
+    username: Yup.string().email().required("Please enter your email"),
+    password: Yup.string().required("Please enter password")
 });
 
 
 const initialValues = {
-  email: "",
-  password: "",
+    username: "",
+    password: "",
 };
 
 function Login() {
 
-  const notify = () => toast("Login Successfully!!");
+    const notify = () => toast("Login Successfully!!");
 
-  const { values, errors, handleBlur, touched, handleChange, handleSubmit } = useFormik({
-    initialValues: initialValues,
-    validationSchema: signUpSchema,
-    onSubmit(res) {
-      console.log(res, "Res")
-      notify()
-    }
-  })
+    const { values, errors, handleBlur, touched, handleChange, handleSubmit } = useFormik({
+        initialValues: initialValues,
+        validationSchema: signUpSchema,
+        onSubmit(res) {
+            console.log(res, "Res")
+            notify()
+        }
+    })
 
-  console.log(errors, "formik")
+    console.log(errors, "formik")
 
 
-  return (
-    <div className='flex justify-start h-screen items-center  bg-white  lg:space-x-32 xl:space-52 2xl:space-x-0'>
-    <div className="img 2xl:w-2/3  hidden lg:block">
-        <img src={image} alt="landing" className="" />
-    </div>
-
-    <div className=' 2xl:w-[27%] px-5 mt-4 sm lg:mt-0  '>
-        <div className=' space-y-3  '>
-            <h1 className='text-3xl font-bold text-center uppercaseblue-500 uppercase text-blue-500'>Login</h1>
-            <p className=' text-gray-500 text-center text-xs sm:text-base '>Wellcome back! Please enter your details.</p>
-        </div>
-        <form action="" className='space-y-3' onSubmit={handleSubmit}>
-            <div className='space-y-5 py-4 '>
-                <div className='space-y-2'>
-                    <label htmlFor="Email" className='font-semibold text-base'>Email</label>
-                    <input type="Email"
-                        value={values.email}
-                        placeholder='Enter Your Email'
-                        autoComplete='off'
-                        name='email'
-                        id='email'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className='w-full rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500' />
-                    {errors.email && touched.email
-                        ?
-                        <p className='form-error text-red-600 text-sm font-semibold'>{errors.email}</p>
-                        :
-                        null}
+    return (
+        <>
+            <section className="h-full w-full flex justify-center items-center ">
+                <div className="flex w-full h-screen overflow-hidden ">
+                    <div className="hidden lg:flex flex-1 justify-center items-center sm:hidden">
+                        <img src="/login.jpg" alt="" />
+                    </div>
+                    <div className="flex flex-1 flex-col justify-center items-center bg-[#E9EFFD] ">
+                        <section className="h-full w-full flex justify-center items-center">
+                            <div className="login">
+                                <div className="mb-10">
+                                    <h2 className="text-[27px] text-[#0F0673] font-bold text-center tracking-wider">
+                                        Admin Login
+                                    </h2>
+                                </div>
+                                <form
+                                    action=""
+                                    onSubmit={handleSubmit}
+                                    className="flex flex-col justify-center items-center"
+                                >
+                                    <div className="mt-3 sm:px-5 flex flex-col">
+                                        <input
+                                            type="text"
+                                            className='border-2 outline-none bg-white focus:bg-white rounded-md h-[38px] w-64 px-2'
+                                            placeholder="Username"
+                                            name="username"
+                                            id="lastname"
+                                            value={values.username}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {errors.username && touched.username
+                                            ?
+                                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.username}</p>
+                                            :
+                                            null}
+                                    </div>
+                                    <div className="mt-3 flex flex-col">
+                                        <input
+                                            type="password"
+                                            className='border-2 bg-white outline-none rounded-md h-[38px] w-64 px-2'
+                                            placeholder="Password"
+                                            name="password"
+                                            id="password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        {errors.password && touched.password
+                                            ?
+                                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.password}</p>
+                                            :
+                                            null}
+                                    </div>
+                                    <div className="mt-10">
+                                        <button
+                                            type="submit"
+                                            className="border-2 bg-[#494BF5] w-64 py-2 rounded-md hover:bg-[#7D97F4]"
+                                        >
+                                            <span className="text-white">
+                                                Login
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+                                <div className="mt-5 flex justify-center">
+                                    <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                                        Forgot Password?
+                                    </span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
-                <div className='space-y-2'>
-                    <label htmlFor="Password" className='font-semibold text-base'>Password</label>
-                    <input type="password"
-                        value={values.password}
-                        placeholder='Enter Your Password'
-                        autoComplete='off'
-                        name='password'
-                        id='password'
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className='w-full rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500' />
-                    {errors.password && touched.password
-                        ?
-                        <p className='form-error text-red-600 text-sm font-semibold'>{errors.password}</p>
-                        :
-                        null}
-                </div>
-            </div>
-            <Link to={"/ForgetPassword"}>
-                <div className=' flex justify-end items-end'>
-                    <h1 className='text-sm underline font-semibold text-blue-500 cursor-pointer'>Forget Password?</h1>
-                </div>
-            </Link>
-            <div className='py-1'>
+            </section>
 
-                <button type='submit' className='py-2  uppercase bg-blue-500 hover:shadow-none hover:border-blue-500 border-blue-500 border hover:bg-white hover:text-blue-500 duration-500 shadow-sm font-sans shadow-blue-500 px-20 rounded-md w-full text-white font-semibold text-base'>
-                    Submit
-                </button>
-            </div>
-        </form>
-        <div className='text-center mt-5 text-slate-500'>
-            Don't have an account?
-            <Link to={"/Registration"}>
-                <span className='hover:text-black font-semibold cursor-pointer text-blue-500 px-2'>Create an account</span>
-            </Link>
-        </div>
-
-    </div>
-</div>
-  )
+        </>
+    )
 }
 
 export default Login

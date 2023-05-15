@@ -16,7 +16,7 @@ function CustomerProfile() {
     const [toggle, setToggle] = React.useState(false);
     const [isEnable, setIsEnable] = React.useState(true);
 
-    const { values, touched, resetForm , errors, handleChange, handleSubmit, handleBlur } =
+    const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
@@ -33,14 +33,14 @@ function CustomerProfile() {
 
     function handleedit(e) {
         e.preventDefault();
-        resetForm({e : ""})
+        resetForm({ e: "" })
         setIsEnable(false);
         setToggle(true);
     }
 
     function handleCancel(e) {
         e.preventDefault();
-        resetForm({e : ""})
+        resetForm({ e: "" })
         setIsEnable(true);
         setToggle(false);
     }
@@ -58,9 +58,9 @@ function CustomerProfile() {
 
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14"  onSubmit={handleSubmit}>
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" onSubmit={handleSubmit}>
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
-                                <div className="w-full flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8 xs:px-5 md:px-7 xl:px-14 ">
+                                <div className="w-full flex xs:flex-col xs:gap-4 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                         <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                             <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
@@ -71,18 +71,24 @@ function CustomerProfile() {
                                                     className="object-contain "
                                                     alt="student profile"
                                                 />
-                                                <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
-                                                    <input
-                                                        type="file"
-                                                        id="logo"
-                                                        className="rounded-md w-16"
-                                                        accept=".png, .jpg, .jpeg"
-                                                        name="logo"
-                                                        onChange={(e) => handleImageUpload(e)}
-                                                        onBlur={handleBlur}
-                                                        onInput={(e) => handleImageUpload(e)}
-                                                    />
-                                                </div>
+                                                {
+                                                    !isEnable
+                                                        ?
+                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                            <input
+                                                                type="file"
+                                                                id="logo"
+                                                                className="rounded-md w-16"
+                                                                accept=".png, .jpg, .jpeg"
+                                                                name="logo"
+                                                                onChange={(e) => handleImageUpload(e)}
+                                                                onBlur={handleBlur}
+                                                                onInput={(e) => handleImageUpload(e)}
+                                                            />
+                                                        </div>
+                                                        :
+                                                        null
+                                                }
                                             </div>
                                         </div>
                                         <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
@@ -130,8 +136,6 @@ function CustomerProfile() {
                                                     </span>
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="whatsappno w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -154,6 +158,8 @@ function CustomerProfile() {
                                                     </span>
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="mobileno w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -176,8 +182,6 @@ function CustomerProfile() {
                                                     </span>
                                                 </label>
                                             </div>
-                                        </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                             <div className="reference w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -224,183 +228,90 @@ function CustomerProfile() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                            <div className="date w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Date *
-                                                    </span>
-                                                    <input
-                                                        type="date"
-                                                        name="dob"
-                                                        disabled={isEnable}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.date}
-                                                        className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.date && touched.date ? errors.date : null}
-                                                    </span>
-                                                </label>
+                                        <div className="flex justify-between w-full">
+                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src="/images/adhar.webp"
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain"
+                                                    alt="student profile"
+                                                />
+                                                {
+                                                    !isEnable
+                                                        ?
+                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                            <input
+                                                                type="file"
+                                                                id="logo"
+                                                                className="rounded-md w-16"
+                                                                accept=".png, .jpg, .jpeg"
+                                                                name="logo"
+                                                                onChange={(e) => handleImageUpload(e)}
+                                                                onBlur={handleBlur}
+                                                                onInput={(e) => handleImageUpload(e)}
+                                                            />
+                                                        </div>
+                                                        :
+                                                        null
+                                                }
                                             </div>
-                                            <div className="selectinst w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Company *
-                                                    </span>
-                                                    <select
-                                                        name="company"
-                                                        id="company"
-                                                        value={values.company}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        disabled={isEnable}
-                                                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                                                        <option value="">Select Company</option>
-                                                        <option value="Oppo">Oppo</option>
-                                                        <option value="Vivo">Vivo</option>
-                                                    </select>
-                                                </label>
-                                                <span className="text-xs font-semibold text-red-600 px-1">
-                                                    {errors.company && touched.company ? errors.company : null}
-                                                </span>
+                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src="/images/adhar_back.jpg"
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain"
+                                                    alt="student profile"
+                                                />
+                                                {
+                                                    !isEnable
+                                                        ?
+                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                            <input
+                                                                type="file"
+                                                                id="logo"
+                                                                className="rounded-md w-16"
+                                                                accept=".png, .jpg, .jpeg"
+                                                                name="logo"
+                                                                onChange={(e) => handleImageUpload(e)}
+                                                                onBlur={handleBlur}
+                                                                onInput={(e) => handleImageUpload(e)}
+                                                            />
+                                                        </div>
+                                                        :
+                                                        null
+                                                }
                                             </div>
-                                        </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                            <div className="selectinst w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Model *
-                                                    </span>
-                                                    <select
-                                                        name="model"
-                                                        id="model"
-                                                        value={values.model}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        disabled={isEnable}
-                                                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                                                        <option value="">Select Model</option>
-                                                        <option value="F17">F17</option>
-                                                    </select>
-                                                </label>
-                                                <span className="text-xs font-semibold text-red-600 px-1">
-                                                    {errors.model && touched.model ? errors.model : null}
-                                                </span>
-                                            </div>
-                                            <div className="dp w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Price *
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="price"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.price}
-                                                        disabled={isEnable}
-                                                        placeholder="Enter Down Payment"
-                                                        className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.price && touched.price ? errors.price : null}
-                                                    </span>
-                                                </label>
+                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src="/images/pan.webp"
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain"
+                                                    alt="student profile"
+                                                />
+                                                {
+                                                    !isEnable
+                                                        ?
+                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                            <input
+                                                                type="file"
+                                                                id="logo"
+                                                                className="rounded-md w-16"
+                                                                accept=".png, .jpg, .jpeg"
+                                                                name="logo"
+                                                                onChange={(e) => handleImageUpload(e)}
+                                                                onBlur={handleBlur}
+                                                                onInput={(e) => handleImageUpload(e)}
+                                                            />
+                                                        </div>
+                                                        :
+                                                        null
+                                                }
                                             </div>
                                         </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                            <div className="selectinst w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Installment *
-                                                    </span>
-                                                    <select
-                                                        name="installment"
-                                                        id="installment"
-                                                        value={values.installment}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        disabled={isEnable}
-                                                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                                                        <option value="">Select Installment</option>
-                                                        <option value="2">For 2 Month</option>
-                                                        <option value="3">For 3 Month</option>
-                                                    </select>
-                                                </label>
-                                                <span className="text-xs font-semibold text-red-600 px-1">
-                                                    {errors.installment && touched.installment ? errors.installment : null}
-                                                </span>
-                                            </div>
-                                            <div className="dp w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Down Payment *
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="dp"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.dp}
-                                                        disabled={isEnable}
-                                                        placeholder="Enter Down Payment"
-                                                        className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.dp && touched.dp ? errors.dp : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                            <div className="discount w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Discount
-                                                    </span>
-                                                    <input
-                                                        type="text" id='discount'
-                                                        name="discount"
-                                                        placeholder="Enter Your Discount"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.discount}
-                                                        disabled={isEnable}
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.discount && touched.discount
-                                                            ? errors.discount
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div className="totalfee w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Total Fee
-                                                    </span>
-                                                    <input
-                                                        type="text" id='totalfee'
-                                                        name="net_payable"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.net_payable}
-                                                        disabled={isEnable}
-                                                        placeholder="Enter Net Payable Amount"
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.net_payable && touched.net_payable
-                                                            ? errors.net_payable
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="flex py-2 ">
+                                        <div className="flex pt-10 ">
                                             <div>
                                                 {!toggle ? (
                                                     <button

@@ -63,7 +63,7 @@ function Dashboard() {
           <div className='flex justify-start items-center w-1/3 '>
             <input
               type="search"
-              placeholder='Search Receipt (BY : Name , Whatsapp Number)'
+              placeholder='Search Customer'
               className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
             />
             <div className='bg-blue-500 px-3 py-[7px] group rounded-r-lg flex justify-center items-center

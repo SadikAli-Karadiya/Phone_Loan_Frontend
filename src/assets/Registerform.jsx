@@ -35,18 +35,13 @@ function Registerform() {
       initialValues: initialValues,
       validationSchema: signUpSchema,
       onSubmit(res) {
-        console.log(res, "Res")
-        console.log("hello")
         alert("done")
         notify()
         navigate("/")
       }
     })
-  
-    console.log(errors, "formik")
 
-
-  return (
+    return (
     <div className="">
               <form action="" className="space-y-5" onSubmit={handleSubmit}>
                 <div className="flex flex-col md:flex-row justify-center items-center w-full md:space-y-0 md:space-x-5 space-y-5 lg:space-x-7">

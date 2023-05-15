@@ -27,3 +27,12 @@
     border-bottom: 1px solid red;
     
 }
+
+
+.document_img_div{
+    border-radius: 10px;
+    position: relative;
+    height: 170px!important;
+    width:250px!important;
+    overflow: hidden;
+}
