@@ -21,7 +21,7 @@ function Header() {
     }
 
     return (
-        <div className="h-14 lg:h-16 w-full flex justify-end items-center bg-white px-3 lg:px-5 shadow-2xl">
+        <div className="h-14 z-[101] lg:h-16 sticky top-0 bg-white w-full flex justify-end items-center px-3 lg:px-5 drop-shadow-md">
             <div>
                 <div
                     onClick={handleToggle}
