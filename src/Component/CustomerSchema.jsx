@@ -43,22 +43,6 @@ export const customerSchema = Yup.object({
         })
         .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
 
-    dob: Yup.date()
-        .max(new Date(), 'Please select valid DOB')
-        .required("Please Enter Your Date Of Birth")
-        .nullable(),
-
-    gender: Yup.string().required("Please Select Gender"),
-
-    address: Yup.string()
-        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-            if (value) {
-                return value.trim() === value;
-            }
-            return true;
-        })
-        .required("Please Enter Your Address"),
-
     refrence: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
@@ -67,7 +51,6 @@ export const customerSchema = Yup.object({
             return true;
         })
         .min(2, "Minimum 2 characters are required")
-        .required("Please Enter Reference Name")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
     refrence_no: Yup.string()
@@ -78,17 +61,16 @@ export const customerSchema = Yup.object({
             return true;
         })
         .min(10, "Please enter valid mobile no")
-        .max(10, "Please enter valid mobile no")
-        .required("Please Enter Reference Mobile No"),
+        .max(10, "Please enter valid mobile no"),
 
     date: Yup.date()
         .max(new Date(), 'Please select valid date')
         .required("Please Enter Date")
         .nullable(),
 
-    installment: Yup.string().required("Please Select Company"),
+    company: Yup.string().required("Please Select Company"),
 
-    installment: Yup.string().required("Please Select Model"),
+    model: Yup.string().required("Please Select Model"),
 
     price: Yup.string().required("Please Enter Price"),
 
@@ -96,7 +78,7 @@ export const customerSchema = Yup.object({
 
     dp: Yup.string().required("Please Enter Down Payment"),
 
-    net_payable: Yup.string().required("Please Enter Net Payable Amount"),
+    net_payable: Yup.string(),
 
     note: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
@@ -115,6 +97,50 @@ export const customerSchema = Yup.object({
                 return isValidFileType(value && value.name.toLowerCase(), "image")
             })
         .required("Please Enter Adhar Card")
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
+            }
+            return value && value.size <= 2097152
+        }),
+    adhar_back: Yup.mixed()
+        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true; // skip validation if value is empty
+                }
+                return isValidFileType(value && value.name.toLowerCase(), "image")
+            })
+        .required("Please Enter Adhar Card")
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
+            }
+            return value && value.size <= 2097152
+        }),
+    pan: Yup.mixed()
+        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true; // skip validation if value is empty
+                }
+                return isValidFileType(value && value.name.toLowerCase(), "image")
+            })
+        .required("Please Enter Adhar Card")
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
+            }
+            return value && value.size <= 2097152
+        }),
+    light_bill: Yup.mixed()
+        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true; // skip validation if value is empty
+                }
+                return isValidFileType(value && value.name.toLowerCase(), "image")
+            })
         .test("is-valid-size", "Max allowed size is 2MB", value => {
             if (!value) {
                 return true;

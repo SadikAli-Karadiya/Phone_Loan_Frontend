@@ -13,48 +13,48 @@ function Dashboard() {
     <div className='px-5 py-5 xl:px-10 '>
       <div className='grid grid-cols-4 my-10 gap-5 '>
         <div className='bg-[#e55353] py-3 px-3 rounded-md'>
-            <div className='flex justify-between items-start pb-16' >
-              <div>
-                <h1 className="text-white font-roboto font-bold text-2xl">
-                  5000
-                </h1>
-                <p className = "text-white">Total Customer</p>
-              </div>
-              <BiDotsVerticalRounded className='text-white'/>
+          <div className='flex justify-between items-start pb-16' >
+            <div>
+              <h1 className="text-white font-roboto font-bold text-2xl">
+                5000
+              </h1>
+              <p className="text-white">Total Customer</p>
             </div>
+            <BiDotsVerticalRounded className='text-white' />
+          </div>
         </div>
         <div className='bg-[#f9b115] py-3 px-3 rounded-md pb-16'>
-            <div className='flex justify-between items-start'>
-              <div>
-                <h1 className="text-white font-roboto font-bold text-2xl">
-                  5000
-                </h1>
-                <p className = "text-white">Total Customer</p>
-              </div>
-              <BiDotsVerticalRounded className='text-white'/>
+          <div className='flex justify-between items-start'>
+            <div>
+              <h1 className="text-white font-roboto font-bold text-2xl">
+                5000
+              </h1>
+              <p className="text-white">Total Customer</p>
             </div>
+            <BiDotsVerticalRounded className='text-white' />
+          </div>
         </div>
         <div className='bg-[#3399ff] py-3 px-3 rounded-md pb-16'>
-            <div className='flex justify-between items-start'>
-              <div>
-                <h1 className="text-white font-roboto font-bold text-2xl">
-                  5000
-                </h1>
-                <p className = "text-white">Total Customer</p>
-              </div>
-              <BiDotsVerticalRounded className='text-white'/>
+          <div className='flex justify-between items-start'>
+            <div>
+              <h1 className="text-white font-roboto font-bold text-2xl">
+                5000
+              </h1>
+              <p className="text-white">Total Customer</p>
             </div>
+            <BiDotsVerticalRounded className='text-white' />
+          </div>
         </div>
         <div className='bg-[#321fdb] py-3 px-3 rounded-md pb-16'>
-            <div className='flex justify-between items-start'>
-              <div>
-                <h1 className="text-white font-roboto font-bold text-2xl">
-                  5000
-                </h1>
-                <p className = "text-white">Total Customer</p>
-              </div>
-              <BiDotsVerticalRounded className='text-white'/>
+          <div className='flex justify-between items-start'>
+            <div>
+              <h1 className="text-white font-roboto font-bold text-2xl">
+                5000
+              </h1>
+              <p className="text-white">Total Customer</p>
             </div>
+            <BiDotsVerticalRounded className='text-white' />
+          </div>
         </div>
       </div>
       <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden">
@@ -72,6 +72,19 @@ function Dashboard() {
             </div>
           </div>
           <div className="right flex items-center space-x-3 pr-6">
+            <div className='flex items-center space-x-3'>
+              <div className='bg-green-200 rounded-md px-3 shadow-lg py-1 flex flex-col justify-center  items-center'>
+                <h1 className='font-semibold text-sm'>
+                  Total : 291840
+                </h1>
+                <p className='text-sm italic'>Transection : 66</p>
+              </div>
+              <div className='flex justify-end items-end'>
+                <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
+                  Calculate Total
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <table

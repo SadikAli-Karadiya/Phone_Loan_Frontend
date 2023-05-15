@@ -68,35 +68,6 @@ function EMIHistory() {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr className=" border-b">
-                                    <th className="py-5 px-6">
-                                        01
-                                    </th>
-                                    <td className="px-6 py-5 ">
-                                        05/01/2023
-                                    </td>
-                                    <td className="px-6 py-5 capitalize">
-                                        5000
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        2
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        <h1 className='bg-red-300 text-red-900 font-bold py-[2px] rounded-md'>
-                                            Pending
-                                        </h1>
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        <div className="flex justify-center space-x-3">
-                                            <button
-                                                onClick={() =>
-                                                    navigate(`/Receipt/Generate`)}
-                                                className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                                Pay
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

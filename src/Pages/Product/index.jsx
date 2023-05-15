@@ -11,16 +11,37 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import CreatableSelect from 'react-select/creatable';
 
-
+const createOption = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, ''),
+});
 
 function Product() {
+  const defaultOptions = [
+    {
 
+    }
+  ];
   const navigate = useNavigate();
   const location = useLocation();
   const [model, setModel] = React.useState(false);
   const [pageNo, setPageNo] = React.useState(1);
   const [PhoneInfo, setPhoneInfo] = React.useState([])
+  const [isLoading, setIsLoading] = React.useState();
+  const [options, setOptions] = React.useState(defaultOptions);
+  const [value, setValue] = React.useState();
+
+  const handleCreate = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      setIsLoading(false);
+      setOptions((prev) => [...prev, newOption]);
+      setValue(newOption);
+    }, 1000);
+  };
 
   const productSchema = Yup.object({
     company: Yup.string().required("Please Enter Company"),
@@ -35,12 +56,12 @@ function Product() {
     description: "",
   }
 
-  const [value, setValue] = React.useState({
-    company: "",
-    model: "",
-    price: "",
-    description: "",
-  });
+  // const [value, setValue] = React.useState({
+  //   company: "",
+  //   model: "",
+  //   price: "",
+  //   description: "",
+  // });
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
@@ -60,7 +81,7 @@ function Product() {
           // } else {
           // newsRegistration(fd).then();
           setPhoneInfo(data)
-          resetForm({values : ""})
+          resetForm({ values: "" })
           setModel(false)
           // }
         } catch (err) {
@@ -115,7 +136,7 @@ function Product() {
         {model && (
           <div className="w-full h-full bg-black  ">
             <div className="flex justify-center shadow-2xl  ">
-              <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[50%] lg:w-[70%] opacity-100 shadow-2xl rounded xs:top-5 lg:top-10 bg-white z-50 ">
+              <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[50%] lg:w-[53.9%] opacity-100 shadow-2xl rounded xs:top-5 lg:top-10 bg-white z-50 ">
                 <div className="">
                   <div className="flex justify-end ">
                     <button
@@ -137,62 +158,70 @@ function Product() {
                       className="space-y-5 xl:space-y-10 "
                       onSubmit={handleSubmit}
                     >
-                      <div className="flex xs:flex-col lg:flex-row lg:space-y-0 lg:space-x-8 items-center space-y-5 md:space-y-8">
-                        <div className="flex flex-col space-y-2  w-full ">
-                          <label htmlFor="company">Company *</label>
-                          <select
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            name="company"
-                            id="company"
-                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-non border border-slate-300 outline-blue-200"
-                          >
-                            <option value="">Select Company</option>
-                            <option value="Oppo">Oppo</option>
-                            <option value="Techno">Techno</option>
-                            <option value="Vivo">Vivo</option>
-                          </select>
-                          {errors.company && touched.company ? (
-                            <p className="form-error text-red-600 text-sm font-semibold">
-                              {errors.company}
-                            </p>
-                          ) : null}
-                        </div>
-                        <div className="flex flex-col space-y-2 w-full ">
-                          <label htmlFor="model name ">Model Name *</label>
-                          <input
-                            type="text"
-                            name="model"
-                            id="model"
-                            value={value.model ? value.model : values.model}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                            placeholder="Enter Model Name "
+                      <div className="space-y-10">
+                        <div className='flex space-x-10'>
+                          <CreatableSelect
+                            className='w-64 drop-shadow-md'
+                            isClearable
+                            placeholder="Select Company"
+                            isDisabled={isLoading}
+                            isLoading={isLoading}
+                            onChange={(newValue) => setValue(newValue)}
+                            onCreateOption={handleCreate}
+                            options={options}
+                            value={value}
                           />
-                          {errors.model && touched.model
-                            ?
-                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
-                            :
-                            null}
-                        </div>
-                        <div className="flex flex-col space-y-2 w-full ">
-                          <label htmlFor="model name ">Price * </label>
-                          <input
-                            type="text"
-                            name="price"
-                            id="price"
-                            value={value.price ? value.price : values.price}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                            placeholder="Enter Model Name "
+                          <CreatableSelect
+                            className='w-64 drop-shadow-md'
+                            isClearable
+                            placeholder="Select Model"
+                            isDisabled={isLoading}
+                            isLoading={isLoading}
+                            onChange={(newValue) => setValue(newValue)}
+                            onCreateOption={handleCreate}
+                            options={options}
+                            value={value}
                           />
-                          {errors.price && touched.price
-                            ?
-                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                            :
-                            null}
+                        </div>
+                        <div className='flex space-x-10'>
+                          <div className='flex flex-col'>
+                            <CreatableSelect
+                              className='w-64 drop-shadow-md'
+                              isClearable
+                              placeholder="Select Storage"
+                              isDisabled={isLoading}
+                              isLoading={isLoading}
+                              onChange={(newValue) => setValue(newValue)}
+                              onCreateOption={handleCreate}
+                              options={options}
+                              // value={values.company ? value.company : values.company}
+                              // onBlur={handleBlur}
+                              // name='company'
+
+                            />
+                            {/* {errors.price && touched.price
+                              ?
+                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
+                              :
+                              null} */}
+                          </div>
+                          <div className="flex flex-col space-y-2 w-full ">
+                            <input
+                              type="text"
+                              name="price"
+                              id="price"
+                              // value={value.price ? value.price : values.price}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              className="rounded-md py-1 md:py-[5px] drop-shadow-md xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
+                              placeholder="Enter Price "
+                            />
+                            {/* {errors.price && touched.price
+                              ?
+                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
+                              :
+                              null} */}
+                          </div>
                         </div>
                       </div>
                       <div className="flex justify-center items-center w-full space-x-5 ">
@@ -222,7 +251,8 @@ function Product() {
               </div>
             </div>
           </div>
-        )}
+        )
+        }
         <div className={`bg-slate-100 ${model && "opacity-10"}`}>
           <div className=" xl:px-10 h-full">
             <div className='w-full justify-between items-center flex py-8 px-5'>
@@ -281,6 +311,9 @@ function Product() {
                           Model
                         </th>
                         <th scope="col" className="px-6 py-4">
+                          Storage
+                        </th>
+                        <th scope="col" className="px-6 py-4">
                           Price
                         </th>
                         <th scope="col" className="px-6 py-4">
@@ -298,6 +331,9 @@ function Product() {
                         </td>
                         <td className="px-6 py-5">
                           F11 Pro
+                        </td>
+                        <td className="px-6 py-5">
+                          4 / 64
                         </td>
                         <td className="px-6 py-5">
                           15000
@@ -328,7 +364,7 @@ function Product() {
 
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }

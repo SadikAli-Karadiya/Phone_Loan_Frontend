@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -7,16 +7,17 @@ import "../../Customer/CustomerRegister/Customerform.css"
 
 function CustomerRegister() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
-    const [img, setImg] = React.useState(defaultImage);
-    const [photo, setPhoto] = React.useState("");
+    const [img, setImg] = useState(defaultImage);
+    const [photo, setPhoto] = useState("");
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+
 
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
             onSubmit: (values) => {
-                setIndex(2);
-                dispatch(setBasicInfoForm({ ...values, logo: photo }));
+                setIsLoadingOnSubmit(true);
                 resetForm({ values: "" })
             },
         });
@@ -25,6 +26,11 @@ function CustomerRegister() {
         setPhoto(() => e.target.files[0]);
         setImg(URL.createObjectURL(e.target.files[0]));
     }
+
+    const handleClick = (e) => {
+        resetForm({ values: "" })
+    };
+
     return (
         <>
             <div className="py-5">
@@ -193,7 +199,6 @@ function CustomerRegister() {
                                 </div>
                             </div>
                             <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-
                                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="date w-full">
                                         <label className="block">
@@ -202,7 +207,7 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="date"
-                                                name="dob"
+                                                name="date"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
                                                 value={values.date}
@@ -402,7 +407,7 @@ function CustomerRegister() {
                                         />
                                     </label>
                                     <span className="text-xs font-semibold text-red-600 px-1">
-                                        {errors.back && touched.back ? errors.back : null}
+                                        {errors.adhar_back && touched.adhar_back ? errors.adhar_back : null}
                                     </span>
                                 </div>
                                 <div className="pan w-full">
@@ -444,25 +449,12 @@ function CustomerRegister() {
 
                             </div>
                             <div className="flex py-2 ">
-                                <div>
-                                    <button
-                                        type="button"
-                                        className="text-[#0d0d48] hover:text-white border-2  border-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden rounded-md cursor-pointer group mr-3">
-                                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#0d0d48]  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                        <span className="relative flex items-center gap-2 text-base">
-                                            CLEAR
-                                        </span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                                    >
-                                        <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                        <span className="relative flex items-center gap-2 text-base">
-                                            SUBMIT
-                                        </span>
-                                    </button>
-                                </div>
+                                <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>
+                                    CLEAR
+                                </button>
+                                <button type="submit" disabled={isLoadingOnSubmit} className={`px-8 h-10 ${isLoadingOnSubmit ? 'opacity-40' : 'opacity-100'} bg-[#0d0d48] border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
+                                    {isLoadingOnSubmit ? 'Loading...' : 'SUBMIT'}
+                                </button>
                             </div>
                         </div>
                     </div>
