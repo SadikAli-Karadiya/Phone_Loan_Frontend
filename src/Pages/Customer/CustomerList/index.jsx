@@ -19,8 +19,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 
-
-
 function CustomersList() {
   const [model, setModel] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
@@ -372,7 +370,7 @@ function CustomersList() {
           </div>
         )}
         <div className={` ${model && "opacity-10"}`}>
-          <div className='xl:px-5  h-full'>
+          <div className='xl:px-5 h-full'>
             <div className='py-5 px-5'>
               <div className='flex items-center justify-end pb-5'>
                 <Tippy content="Add New EMI">

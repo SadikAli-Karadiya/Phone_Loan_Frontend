@@ -12,6 +12,10 @@ import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
 import CreatableSelect from 'react-select/creatable';
+import { BiFolderPlus } from "react-icons/bi";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+
 
 const createOption = (label) => ({
   label,
@@ -129,9 +133,6 @@ function Product() {
 
   return (
     <>
-      {/* <div className=' px-10 py-5 h-full'>
-       
-    </div> */}
       <div className="relative">
         {model && (
           <div className="w-full h-full bg-black  ">
@@ -149,104 +150,15 @@ function Product() {
                       <AiFillCloseCircle />
                     </button>
                   </div>
-                  <div className="  rounded-md  my-5 xl:py-4  px-5 xl:px-10">
-                    <h1 className="font-semibold text-[#000080] text-lg lg:text-xl pb-5 ">
-                      Add Product
-                    </h1>
-                    <form
-                      action=""
-                      className="space-y-5 xl:space-y-10 "
-                      onSubmit={handleSubmit}
-                    >
-                      <div className="space-y-10">
-                        <div className='flex space-x-10'>
-                          <CreatableSelect
-                            className='w-64 drop-shadow-md'
-                            isClearable
-                            placeholder="Select Company"
-                            isDisabled={isLoading}
-                            isLoading={isLoading}
-                            onChange={(newValue) => setValue(newValue)}
-                            onCreateOption={handleCreate}
-                            options={options}
-                            value={value}
-                          />
-                          <CreatableSelect
-                            className='w-64 drop-shadow-md'
-                            isClearable
-                            placeholder="Select Model"
-                            isDisabled={isLoading}
-                            isLoading={isLoading}
-                            onChange={(newValue) => setValue(newValue)}
-                            onCreateOption={handleCreate}
-                            options={options}
-                            value={value}
-                          />
-                        </div>
-                        <div className='flex space-x-10'>
-                          <div className='flex flex-col'>
-                            <CreatableSelect
-                              className='w-64 drop-shadow-md'
-                              isClearable
-                              placeholder="Select Storage"
-                              isDisabled={isLoading}
-                              isLoading={isLoading}
-                              onChange={(newValue) => setValue(newValue)}
-                              onCreateOption={handleCreate}
-                              options={options}
-                              // value={values.company ? value.company : values.company}
-                              // onBlur={handleBlur}
-                              // name='company'
-
-                            />
-                            {/* {errors.price && touched.price
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                              :
-                              null} */}
-                          </div>
-                          <div className="flex flex-col space-y-2 w-full ">
-                            <input
-                              type="text"
-                              name="price"
-                              id="price"
-                              // value={value.price ? value.price : values.price}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              className="rounded-md py-1 md:py-[5px] drop-shadow-md xl:py-[6px] px-3 outline-non border border-slate-300 outline-blue-200"
-                              placeholder="Enter Price "
-                            />
-                            {/* {errors.price && touched.price
-                              ?
-                              <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                              :
-                              null} */}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center items-center w-full space-x-5 ">
-                        <button
-                          type="submit"
-                          // disabled={thing.isLoading}
-                          className={`
-                border-2 border-[#0d0d48] relative inline-flex items-center justify-center  px-4 py-1 
-              sm:px-8 sm:py-[6px] xl:px-32 xl:py-[5px] overflow-hidden font-medium tracking-tighter text-[#0d0d48] hover:text-white rounded-lg cursor-pointer group`}
-                        >
-                          <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#0d0d48] rounded-lg group-hover:w-full group-hover:h-56"></span>
-                          <span className="relative ">
-                            {/* {thing.isLoading
-                              ? "Loading..."
-                              : updateData.isLoading
-                                ? "Updating..."
-                                : location?.state?.isEdit
-                                  ? "UPDATE"
-                                  : "SUBMIT"} */}
-                            SUBMIT
-                          </span>
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+                  <Tippy content="Add New EMI">
+                    <div
+                      onClick={() => {
+                        setModel(true);
+                      }}
+                      className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                      <BiFolderPlus className='xs:text-base sm:text-xl' />
+                    </div>
+                  </Tippy>
                 </div>
               </div>
             </div>
@@ -257,13 +169,18 @@ function Product() {
           <div className=" xl:px-10 h-full">
             <div className='w-full justify-between items-center flex py-8 px-5'>
               <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>All Product</h1>
-              <button
-                onClick={() => {
-                  setModel(true);
-                }}
-                className='bg-[#0d0d48] hover:bg-blue-900 text-white rounded-full xs:px-3 xs:py-[6px] xs:text-xs xl:text-sm xl:px-4 xl:py-2 font-semibold '>
-                Add New Product
-              </button>
+              <div className='flex items-center justify-end pb-5'>
+                <Tippy content="Add New Product">
+                  <div
+                    onClick={() => {
+                      setModel(true);
+                    }}
+                    className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                    <BiFolderPlus className='xs:text-base sm:text-xl' />
+                  </div>
+                </Tippy>
+
+              </div>
             </div>
             <div className='flex justify-center items-center xs:py-3'>
               <input
@@ -364,7 +281,7 @@ function Product() {
 
           </div>
         </div>
-      </div >
+      </div>
     </>
   )
 }
