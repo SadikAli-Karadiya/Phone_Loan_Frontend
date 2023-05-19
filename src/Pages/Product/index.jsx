@@ -135,7 +135,7 @@ function Product() {
     <>
       <div className="relative">
         {model && (
-          <div className="w-full h-full bg-black  ">
+          <div className="w-full h-full bg-white  ">
             <div className="flex justify-center shadow-2xl  ">
               <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[50%] lg:w-[53.9%] opacity-100 shadow-2xl rounded xs:top-5 lg:top-10 bg-white z-50 ">
                 <div className="">
@@ -150,15 +150,78 @@ function Product() {
                       <AiFillCloseCircle />
                     </button>
                   </div>
-                  <Tippy content="Add New EMI">
-                    <div
-                      onClick={() => {
-                        setModel(true);
-                      }}
-                      className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
-                      <BiFolderPlus className='xs:text-base sm:text-xl' />
-                    </div>
-                  </Tippy>
+                  <div className='px-10 py-10'>
+                    <h1 className="font-semibold text-[#0d0d48] text-lg lg:text-xl pb-5 ">
+                      Add Product
+                    </h1>
+                    <form action="" className='space-y-5'>
+                      <div className='flex items-center w-full space-x-5'>
+                        <CreatableSelect
+                          className='w-full'
+                          isClearable
+                          isDisabled={isLoading}
+                          isLoading={isLoading}
+                          onChange={(newValue) => setValue(newValue)}
+                          onCreateOption={handleCreate}
+                          options={options}
+                          value={value}
+                        />
+                        <CreatableSelect
+                          className='w-full'
+                          isClearable
+                          isDisabled={isLoading}
+                          isLoading={isLoading}
+                          onChange={(newValue) => setValue(newValue)}
+                          onCreateOption={handleCreate}
+                          options={options}
+                          value={value}
+                        />
+                      </div>
+                      <div className='flex items-center w-full space-x-5'>
+                        <CreatableSelect
+                          className='w-full'
+                          isClearable
+                          isDisabled={isLoading}
+                          isLoading={isLoading}
+                          onChange={(newValue) => setValue(newValue)}
+                          onCreateOption={handleCreate}
+                          options={options}
+                          value={value}
+                        />
+                        <CreatableSelect
+                          className='w-full'
+                          isClearable
+                          isDisabled={isLoading}
+                          isLoading={isLoading}
+                          onChange={(newValue) => setValue(newValue)}
+                          onCreateOption={handleCreate}
+                          options={options}
+                          value={value}
+                        />
+                      </div>
+
+                      <div className="flex justify-center items-center w-full space-x-5 ">
+                        <button
+                          type="submit"
+                          // disabled={thing.isLoading}
+                          className={`
+                                      border-2 border-[#0d0d48] relative inline-flex items-center justify-center  px-4 py-1 
+                                     sm:px-8 sm:py-[6px] xl:px-32 xl:py-[5px] overflow-hidden font-medium tracking-tighter text-[#0d0d48] hover:text-white rounded-lg cursor-pointer group`}>
+                          <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#0d0d48] rounded-lg group-hover:w-full group-hover:h-56"></span>
+                          <span className="relative ">
+                            {/* {thing.isLoading
+                              ? "Loading..."
+                              : updateData.isLoading
+                                ? "Updating..."
+                                : location?.state?.isEdit
+                                  ? "UPDATE"
+                                  : "SUBMIT"} */}
+                            SUBMIT
+                          </span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -185,7 +248,7 @@ function Product() {
             <div className='flex justify-center items-center xs:py-3'>
               <input
                 type="search"
-                placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
+                placeholder='Search Receipt (BY : Company Name , Model Name)'
                 className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
               />
               <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
@@ -199,74 +262,72 @@ function Product() {
 
 
               </div>
-              <div className='px-5 py-5'>
-                <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
-                  <div className='flex justify-between items-center py-5 px-5'>
-                    <h1 className='font-bold  text-lg'>Product List</h1>
-                    <div>
-                      <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
-                        <option value="">Select Company</option>
-                        <option value="Oppo">Oppo</option>
-                        <option value="Vivo">Vivo</option>
-                        <option value="Techno">Techno</option>
-                      </select>
-                    </div>
+
+              <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
+                <div className='flex justify-between items-center py-5 px-5'>
+                  <h1 className='font-bold  text-lg'>Product List</h1>
+                  <div>
+                    <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
+                      <option value="">Select Company</option>
+                      <option value="Oppo">Oppo</option>
+                      <option value="Vivo">Vivo</option>
+                      <option value="Techno">Techno</option>
+                    </select>
                   </div>
-                  <table
-                    className="w-full text-sm text-center "
-                    id="table-to-xls"
-                  >
-                    <thead className="text-xs text-gray-700 bg-gray-100 uppercase  ">
-                      <tr className="text-black text-sm ">
-                        <th scope="col" className="pl-3 py-4">
-                          Sr No
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          Company
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          Model
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          Storage
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          Price
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                      <tr className=" border-b">
-                        <td className="px-6 py-5 font-bold">
-                          001
-                        </td>
-                        <td className="px-6 py-5 capitalize">
-                          Vivo
-                        </td>
-                        <td className="px-6 py-5">
-                          F11 Pro
-                        </td>
-                        <td className="px-6 py-5">
-                          4 / 64
-                        </td>
-                        <td className="px-6 py-5">
-                          15000
-                        </td>
-                        <td className="px-6 py-5">
-                          <div className="flex justify-center items-center space-x-2">
-                            <FiEdit className='text-lg cursor-pointer ' onClick={() => {
-                              setModel(true);
-                            }} />
-                            <MdDelete className='text-xl text-red-600 cursor-pointer' />
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </div>
+                <table
+                  className="w-full text-sm text-center rounded-xl  text-white bg-[#0d0d48]"
+                  id="table-to-xls">
+                  <thead className="text-xs uppercase">
+                    <tr className="text-white text-sm ">
+                      <th scope="col" className="pl-3 py-4">
+                        Sr No
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Company
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Model
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Storage
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Price
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                    <tr className=" border-b">
+                      <td className="px-6 py-5 font-bold">
+                        001
+                      </td>
+                      <td className="px-6 py-5 capitalize">
+                        Vivo
+                      </td>
+                      <td className="px-6 py-5">
+                        F11 Pro
+                      </td>
+                      <td className="px-6 py-5">
+                        4 / 64
+                      </td>
+                      <td className="px-6 py-5">
+                        15000
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex justify-center items-center space-x-2">
+                          <FiEdit className='text-lg cursor-pointer ' onClick={() => {
+                            setModel(true);
+                          }} />
+                          <MdDelete className='text-xl text-red-600 cursor-pointer' />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 

@@ -124,6 +124,7 @@ function CustomersList() {
       ]
     },
   ])
+  const [Selectemi, setSelectemi] = useState("")
 
   const bgColors = [
     "#ffd6d6",
@@ -236,6 +237,7 @@ function CustomersList() {
       return n?.id == id;
     });
     setSelectedEMI(Customer)
+    setSelectemi(id)
   };
 
   const handleDeleteClass = async (class_id) => {
@@ -392,10 +394,9 @@ function CustomersList() {
                         style={{
                           backgroundColor: bgColors[index % bgColors.length],
                         }}
-                        className='px-5 py-3 my-3 w-[23%] group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3 '
+                        className='px-5 py-3 my-3 w-[23%] group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3'
                         key={index}
-                        onClick={() => handleSelectEMI(item.id)}
-                      >
+                        onClick={() => handleSelectEMI(item.id)}>
                         <div className='flex justify-between items-center '>
                           <div>
                             <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
@@ -417,7 +418,7 @@ function CustomersList() {
                               onMouseEnter={handleMouseEnterEdit}
                               onMouseLeave={handleMouseLeaveEdit}
                               onClick={() => handleEditEMI(item.id)}
-                              className='edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block hidden '
+                              className={`${Selectemi == item.id ? "block" : "hidden"} edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block `}
                             >
                               <MdModeEdit className='' />
                             </div>
@@ -437,7 +438,8 @@ function CustomersList() {
                               onMouseEnter={handleMouseEnterDelete}
                               onMouseLeave={handleMouseLeaveDelete}
                               onClick={() => handleDeleteClass(item.id)}
-                              className='edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block hidden '>
+                              className={`${Selectemi == item.id ? "block" : "hidden"} edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block `}
+                            >
                               <MdDelete className=' ' />
                             </div>
                           </div>
@@ -483,131 +485,130 @@ function CustomersList() {
                 )}
               </div>
             </div>
-            <div className='px-5 py-5 '>
-              <div className="bg-white shadow-md rounded-md xs:overflow-x-scroll xl:overflow-x-hidden">
-                <h1 className='font-bold pt-4 px-4 text-lg'>Customer List</h1>
-                <div className='flex justify-between items-center px-3 py-5'>
-                  <div className='flex justify-start items-center w-1/3 '>
-                    <input
-                      type="search"
-                      placeholder='Search Customer'
-                      className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
-                    />
-                    <div className='bg-blue-500 px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
+            <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
+              <h1 className='font-bold text-lg'>Customer List</h1>
+              <div className='flex justify-between items-center py-5'>
+                <div className='flex justify-start items-center w-1/3 '>
+                  <input
+                    type="search"
+                    placeholder='Search Customer'
+                    className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+                  />
+                  <div className='bg-[#3b82f6] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
                          shadow-xl cursor-pointer text-white text-2xl '>
-                      <BiSearch className='search group-hover:scale-125 duration-300' />
-                    </div>
-                  </div>
-                  <div className="right flex items-center space-x-3 pr-6">
-                    <button
-                      id="year-btn"
-                      className=" flex items-center drop-shadow-lg border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
-                      <select
-                        onChange={handlePendingPaidUpClick}
-                        name=""
-                        id=""
-                        className="cursor-pointer text-darkblue-500 text-base outline-none"
-                      >
-                        <option value={0}>All</option>
-                        <option value={1}>Pending</option>
-                        <option value={2}>Paidup</option>
-                      </select>
-                    </button>
+                    <BiSearch className='search group-hover:scale-125 duration-300' />
                   </div>
                 </div>
-                <table
-                  className="w-full items-center text-sm text-center" id="table-to-xls" >
-                  <thead className="text-xs bg-blue-50 text-gray-700 bg-class3-50 uppercase  ">
-                    <tr className="text-black text-sm ">
-                      <th scope="col" className="pl-3 py-4">
-                        Serial No
-                      </th>
-                      <th scope="col" className="pl-3 py-4">
-                        Customer Id
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Name
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Phone
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Total
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Paidup
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Pending
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Profile
-                      </th>
-                      <th scope="col" className="px-6 py-4">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  {
-                    selectedEMI?.CustomersList?.length > 0 ? (
-                      selectedEMI?.CustomersList.map((item, index) => {
-                        return (
-                          <tbody className="bg-white items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden" key={index}>
-                            <tr className=" border-b">
-                              <th className="py-5 px-6">
-                                {index + 1}
-                              </th>
-                              <td className="px-6 py-5 text-gray-500">
-                                {item.customer_id}
-                              </td>
-                              <td className="px-6 py-5 capitalize">
-                                {item.name}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.mobile}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.total}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.total - item.pending}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.pending}
-                              </td>
-                              <td className="px-6 py-5">
-                                <div className="flex justify-center items-center">
-                                  <AiFillEye
-                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                    onClick={() =>
-                                      navigate(`/Customer/profile-detail`)}
-                                  />
-                                </div>
-                              </td>
-                              <td className="px-6 py-5 ">
-                                <div className="flex justify-center space-x-3">
-                                  <button
-                                    onClick={() =>
-                                      navigate(`/Receipt/Generate`)}
-                                    className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                    Pay
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        )
-                      })
-                    ) : (
-                      <div className='flex justify-center items-center w-full'>
-                        <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
-                          <FaUsers className='text-3xl' />
-                          <h1 className=' font-semibold'>Customer Not Found</h1>
-                        </div>
-                      </div>
-                    )}
-                </table>
+                <div className="right flex items-center space-x-3 pr-6">
+                  <button
+                    id="year-btn"
+                    className=" flex items-center drop-shadow-lg border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
+                    <select
+                      onChange={handlePendingPaidUpClick}
+                      name=""
+                      id=""
+                      className="cursor-pointer text-darkblue-500 text-base outline-none"
+                    >
+                      <option value={0}>All</option>
+                      <option value={1}>Pending</option>
+                      <option value={2}>Paidup</option>
+                    </select>
+                  </button>
+                </div>
               </div>
+              <table
+                className="w-full text-sm text-center rounded-xl  text-white bg-[#3b82f6]  "
+                id="table-to-xls" >
+                <thead className="text-xs uppercase  ">
+                  <tr className=" text-sm ">
+                    <th scope="col" className="pl-3 py-4">
+                      Serial No
+                    </th>
+                    <th scope="col" className="pl-3 py-4">
+                      Customer Id
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Name
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Phone
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Total
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Paidup
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Pending
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Profile
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                {
+                  selectedEMI?.CustomersList?.length > 0 ? (
+                    selectedEMI?.CustomersList.map((item, index) => {
+                      return (
+                        <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden" key={index}>
+                          <tr className=" border-b">
+                            <th className="py-5 px-6">
+                              {index + 1}
+                            </th>
+                            <td className="px-6 py-5 text-gray-500">
+                              {item.customer_id}
+                            </td>
+                            <td className="px-6 py-5 capitalize">
+                              {item.name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.mobile}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.total}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.total - item.pending}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.pending}
+                            </td>
+                            <td className="px-6 py-5">
+                              <div className="flex justify-center items-center">
+                                <AiFillEye
+                                  className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                  onClick={() =>
+                                    navigate(`/Customer/profile-detail`)}
+                                />
+                              </div>
+                            </td>
+                            <td className="px-6 py-5 ">
+                              <div className="flex justify-center space-x-3">
+                                <button
+                                  onClick={() =>
+                                    navigate(`/Receipt/Generate`)}
+                                  className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                  Pay
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      )
+                    })
+                  ) : (
+                    <div className='flex justify-center items-center w-full'>
+                      <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
+                        <FaUsers className='text-3xl' />
+                        <h1 className=' font-semibold'>Customer Not Found</h1>
+                      </div>
+                    </div>
+                  )}
+              </table>
             </div>
 
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>

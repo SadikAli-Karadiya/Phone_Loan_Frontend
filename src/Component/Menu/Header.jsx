@@ -41,17 +41,20 @@ function Header() {
                 {
                     isMenu && (
                         <div
-                            className={` bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl w-1/6 `}
+                            className={` bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl w-1/5 `}
                             id="profileTable"
                         >
                             <div className="">
                                 <div className="mt-3 mb-3 ">
-                                    <NavLink to="/admin/Updateprofile">
+                                    <NavLink
+                                        to="/admin/Updateprofile"
+                                        onClick={handleToggle}
+                                    >
                                         <div className="bg-white hover:bg-slate-200 text-gray-800 h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6 items-center">
                                             <div className="bg-blue-200 p-2.5 flex justify-center items-center rounded-full">
                                                 <FaRegUserCircle className="text-blue-500 text-xl " />
                                             </div>
-                                            <span className="md:text-sm xl:text-base">
+                                            <span className="md:text-sm xl:text-base font-roboto">
                                                 Admin Profile
                                             </span>
                                         </div>
@@ -68,23 +71,27 @@ function Header() {
                                     </NavLink> */}
 
                                     {/* {myData?.is_super_admin ? ( */}
-                                    <NavLink to="/admin/Addadmin">
+                                    <NavLink to="/admin/Addadmin"
+                                        onClick={handleToggle}
+                                    >
                                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
                                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
                                                 <BiUserPlus className="text-blue-500 text-xl" />
                                             </div>
-                                            <span className="md:text-sm xl:text-base">Add Admin</span>
+                                            <span className="md:text-sm xl:text-base font-roboto">Add Admin</span>
                                         </div>
                                     </NavLink>
                                     {/* ) : null} */}
 
                                     {/* {myData?.is_super_admin ? ( */}
-                                    <NavLink to="/admin/List">
+                                    <NavLink to="/admin/List"
+                                    onClick={handleToggle}
+                                    >
                                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
                                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
                                                 <BiUserPlus className="text-blue-500 text-xl" />
                                             </div>
-                                            <span className="md:text-sm xl:text-base">
+                                            <span className="md:text-sm xl:text-base font-roboto">
                                                 Admin List
                                             </span>
                                         </div>
@@ -98,7 +105,7 @@ function Header() {
                                         <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
                                             <RiLogoutCircleRLine className="text-blue-500 text-xl" />
                                         </div>
-                                        <span className="md:text-sm xl:text-base">Logout</span>
+                                        <span className="md:text-sm xl:text-base font-roboto">Logout</span>
                                     </div>
                                 </div>
                             </div>

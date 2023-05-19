@@ -81,28 +81,26 @@ function Report() {
   return (
     <>
       <div className='px-5 py-5'>
-        <div className='flex justify-end items-end'>
-          <div className="bg-gray-50 shadow-xl rounded-lg py-3 ">
-            <h1 className="mx-4 my-2 font-semibold"> EMI Calendar</h1>
-            <div className="grid grid-cols-4 px-5 py-3  gap-5 ">
-              {noOfTransaction?.map((data, i) => {
-                console.log(data)
-                return (
-                  <div key={i} className="rounded-xl shadow-2xl bg-white ">
-                    <h1 className=" text-sm py-1 font-semibold bg-green-300 rounded-t-xl text-center">
-                      {data.months}
-                    </h1>
-                    <span className="text-xs m-2 ">Transactions : {data.transection}</span>
-                    <h2 className=" text-xs m-2">
-                      Total :
-                      <span className="ml-1 font-bold">
-                        {data.total}
-                      </span>
-                    </h2>
-                  </div>
-                );
-              })}
-            </div>
+        <h1 className="mx-4 my-2 font-semibold"> EMI Calendar</h1>
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-wrap justify-center gap-5 pt-5 w-4/5 items-center">
+            {noOfTransaction?.map((data, i) => {
+              console.log(data)
+              return (
+                <div key={i} className="rounded-xl shadow-2xl bg-white w-32 ">
+                  <h1 className=" text-sm py-1 font-semibold bg-green-300 rounded-t-xl text-center">
+                    {data.months}
+                  </h1>
+                  <span className="text-xs m-2 ">Transactions : {data.transection}</span>
+                  <h2 className=" text-xs m-2">
+                    Total :
+                    <span className="ml-1 font-bold">
+                      {data.total}
+                    </span>
+                  </h2>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className='px-5 py-5 xl:px-10 bg-white drop-shadow-md mt-10 '>
@@ -141,26 +139,26 @@ function Report() {
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="bg-gray-100 h-16 w-full text-sm leading-none font-bold text-[#0d0d48]">
-                  <th className="font-normal text-left pl-10">Date</th>
-                  <th className="font-normal text-left  px-2 xl:px-0">
+                  <th className="text-left pl-10">Date</th>
+                  <th className="text-left  px-2 xl:px-0">
                     Reciept No
                   </th>
-                  <th className="font-normal text-left px-2 xl:px-0">
+                  <th className="text-left px-2 xl:px-0">
                     Student Name
                   </th>
-                  <th className="font-normal text-left px-2 xl:px-0">
+                  <th className="text-left px-2 xl:px-0">
                     Class
                   </th>
-                  <th className="font-normal text-left  px-2 xl:px-0">
+                  <th className="text-left  px-2 xl:px-0">
                     Installment
                   </th>
-                  <th className="font-normal text-left px-2 xl:px-0">
+                  <th className="text-left px-2 xl:px-0">
                     Amount
                   </th>
-                  <th className="font-normal text-left px-2 xl:px-0">
+                  <th className="text-left px-2 xl:px-0">
                     Admin
                   </th>
-                  <th className="font-normal text-left px-2 xl:px-0">
+                  <th className="text-left px-2 xl:px-0">
                     Detail
                   </th>
                 </tr>
