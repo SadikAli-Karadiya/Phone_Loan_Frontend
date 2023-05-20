@@ -444,7 +444,7 @@ function CustomersList() {
                             </div>
                           </div>
                         </div>
-                        <div className={`${item._id} flex items-center justify-start space-x-7`}>
+                        <div className={`${item._id} flex items-center justify-start space-x-7 py-2`}>
                           <div className=''>
                             <h1
                               style={{

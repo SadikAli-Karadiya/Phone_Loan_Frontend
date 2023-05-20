@@ -32,6 +32,12 @@ const createStorage = (label) => ({
   value: label.toLowerCase().replace(/\W/g, ''),
 });
 
+const productSchema = Yup.object({
+  company: Yup.string().required("Please Enter Company"),
+  model: Yup.string().required("Please Enter Model"),
+  price: Yup.string().required("Please Enter Price"),
+});
+
 function Product() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,6 +52,8 @@ function Product() {
   const [StorageList, setStorageList] = React.useState([]);
   const [Storage, setStorage] = React.useState();
   const [value, setValue] = React.useState();
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
+
 
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
@@ -78,14 +86,10 @@ function Product() {
   };
 
 
-  const productSchema = Yup.object({
-    company: Yup.string().required("Please Enter Company"),
-    model: Yup.string().required("Please Enter Model"),
-    price: Yup.string().required("Please Enter Price"),
-  });
+
 
   const initialValues = {
-    company: "",
+    company: company,
     model: "",
     storage: "",
     price: "",
@@ -103,13 +107,12 @@ function Product() {
       initialValues: initialValues,
       validationSchema: productSchema,
       onSubmit(data) {
-        // const modeldata = {
-        //   // ...data,
-        //   // company : company,
-        //   // model : Model_Name,
-        //   // storage : Storage,
-        // }
-        console.log(data)
+        const modeldata = {
+          ...data,
+          company: company,
+          model: Model_Name,
+          storage: Storage,
+        }
       },
     });
 
@@ -174,11 +177,11 @@ function Product() {
                     <h1 className="font-semibold text-[#0d0d48] text-lg lg:text-xl pb-5 ">
                       Add Product
                     </h1>
-                    <form action="" className='space-y-5'>
+                    <form action="" className='space-y-5' onSubmit={handleSubmit}>
                       <div className='flex items-center w-full space-x-5'>
-                        <div>
+                        <div className='w-full'>
                           <CreatableSelect
-                            className='w-full '
+                            className='w-full'
                             isClearable
                             isDisabled={isLoading}
                             isLoading={isLoading}
@@ -191,55 +194,72 @@ function Product() {
                           />
                           {errors.company &&
                             touched.company ? (
-                            <small className="text-red-600 mt-2">
+                            <small className="form-error text-red-600 text-sm font-semibold">
                               {errors.company}
                             </small>
                           ) : null}
                         </div>
-                        {/* <div>
+                        <div className='w-full'>
                           <CreatableSelect
                             className='w-full'
                             isClearable
+                            placeholder="Select Model"
                             isDisabled={isLoading}
                             isLoading={isLoading}
                             onChange={(newModel) => setModel_Name(newModel)}
                             onCreateOption={handleCreateModel}
                             options={ModelList}
                             value={Model_Name}
+                            name='model'
                           />
-                        </div> */}
+                          {errors.model &&
+                            touched.model ? (
+                            <small className="form-error text-red-600 text-sm font-semibold">
+                              {errors.model}
+                            </small>
+                          ) : null}
+                        </div>
                       </div>
-                      {/* <div className='flex items-center w-full space-x-5'>
-                        <CreatableSelect
-                          className='w-full'
-                          isClearable
-                          isDisabled={isLoading}
-                          isLoading={isLoading}
-                          onChange={(newstorage) => setStorage(newstorage)}
-                          onCreateOption={handleCreateStorage}
-                          options={StorageList}
-                          value={Storage}
-                        />
-                      </div> */}
+                      <div className='flex items-center w-full space-x-5'>
+                        <div className='w-full'>
+                          <CreatableSelect
+                            className='w-full'
+                            isClearable
+                            name='storage'
+                            isDisabled={isLoading}
+                            isLoading={isLoading}
+                            onChange={(newstorage) => setStorage(newstorage)}
+                            onCreateOption={handleCreateStorage}
+                            options={StorageList}
+                            placeholder="Select Storage"
+                            onBlur={handleBlur}
+                            value={values.storage}
+                          />
+                         {errors.storage && touched.storage
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.storage}</p>
+                            :
+                            null}
+                        </div>
+                        <div className="firstname flex flex-col space-y-2 w-full ">
+                          <input type="text"
+                            name="price"
+                            value={values.price}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
+                            placeholder="Enter Phone Price " />
+                          {errors.price && touched.price
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
+                            :
+                            null}
+                        </div>
+                      </div>
 
                       <div className="flex justify-center items-center w-full space-x-5 ">
-                        <button
-                          type="submit"
-                          // disabled={thing.isLoading}
-                          className={`
-                                      border-2 border-[#0d0d48] relative inline-flex items-center justify-center  px-4 py-1 
-                                     sm:px-8 sm:py-[6px] xl:px-32 xl:py-[5px] overflow-hidden font-medium tracking-tighter text-[#0d0d48] hover:text-white rounded-lg cursor-pointer group`}>
-                          <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-[#0d0d48] rounded-lg group-hover:w-full group-hover:h-56"></span>
-                          <span className="relative ">
-                            {/* {thing.isLoading
-                              ? "Loading..."
-                              : updateData.isLoading
-                                ? "Updating..."
-                                : location?.state?.isEdit
-                                  ? "UPDATE"
-                                  : "SUBMIT"} */}
-                            SUBMIT
-                          </span>
+                        <button type="submit" disabled={isLoadingOnSubmit} className={`px-8 h-10 ${isLoadingOnSubmit ? 'opacity-40' : 'opacity-100'} bg-[#0d0d48] border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
+                          {isLoadingOnSubmit ? 'Loading...' : 'SUBMIT'}
                         </button>
                       </div>
                     </form>
