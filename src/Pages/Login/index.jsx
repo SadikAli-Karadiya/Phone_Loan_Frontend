@@ -38,9 +38,9 @@ function Login() {
             <section className="h-full w-full flex justify-center items-center ">
                 <div className="flex w-full h-screen overflow-hidden ">
                     <div className="hidden lg:flex flex-1 justify-center items-center sm:hidden">
-                        <img src="/login.jpg" alt="" />
+                        <img src="/images/login.jpg" alt="" />
                     </div>
-                    <div className="flex flex-1 flex-col justify-center items-center bg-[#E9EFFD] ">
+                    <div className="flex flex-1 flex-col justify-center items-center  ">
                         <section className="h-full w-full flex justify-center items-center">
                             <div className="login">
                                 <div className="mb-10">

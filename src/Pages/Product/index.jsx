@@ -276,9 +276,9 @@ function Product() {
                   </div>
                 </div>
                 <table
-                  className="w-full text-sm text-center rounded-xl  text-white bg-[#0d0d48]"
+                  className="w-full text-sm text-center rounded-xl  text-white "
                   id="table-to-xls">
-                  <thead className="text-xs uppercase">
+                  <thead className="text-xs uppercase bg-[#0d0d48]">
                     <tr className="text-white text-sm ">
                       <th scope="col" className="pl-3 py-4">
                         Sr No

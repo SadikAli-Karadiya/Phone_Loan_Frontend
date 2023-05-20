@@ -1,12 +1,13 @@
 import React from 'react'
 import image from "../../../public/user.png"
 import { BiDotsVerticalRounded } from "react-icons/bi"
-import { NavLink , Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BiUserPlus } from "react-icons/bi";
 import { VscKey } from "react-icons/vsc";
+import { FiChevronRight } from "react-icons/fi"
 import "../../App.css"
 
 function Header() {
@@ -39,205 +40,75 @@ function Header() {
                 </div>
                 <div
                     className={`${isMenu
-                        ? "active top-[80px] lg:top-[90px] 2xl:top-[78px] "
+                        ? "active top-[80px] lg:top-[75px] 2xl:top-[78px] "
                         : " inactive"
-                        } dropdown-menu bg-black duration-500 ease-in  shadow-lg p-2 absolute  right-3 w-64 top-[70px]   rounded-md `}
+                        } dropdown-menu bg-white duration-500 ease-in shadow-lg p-2 absolute  right-8 w-52 top-[70px] rounded-md  `}
                 >
-                    <ul className="py-3 px-2">
-                        <p className="text-gray-400 py-2">Profile settings</p>
-                        <Link  to="/admin/Updateprofile" >
+                    <ul className="">
+                        <Link to="/admin/Updateprofile" >
                             <li
-                                // onClick={() => setIsMenu(false)}
-                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                            >
-                                <div className="flex items-center space-x-3 text-white">
-                                    <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                        {/* <FaUserAlt /> */}
+                                onClick={handleToggle}
+                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
+                                <div className="flex items-center space-x-3 text-blue-500">
+                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
+                                        <FaRegUserCircle />
                                     </div>
-                                    <h1 className="text-sm font-semibold">User Profile</h1>
+                                    <h1 className="text-sm font-roboto">Admin Profile</h1>
                                 </div>
-                                {/* <FiChevronRight className="text-white" /> */}
+                                <FiChevronRight className="text-blue-500" />
                             </li>
                         </Link>
-                        {/* {
-                            user.is_player
-                                ? */}
-                                <Link 
-                                // to={`/player/profile-detail/${user?.players[0]?.id}`}
-                                >
-                                    <li
-                                        // onClick={() => setIsMenu(false)}
-                                        className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                                    >
-                                        <div className="flex items-center space-x-3 text-white">
-                                            <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                                {/* <GiBasketballJersey /> */}
-                                            </div>
-                                            <h1 className="text-sm font-semibold">Player Profile</h1>
-                                        </div>
-                                        {/* <FiChevronRight className="text-white" /> */}
-                                    </li>
-                                </Link>
-                                {/* :
-                                null
-                        } */}
-                        {/* {
-                            user.is_manager
-                                ? */}
-                                <Link to={"/team/profile"}>
-                                    <li
-                                        onClick={() => setIsMenu(false)}
-                                        className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                                    >
-                                        <div className="flex items-center space-x-3 text-white">
-                                            <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                                {/* <RiTeamFill /> */}
-                                            </div>
-                                            <h1 className="text-sm font-semibold">Team Profile</h1>
-                                        </div>
-                                        {/* <FiChevronRight className="text-white" /> */}
-                                    </li>
-                                </Link>
-                                {/* :
-                                null
-                        } */}
-                        {/* {
-                            user.is_organizer
-                                ?
-                                <Link to={"/tournament/organizer"}>
-                                    <li
-                                        onClick={() => setIsMenu(false)}
-                                        className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                                    >
-                                        <div className="flex items-center space-x-3 text-white">
-                                            <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                                <GiDiamondTrophy />
-                                            </div>
-                                            <h1 className="text-sm font-semibold">Tournament Profile</h1>
-                                        </div>
-                                        <FiChevronRight className="text-white" />
-                                    </li>
-                                </Link>
-                                :
-                                null
-                        } */}
-                        {/* {
-                            user.is_admin
-                                ?
-                                <Link to={"/admin/dashboard"}>
-                                    <li
-                                        onClick={() => setIsMenu(false)}
-                                        className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                                    >
-                                        <div className="flex items-center space-x-3 text-white">
-                                            <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                                <MdAdminPanelSettings />
-                                            </div>
-                                            <h1 className="text-sm font-semibold">Admin Panel</h1>
-                                        </div>
-                                        <FiChevronRight className="text-white" />
-                                    </li>
-                                </Link>
-                                :
-                                null
-                        } */}
+
+                        <Link
+                            to="/admin/Addadmin">
+                            <li
+                                onClick={handleToggle}
+                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
+                                <div className="flex items-center space-x-3 text-blue-500">
+                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
+                                        <BiUserPlus />
+                                    </div>
+                                    <h1 className="text-sm font-roboto">Add Admin</h1>
+                                </div>
+                                <FiChevronRight className="text-blue-500" />
+                            </li>
+                        </Link>
+
+
+                        <Link
+                            to="/admin/List"
+                        >
+                            <li
+                                onClick={handleToggle}
+                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
+                                <div className="flex items-center space-x-3 text-blue-500">
+                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
+                                        <BiUserPlus />
+                                    </div>
+                                    <h1 className="text-sm font-roboto">Admin List</h1>
+                                </div>
+                                <FiChevronRight className="text-blue-500" />
+                            </li>
+                        </Link>
                         <Link to={"/"}>
                             <li
-                                // onClick={() => {
-                                //     dispatch(logout());
-                                // }}
-                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-[#ee6730] duration-150 px-2  py-2 rounded-md  "
-                            >
-                                <div className="flex items-center space-x-3 text-white">
-                                    <div className="rounded-full px-1 py-1 bg-white text-black flex justify-center border items-center ">
-                                        {/* <MdOutlineLogout /> */}
+                                onClick={handleToggle}
+                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
+                                <div className="flex items-center space-x-3 text-blue-500">
+                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
+                                        <RiLogoutCircleRLine />
                                     </div>
-                                    <h1 className="text-sm font-semibold">Logout</h1>
+                                    <h1 className="text-sm font-roboto">Logout</h1>
                                 </div>
-                                {/* <FiChevronRight className="text-white" /> */}
+                                <FiChevronRight className="text-blue-500" />
                             </li>
                         </Link>
                     </ul>
                 </div>
+
             </div>
         </div>
     )
 }
 
 export default Header
-// {
-//     isMenu && (
-//         <div
-//             className={`${isMenu ? "active top-[80px] lg:top-[90px] 2xl:top-[78px] " : "inactive"} absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl w-1/5 `}
-//             // className={`dropdown-menu duration-300 bottom absolute z-[999] top-20 right-5 bg-white drop-shadow-xl rounded-xl w-1/5 `}
-//             id="profileTable"
-//         >
-//             <div className="">
-//                 <div className="mt-3 mb-3 ">
-//                     <NavLink
-//                         to="/admin/Updateprofile"
-//                         onClick={handleToggle}
-//                     >
-//                         <div className="bg-white hover:bg-slate-200 text-gray-800 h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6 items-center">
-//                             <div className="bg-blue-200 p-2.5 flex justify-center items-center rounded-full">
-//                                 <FaRegUserCircle className="text-blue-500 text-xl " />
-//                             </div>
-//                             <span className="md:text-sm xl:text-base font-roboto">
-//                                 Admin Profile
-//                             </span>
-//                         </div>
-//                     </NavLink>
-//                     {/* <NavLink className="nav-link" >
-//                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6  items-center">
-//                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
-//                                 <VscKey className="text-blue-500 text-xl" />
-//                             </div>
-//                             <span className="md:text-sm xl:text-base">
-//                                 Change Passoword
-//                             </span>
-//                         </div>
-//                     </NavLink> */}
-
-//                     {/* {myData?.is_super_admin ? ( */}
-//                     <NavLink to="/admin/Addadmin"
-//                         onClick={handleToggle}
-//                     >
-//                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
-//                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
-//                                 <BiUserPlus className="text-blue-500 text-xl" />
-//                             </div>
-//                             <span className="md:text-sm xl:text-base font-roboto">Add Admin</span>
-//                         </div>
-//                     </NavLink>
-//                     {/* ) : null} */}
-
-//                     {/* {myData?.is_super_admin ? ( */}
-//                     <NavLink to="/admin/List"
-//                     onClick={handleToggle}
-//                     >
-//                         <div className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-xl ml-4 mr-4 space-x-6  items-center">
-//                             <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
-//                                 <BiUserPlus className="text-blue-500 text-xl" />
-//                             </div>
-//                             <span className="md:text-sm xl:text-base font-roboto">
-//                                 Admin List
-//                             </span>
-//                         </div>
-//                     </NavLink>
-//                     {/* ) : null} */}
-//                     <hr></hr>
-//                     <div
-//                         onClick={handleLogoutButton}
-//                         className="bg-white hover:bg-slate-200 text-gray-800  h-11 my-2 cursor-pointer hover:text-blue-500  flex justify-start px-2 hover:rounded-lg ml-4 mr-4 space-x-6  items-center"
-//                     >
-//                         <div className="bg-blue-200  p-2.5 flex justify-center items-center rounded-full">
-//                             <RiLogoutCircleRLine className="text-blue-500 text-xl" />
-//                         </div>
-//                         <span className="md:text-sm xl:text-base font-roboto">Logout</span>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-
-// }

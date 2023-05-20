@@ -162,7 +162,7 @@ function PayEMI() {
             </div>
           </div>
         </div>
-
+        {/* 
         {
           loading
             ?
@@ -171,106 +171,103 @@ function PayEMI() {
             (
               data?.length > 0
                 ?
-                (
-                  <div className='px-5 py-5 '>
-                    <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden">
-                      <h1 className='font-bold p-6 text-lg'>Customer List</h1>
-                      <table
-                        className="w-full bg-blue-50 text-sm text-center "
-                        id="table-to-xls"
-                      >
-                        <thead className="text-xs text-gray-700 bg-class3-50 uppercase  ">
-                          <tr className="text-black text-sm ">
-                            <th scope="col" className="pl-3 py-4">
-                              Customer Id
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Name
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Phone
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Company
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Model
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Total
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Pending
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Profile
-                            </th>
-                            <th scope="col" className="px-6 py-4">
-                              Action
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-red-100 items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                          <tr className=" border-b">
-                            <td className="px-6 py-5 font-bold">
-                              001
-                            </td>
-                            <td className="px-6 py-5 capitalize">
-                              Shad
-                            </td>
-                            <td className="px-6 py-5">
-                              1234567890
-                            </td>
-                            <td className="px-6 py-5">
-                              Vivo
-                            </td>
-                            <td className="px-6 py-5">
-                              F17
-                            </td>
-                            <td className="px-6 py-5">
-                              15000
-                            </td>
-                            <td className="px-6 py-5">
-                              5000
-                            </td>
-                            <td className="px-6 py-5">
-                              <div className="flex justify-center items-center">
-                                <AiFillEye
-                                  className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                  onClick={() =>
-                                    navigate(`/Customer/profile-detail`)}
-                                />
-                              </div>
-                            </td>
-                            <td className="px-6 py-5 ">
-                              <div className="flex justify-center space-x-3">
-                                <button
-                                  onClick={() =>
-                                    navigate(`/Receipt/Generate`)}
-                                  className='bg-[#0d0d48] hover:bg-blue-900 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                  Pay
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                ( */}
+          <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5 mt-5">
+            <h1 className='font-bold text-lg'>Customer List</h1>
+            <table
+              className="w-full text-sm text-center rounded-xl  text-white  mt-5"
+              id="table-to-xls">
+              <thead className="text-xs uppercase bg-[#0d0d48]">
+                <tr className=" text-sm">
+                  <th scope="col" className="pl-3 py-4">
+                    Customer Id
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Name
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Phone
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Company
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Model
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Total
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Pending
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Profile
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                <tr className=" border-b">
+                  <td className="px-6 py-5 font-bold">
+                    001
+                  </td>
+                  <td className="px-6 py-5 capitalize">
+                    Shad
+                  </td>
+                  <td className="px-6 py-5">
+                    1234567890
+                  </td>
+                  <td className="px-6 py-5">
+                    Vivo
+                  </td>
+                  <td className="px-6 py-5">
+                    F17
+                  </td>
+                  <td className="px-6 py-5">
+                    15000
+                  </td>
+                  <td className="px-6 py-5">
+                    5000
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="flex justify-center items-center">
+                      <AiFillEye
+                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                        onClick={() =>
+                          navigate(`/Customer/profile-detail`)}
+                      />
                     </div>
-                  </div>
-                )
+                  </td>
+                  <td className="px-6 py-5 ">
+                    <div className="flex justify-center space-x-3">
+                      <button
+                        onClick={() =>
+                          navigate(`/Receipt/Generate`)}
+                        className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                        Pay
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        {/* )
                 : (
                   showNotFound != -1
                     ?
                     <div className="bg-red-200 font-bold justify-center items-center p-2 rounded mx-3 flex space-x-2">
                       <IoMdInformationCircle className="text-xl text-red-600" />
 
-                      <h1 className="text-red-800">No Receipt Found </h1>
+                      <h1 className="text-red-800">No Curtomer Found </h1>
                     </div>
                     :
                     null
                 )
             )
-        }
+        } */}
       </div>
     </>
   )

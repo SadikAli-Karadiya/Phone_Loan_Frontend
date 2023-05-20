@@ -494,7 +494,7 @@ function CustomersList() {
                     placeholder='Search Customer'
                     className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                   />
-                  <div className='bg-[#3b82f6] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
+                  <div className='bg-[#f3797e] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
                          shadow-xl cursor-pointer text-white text-2xl '>
                     <BiSearch className='search group-hover:scale-125 duration-300' />
                   </div>
@@ -517,9 +517,9 @@ function CustomersList() {
                 </div>
               </div>
               <table
-                className="w-full text-sm text-center rounded-xl  text-white bg-[#3b82f6]  "
+                className="w-full text-sm text-center rounded-xl  text-white "
                 id="table-to-xls" >
-                <thead className="text-xs uppercase  ">
+                <thead className="text-xs uppercase bg-[#f3797e] ">
                   <tr className=" text-sm ">
                     <th scope="col" className="pl-3 py-4">
                       Serial No
@@ -610,7 +610,7 @@ function CustomersList() {
                   )}
               </table>
             </div>
-
+{/* 
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
               <Pagination
                 total={data && data.pageCount ? data.pageCount : 0}
@@ -618,7 +618,7 @@ function CustomersList() {
                 onPageChange={(page) => setPageNo(page)}
               // previousLabel="Previous" nextLabel="Next"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

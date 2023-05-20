@@ -10,6 +10,7 @@ import Search from '../Pages/Search'
 import Customer from '../Pages/Customer'
 import Index from '../Pages/Reciept'
 import Admin from '../Pages/AdminProfile'
+import Error from '../Component/Error'
 
 function PrivateRoutes() {
   return (
@@ -25,8 +26,8 @@ function PrivateRoutes() {
             <Route path='/Search' element={<Search />}  />
             <Route path='/Customer/*' element={<Customer />}  />
             <Route path='/admin/*' element={<Admin />}  />
-            <Route path='/' element={<Navigate to='/dashboard' />} />
-
+            {/* <Route path='/' element={<Navigate to='/dashboard' />} /> */}
+            <Route path='/*' element={<Error />}  />
         </Route>
     </Routes>
     </div>

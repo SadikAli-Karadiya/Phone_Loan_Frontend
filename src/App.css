@@ -10,13 +10,13 @@
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    transition: .4s ease-in-out;
+    transition: .2s ease-in-out;
   }
 
   .dropdown-menu.inactive {
     opacity: 0;
     visibility: hidden;
     transform: translateY(-20px);
-    transition: .4s ease-in-out;
+    transition: .2s ease-in-out;
   }
   

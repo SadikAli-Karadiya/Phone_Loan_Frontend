@@ -25,8 +25,8 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div> */}
-        <div className='bg-[#f9b115] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
-          <div className='flex flex-col space-y-4 '>
+        <div className='bg-[#f9b115] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
+          <div className='flex flex-col space-y-4'>
             <p className="text-white text-lg font-semibold ">Total Customer</p>
             <div className='flex items-center space-x-5'>
               <div className='bg-white text-[#f9b115] px-2 py-2 text-3xl rounded-md'>
@@ -73,28 +73,7 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
-        {/* <div className='bg-[#3399ff] py-3 px-3 rounded-md pb-16'>
-          <div className='flex justify-between items-start'>
-            <div>
-              <h1 className="text-white font-roboto font-bold text-2xl">
-                5000
-              </h1>
-              <p className="text-white">Total Customer</p>
-            </div>
-            <BiDotsVerticalRounded className='text-white' />
-          </div>
-        </div>
-        <div className='bg-[#321fdb] py-3 px-3 rounded-md pb-16'>
-          <div className='flex justify-between items-start'>
-            <div>
-              <h1 className="text-white font-roboto font-bold text-2xl">
-                5000
-              </h1>
-              <p className="text-white">Total Customer</p>
-            </div>
-            <BiDotsVerticalRounded className='text-white' />
-          </div>
-        </div> */}
+
       </div>
       <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
         <h1 className='font-bold text-lg'>Customer List</h1>
