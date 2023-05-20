@@ -445,14 +445,6 @@ function CustomersList() {
                           </div>
                         </div>
                         <div className={`${item._id} flex items-center justify-start space-x-7`}>
-                          <div className='rounded-md'
-                            style={{
-                              backgroundColor:
-                                headingBgColor[index % headingBgColor.length],
-                            }}
-                          >
-                            <RiFolderUserFill className='text-white text-6xl' />
-                          </div>
                           <div className=''>
                             <h1
                               style={{
@@ -461,7 +453,7 @@ function CustomersList() {
                                   index % headingBgColor.length
                                   ],
                               }}
-                              className='text-4xl font-bold'>{item.installment}</h1>
+                              className='text-4xl font-bold'>{item.installment} <span className='uppercase text-2xl'>month</span></h1>
                           </div>
                         </div>
                         <div className='rounded-md px-7 py-1'
@@ -494,7 +486,7 @@ function CustomersList() {
                     placeholder='Search Customer'
                     className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                   />
-                  <div className='bg-[#f3797e] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
+                  <div className='bg-[#3399ff] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
                          shadow-xl cursor-pointer text-white text-2xl '>
                     <BiSearch className='search group-hover:scale-125 duration-300' />
                   </div>
@@ -519,7 +511,7 @@ function CustomersList() {
               <table
                 className="w-full text-sm text-center rounded-xl  text-white "
                 id="table-to-xls" >
-                <thead className="text-xs uppercase bg-[#f3797e] ">
+                <thead className="text-xs uppercase bg-[#3399ff] ">
                   <tr className=" text-sm ">
                     <th scope="col" className="pl-3 py-4">
                       Serial No

@@ -20,10 +20,10 @@ const Sidebar = () => {
     (
 
       <div className="flex flex-col justify-center items-center min-h-screen ">
-        <div className="bg-blue-500 rounded-full w-7 h-7 animate-bounce">
+        <div className="bg-[#0d0d48] rounded-full w-7 h-7 animate-bounce">
           .
         </div>
-        <h1 className="loading uppercase ml-11 font-bold text-lg mt-1 font-roboto text-blue-500">Loading....</h1>
+        <h1 className="loading uppercase ml-11 font-bold text-lg mt-1 font-roboto text-[#0d0d48]">Loading....</h1>
       </div>
 
     )

@@ -17,35 +17,66 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 
-const createOption = (label) => ({
+const createCompany = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, ''),
+});
+
+const createModel = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, ''),
+});
+
+const createStorage = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, ''),
 });
 
 function Product() {
-  const defaultOptions = [
-    {
-
-    }
-  ];
   const navigate = useNavigate();
   const location = useLocation();
   const [model, setModel] = React.useState(false);
   const [pageNo, setPageNo] = React.useState(1);
   const [PhoneInfo, setPhoneInfo] = React.useState([])
   const [isLoading, setIsLoading] = React.useState();
-  const [options, setOptions] = React.useState(defaultOptions);
+  const [CompanyList, setComapnyList] = React.useState([]);
+  const [company, setCompany] = React.useState();
+  const [ModelList, setModelList] = React.useState([]);
+  const [Model_Name, setModel_Name] = React.useState();
+  const [StorageList, setStorageList] = React.useState([]);
+  const [Storage, setStorage] = React.useState();
   const [value, setValue] = React.useState();
 
-  const handleCreate = (inputValue) => {
+  const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
-      const newOption = createOption(inputValue);
+      const newComapny = createCompany(inputValue);
       setIsLoading(false);
-      setOptions((prev) => [...prev, newOption]);
-      setValue(newOption);
+      setComapnyList((prev) => [...prev, newComapny]);
+      setCompany(newComapny);
     }, 1000);
   };
+
+  const handleCreateModel = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newModel = createModel(inputValue);
+      setIsLoading(false);
+      setModelList((prev) => [...prev, newModel]);
+      setModel_Name(newModel);
+    }, 1000);
+  };
+
+  const handleCreateStorage = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newStorage = createStorage(inputValue);
+      setIsLoading(false);
+      setStorageList((prev) => [...prev, newStorage]);
+      setStorage(newStorage);
+    }, 1000);
+  };
+
 
   const productSchema = Yup.object({
     company: Yup.string().required("Please Enter Company"),
@@ -56,8 +87,8 @@ function Product() {
   const initialValues = {
     company: "",
     model: "",
+    storage: "",
     price: "",
-    description: "",
   }
 
   // const [value, setValue] = React.useState({
@@ -69,28 +100,16 @@ function Product() {
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: value ? value : initialValues,
+      initialValues: initialValues,
       validationSchema: productSchema,
       onSubmit(data) {
-        try {
-          const fd = new FormData();
-          fd.append("photo", data.photo);
-          let ok = JSON.stringify({
-            PhoneInfo: data,
-          });
-          fd.append("data", ok);
-          // if (value) {
-          //   fb.append("id", value.id);
-          //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
-          // } else {
-          // newsRegistration(fd).then();
-          setPhoneInfo(data)
-          resetForm({ values: "" })
-          setModel(false)
-          // }
-        } catch (err) {
-          toast.error(err.message);
-        }
+        // const modeldata = {
+        //   // ...data,
+        //   // company : company,
+        //   // model : Model_Name,
+        //   // storage : Storage,
+        // }
+        console.log(data)
       },
     });
 
@@ -131,6 +150,7 @@ function Product() {
   //   setModel(true);
   // };
 
+
   return (
     <>
       <div className="relative">
@@ -156,49 +176,51 @@ function Product() {
                     </h1>
                     <form action="" className='space-y-5'>
                       <div className='flex items-center w-full space-x-5'>
-                        <CreatableSelect
-                          className='w-full'
-                          isClearable
-                          isDisabled={isLoading}
-                          isLoading={isLoading}
-                          onChange={(newValue) => setValue(newValue)}
-                          onCreateOption={handleCreate}
-                          options={options}
-                          value={value}
-                        />
-                        <CreatableSelect
-                          className='w-full'
-                          isClearable
-                          isDisabled={isLoading}
-                          isLoading={isLoading}
-                          onChange={(newValue) => setValue(newValue)}
-                          onCreateOption={handleCreate}
-                          options={options}
-                          value={value}
-                        />
+                        <div>
+                          <CreatableSelect
+                            className='w-full '
+                            isClearable
+                            isDisabled={isLoading}
+                            isLoading={isLoading}
+                            onChange={(newCompany) => setCompany(newCompany)}
+                            onCreateOption={handleCreateCompany}
+                            placeholder="Select Company"
+                            options={CompanyList}
+                            value={values.company}
+                            name='company'
+                          />
+                          {errors.company &&
+                            touched.company ? (
+                            <small className="text-red-600 mt-2">
+                              {errors.company}
+                            </small>
+                          ) : null}
+                        </div>
+                        {/* <div>
+                          <CreatableSelect
+                            className='w-full'
+                            isClearable
+                            isDisabled={isLoading}
+                            isLoading={isLoading}
+                            onChange={(newModel) => setModel_Name(newModel)}
+                            onCreateOption={handleCreateModel}
+                            options={ModelList}
+                            value={Model_Name}
+                          />
+                        </div> */}
                       </div>
-                      <div className='flex items-center w-full space-x-5'>
+                      {/* <div className='flex items-center w-full space-x-5'>
                         <CreatableSelect
                           className='w-full'
                           isClearable
                           isDisabled={isLoading}
                           isLoading={isLoading}
-                          onChange={(newValue) => setValue(newValue)}
-                          onCreateOption={handleCreate}
-                          options={options}
-                          value={value}
+                          onChange={(newstorage) => setStorage(newstorage)}
+                          onCreateOption={handleCreateStorage}
+                          options={StorageList}
+                          value={Storage}
                         />
-                        <CreatableSelect
-                          className='w-full'
-                          isClearable
-                          isDisabled={isLoading}
-                          isLoading={isLoading}
-                          onChange={(newValue) => setValue(newValue)}
-                          onCreateOption={handleCreate}
-                          options={options}
-                          value={value}
-                        />
-                      </div>
+                      </div> */}
 
                       <div className="flex justify-center items-center w-full space-x-5 ">
                         <button
