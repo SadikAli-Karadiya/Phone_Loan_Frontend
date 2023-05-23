@@ -22,7 +22,7 @@ function PrivateRoutes() {
             <Route path='/EMI' element={<PayEMI />}  />
             <Route path='/Receipt/*' element={<Index/>}  />
             <Route path='/Report' element={<Report />}  />            
-            <Route path='/Product' element={<Product />}  />
+            <Route path='/Product/*' element={<Product />}  />
             <Route path='/Search' element={<Search />}  />
             <Route path='/Customer/*' element={<Customer />}  />
             <Route path='/admin/*' element={<Admin />}  />

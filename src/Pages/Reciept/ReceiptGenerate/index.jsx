@@ -11,27 +11,32 @@ function GenerateReceipt() {
 
     const [fee, setFee] = React.useState('');
     const [discount, setDiscount] = React.useState('');
+    const [charge, setCharge] = React.useState('');
     const [payment, setPayment] = React.useState("cash");
     const [chequeNo, setChequeNo] = React.useState('');
     const [upiNo, setUpiNo] = React.useState('');
     const [toggleCheque, setToggleCheque] = React.useState(false);
     const [toggleUpi, setToggleUpi] = React.useState(false);
     const [toggleCash, setToggleCash] = React.useState(true);
-
     const [deduction, setDeduction] = React.useState(0);
+    const [charges, setCharges] = React.useState(0);
     const [discountAppliedMsg, setDiscountAppliedMsg] = React.useState(true);
+    const [chargeAppliedMsg, setChargeAppliedMsg] = React.useState(true);
     const [model, setModel] = React.useState(false);
     const [pin, setPin] = React.useState("");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [isdiscount, setdiscount] = React.useState(false);
+    const [ischarge, setcharge] = React.useState(false);
+    const navigate = useNavigate();
 
     const [errors, setErrors] = React.useState({
         amount: '',
+        charge: "",
         discount: '',
         upi: '',
         cheque: '',
         invalid_pin: ''
     });
-
     function handleDiscount(e) {
         if (discount == '') {
             setErrors((prevData) => {
@@ -58,10 +63,42 @@ function GenerateReceipt() {
         setDeduction(discount);
         setDiscountAppliedMsg(false);
     }
+    function handleCharge(e) {
+        if (charge == '') {
+            setErrors((prevData) => {
+                return {
+                    ...prevData,
+                    charge: '*Please enter charge'
+                }
+            })
+            return;
+        }
+        if (Number(discount) > Number(fee)) {
+            return;
+        }
+        if (fee == '' || fee == 0 || fee == undefined) {
+            setErrors((prevData) => {
+                return {
+                    ...prevData,
+                    amount: '*Please enter amount'
+                }
+            })
+            return;
+        }
+        setFee(charge + fee);
+        setCharges(charge);
+        setChargeAppliedMsg(false);
+    }
+    console.log(fee)
     function handleRemoveDiscount() {
         setFee(Number(fee) + Number(deduction));
         setDeduction(0);
         setDiscountAppliedMsg(true);
+    }
+    function handleRemoveCharge() {
+        setFee(Number(fee) - Number(charge));
+        setCharges(0);
+        setChargeAppliedMsg(true);
     }
     function handlePaymentMethod(e) {
         setUpiNo('')
@@ -175,6 +212,45 @@ function GenerateReceipt() {
         }
         setDiscount(e.target.value)
     }
+    const handleChargeValidation = (e) => {
+        const regex = new RegExp(/^[0-9]+$/)
+        if (e.target.value != '') {
+            if (regex.test(e.target.value)) {
+                setErrors((prevData) => {
+                    return {
+                        ...prevData,
+                        charge: ''
+                    }
+                })
+            }
+            else {
+                setErrors((prevData) => {
+                    return {
+                        ...prevData,
+                        discount: '*Enter only numbers'
+                    }
+                })
+            }
+        }
+        else {
+            setErrors((prevData) => {
+                return {
+                    ...prevData,
+                    charge: ''
+                }
+            })
+        }
+
+        // if (Number(e.target.value) > Number(fee)) {
+        //     setErrors((prevData) => {
+        //         return {
+        //             ...prevData,
+        //             charge: '*Discount should be less than Amount'
+        //         }
+        //     })
+        // }
+        setCharge(e.target.value)
+    }
     const handleUpiNo = (e) => {
         const regex = new RegExp(/^[0-9 A-Za-z@]+$/)
 
@@ -217,6 +293,15 @@ function GenerateReceipt() {
         }
         setChequeNo(e.target.value)
     }
+    function handlediscounttoggle() {
+        setdiscount(true)
+        setcharge(false)
+    }
+    function handlechargetoggle() {
+        setcharge(true)
+        setdiscount(false)
+    }
+
 
     const onSubmit = () => {
         let err = 0;
@@ -271,7 +356,6 @@ function GenerateReceipt() {
 
     }
 
-    const navigate = useNavigate();
     async function handlePINsubmit() {
         try {
             const feesData = {
@@ -501,40 +585,92 @@ function GenerateReceipt() {
                                     {errors.month != '' ? (<small className="text-red-700 mt-2">{errors.month}</small>) : null}
                                 </div>
                             </div>
-                            <div className="xl:ml-24">
-                                <h1 className="font-bold  text-lg">
-                                    Discount : <span> {deduction}</span>
-                                </h1>
-                                {discountAppliedMsg ? (
-                                    <div className="flex flex-col">
-                                        <div className="flex rounded-l-md border-2 mr-2 my-2 h-8 rounded-r-lg border-[#0d0d48] items-center">
-                                            <input
-                                                placeholder="Enter Discount "
-                                                className="outline-none px-2 py-0 w-32 rounded-l-md "
-                                                value={discount}
-                                                onChange={handleDiscountValidation}
-                                            />
-                                            <button
-                                                className=" text-white py-1  px-4 bg-[#0d0d48] rounded-r-md"
-                                                onClick={handleDiscount}
-                                            >
-                                                Apply
-                                            </button>
+                            <div className=" space-y-5">
+                                <div className="flex items-center space-x-5">
+                                    <button className="bg-green-600 rounded-full hover:shadow-xl px-3 py-1 text-sm text-white" onClick={handlediscounttoggle}>
+                                        Discound
+                                    </button>
+                                    <button className="bg-red-600 rounded-full hover:shadow-xl px-3 py-1 text-sm text-white" onClick={handlechargetoggle}>
+                                        Charge
+                                    </button>
+                                </div>
+                                {
+                                    isdiscount == true ?
+                                        <div className="">
+                                            <h1 className="font-bold  text-lg">
+                                                Discount : <span> {deduction}</span>
+                                            </h1>
+                                            {discountAppliedMsg ? (
+                                                <div className="flex flex-col">
+                                                    <div className="flex rounded-l-md border-2 mr-2 my-2 h-8 rounded-r-lg border-[#0d0d48] items-center">
+                                                        <input
+                                                            placeholder="Enter Discount "
+                                                            className="outline-none px-2 py-0 w-32 rounded-l-md "
+                                                            value={discount}
+                                                            onChange={handleDiscountValidation}
+                                                        />
+                                                        <button
+                                                            className=" text-white py-1  px-4 bg-[#0d0d48] rounded-r-md"
+                                                            onClick={handleDiscount}
+                                                        >
+                                                            Apply
+                                                        </button>
+                                                    </div>
+                                                    {errors.discount != '' ? (<small className="text-red-700">{errors.discount}</small>) : null}
+                                                </div>
+                                            )
+                                                :
+                                                <div className="flex flex-col items-end">
+                                                    <h1 className="text-green-800 font-bold">
+                                                        Discount Applied Successfully !
+                                                    </h1>
+                                                    <button className="text-center text-sm font-semibold hover:bg-red-300 text-white bg-red-400 rounded-md px-2 py-[5px] mt-2" onClick={() => handleRemoveDiscount()}>
+                                                        Remove Discount
+                                                    </button>
+                                                </div>
+                                            }
                                         </div>
-                                        {errors.discount != '' ? (<small className="text-red-700">{errors.discount}</small>) : null}
-                                    </div>
-                                )
-                                    :
-                                    <div className="flex flex-col items-end">
-                                        <h1 className="text-green-800 font-bold">
-                                            Discount Applied Successfully !
-                                        </h1>
-                                        <button className="text-center text-sm font-semibold hover:bg-red-300 text-white bg-red-400 rounded-md px-2 py-[5px] mt-2" onClick={() => handleRemoveDiscount()}>
-                                            Remove Discount
-                                        </button>
-                                    </div>
+                                        :
+                                        ischarge == true ?
+                                            <div className="">
+                                                <h1 className="font-bold  text-lg">
+                                                    Charge : <span> {charge}</span>
+                                                </h1>
+                                                {chargeAppliedMsg ? (
+                                                    <div className="flex flex-col">
+                                                        <div className="flex rounded-l-md border-2 mr-2 my-2 h-8 rounded-r-lg border-[#0d0d48] items-center">
+                                                            <input
+                                                                placeholder="Enter Charge "
+                                                                className="outline-none px-2 py-0 w-32 rounded-l-md "
+                                                                value={charge}
+                                                                onChange={handleChargeValidation}
+                                                            />
+                                                            <button
+                                                                className=" text-white py-1  px-4 bg-[#0d0d48] rounded-r-md"
+                                                                onClick={handleCharge}
+                                                            >
+                                                                Apply
+                                                            </button>
+                                                        </div>
+                                                        {errors.charge != '' ? (<small className="text-red-700">{errors.charge}</small>) : null}
+                                                    </div>
+                                                )
+                                                    :
+                                                    <div className="flex flex-col items-end">
+                                                        <h1 className="text-green-800 font-bold">
+                                                            Charge Applied Successfully !
+                                                        </h1>
+                                                        <button className="text-center text-sm font-semibold hover:bg-red-300 text-white bg-red-400 rounded-md px-2 py-[5px] mt-2" onClick={() => handleRemoveCharge()}>
+                                                            Remove Charge
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </div>
+                                            :
+                                            null
                                 }
                             </div>
+
                         </div>
                         <div className="flex flex-col py-4 px-6">
                             <div className="flex items-center space-x-2">

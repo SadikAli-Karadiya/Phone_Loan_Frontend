@@ -32,17 +32,18 @@ const Sidebar = () => {
       <div className="relative bg-[#f5f7ff] min-h-screen flex ">
         <div className="h-full bg-white sticky left-0 top-0">
           <div className="sidebar h-screen xs:w-20 w-20 xl:w-56 bg-white drop-shadow-md">
-            <div className="sidebar-top flex justify-center py-2 ">
-              <img
+            <div className="sidebar-top flex justify-center py-8 ">
+              {/* <img
                 src="/images/logo.png"
                 alt=""
                 className="w-2/3 cursor-pointer hidden xl:block"
                 id="logo"
-              />
+              /> */}
+              <h1 className="font-semibold text-2xl">EMI Manager</h1>
             </div>
-            <div className="mt-12 xl:mt-6 ">
+            <div className="">
               <ul className="text-center">
-                <li className="xs:px-3 xl:px-5 my-3">
+                <li className="xs:px-3 xl:px-5 my-3 xl:my-0">
                   <NavLink
                     activeclassname="active"
                     to="/">
