@@ -1,9 +1,11 @@
 import React from 'react'
 import { AiFillEye } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 function Report() {
+  const navigate = useNavigate();
   const noOfTransaction = [
     {
       id: 1,
@@ -158,7 +160,7 @@ function Report() {
                   <th className="text-left px-2 xl:px-0">
                     Admin
                   </th>
-                  <th className="text-left px-2 xl:px-0">
+                  <th className="text-center px-2 xl:px-0">
                     Detail
                   </th>
                 </tr>
@@ -194,12 +196,14 @@ function Report() {
                   <td>
                     <span className="capitalize">Israil</span>
                   </td>
-                  <td className="px-5  ">
-                    <span>
-                      <NavLink
-                        to={"/Receipt/Receipt"}>
-                        <AiFillEye className="text-xl cursor-pointer" />
-                      </NavLink>
+                  <td className="px-5">
+                    <span className='flex justify-center items-center '>
+                      <Tippy content="Show Reciept">
+                        <div onClick={() =>
+                          navigate(`/Receipt/Receipt`)}>
+                          <AiFillEye className="text-xl cursor-pointer" />
+                        </div>
+                      </Tippy>
                     </span>
                   </td>
                 </tr>

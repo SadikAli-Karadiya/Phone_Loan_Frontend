@@ -3,6 +3,8 @@ import { BiSearch } from "react-icons/bi"
 import "../../../App.css"
 import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 function SearchReciept() {
   const navigate = useNavigate();
@@ -101,7 +103,7 @@ function SearchReciept() {
                   Total
                 </th>
                 <th scope="col" className="px-6 py-4">
-                  Profile
+                  Action
                 </th>
               </tr>
             </thead>
@@ -137,11 +139,15 @@ function SearchReciept() {
                 </td>
                 <td className="px-6 py-5">
                   <div className="flex justify-center items-center">
-                    <AiFillEye
-                      className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                      onClick={() =>
-                        navigate(`/Receipt/Receipt`)}
-                    />
+                    <Tippy content="Show Reciept">
+                      <div>
+                        <AiFillEye
+                          className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                          onClick={() =>
+                            navigate(`/Receipt/Receipt`)}
+                        />
+                      </div>
+                    </Tippy>
                   </div>
                 </td>
               </tr>

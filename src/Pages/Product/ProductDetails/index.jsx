@@ -118,14 +118,13 @@ function ProductDetails() {
     };
 
 
-    // const handleUpdate = (id) => {
-    //   let updatenews = data?.AllNews?.find((n) => {
-    //     return n?.id == id;
-    //   });
-
-    //   setValue(updatenews)
-    //   setModel(true);
-    // };
+    const handleUpdatespecification = (id) => {
+        setModel(true);
+        let updatenews = data?.AllNews?.find((n) => {
+            return n?.id == id;
+        });
+        setValue(updatenews)
+    };
 
 
     return (
@@ -277,13 +276,12 @@ function ProductDetails() {
                                             15000
                                         </td>
                                         <td className="px-6 py-5"
-                                            onClick={() =>
-                                                navigate(`/Product/product-details`)}
+
                                         >
                                             <div className='flex justify-center items-center space-x-2'>
                                                 <Tippy content="Update Storage">
-                                                    <div>
-                                                        <FiEdit className='text-lg cursor-pointer' />
+                                                    <div onClick={handleUpdatespecification}>
+                                                        <FiEdit className='text-[16px] cursor-pointer' />
                                                     </div>
                                                 </Tippy>
                                                 <Tippy content="Delete Storage">

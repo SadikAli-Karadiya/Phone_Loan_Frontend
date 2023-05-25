@@ -6,7 +6,8 @@ import { FaUsers } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { GiSmartphone } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 
 function Dashboard() {
@@ -164,11 +165,15 @@ function Dashboard() {
               </td>
               <td className="px-6 py-5">
                 <div className="flex justify-center items-center">
-                  <AiFillEye
-                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                    onClick={() =>
-                      navigate(`/Customer/profile-detail`)}
-                  />
+                  <Tippy content="Customer Profile">
+                    <div>
+                      <AiFillEye
+                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                        onClick={() =>
+                          navigate(`/Customer/profile-detail`)}
+                      />
+                    </div>
+                  </Tippy>
                 </div>
               </td>
               <td className="px-6 py-5 ">

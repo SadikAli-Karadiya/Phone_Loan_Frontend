@@ -4,7 +4,8 @@ import "../../App.css"
 import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
-
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 function Search() {
     const navigate = useNavigate();
@@ -104,11 +105,15 @@ function Search() {
                                 </td>
                                 <td className="px-6 py-5">
                                     <div className="flex justify-center items-center">
-                                        <AiFillEye
-                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                            onClick={() =>
-                                                navigate(`/Customer/profile-detail`)}
-                                        />
+                                        <Tippy content="Customer Profile">
+                                            <div>
+                                                <AiFillEye
+                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                    onClick={() =>
+                                                        navigate(`/Customer/profile-detail`)}
+                                                />
+                                            </div>
+                                        </Tippy>
                                     </div>
                                 </td>
                                 <td className="px-6 py-5 ">
