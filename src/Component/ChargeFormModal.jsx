@@ -6,49 +6,24 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 
-
-const createCompany = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-const createModel = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-
 const productSchema = Yup.object({
-  company: Yup.string().required("Please Enter Company"),
-  model: Yup.string().required("Please Enter Model"),
+  charge: Yup.string().required("Please Enter Charge"),
+  price: Yup.string().required("Please Enter Price"),
 });
 
-
-function ProductFormModal({ showModal, handleShowModal }) {
+function ChargeFormModal({ showModal, handleShowModal }) {
   const [error, setError] = useState("");
-  const [CompanyList, setComapnyList] = React.useState([]);
-  const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
+  const [RamList, setRamList] = React.useState([]);
+  const [ram, setRam] = React.useState();
+  const [StorageList, setStorageList] = React.useState([]);
+  const [Charge, setCharge] = React.useState(false);
 
-  const handleCreateCompany = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newComapny = createCompany(inputValue);
-      setIsLoading(false);
-      setComapnyList((prev) => [...prev, newComapny]);
-      setCompany(newComapny);
-    }, 1000);
-  };
 
   const initialValues = {
-    company: company,
-    model: "",
+    charge: "",
+    price: "",
   }
-
-  // const [value, setValue] = React.useState({
-  //   company: "",
-  //   model: "",
-  // });
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
@@ -57,38 +32,9 @@ function ProductFormModal({ showModal, handleShowModal }) {
       onSubmit(data) {
         const modeldata = {
           ...data,
-          company: company,
-          model: Model_Name,
         }
       },
     });
-
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this news?',
-      text: "The news will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await deleteNewsDetails(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        refetch()
-      }
-    })
-  };
 
   const customStyles = {
     control: (provided, state) => ({
@@ -130,10 +76,13 @@ function ProductFormModal({ showModal, handleShowModal }) {
     handleShowModal(false);
   };
 
+  function handlecharge() {
+    setCharge(true)
+  }
+
   return (
     <Modal open={showModal}
-      onClose={handleModalClose}
-    >
+      onClose={handleModalClose}>
       <Modal.Description className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-lg ">
         <Modal.Title
           as="h3"
@@ -165,41 +114,54 @@ function ProductFormModal({ showModal, handleShowModal }) {
         <Modal.Description>
           <div className="px-4 py-4">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className='flex flex-col items-center w-full space-y-5'>
-                <div className='w-full'>
-                  <CreatableSelect
-                    className='w-full'
-                    isClearable
-                    isDisabled={isLoading}
-                    isLoading={isLoading}
-                    onChange={(newCompany) => setCompany(newCompany)}
-                    onCreateOption={handleCreateCompany}
-                    placeholder="Select Company"
-                    options={CompanyList}
-                    value={values.company}
-                    name='company'
-                  />
-                  {errors.company &&
-                    touched.company ? (
-                    <small className="form-error text-red-600 text-sm font-semibold">
-                      {errors.company}
-                    </small>
-                  ) : null}
-                </div>
-                <div className="firstname flex flex-col space-y-2 w-full ">
+              <div className='flex flex-col justify-start w-full'>
+                <div className="flex flex-col space-y-2 w-full ">
                   <input type="text"
-                    name="model"
-                    value={values.model}
+                    name="price"
+                    value={values.price}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                    placeholder="Enter Model Name " />
-                  {errors.model && touched.model
+                    className="rounded-md py-2 px-3 outline-non"
+                    placeholder="Enter Phone Price " />
+                  {errors.price && touched.price
                     ?
-                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
+                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
                     :
                     null}
                 </div>
+                {
+                  Charge == true ?
+                    <div className="space-y-2 mt-5">
+                      <div className="flex flex-col w-full ">
+                        <input type="text"
+                          name="charge"
+                          value={values.charge}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="rounded-md py-2 px-3 outline-non"
+                          placeholder="Enter Charge " />
+                        {errors.charge && touched.charge
+                          ?
+                          <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
+                          :
+                          null}
+                      </div>
+                      <h1 className="uppercase font-semibold text-white  text-start">Remove Charge</h1>
+                    </div>
+                    :
+                    null
+                }
+                {
+                  Charge == false ?
+                    <div className="flex items-center space-x-2 pt-3 cursor-pointer"
+                      onClick={handlecharge}
+                    >
+                      <input type="radio" />
+                      <h1 className="uppercase font-semibold text-white  text-start">Add Charge</h1>
+                    </div>
+                    :
+                    ""
+                }
               </div>
               <div className="mt-5 text-right">
                 <button
@@ -224,4 +186,4 @@ function ProductFormModal({ showModal, handleShowModal }) {
   );
 }
 
-export default ProductFormModal;
+export default ChargeFormModal;

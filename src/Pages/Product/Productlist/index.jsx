@@ -17,81 +17,13 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal"
 
-
-const createCompany = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-const createModel = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-
-const productSchema = Yup.object({
-  company: Yup.string().required("Please Enter Company"),
-  model: Yup.string().required("Please Enter Model"),
-});
-
 function ProductList() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [model, setModel] = React.useState(false);
   const [pageNo, setPageNo] = React.useState(1);
-  const [PhoneInfo, setPhoneInfo] = React.useState([])
   const [isLoading, setIsLoading] = React.useState();
-  const [CompanyList, setComapnyList] = React.useState([]);
-  const [company, setCompany] = React.useState();
-  const [ModelList, setModelList] = React.useState([]);
-  const [Model_Name, setModel_Name] = React.useState();
   const [value, setValue] = React.useState();
-  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
   const [productFormModal, setProductFormModal] = React.useState(false);
-
-
-  const handleCreateCompany = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newComapny = createCompany(inputValue);
-      setIsLoading(false);
-      setComapnyList((prev) => [...prev, newComapny]);
-      setCompany(newComapny);
-    }, 1000);
-  };
-
-  const handleCreateModel = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newModel = createModel(inputValue);
-      setIsLoading(false);
-      setModelList((prev) => [...prev, newModel]);
-      setModel_Name(newModel);
-    }, 1000);
-  };
-
-  const initialValues = {
-    company: company,
-    model: "",
-  }
-
-  // const [value, setValue] = React.useState({
-  //   company: "",
-  //   model: "",
-  // });
-
-  const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: productSchema,
-      onSubmit(data) {
-        const modeldata = {
-          ...data,
-          company: company,
-          model: Model_Name,
-        }
-      },
-    });
 
   const handleDelete = async (id) => {
     Swal.fire({

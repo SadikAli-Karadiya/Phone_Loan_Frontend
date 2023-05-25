@@ -15,80 +15,21 @@ import CreatableSelect from 'react-select/creatable';
 import { MdSdStorage } from "react-icons/md";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import SpecificationFormModal from '../../../Component/SpecificationFormModal';
 
 
-const createRam = (label) => ({
-    label,
-    value: label.toLowerCase().replace(/\W/g, ''),
-});
 
-const createStorage = (label) => ({
-    label,
-    value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-const productSchema = Yup.object({
-    ram: Yup.string().required("Please Enter RAM"),
-    storage: Yup.string().required("Please Enter Storage"),
-    price: Yup.string().required("Please Enter Price"),
-});
 
 function ProductDetails() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [model, setModel] = React.useState(false);
     const [pageNo, setPageNo] = React.useState(1);
-    const [PhoneInfo, setPhoneInfo] = React.useState([])
     const [isLoading, setIsLoading] = React.useState();
-    const [RamList, setRamList] = React.useState([]);
-    const [ram, setRam] = React.useState();
-    const [StorageList, setStorageList] = React.useState([]);
-    const [Storage, setStorage] = React.useState();
     const [value, setValue] = React.useState();
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
+    const [specificationFormModal, setspecificationFormModal] = React.useState(false);
 
-    const handleCreateRam = (inputValue) => {
-        setIsLoading(true);
-        setTimeout(() => {
-            const newRam = createRam(inputValue);
-            setIsLoading(false);
-            setRamList((prev) => [...prev, newRam]);
-            setRam(newRam);
-        }, 1000);
-    };
 
-    const handleCreateStorage = (inputValue) => {
-        setIsLoading(true);
-        setTimeout(() => {
-            const newStorage = createStorage(inputValue);
-            setIsLoading(false);
-            setStorageList((prev) => [...prev, newStorage]);
-            setStorage(newStorage);
-        }, 1000);
-    };
-
-    const initialValues = {
-        ram: "",
-        storage: "",
-        price: "",
-    }
-
-    // const [value, setValue] = React.useState({
-    // ram : "",
-    // storage: "",
-    // price: "",
-    // });
-
-    const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
-        useFormik({
-            initialValues: initialValues,
-            validationSchema: productSchema,
-            onSubmit(data) {
-                const modeldata = {
-                    ...data,
-                }
-            },
-        });
 
     const handleDelete = async (id) => {
         Swal.fire({
@@ -129,7 +70,7 @@ function ProductDetails() {
 
     return (
         <>
-            <div className="relative">
+            {/* <div className="relative">
                 {model && (
                     <div className="w-full h-full bg-white  ">
                         <div className="flex justify-center shadow-2xl  ">
@@ -151,62 +92,7 @@ function ProductDetails() {
                                             Add Model
                                         </h1>
                                         <form action="" className='space-y-5' onSubmit={handleSubmit}>
-                                            <div className='flex flex-col items-center w-full space-y-5'>
-                                                <div className='w-full'>
-                                                    <CreatableSelect
-                                                        className='w-full'
-                                                        isClearable
-                                                        isDisabled={isLoading}
-                                                        isLoading={isLoading}
-                                                        onChange={(newRam) => setRam(newRam)}
-                                                        onCreateOption={handleCreateRam}
-                                                        placeholder="Select RAM"
-                                                        options={RamList}
-                                                        value={values.Ram}
-                                                        name='ram'
-                                                    />
-                                                    {errors.ram &&
-                                                        touched.ram ? (
-                                                        <small className="form-error text-red-600 text-sm font-semibold">
-                                                            {errors.ram}
-                                                        </small>
-                                                    ) : null}
-                                                </div>
-                                                <div className='w-full'>
-                                                    <CreatableSelect
-                                                        className='w-full'
-                                                        isClearable
-                                                        name='storage'
-                                                        isDisabled={isLoading}
-                                                        isLoading={isLoading}
-                                                        onChange={(newstorage) => setStorage(newstorage)}
-                                                        onCreateOption={handleCreateStorage}
-                                                        options={StorageList}
-                                                        placeholder="Select Storage"
-                                                        onBlur={handleBlur}
-                                                        value={values.Storage}
-                                                    />
-                                                    {errors.storage && touched.storage
-                                                        ?
-                                                        <p className='form-error text-red-600 text-sm font-semibold'>{errors.storage}</p>
-                                                        :
-                                                        null}
-                                                </div>
-                                                <div className="firstname flex flex-col space-y-2 w-full ">
-                                                    <input type="text"
-                                                        name="price"
-                                                        value={values.price}
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                                                        placeholder="Enter Phone Price " />
-                                                    {errors.price && touched.price
-                                                        ?
-                                                        <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                                                        :
-                                                        null}
-                                                </div>
-                                            </div>
+                                          
 
                                             <div className="flex justify-center items-center w-full space-x-5 ">
                                                 <button type="submit" disabled={isLoadingOnSubmit} className={`px-8 h-10 ${isLoadingOnSubmit ? 'opacity-40' : 'opacity-100'} bg-[#0d0d48] border-2 border-[#0d0d48] hover:bg-white hover:text-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
@@ -221,82 +107,80 @@ function ProductDetails() {
                     </div>
                 )
                 }
-                <div className={`bg-slate-100 ${model && "opacity-10"}`}>
-                    <div className=" xl:px-10 h-full">
-                        <div className='w-full justify-between items-center flex py-8 px-5'>
-                            <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>Vivo F17 Pro</h1>
-                            <div className='flex items-center justify-end pb-5'>
-                                <Tippy content="Add Storage">
-                                    <div
-                                        onClick={() => {
-                                            setModel(true);
-                                        }}
-                                        className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
-                                        <MdSdStorage className='xs:text-base sm:text-xl' />
-                                    </div>
-                                </Tippy>
-
+                <div className={`bg-slate-100 ${model && "opacity-10"}`}> */}
+            <div className=" xl:px-10 h-full">
+                <div className='w-full justify-between items-center flex py-8 px-5'>
+                    <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>Vivo F17 Pro</h1>
+                    <div className='flex items-center justify-end pb-5'>
+                        <Tippy content="Add Storage">
+                            <div
+                                onClick={() => setspecificationFormModal(true)}
+                                className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                                <MdSdStorage className='xs:text-base sm:text-xl' />
                             </div>
-                        </div>
-                        <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
-                            <table
-                                className="w-full text-sm text-center rounded-xl  text-white "
-                                id="table-to-xls">
-                                <thead className="text-xs uppercase bg-[#0d0d48]">
-                                    <tr className="text-white text-sm ">
-                                        <th scope="col" className="pl-3 py-4">
-                                            Sr No
-                                        </th>
-                                        <th scope="col" className="px-6 py-4">
-                                            RAM
-                                        </th>
-                                        <th scope="col" className="px-6 py-4">
-                                            Storage
-                                        </th>
-                                        <th scope="col" className="px-6 py-4">
-                                            Price
-                                        </th>
-                                        <th scope="col" className="px-6 py-4">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                    <tr className=" border-b">
-                                        <td className="px-6 py-5 font-bold">
-                                            001
-                                        </td>
-                                        <td className="px-6 py-5 capitalize">
-                                            4GB
-                                        </td>
-                                        <td className="px-6 py-5">
-                                            64GB
-                                        </td>
-                                        <td className="px-6 py-5">
-                                            15000
-                                        </td>
-                                        <td className="px-6 py-5"
+                        </Tippy>
 
-                                        >
-                                            <div className='flex justify-center items-center space-x-2'>
-                                                <Tippy content="Update Storage">
-                                                    <div onClick={handleUpdatespecification}>
-                                                        <FiEdit className='text-[16px] cursor-pointer' />
-                                                    </div>
-                                                </Tippy>
-                                                <Tippy content="Delete Storage">
-                                                    <div>
-                                                        <MdDelete className='text-lg cursor-pointer text-red-600' />
-                                                    </div>
-                                                </Tippy>
+                    </div>
+                </div>
+                <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
+                    <table
+                        className="w-full text-sm text-center rounded-xl  text-white "
+                        id="table-to-xls">
+                        <thead className="text-xs uppercase bg-[#0d0d48]">
+                            <tr className="text-white text-sm ">
+                                <th scope="col" className="pl-3 py-4">
+                                    Sr No
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    RAM
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Storage
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Price
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                            <tr className=" border-b">
+                                <td className="px-6 py-5 font-bold">
+                                    001
+                                </td>
+                                <td className="px-6 py-5 capitalize">
+                                    4GB
+                                </td>
+                                <td className="px-6 py-5">
+                                    64GB
+                                </td>
+                                <td className="px-6 py-5">
+                                    15000
+                                </td>
+                                <td className="px-6 py-5"
+
+                                >
+                                    <div className='flex justify-center items-center space-x-2'>
+                                        <Tippy content="Update Storage">
+                                            <div onClick={handleUpdatespecification}>
+                                                <FiEdit className='text-[16px] cursor-pointer' />
                                             </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        </Tippy>
+                                        <Tippy content="Delete Storage">
+                                            <div>
+                                                <MdDelete className='text-lg cursor-pointer text-red-600' />
+                                            </div>
+                                        </Tippy>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                        {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
+                {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
               <Pagination
               // total={data && data.pageCount ? data.pageCount : 0}
               // current={pageNo}
@@ -305,9 +189,15 @@ function ProductDetails() {
               />
             </div> */}
 
-                    </div>
-                </div>
             </div>
+            <SpecificationFormModal
+                showModal={specificationFormModal}
+                handleShowModal={setspecificationFormModal}
+            // refetchData={refetchData}
+            // tournamentDetails={tournamentDetails}
+            />
+            {/* </div>
+            </div> */}
         </>
     )
 }

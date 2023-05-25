@@ -152,8 +152,6 @@ function CustomersList() {
     "#ca8a04",
   ];
 
-
-
   const handleMouseEnterEdit = () => {
     setIsHoverEdit(true);
   };
@@ -387,9 +385,6 @@ function CustomersList() {
                 <th scope="col" className="px-6 py-4">
                   Profile
                 </th>
-                <th scope="col" className="px-6 py-4">
-                  Action
-                </th>
               </tr>
             </thead>
             {
@@ -430,16 +425,6 @@ function CustomersList() {
                                 />
                               </div>
                             </Tippy>
-                          </div>
-                        </td>
-                        <td className="px-6 py-5 ">
-                          <div className="flex justify-center space-x-3">
-                            <button
-                              onClick={() =>
-                                navigate(`/Receipt/Generate`)}
-                              className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                              Pay
-                            </button>
                           </div>
                         </td>
                       </tr>

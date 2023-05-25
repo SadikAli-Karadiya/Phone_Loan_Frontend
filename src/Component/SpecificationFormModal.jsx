@@ -6,48 +6,60 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 
-
-const createCompany = (label) => ({
+const createRam = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, ''),
 });
 
-const createModel = (label) => ({
+const createStorage = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, ''),
 });
-
 
 const productSchema = Yup.object({
-  company: Yup.string().required("Please Enter Company"),
-  model: Yup.string().required("Please Enter Model"),
+  ram: Yup.string().required("Please Enter RAM"),
+  storage: Yup.string().required("Please Enter Storage"),
+  price: Yup.string().required("Please Enter Price"),
 });
 
-
-function ProductFormModal({ showModal, handleShowModal }) {
+function SpecificationFormModal({ showModal, handleShowModal }) {
   const [error, setError] = useState("");
-  const [CompanyList, setComapnyList] = React.useState([]);
-  const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
+  const [RamList, setRamList] = React.useState([]);
+  const [ram, setRam] = React.useState();
+  const [StorageList, setStorageList] = React.useState([]);
+  const [Storage, setStorage] = React.useState();
 
-  const handleCreateCompany = (inputValue) => {
+  const handleCreateRam = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
-      const newComapny = createCompany(inputValue);
+      const newRam = createRam(inputValue);
       setIsLoading(false);
-      setComapnyList((prev) => [...prev, newComapny]);
-      setCompany(newComapny);
+      setRamList((prev) => [...prev, newRam]);
+      setRam(newRam);
+    }, 1000);
+  };
+
+  const handleCreateStorage = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const newStorage = createStorage(inputValue);
+      setIsLoading(false);
+      setStorageList((prev) => [...prev, newStorage]);
+      setStorage(newStorage);
     }, 1000);
   };
 
   const initialValues = {
-    company: company,
-    model: "",
+    ram: "",
+    storage: "",
+    price: "",
   }
 
   // const [value, setValue] = React.useState({
-  //   company: "",
-  //   model: "",
+  // ram : "",
+  // storage: "",
+  // price: "",
   // });
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
@@ -57,8 +69,6 @@ function ProductFormModal({ showModal, handleShowModal }) {
       onSubmit(data) {
         const modeldata = {
           ...data,
-          company: company,
-          model: Model_Name,
         }
       },
     });
@@ -132,8 +142,7 @@ function ProductFormModal({ showModal, handleShowModal }) {
 
   return (
     <Modal open={showModal}
-      onClose={handleModalClose}
-    >
+      onClose={handleModalClose}>
       <Modal.Description className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-gray-700 shadow-xl rounded-lg ">
         <Modal.Title
           as="h3"
@@ -165,38 +174,58 @@ function ProductFormModal({ showModal, handleShowModal }) {
         <Modal.Description>
           <div className="px-4 py-4">
             <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className='flex flex-col items-center w-full space-y-5'>
+              <div className='flex flex-col items-center justify-start w-full space-y-5'>
                 <div className='w-full'>
                   <CreatableSelect
                     className='w-full'
                     isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
-                    onChange={(newCompany) => setCompany(newCompany)}
-                    onCreateOption={handleCreateCompany}
-                    placeholder="Select Company"
-                    options={CompanyList}
-                    value={values.company}
-                    name='company'
+                    onChange={(newRam) => setRam(newRam)}
+                    onCreateOption={handleCreateRam}
+                    placeholder="Select RAM"
+                    options={RamList}
+                    value={values.Ram}
+                    name='ram'
                   />
-                  {errors.company &&
-                    touched.company ? (
+                  {errors.ram &&
+                    touched.ram ? (
                     <small className="form-error text-red-600 text-sm font-semibold">
-                      {errors.company}
+                      {errors.ram}
                     </small>
                   ) : null}
                 </div>
-                <div className="firstname flex flex-col space-y-2 w-full ">
+                <div className='w-full'>
+                  <CreatableSelect
+                    className='w-full'
+                    isClearable
+                    name='storage'
+                    isDisabled={isLoading}
+                    isLoading={isLoading}
+                    onChange={(newstorage) => setStorage(newstorage)}
+                    onCreateOption={handleCreateStorage}
+                    options={StorageList}
+                    placeholder="Select Storage"
+                    onBlur={handleBlur}
+                    value={values.Storage}
+                  />
+                  {errors.storage && touched.storage
+                    ?
+                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.storage}</p>
+                    :
+                    null}
+                </div>
+                <div className="flex flex-col space-y-2 w-full ">
                   <input type="text"
-                    name="model"
-                    value={values.model}
+                    name="price"
+                    value={values.price}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                    placeholder="Enter Model Name " />
-                  {errors.model && touched.model
+                    placeholder="Enter Phone Price " />
+                  {errors.price && touched.price
                     ?
-                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
+                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
                     :
                     null}
                 </div>
@@ -224,4 +253,4 @@ function ProductFormModal({ showModal, handleShowModal }) {
   );
 }
 
-export default ProductFormModal;
+export default SpecificationFormModal;
