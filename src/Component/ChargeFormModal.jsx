@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import CreatableSelect from 'react-select/creatable';
+import { MdDelete } from "react-icons/md"
+import { FiPlus } from "react-icons/fi"
 
 const productSchema = Yup.object({
   charge: Yup.string().required("Please Enter Charge"),
@@ -74,10 +75,15 @@ function ChargeFormModal({ showModal, handleShowModal }) {
   const handleModalClose = () => {
     resetForm("")
     handleShowModal(false);
+    setCharge(false)
   };
 
   function handlecharge() {
     setCharge(true)
+  }
+
+  function handleremovecharge() {
+    setCharge(false)
   }
 
   return (
@@ -131,7 +137,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                 </div>
                 {
                   Charge == true ?
-                    <div className="space-y-2 mt-5">
+                    <div className="mt-5 flex items-center justify-start space-x-3">
                       <div className="flex flex-col w-full ">
                         <input type="text"
                           name="charge"
@@ -146,7 +152,11 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                           :
                           null}
                       </div>
-                      <h1 className="uppercase font-semibold text-white  text-start">Remove Charge</h1>
+                      <div className="flex items-center space-x-2 group cursor-pointer bg-red-600 py-2 px-2 rounded-md hover:bg-white "
+                        onClick={handleremovecharge}
+                      >
+                        <MdDelete className="text-white text-lg group-hover:text-red-600" />
+                      </div>
                     </div>
                     :
                     null
@@ -156,8 +166,10 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                     <div className="flex items-center space-x-2 pt-3 cursor-pointer"
                       onClick={handlecharge}
                     >
-                      <input type="radio" />
-                      <h1 className="uppercase font-semibold text-white  text-start">Add Charge</h1>
+                      <div className="bg-white px-1 py-1 rounded-md text-lg">
+                        <FiPlus />
+                      </div>
+                      <h1 className="font-semibold text-white  text-start">Add Charge</h1>
                     </div>
                     :
                     ""
