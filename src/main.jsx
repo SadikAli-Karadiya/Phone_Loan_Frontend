@@ -4,7 +4,9 @@ import App from './App'
 import './index.css'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { QueryClient, QueryClientProvider } from "react-query";
 
+const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ToastContainer
@@ -18,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       draggable
       pauseOnHover
     />
-    <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     <ToastContainer />
   </React.StrictMode>,
 )
