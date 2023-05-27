@@ -7,10 +7,14 @@ import { IoMdInformationCircle } from "react-icons/io";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useMutation } from 'react-query'
 
 
 function PayEMI() {
   const navigate = useNavigate();
+
+  const {isLoading, isError, error, mutate} = useMutation((data)=>{console.log(data)}, {retry: 3})
+
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [showNotFound, setShowNotFound] = useState(-1)
@@ -248,8 +252,9 @@ function PayEMI() {
                 <td className="px-6 py-5 ">
                   <div className="flex justify-center space-x-3">
                     <button
-                      onClick={() =>
-                        navigate(`/Receipt/Generate`)}
+                      onClick={() =>{
+                        mutate({name:'sadik', email: 'sadik@email'})
+                        navigate(`/Receipt/Generate`)}}
                       className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
                       Pay
                     </button>
