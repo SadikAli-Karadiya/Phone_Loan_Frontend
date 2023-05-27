@@ -19,7 +19,6 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import InstallmentFormModal from '../../../Component/InstallFormModal';
 
-
 function CustomersList() {
   const [model, setModel] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
@@ -127,7 +126,6 @@ function CustomersList() {
     },
   ])
   const [Selectemi, setSelectemi] = useState("")
-
   const bgColors = [
     "#ffd6d6",
     "#bfdbfe",
@@ -139,7 +137,6 @@ function CustomersList() {
     "#d8bbbc",
     "#fef9c3",
   ];
-
   const headingBgColor = [
     "#f3797e",
     "#3b82f6",
@@ -230,7 +227,7 @@ function CustomersList() {
               </div>
             </Tippy>
           </div>
-          <div className='bg-white px-5 flex space-x-5 flex-wrap justify-center items-center py-5 rounded-md'>
+          <div className='bg-white flex gap-10 px-5 flex-wrap justify-center items-center py-5 rounded-md'>
             {data?.length > 0 ? (
               data?.map((item, index) => {
                 return (
@@ -238,7 +235,7 @@ function CustomersList() {
                     style={{
                       backgroundColor: bgColors[index % bgColors.length],
                     }}
-                    className='px-5 py-3 my-3 w-[23%] group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3'
+                    className='px-5 py-3 my-3 group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3'
                     key={index}
                     onClick={() => handleSelectEMI(item.id)}>
                     <div className='flex justify-between items-center '>
@@ -432,14 +429,18 @@ function CustomersList() {
                   )
                 })
               ) : (
-                <div className='flex justify-center items-center w-full'>
-                  <div className='flex items-center space-x-3 justify-center text-gray-500 py-5'>
-                    <FaUsers className='text-3xl' />
-                    <h1 className=' font-semibold'>Customer Not Found</h1>
-                  </div>
-                </div>
+                null
               )}
           </table>
+          {
+            selectedEMI?.CustomersList?.length > 0 ?
+              null
+              :
+              <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                <FaUsers className='text-3xl' />
+                <h1 className=' font-semibold'>Customer Not Found</h1>
+              </div>
+          }
         </div>
         <InstallmentFormModal
           showModal={installmentFormModal}
