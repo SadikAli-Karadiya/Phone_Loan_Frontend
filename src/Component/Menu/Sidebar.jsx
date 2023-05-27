@@ -39,7 +39,7 @@ const Sidebar = () => {
                 className="w-2/3 cursor-pointer hidden xl:block"
                 id="logo"
               /> */}
-              <h1 className="font-semibold text-2xl">EMI Manager</h1>
+              <h1 className="font-semibold text-2xl hidden lg:block">EMI Manager</h1>
             </div>
             <div className="">
               <ul className="text-center">
