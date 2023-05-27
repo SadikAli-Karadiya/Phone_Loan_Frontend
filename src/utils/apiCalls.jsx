@@ -1,7 +1,7 @@
 import axios from "axios"; 
 
 const instance = axios.create({
-  baseURL : 'http://127.0.0.1:8000/api/',
+  baseURL : 'http://localhost:4000/',
   headers: {
 //  Authorization: `<Your Auth Token>`,
     ContentType: "application/json",
@@ -11,16 +11,12 @@ const instance = axios.create({
 });
 
 
-export default {
-    getData: () => {
+
+    export const getAllCompanies = () => {
       return instance({
           'method':'GET',
-          'url':'/query',
-          'data': {
-            'item1':'data1',
-          },
+          'url':'/company',
           'headers': { 'content-type':'application/json' // override instance defaults
           },
       })
     }
-}

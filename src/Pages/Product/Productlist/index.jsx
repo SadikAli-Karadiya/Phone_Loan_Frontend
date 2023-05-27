@@ -15,7 +15,9 @@ import CreatableSelect from 'react-select/creatable';
 import { BiFolderPlus } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import ProductFormModel from "../../../Component/ProductFormModal"
+import ProductFormModel from "../../../Component/ProductFormModal";
+import {useQuery} from 'react-query'
+import {getAllCompanies} from '../../../utils/apiCalls'
 
 function ProductList() {
   const navigate = useNavigate();
@@ -24,6 +26,8 @@ function ProductList() {
   const [isLoading, setIsLoading] = React.useState();
   const [value, setValue] = React.useState();
   const [productFormModal, setProductFormModal] = React.useState(false);
+
+  const companies = useQuery('companies', getAllCompanies)
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -175,9 +179,13 @@ function ProductList() {
               <div>
                 <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
                   <option value="">Select Company</option>
-                  <option value="Oppo">Oppo</option>
-                  <option value="Vivo">Vivo</option>
-                  <option value="Techno">Techno</option>
+                  {
+                    companies?.data?.data?.all_companies?.map((company, index)=>{
+                      return (
+                        <option key={index} value={company.company_name}>{company.company_name}</option>
+                      )
+                    })
+                  }
                 </select>
               </div>
             </div>
