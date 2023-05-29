@@ -398,9 +398,6 @@ function CustomerProfile() {
                                                 Total EMI
                                             </th>
                                             <th scope="col" className="px-6 py-4">
-                                                Pending EMI
-                                            </th>
-                                            <th scope="col" className="px-6 py-4">
                                                 Total Amount
                                             </th>
                                             <th scope="col" className="px-6 py-4">
@@ -419,7 +416,7 @@ function CustomerProfile() {
                                             data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
                                                 console.log(item)
                                                 return (
-                                                    <tbody key={index} className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                                    <tbody key={index} className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                         <tr className=" border-b">
 
                                                             <td className="px-6 py-5 ">
@@ -433,9 +430,6 @@ function CustomerProfile() {
                                                             </td>
                                                             <td className="px-6 py-5">
                                                                 {item.installment.month}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                2
                                                             </td>
                                                             <td className="px-6 py-5">
                                                                 {item.net_amount}

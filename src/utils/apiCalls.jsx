@@ -99,3 +99,13 @@ export const getallSpecification = (id) => {
     },
   })
 }
+
+export const getallReceipt = (search) => {
+  return instance({
+    'method': 'GET',
+  'url': `/receipt/${search}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}

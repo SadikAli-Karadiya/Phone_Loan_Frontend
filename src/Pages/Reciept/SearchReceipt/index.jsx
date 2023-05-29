@@ -5,6 +5,10 @@ import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { getallReceipt } from '../../../utils/apiCalls';
+import { useQuery } from 'react-query'
+import moment from 'moment'
+
 
 function SearchReciept() {
   const navigate = useNavigate();
@@ -12,6 +16,7 @@ function SearchReciept() {
   const [loading, setLoading] = useState(false);
   const [CustomerReceipts, setCustomerReceipts] = useState([])
   const [showNotFound, setShowNotFound] = useState(-1)
+  const data = useQuery(['receipt', searchValue], () => getallReceipt(searchValue))
 
   const searchAllReceipts = async (e) => {
     try {

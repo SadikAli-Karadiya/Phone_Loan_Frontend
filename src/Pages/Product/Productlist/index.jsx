@@ -2,7 +2,7 @@ import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../../App.css"
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaUsers } from "react-icons/fa";
+import { BsPhone } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
 import { useFormik } from "formik";
@@ -179,16 +179,16 @@ function ProductList() {
                 ) : (
                   null
                 )}
-              {
-                phones?.data?.data?.AllModel.length > 0 ?
-                  null
-                  :
-                  <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                    <FaUsers className='text-3xl' />
-                    <h1 className=' font-semibold'>Customer Not Found</h1>
-                  </div>
-              }
             </table>
+            {
+              phones?.data?.data?.AllModel.length > 0 ?
+                null
+                :
+                <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                  <BsPhone className='text-3xl' />
+                  <h1 className=' font-semibold'>Model Not Found</h1>
+                </div>
+            }
           </div>
         </div>
 

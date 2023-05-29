@@ -1,5 +1,5 @@
 import React from 'react'
-import { BiSearch } from "react-icons/bi"
+import { FaReceipt } from "react-icons/fa"
 import { AiFillEye } from "react-icons/ai";
 import "../../../App.css"
 import { useNavigate, useParams } from "react-router-dom";
@@ -107,41 +107,13 @@ function EMIHistory() {
                                 ) : (
                                     null
                                 )}
-                            {/* <tbody className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                <tr className=" border-b">
-                                    <th className="py-5 px-6">
-                                        01
-                                    </th>
-                                    <td className="px-6 py-5 ">
-                                        05/01/2023
-                                    </td>
-                                    <td className="px-6 py-5 capitalize">
-                                        5000
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        2
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        <h1 className='bg-red-300 text-red-900 font-bold py-[2px] rounded-md'>
-                                            Paid
-                                        </h1>
-                                    </td>
-                                    <td className="px-8 py-5">
-                                        <div
-                                            onClick={() => setChargeFormModal(true)}
-                                            className="flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg cursor-pointer text-white font-semibold">
-                                            Pay
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody> */}
                         </table>
                         {
                             data?.data?.data?.AllEmi?.length > 0 ?
                                 null
                                 :
-                                <div className='flex justify-center items-center w-full py-5 space-x-4 text-gray-500'>
-                                    {/* <FaUsers className='text-3xl' /> */}
+                                <div className='flex justify-center items-center w-full py-5 space-x-2 text-gray-500'>
+                                    <FaReceipt className='text-xl' />
                                     <h1 className='font-semibold'>Emi Not Found</h1>
                                 </div>
                         }
