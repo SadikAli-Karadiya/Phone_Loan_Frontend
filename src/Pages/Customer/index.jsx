@@ -13,8 +13,8 @@ function Customer() {
                 <Route>
                     <Route path="/list" element={<CustomersList />} />
                     <Route path="/add-edit" element={<CustomerRegister />} />
-                    <Route path="/profile-detail" element={<CustomerProfile />} />
-                    <Route path="/EMI-History" element={<EMIHistory />} />
+                    <Route path="/profile-detail/:id" element={<CustomerProfile />} />
+                    <Route path="/EMI-History/:id" element={<EMIHistory />} />
 
                     {/* <Route index element={<CustomersList />} /> */}
                 </Route>

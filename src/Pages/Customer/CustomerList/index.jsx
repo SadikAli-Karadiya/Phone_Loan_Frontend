@@ -2,13 +2,8 @@ import { React, useRef, useState } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
-import { AiFillCloseCircle } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
 import { RiFolderUserFill } from "react-icons/ri";
@@ -18,14 +13,20 @@ import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import InstallmentFormModal from '../../../Component/InstallFormModal';
+import { getAllInstallment, getAllPurchase } from '../../../utils/apiCalls';
+import { useQuery } from 'react-query'
+
 
 function CustomersList() {
   const [model, setModel] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
   const [isHoverDelete, setIsHoverDelete] = useState(false);
-  const [selectedEMI, setSelectedEMI] = useState(0);
+  const [selectedEMI, setSelectedEMI] = useState([]);
   const [pageNo, setPageNo] = useState(1);
   const [installmentFormModal, setInstallmentFormModal] = useState(false);
+  const installment = useQuery('installment', getAllInstallment)
+  const purchase = useQuery('purchase', getAllPurchase)
+  console.log(purchase?.data?.data)
   const navigate = useNavigate();
   const [data, setdata] = useState([
     {
@@ -187,9 +188,10 @@ function CustomersList() {
   };
 
   const handleSelectEMI = (id) => {
-    let Customer = data?.find((n) => {
-      return n?.id == id;
+    let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
+      return n?.installment_id == id;
     });
+    console.log(Customer.length)
     setSelectedEMI(Customer)
     setSelectemi(id)
   };
@@ -228,8 +230,8 @@ function CustomersList() {
             </Tippy>
           </div>
           <div className='bg-white flex gap-10 px-5 flex-wrap justify-center items-center py-5 rounded-md'>
-            {data?.length > 0 ? (
-              data?.map((item, index) => {
+            {installment?.data?.data.AllInstallment?.length > 0 ? (
+              installment?.data?.data.AllInstallment?.map((item, index) => {
                 return (
                   <div
                     style={{
@@ -240,7 +242,7 @@ function CustomersList() {
                     onClick={() => handleSelectEMI(item.id)}>
                     <div className='flex justify-between items-center '>
                       <div>
-                        <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charge}</span> | <span className='text-sm'>{item.dp}%</span></h1>
+                        <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charges} Charge</span></h1>
                       </div>
                       <div className='flex justify-end items-center space-x-2'>
                         <Tippy content="Edit EMI">
@@ -298,7 +300,7 @@ function CustomersList() {
                               index % headingBgColor.length
                               ],
                           }}
-                          className='text-4xl font-bold'>{item.installment} <span className='uppercase text-2xl'>month</span></h1>
+                          className='text-4xl font-bold'>{item.month} <span className='uppercase text-2xl'>month</span></h1>
                       </div>
                     </div>
                     <div className='rounded-md px-7 py-1'
@@ -307,7 +309,7 @@ function CustomersList() {
                           headingBgColor[index % headingBgColor.length],
                       }}
                     >
-                      <p className='text-white text-center text-sm font-roboto'>Total Customer : {item.CustomersList.length}</p>
+                      <p className='text-white text-center text-sm font-roboto'>Total Customer : 15</p>
                     </div>
                   </div>
                 );
@@ -322,7 +324,7 @@ function CustomersList() {
             )}
           </div>
         </div>
-        <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
+        <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 mx-5 my-5 py-5">
           <h1 className='font-bold text-lg'>Customer List</h1>
           <div className='flex justify-between items-center py-5'>
             <div className='flex justify-start items-center w-1/3 '>
@@ -385,10 +387,11 @@ function CustomersList() {
               </tr>
             </thead>
             {
-              selectedEMI?.CustomersList?.length > 0 ? (
-                selectedEMI?.CustomersList.map((item, index) => {
+              selectedEMI?.length > 0 ? (
+                selectedEMI?.map((item, index) => {
                   return (
-                    <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden" key={index}>
+                    <tbody key={index}
+                      className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                       <tr className=" border-b">
                         <th className="py-5 px-6">
                           {index + 1}
@@ -397,19 +400,19 @@ function CustomersList() {
                           {item.customer_id}
                         </td>
                         <td className="px-6 py-5 capitalize">
-                          {item.name}
+                          {item.customer.first_name}
                         </td>
                         <td className="px-6 py-5">
-                          {item.mobile}
+                          {item.customer.mobile}
                         </td>
                         <td className="px-6 py-5">
-                          {item.total}
+                          {item.net_amount}
                         </td>
                         <td className="px-6 py-5">
-                          {item.total - item.pending}
+                          {item.net_amount - item.pending_amount}
                         </td>
                         <td className="px-6 py-5">
-                          {item.pending}
+                          {item.pending_amount}
                         </td>
                         <td className="px-6 py-5">
                           <div className="flex justify-center items-center">
@@ -418,7 +421,8 @@ function CustomersList() {
                                 <AiFillEye
                                   className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                   onClick={() =>
-                                    navigate(`/Customer/profile-detail`)}
+                                    navigate(`/Customer/profile-detail/${item.customer.id}`)
+                                  }
                                 />
                               </div>
                             </Tippy>
@@ -433,12 +437,12 @@ function CustomersList() {
               )}
           </table>
           {
-            selectedEMI?.CustomersList?.length > 0 ?
+            selectedEMI?.length > 0 ?
               null
               :
               <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
                 <FaUsers className='text-3xl' />
-                <h1 className=' font-semibold'>Customer Not Found</h1>
+                <h1 className='font-semibold'>Customer Not Found</h1>
               </div>
           }
         </div>

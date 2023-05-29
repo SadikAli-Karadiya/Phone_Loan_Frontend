@@ -2,7 +2,7 @@ import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../../App.css"
 import { useNavigate, useLocation } from "react-router-dom";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { FaUsers } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
 import { useFormik } from "formik";
@@ -16,18 +16,20 @@ import { BiFolderPlus } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal";
-import {useQuery} from 'react-query'
-import {getAllCompanies} from '../../../utils/apiCalls'
+import { useQuery } from 'react-query'
+import { getAllCompanies, getAllPhone } from '../../../utils/apiCalls'
 
 function ProductList() {
   const navigate = useNavigate();
   const location = useLocation();
   const [pageNo, setPageNo] = React.useState(1);
-  const [isLoading, setIsLoading] = React.useState();
   const [value, setValue] = React.useState();
+  const [search, setSearch] = React.useState("");
   const [productFormModal, setProductFormModal] = React.useState(false);
 
   const companies = useQuery('companies', getAllCompanies)
+  const phones = useQuery('phones', getAllPhone)
+
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -69,78 +71,6 @@ function ProductList() {
 
   return (
     <>
-      {/* <div className="relative">
-        {model && (
-          <div className="w-full h-full bg-white  ">
-            <div className="flex justify-center shadow-2xl  ">
-              <div className="absolute sm:mx-0 xs:w-[80%] sm:w-[60%] md:w-[50%] lg:w-[35%] opacity-100 shadow-2xl rounded xs:top-5 lg:top-10 bg-white z-50 ">
-                <div className="">
-                  <div className="flex justify-end ">
-                    <button
-                      onClick={() => {
-                        resetForm()
-                        setModel(false);
-                      }}
-                      className="absolute translate-x-4 -translate-y-4 font-bold text-2xl p-2 text-[#571217] "
-                    >
-                      <AiFillCloseCircle />
-                    </button>
-                  </div>
-                  <div className='px-10 py-10'>
-                    <h1 className="font-semibold text-[#0d0d48] text-lg lg:text-xl pb-5 ">
-                      Add Model
-                    </h1>
-                    <form action="" className='space-y-5' onSubmit={handleSubmit}>
-                      <div className='flex flex-col items-center w-full space-y-5'>
-                        <div className='w-full'>
-                          <CreatableSelect
-                            className='w-full'
-                            isClearable
-                            isDisabled={isLoading}
-                            isLoading={isLoading}
-                            onChange={(newCompany) => setCompany(newCompany)}
-                            onCreateOption={handleCreateCompany}
-                            placeholder="Select Company"
-                            options={CompanyList}
-                            value={values.company}
-                            name='company'
-                          />
-                          {errors.company &&
-                            touched.company ? (
-                            <small className="form-error text-red-600 text-sm font-semibold">
-                              {errors.company}
-                            </small>
-                          ) : null}
-                        </div>
-                        <div className="firstname flex flex-col space-y-2 w-full ">
-                          <input type="text"
-                            name="model"
-                            value={values.model}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                            placeholder="Enter Model Name " />
-                          {errors.model && touched.model
-                            ?
-                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
-                            :
-                            null}
-                        </div>
-                      </div>
-                      <div className="flex justify-center items-center w-full space-x-5 ">
-                        <button type="submit" disabled={isLoadingOnSubmit} className={`px-8 h-10 ${isLoadingOnSubmit ? 'opacity-40' : 'opacity-100'} bg-[#0d0d48] border-2 border-[#0d0d48] hover:bg-white hover:text-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
-                          {isLoadingOnSubmit ? 'Loading...' : 'SUBMIT'}
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )
-        }
-        <div className={`bg-slate-100 ${model && "opacity-10"}`}> */}
       <div className=" xl:px-10 h-full">
         <div className='w-full justify-between items-center flex py-8 px-5'>
           <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>All Models</h1>
@@ -158,6 +88,10 @@ function ProductList() {
         <div className='flex justify-center items-center xs:py-3'>
           <input
             type="search"
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            value={search}
             placeholder='Search Receipt (BY : Company Name , Model Name)'
             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
           />
@@ -177,10 +111,10 @@ function ProductList() {
             <div className='flex justify-between items-center py-5 px-5'>
               <h1 className='font-bold  text-lg'>Product List</h1>
               <div>
-                <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg'>
+                <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg outline-none' >
                   <option value="">Select Company</option>
                   {
-                    companies?.data?.data?.all_companies?.map((company, index)=>{
+                    companies?.data?.data?.all_companies?.map((company, index) => {
                       return (
                         <option key={index} value={company.company_name}>{company.company_name}</option>
                       )
@@ -208,34 +142,52 @@ function ProductList() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                <tr className=" border-b">
-                  <td className="px-6 py-5 font-bold">
-                    001
-                  </td>
-                  <td className="px-6 py-5 capitalize">
-                    Vivo
-                  </td>
-                  <td className="px-6 py-5">
-                    F11 Pro
-                  </td>
-                  <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                    <div className='flex justify-center items-center space-x-3 ' >
-                      <Tippy content="Show Storage">
-                        <div onClick={() =>
-                          navigate(`/Product/product-details`)}>
-                          <AiFillEye className='text-xl cursor-pointer' />
-                        </div>
-                      </Tippy>
-                      <Tippy content="Update Model">
-                        <div onClick={handleUpdatemodel}>
-                          <FiEdit className='text-[17px] cursor-pointer' />
-                        </div>
-                      </Tippy>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+              {
+                phones?.data?.data?.AllModel.length > 0 ? (
+                  phones?.data?.data?.AllModel.map((item, index) => {
+                    return (
+                      <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                        <tr className=" border-b">
+                          <td className="px-6 py-5 font-bold">
+                            {index + 1}
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            {item.company.company_name}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.model_name}
+                          </td>
+                          <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                            <div className='flex justify-center items-center space-x-3 ' >
+                              <Tippy content="Show Storage">
+                                <div onClick={() =>
+                                  navigate(`/Product/product-details/${item.id}`)}>
+                                  <AiFillEye className='text-xl cursor-pointer' />
+                                </div>
+                              </Tippy>
+                              <Tippy content="Update Model">
+                                <div onClick={handleUpdatemodel}>
+                                  <FiEdit className='text-[17px] cursor-pointer' />
+                                </div>
+                              </Tippy>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    )
+                  })
+                ) : (
+                  null
+                )}
+              {
+                phones?.data?.data?.AllModel.length > 0 ?
+                  null
+                  :
+                  <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                    <FaUsers className='text-3xl' />
+                    <h1 className=' font-semibold'>Customer Not Found</h1>
+                  </div>
+              }
             </table>
           </div>
         </div>

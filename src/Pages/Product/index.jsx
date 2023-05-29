@@ -10,7 +10,7 @@ function Product() {
             <Routes>
                 <Route>
                     <Route path="/" element={<ProductList />} />
-                    <Route path="/product-details" element={<ProductDetails />} />
+                    <Route path="/product-details/:id" element={<ProductDetails />} />
 
                 </Route>
             </Routes>

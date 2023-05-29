@@ -1,19 +1,24 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import { customerSchema, initialValues } from "../../../Component/CustomerSchema";
 import "../../Customer/CustomerRegister/Customerform.css"
 import { FaUserEdit } from "react-icons/fa"
 import { AiFillEye } from "react-icons/ai";
+import { BsPhone } from "react-icons/bs";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { AiFillCloseCircle } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
 import NewPhoneFormModel from '../../../Component/NewPhoneFormModal';
+import { getPurchaseCustomerbyId } from '../../../utils/apiCalls';
+import { useQuery } from 'react-query'
+import moment from 'moment'
 
 
 function CustomerProfile() {
     const navigate = useNavigate();
+    const params = useParams();
+    const location = useLocation();
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = React.useState(defaultImage);
     const [photo, setPhoto] = React.useState("");
@@ -21,7 +26,9 @@ function CustomerProfile() {
     const [toggle, setToggle] = React.useState(false);
     const [isEnable, setIsEnable] = React.useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
-
+    const data = useQuery(['customer', params.id], () => getPurchaseCustomerbyId(params.id))
+    console.log(data?.data?.data?.CustomerAllPurchase?.length)
+    const Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
@@ -119,7 +126,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your First Name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.first_name}
+                                                        value={Customer_details?.first_name ? Customer_details?.first_name : values.first_name}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -141,7 +148,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your Last Name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.last_name}
+                                                        value={Customer_details?.last_name ? Customer_details?.last_name : values.last_name}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '
                                                     />
@@ -163,7 +170,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your WhatsApp No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.whatsapp_no}
+                                                        value={Customer_details?.mobile ? Customer_details?.mobile : values.whatsapp_no}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -187,7 +194,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your Mobile No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.alternate_no}
+                                                        value={Customer_details?.alternate_no ? Customer_details?.alternate_no : values.alternate_no}
                                                         disabled={isEnable}
                                                         className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none ${errors.alternate_no && 'border-red-600'}`}
                                                     />
@@ -208,7 +215,7 @@ function CustomerProfile() {
                                                         name="refrence"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.refrence}
+                                                        value={Customer_details?.reference_name ? Customer_details?.reference_name : values.refrence}
                                                         disabled={isEnable}
                                                         placeholder="Enter Refeence Name"
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
@@ -230,7 +237,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Refrence Mobile No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.refrence_no}
+                                                        value={Customer_details?.reference_mobile ? Customer_details?.reference_mobile : values.refrence_no}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -407,45 +414,64 @@ function CustomerProfile() {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                        <tr className=" border-b">
+                                    {
+                                        data?.data?.data?.CustomerAllPurchase?.length > 0 ? (
+                                            data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
+                                                console.log(item)
+                                                return (
+                                                    <tbody key={index} className="bg-red-100 items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                                        <tr className=" border-b">
 
-                                            <td className="px-6 py-5 ">
-                                                12 / 02 / 2023
-                                            </td>
-                                            <td className="px-6 py-5 ">
-                                                Vivo
-                                            </td>
-                                            <td className="px-6 py-5 capitalize">
-                                                F17 Pro
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                2
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                1
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                15000
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                5000
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                5000
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex justify-center items-center">
-                                                    <AiFillEye
-                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                        onClick={() =>
-                                                            navigate(`/Customer/EMI-History`)}
-                                                    />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                                            <td className="px-6 py-5 ">
+                                                                {moment(item.phone.createdAt).format("DD / MM / YYYY")}
+                                                            </td>
+                                                            <td className="px-6 py-5 ">
+                                                                Vivo
+                                                            </td>
+                                                            <td className="px-6 py-5 capitalize">
+                                                                {item.phone.model_name}
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                {item.installment.month}
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                2
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                {item.net_amount}
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                5000
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                {item.pending_amount}
+                                                            </td>
+                                                            <td className="px-6 py-5">
+                                                                <div className="flex justify-center items-center">
+                                                                    <AiFillEye
+                                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                        onClick={() =>
+                                                                            navigate(`/Customer/EMI-History/${item.id}`)}
+                                                                    />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                )
+                                            })
+                                        ) : (
+                                            null
+                                        )}
                                 </table>
+                                {
+                                    data?.data?.data?.CustomerAllPurchase?.length > 0 ?
+                                        null
+                                        :
+                                        <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                                            <BsPhone className='text-3xl' />
+                                            <h1 className='font-semibold'>Customer Not Found</h1>
+                                        </div>
+                                }
                             </div>
                         </div>
                     </div>
