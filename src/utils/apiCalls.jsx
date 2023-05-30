@@ -30,6 +30,18 @@ const instance = axios.create({
 // }
 
 
+export const AddInstallment = (PhoneInfo) => {
+  console.log(PhoneInfo)
+  return instance({
+    'url': '/installment/addinstallment',
+    'method': 'POST',
+    'fields': `${PhoneInfo}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 export const getAllInstallment = () => {
   return instance({
     'method': 'GET',
@@ -43,7 +55,7 @@ export const getAllInstallment = () => {
 export const getAllPurchase = () => {
   return instance({
     'method': 'GET',
-    'url': '/purchase',
+    'url': '/purchase/List',
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
@@ -103,7 +115,7 @@ export const getallSpecification = (id) => {
 export const getallReceipt = (search) => {
   return instance({
     'method': 'GET',
-  'url': `/receipt/${search}`,
+    'url': `/receipt/List/${search}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },

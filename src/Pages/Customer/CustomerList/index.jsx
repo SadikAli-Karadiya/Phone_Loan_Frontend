@@ -18,16 +18,16 @@ import { useQuery } from 'react-query'
 
 
 function CustomersList() {
+  const navigate = useNavigate();
   const [model, setModel] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
   const [isHoverDelete, setIsHoverDelete] = useState(false);
   const [selectedEMI, setSelectedEMI] = useState([]);
+  const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [installmentFormModal, setInstallmentFormModal] = useState(false);
   const installment = useQuery('installment', getAllInstallment)
-  const purchase = useQuery('purchase', getAllPurchase)
-  console.log(purchase?.data?.data)
-  const navigate = useNavigate();
+  const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
   const [data, setdata] = useState([
     {
       id: 1,
@@ -167,16 +167,28 @@ function CustomersList() {
   };
 
   const handlePendingPaidUpClick = (e) => {
-    // const filteredCustomer = data?.CustomersList?.filter((data) => {
-    //   if (e.target.value == 2) {
-    //     return data.CustomersList.pending == 0;
-    //   } else if (e.target.value == 1) {
-    //     return data.CustomersList.pending != 0;
-    //   } else {
-    //     return data?.CustomersList;
-    //   }
-    // });
-    // setSelectedEMI(filteredCustomer)
+
+    const filteredCustomer = selectedEMI?.filter((item) => {
+
+      const emiToBePaid = item.pending_amount;
+
+      const paidAmount = item.net_amount - item.pending_amount;
+
+      //   // 0 == all
+      //   // 1 == pending
+      //   // 2 == paidup
+      if (e.target.value == 1 && emiToBePaid) {
+        return item
+      }
+      else if (e.target.value == 2 && emiToBePaid <= paidAmount) {
+        return item
+      }
+      else if (e.target.value == 0) {
+        return item
+      }
+    });
+    setSelectedEMI(filteredCustomer)
+
   };
 
   const handleEditEMI = (id) => {
@@ -191,7 +203,6 @@ function CustomersList() {
     let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
       return n?.installment_id == id;
     });
-    console.log(Customer.length)
     setSelectedEMI(Customer)
     setSelectemi(id)
   };
@@ -215,6 +226,7 @@ function CustomersList() {
       }
     });
   };
+
 
   return (
     <>
@@ -331,28 +343,31 @@ function CustomersList() {
               <input
                 type="search"
                 placeholder='Search Customer'
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                value={search}
                 className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
               />
               <div className='bg-[#3399ff] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
-                         shadow-xl cursor-pointer text-white text-2xl '>
+                shadow-xl cursor-pointer text-white text-2xl '>
                 <BiSearch className='search group-hover:scale-125 duration-300' />
               </div>
             </div>
-            <div className="right flex items-center space-x-3 pr-6">
-              <button
-                id="year-btn"
-                className=" flex items-center drop-shadow-lg border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 " >
-                <select
-                  onChange={handlePendingPaidUpClick}
-                  name=""
-                  id=""
-                  className="cursor-pointer text-darkblue-500 text-base outline-none"
-                >
-                  <option value={0}>All</option>
-                  <option value={1}>Pending</option>
-                  <option value={2}>Paidup</option>
-                </select>
-              </button>
+            <div
+              id="year-btn"
+              className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 outline-none "
+            >
+              <select
+                onChange={handlePendingPaidUpClick}
+                name=""
+                id=""
+                className="cursor-pointer text-darkblue-500 text-base"
+              >
+                <option value={0}>All</option>
+                <option value={1}>Pending</option>
+                <option value={2}>Paidup</option>
+              </select>
             </div>
           </div>
           <table

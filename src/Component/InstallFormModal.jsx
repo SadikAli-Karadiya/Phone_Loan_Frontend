@@ -4,6 +4,9 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useQuery } from 'react-query'
+import { AddInstallment } from '../utils/apiCalls';
+
 
 function InstallmentFormModal({ showModal, handleShowModal }) {
   const [error, setError] = useState("");
@@ -45,15 +48,13 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
   };
 
   const installmentSchema = Yup.object({
-    installment: Yup.string().required("Please Enter Installment"),
-    dp: Yup.string().required("Please Enter Down Payment"),
-    charge: Yup.string().required("Please Enter Charges"),
+    month: Yup.string().required("Please Enter Installment"),
+    charges: Yup.string().required("Please Enter Charges"),
   });
 
   const initialValues = {
-    installment: "",
-    dp: "",
-    charge: "",
+    month : "",
+    charges : "",
   }
 
   const [value, setValue] = useState({
@@ -64,29 +65,29 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: value ? value : initialValues,
+      initialValues: initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
         try {
           const fd = new FormData();
           let ok = JSON.stringify({
-            PhoneInfo: data,
+            InstallmentInfo: fd,
           });
           fd.append("data", ok);
           // if (value) {
           //   fb.append("id", value.id);
           //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
           // } else {
-          // newsRegistration(fd).then();
+            AddInstallment(fd).then();
           // setPhoneInfo([...PhoneInfo, data])
-          const response = await setdata(data)
-          if (response.error) {
-            toast.error(response.error.data.message)
-          } else if (response.data.success) {
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleModalClose(false);
-          }
+          // const response = await setdata(data)
+          // if (response.error) {
+          //   toast.error(response.error.data.message)
+          // } else if (response.data.success) {
+          //   toast.success(response.data.message);
+          //   resetForm({ values: "" })
+          //   handleModalClose(false);
+          // }
         } catch (err) {
           toast.error(err.message);
         }
@@ -140,15 +141,15 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
                     type='text'
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    name="installment"
-                    id="installment"
-                    value={value.installment ? value.installment : values.installment}
+                    name="month"
+                    id="month"
+                    value={values.month}
                     placeholder='Enter Install'
                     className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-none"
                   />
-                  {errors.installment && touched.installment ? (
+                  {errors.month && touched.month ? (
                     <p className="form-error text-red-600 text-sm font-semibold">
-                      {errors.installment}
+                      {errors.month}
                     </p>
                   ) : null}
                 </div>
@@ -156,17 +157,17 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
                   <label htmlFor="model name " className="text-white">Charge * </label>
                   <input
                     type="text"
-                    name="charge"
-                    id="charge"
-                    value={value.charge ? value.charge : values.charge}
+                    name="charges"
+                    id="charges"
+                    value={values.charges}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-none"
                     placeholder="Enter Charge Amount "
                   />
-                  {errors.charge && touched.charge
+                  {errors.charges && touched.charges
                     ?
-                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
+                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.charges}</p>
                     :
                     null}
                 </div>

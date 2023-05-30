@@ -75,44 +75,43 @@ function SearchReciept() {
               CustomerReceipts?.length > 0
                 ?
                 ( */}
-        <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5 mt-5">
-          <h1 className='font-bold text-lg'>Customer List</h1>
+        <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden pt-5 mt-10 mx-10">
+          <h1 className='font-bold text-lg pl-10'>Customer List</h1>
           <table
-            className="w-full text-sm text-center rounded-xl  text-white  mt-5"
-            id="table-to-xls"
-          >
-            <thead className="text-xs uppercase bg-[#0d0d48]">
-              <tr className="text-sm">
-                <th scope="col" className="pl-3 py-4">
+            className="w-full text-sm text-center rounded-xl mt-5"
+            id="table-to-xls">
+            <thead className="bg-gray-100">
+              <tr className="font-light">
+                <th scope="col" className="pl-3 py-4 font-normal">
                   Date
                 </th>
-                <th scope="col" className="pl-3 py-4">
+                <th scope="col" className="pl-3 py-4 font-normal">
                   Receipt No
                 </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="px-6 py-4 font-normal">
                   Name
                 </th>
-                <th scope="col" className="px-6 py-4">
-                  Company
+                <th scope="col" className="px-3 py-4 text-start font-normal">
+                  Phone
                 </th>
-                <th scope="col" className="px-6 py-4">
-                  Model
-                </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="px-6 py-4 font-normal">
                   Installment
                 </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="px-6 py-4 font-normal">
                   Paid
                 </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="px-6 py-4 font-normal">
                   Total
                 </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="px-6 py-4 font-normal">
+                  Admin
+                </th>
+                <th scope="col" className="px-6 py-4 font-normal">
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+            <tbody className="bg-white text-black items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden h-20">
               <tr className=" border-b">
                 <td className="px-6 py-5">
                   001
@@ -123,24 +122,24 @@ function SearchReciept() {
                 <td className="px-6 py-5">
                   Shad
                 </td>
-                <td className="px-6 py-5">
-                  Vivo
-                </td>
-                <td className="px-6 py-5">
-                  F17
+                <td className="px-3 text-start py-5">
+                  Vivo | F17
                 </td>
                 <td className="px-6 py-5">
                   5
                 </td>
                 <td className="px-6 py-5">
-                  <h1 className='bg-green-300 text-green-900 font-bold py-[2px] rounded-md'>
+                  <h1 className='bg-green-300 text-green-900 font-bold rounded-md'>
                     5000
                   </h1>
                 </td>
                 <td className="px-6 py-5">
-                  <h1 className='bg-blue-200 text-blue-900 font-bold py-[2px] rounded-md'>
+                  <h1 className='bg-blue-200 text-blue-900 font-bold rounded-md'>
                     5000
                   </h1>
+                </td>
+                <td className="px-6 py-5">
+                  Israil
                 </td>
                 <td className="px-6 py-5">
                   <div className="flex justify-center items-center">
