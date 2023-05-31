@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import axios from 'axios'
+import qs from "qs";
 
 const instance = axios.create({
   baseURL: 'http://localhost:4000/',
@@ -29,15 +30,18 @@ const instance = axios.create({
 
 // }
 
+var formData = new FormData();
 
-export const AddInstallment = (PhoneInfo) => {
-  console.log(PhoneInfo)
+formData.append('month', '6');
+formData.append('charges', '1000');
+
+export const AddInstallment = () => {
   return instance({
     'url': '/installment/addinstallment',
     'method': 'POST',
-    'fields': `${PhoneInfo}`,
+    'data': formData,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': "multipart/form-data" // override instance defaults
     },
   })
 }
@@ -105,6 +109,16 @@ export const getAllPhone = () => {
 export const getallSpecification = (id) => {
   return instance({
     'method': 'GET',
+    'url': '/specification',
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+export const getallSpecificationById = (id) => {
+  return instance({
+    'method': 'GET',
     'url': `/specification/${id}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
@@ -118,6 +132,19 @@ export const getallReceipt = (search) => {
     'url': `/receipt/List/${search}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+var formData = new FormData();
+
+export const updateCustomerDetails = () => {
+  return instance({
+    'method': 'POST',
+    'url': `/customer/update`,
+    data: formData,
+    'headers': {
+      'content-type': 'multipart/form-data' // override instance defaults
     },
   })
 }

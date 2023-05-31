@@ -8,7 +8,7 @@ import { useQuery } from 'react-query'
 import { AddInstallment } from '../utils/apiCalls';
 
 
-function InstallmentFormModal({ showModal, handleShowModal }) {
+function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -53,41 +53,39 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
   });
 
   const initialValues = {
-    month : "",
-    charges : "",
+    month: "",
+    charges: "",
   }
 
-  const [value, setValue] = useState({
-    installment: "",
-    dp: "",
-    charge: "",
-  });
+  const UpdateInstallment = {
+    month: InstallmentDetails?.month,
+    charges: InstallmentDetails?.charges 
+  }
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: initialValues,
+      initialValues: is_Edit == true ? UpdateInstallment : initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
         try {
           const fd = new FormData();
           let ok = JSON.stringify({
-            InstallmentInfo: fd,
+            InstallmentInfo: data,
           });
           fd.append("data", ok);
           // if (value) {
           //   fb.append("id", value.id);
           //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
           // } else {
-            AddInstallment(fd).then();
-          // setPhoneInfo([...PhoneInfo, data])
-          // const response = await setdata(data)
-          // if (response.error) {
-          //   toast.error(response.error.data.message)
-          // } else if (response.data.success) {
-          //   toast.success(response.data.message);
-          //   resetForm({ values: "" })
-          //   handleModalClose(false);
-          // }
+          const response = await AddInstallment(fd)
+          console.log(response)
+          if (response.error) {
+            toast.error(response.error.data.message)
+          } else if (response.data.success) {
+            toast.success(response.data.message);
+            resetForm({ values: "" })
+            handleModalClose(false);
+          }
         } catch (err) {
           toast.error(err.message);
         }
@@ -133,7 +131,7 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
 
         <Modal.Description>
           <div className="px-4 py-4">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form method="POST" action="/installment/addinstallment" className="space-y-6" enctype='multipart/form-date' onSubmit={handleSubmit}>
               <div className="flex xs:flex-col items-center xs:space-y-4">
                 <div className="flex flex-col space-y-2  w-full ">
                   <label htmlFor="company" className="text-white">Installment *</label>
@@ -174,21 +172,31 @@ function InstallmentFormModal({ showModal, handleShowModal }) {
               </div>
 
               <div className="mt-5 text-right">
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-                </button>
+                {
+                  is_Edit == true ?
+                    <button
+                      type="button"
+                      // onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Update'}
+
+                    </button>
+                    :
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Submit'}
+
+                    </button>
+
+                }
               </div>
             </form>
-            {error != "" ? (
-              <div className="text-center">
-                <small className="text-red-500">{error}</small>
-              </div>
-            ) : null}
           </div>
         </Modal.Description>
       </Modal.Description>

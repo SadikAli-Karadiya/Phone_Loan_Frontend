@@ -16,7 +16,8 @@ function CustomerRegister() {
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
-            onSubmit: (values) => {
+            onSubmit: (data) => {
+                console.log(data , photo)
                 setIsLoadingOnSubmit(true);
                 resetForm({ values: "" })
             },
@@ -118,16 +119,16 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="whatsapp_no"
+                                                name="mobile"
                                                 placeholder="Enter Your WhatsApp No"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.whatsapp_no}
+                                                value={values.mobile}
                                                 className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                             />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.whatsapp_no && touched.whatsapp_no
-                                                    ? errors.whatsapp_no
+                                                {errors.mobile && touched.mobile
+                                                    ? errors.mobile
                                                     : null}
                                             </span>
                                         </label>
@@ -162,15 +163,15 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="refrence"
+                                                name="refrence_name"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.refrence}
+                                                value={values.refrence_name}
                                                 placeholder="Enter Refeence Name"
                                                 className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.refrence && touched.refrence
-                                                    ? errors.refrence
+                                                {errors.refrence_name && touched.refrence_name
+                                                    ? errors.refrence_name
                                                     : null}
                                             </span>
                                         </label>
@@ -182,16 +183,16 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="refrence_no"
+                                                name="refrence_mobile"
                                                 placeholder="Enter Refrence Mobile No"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.refrence_no}
+                                                value={values.refrence_mobile}
                                                 className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                             />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.refrence_no && touched.refrence_no
-                                                    ? errors.refrence_no
+                                                {errors.refrence_mobile && touched.refrence_mobile
+                                                    ? errors.refrence_mobile
                                                     : null}
                                             </span>
                                         </label>
@@ -452,8 +453,8 @@ function CustomerRegister() {
                                 <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>
                                     CLEAR
                                 </button>
-                                <button type="submit" disabled={isLoadingOnSubmit} className={`px-8 h-10 ${isLoadingOnSubmit ? 'opacity-40' : 'opacity-100'} bg-[#0d0d48] border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
-                                    {isLoadingOnSubmit ? 'Loading...' : 'SUBMIT'}
+                                <button type="submit"  className='bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center'>
+                                    SUBMIT
                                 </button>
                             </div>
                         </div>

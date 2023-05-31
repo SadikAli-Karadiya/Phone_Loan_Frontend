@@ -5,11 +5,24 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
+import { getAllPhone, getAllCompanies, getallSpecification } from "../utils/apiCalls";
+import { useQuery } from 'react-query'
 
 
 function NewPhoneFormModal({ showModal, handleShowModal }) {
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = React.useState();
+  const [isLoading, setIsLoading] = useState();
+  const [SelectedCompany, setSelectedCompany] = useState([]);
+  const [Company, setCompany] = useState("");
+  const [SelectModel, setSelectModel] = useState([]);
+  const [Model, setModel] = useState("");
+  const Company_Details = useQuery('company', getAllCompanies)
+  const [SelectSpecification, setSelectSpecification] = useState("");
+  const [Specification, setSpecification] = useState("");
+  const Phone_Details = useQuery('phone', getAllPhone)
+  const specification = useQuery('specification', getallSpecification)
+  // console.log(specification?.data?.data?.AllSpecification)
+  // console.log(Company_Details.data.data.all_companies)
 
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
@@ -65,6 +78,39 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
       height: "44px",
     }),
   };
+
+
+  function handleSelectCompany(event) {
+    let company_name = event.target.value
+    setCompany(company_name)
+    let Company = Phone_Details?.data?.data?.AllModel?.filter((n) => {
+      return n?.company?.company_name == company_name;
+    });
+    setSelectedCompany(Company)
+  };
+
+  function handleSelectModel(event) {
+    let Model_name = event.target.value
+    setModel(Model_name)
+    let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
+      return n?.phone?.model_name == Model_name;
+    });
+    console.log(Model)
+    setSelectModel(Model)
+  };
+
+
+  function handleSelectStorage(event) {
+    let specification = event.target.value
+    setSpecification(specification)
+    let Price = specification?.data?.data?.AllSpecification?.filter((n) => {
+      return n?.ram == specification;
+    });
+    console.log(Price)
+    // setSelectSpecification(Price)
+  };
+
+
 
   const handleModalClose = () => {
     resetForm("")
@@ -134,13 +180,18 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                       <select
                         name="company"
                         id="company"
-                        value={values.company}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        value={Company}
+                        onChange={handleSelectCompany}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                         <option value="">Select Company</option>
-                        <option value="Oppo">Oppo</option>
-                        <option value="Vivo">Vivo</option>
+                        {
+                          Company_Details?.data?.data?.all_companies?.map((company, index) => {
+                            return (
+                              <option
+                                key={index} value={company.company_name}>{company.company_name}</option>
+                            )
+                          })
+                        }
                       </select>
                     </label>
                     <span className="text-xs font-semibold text-red-600 px-1">
@@ -151,48 +202,61 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                   <div className="selectinst w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Model *
                       </span>
                       <select
                         name="model"
                         id="model"
-                        value={values.model}
-                        onChange={handleChange}
+                        value={Model}
+                        onChange={handleSelectModel}
                         onBlur={handleBlur}
-                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-
-                      >
+                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                         <option value="">Select Model</option>
-                        <option value="F17">F17</option>
-                      </select>
+                        {
+                          SelectedCompany.map((model, index) => {
+                            return (
+                              <option
+                                key={index} value={model.model_name}>{model.model_name}</option>
+                            )
+                          })
+                        }                      </select>
                     </label>
                     <span className="text-xs font-semibold text-red-600 px-1">
                       {errors.model && touched.model ? errors.model : null}
                     </span>
                   </div>
-                  <div className="dp w-full">
-                    <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
-                        Price *
-                      </span>
-                      <input
-                        type="text"
-                        name="price"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.price}
-                        placeholder="Enter Down Payment"
-                        className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                      />
+                  <div className="flex items-center w-full gap-2">
+                    <div className="storage w-full">
+                      <label className="block">
+                        <span className="block text-sm font-medium text-white">
+                          Storage *
+                        </span>
+                        <select
+                          name="storage"
+                          id="storage"
+                          value={Specification}
+                          onChange={handleSelectStorage}
+                          className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                          <option value="">RAM / Storage</option>
+                          {
+                            SelectModel?.map((specification, index) => {
+                              return (
+                                <option
+                                  key={index} value={specification.ram && specification.storage}>{specification.ram} / {specification.storage}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      </label>
                       <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.price && touched.price ? errors.price : null}
+                        {errors.company && touched.company ? errors.company : null}
                       </span>
-                    </label>
+                    </div>
                   </div>
                 </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                  <div className="selectinst w-full">
+                  <div className="installment w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-slate-700">
                         Installment *
@@ -213,6 +277,27 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                       {errors.installment && touched.installment ? errors.installment : null}
                     </span>
                   </div>
+                  <div className="price w-full">
+                    <label className="block">
+                      <span className="block text-sm font-medium text-slate-700">
+                        Price *
+                      </span>
+                      <input
+                        type="text"
+                        name="price"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={SelectSpecification}
+                        placeholder="Enter Price"
+                        className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                      />
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.price && touched.price ? errors.price : null}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                   <div className="dp w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-slate-700">
@@ -232,8 +317,6 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                       </span>
                     </label>
                   </div>
-                </div>
-                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                   <div className="totalfee w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-slate-700">

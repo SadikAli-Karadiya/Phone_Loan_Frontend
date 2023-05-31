@@ -13,7 +13,7 @@ function EMIHistory() {
     const params = useParams();
     const [chargeFormModal, setChargeFormModal] = React.useState(false);
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-    console.log(data?.data?.data?.AllEmi)
+
     return (
         <>
             <div className='xs:px-5 sm:px-10 sm:py-5 h-full'>

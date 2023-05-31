@@ -19,13 +19,14 @@ import { useQuery } from 'react-query'
 
 function CustomersList() {
   const navigate = useNavigate();
-  const [model, setModel] = useState(false);
+  const [is_Edit, setIsEdit] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
   const [isHoverDelete, setIsHoverDelete] = useState(false);
   const [selectedEMI, setSelectedEMI] = useState([]);
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [installmentFormModal, setInstallmentFormModal] = useState(false);
+  const [InstallmentDetails, setInstallmentDetails] = useState();
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
   const [data, setdata] = useState([
@@ -192,11 +193,12 @@ function CustomersList() {
   };
 
   const handleEditEMI = (id) => {
-    let updateEMI = data?.find((n) => {
+    let Installment = installment?.data?.data?.AllInstallment?.find((n) => {
       return n?.id == id;
     });
-    setValue(updateEMI);
-    setModel(true);
+    setIsEdit(true)
+    setInstallmentDetails(Installment);
+    setInstallmentFormModal(true);
   };
 
   const handleSelectEMI = (id) => {
@@ -376,16 +378,19 @@ function CustomersList() {
             <thead className="text-xs uppercase bg-[#3399ff] ">
               <tr className=" text-sm ">
                 <th scope="col" className="pl-3 py-4">
-                  Serial No
-                </th>
-                <th scope="col" className="pl-3 py-4">
                   Customer Id
                 </th>
-                <th scope="col" className="px-6 py-4">
+                <th scope="col" className="pl-3 py-4">
                   Name
                 </th>
                 <th scope="col" className="px-6 py-4">
-                  Phone
+                  Mobile
+                </th>
+                <th scope="col" className="px-6 py-4">
+                  Compnay
+                </th>
+                <th scope="col" className="px-6 py-4">
+                  Model
                 </th>
                 <th scope="col" className="px-6 py-4">
                   Total
@@ -409,16 +414,19 @@ function CustomersList() {
                       className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                       <tr className=" border-b">
                         <th className="py-5 px-6">
-                          {index + 1}
+                          {item.customer_id}
                         </th>
                         <td className="px-6 py-5 text-gray-500">
-                          {item.customer_id}
-                        </td>
-                        <td className="px-6 py-5 capitalize">
                           {item.customer.first_name}
                         </td>
-                        <td className="px-6 py-5">
+                        <td className="px-6 py-5 capitalize">
                           {item.customer.mobile}
+                        </td>
+                        <td className="px-6 py-5">
+                          Oppo
+                        </td>
+                        <td className="px-6 py-5">
+                          F17
                         </td>
                         <td className="px-6 py-5">
                           {item.net_amount}
@@ -464,8 +472,9 @@ function CustomersList() {
         <InstallmentFormModal
           showModal={installmentFormModal}
           handleShowModal={setInstallmentFormModal}
-        // refetchData={refetchData}
-        // tournamentDetails={tournamentDetails}
+          // refetchData={refetchData}
+          InstallmentDetails={InstallmentDetails}
+          is_Edit={is_Edit}
         />
         {/* 
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>

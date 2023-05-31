@@ -16,7 +16,7 @@ import { MdSdStorage } from "react-icons/md";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import SpecificationFormModal from '../../../Component/SpecificationFormModal';
-import { getallSpecification } from "../../../utils/apiCalls"
+import { getallSpecificationById } from "../../../utils/apiCalls"
 import { useQuery } from 'react-query'
 
 
@@ -28,7 +28,7 @@ function ProductDetails() {
     const [value, setValue] = React.useState();
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
     const [specificationFormModal, setspecificationFormModal] = React.useState(false);
-    const Spacification = useQuery(['spacification', params.id], () => getallSpecification(params.id))
+    const Spacification = useQuery(['spacification', params.id], () => getallSpecificationById(params.id))
     console.log(Spacification?.data?.data)
 
     const handleDelete = async (id) => {

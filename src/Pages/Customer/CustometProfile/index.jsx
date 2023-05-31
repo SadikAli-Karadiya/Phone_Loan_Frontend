@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
-import { customerSchema, initialValues } from "../../../Component/CustomerSchema";
 import "../../Customer/CustomerRegister/Customerform.css"
 import { FaUserEdit } from "react-icons/fa"
 import { AiFillEye } from "react-icons/ai";
@@ -10,10 +9,142 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { BiFolderPlus } from "react-icons/bi";
 import NewPhoneFormModel from '../../../Component/NewPhoneFormModal';
-import { getPurchaseCustomerbyId } from '../../../utils/apiCalls';
-import { useQuery } from 'react-query'
+import { getPurchaseCustomerbyId, updateCustomerDetails } from '../../../utils/apiCalls';
+import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
+import { toast } from "react-toastify";
+import * as Yup from "yup";
 
+const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
+
+function isValidFileType(fileName, fileType) {
+    return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
+}
+
+const customerSchema = Yup.object({
+    first_name: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(2, "Minimum 2 characters are required")
+        .required("Please Enter Your First Name")
+        .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
+
+    last_name: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(2, "Minimum 2 characters are required")
+        .required("Please Enter Your Last Name")
+        .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
+
+    mobile: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(10, "Please enter valid mobile no")
+        .max(10, "Please enter valid mobile no")
+        .required("Please Enter Your Mobile Number"),
+
+    alternate_mobile: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
+
+    reference_name: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(2, "Minimum 2 characters are required")
+        .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
+
+    refrence_mobile: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(10, "Please enter valid mobile no")
+        .max(10, "Please enter valid mobile no"),
+
+    // adhar_front: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg , jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // adhar_back: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // pan: Yup.mixed()
+    //     .test("is-valid-type", "PAN Card should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // light_bill: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+
+});
 
 function CustomerProfile() {
     const navigate = useNavigate();
@@ -27,15 +158,57 @@ function CustomerProfile() {
     const [isEnable, setIsEnable] = React.useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
     const data = useQuery(['customer', params.id], () => getPurchaseCustomerbyId(params.id))
-    console.log(data?.data?.data?.CustomerAllPurchase?.length)
+    const {mutate, isLoading} = useMutation(updateCustomerDetails)
     const Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
+
+
+    const initialValues = {
+        first_name: "",
+        last_name: "",
+        mobile: "",
+        alternate_no: "",
+        refrence_name: "",
+        refrence_mobile: "",
+        // adhar_front: "",
+        // adhar_back: "",
+        // pan: "",
+        // light_bill: ""
+    }
+
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
-            initialValues: initialValues,
+            initialValues: Customer_details ? Customer_details : initialValues,
             validationSchema: customerSchema,
-            onSubmit: (values) => {
-                setIndex(2);
-                dispatch(setBasicInfoForm({ ...values, logo: photo }));
+            async onSubmit(data) {
+                try {
+                    const fd = new FormData();
+                    fd.append("first_name", data.first_name)
+                    fd.append("last_name", data.last_name)
+                    fd.append("mobile", data.mobile)
+                    fd.append("alternate_no", data.alternate_no)
+                    fd.append("refrence_name", data.refrence_name)
+                    fd.append("refrence_mobile", data.refrence_mobile)
+                    mutate(fd)
+                    // let ok = JSON.stringify({
+                    //     InstallmentInfo: data,
+                    // });
+                    // fd.append("data", ok);
+                    // // if (value) {
+                    // //   fb.append("id", value.id);
+                    // //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
+                    // // } else {
+                    // const response = await AddInstallment(fd)
+                    // console.log(response)
+                    // if (response.error) {
+                    //     toast.error(response.error.data.message)
+                    // } else if (response.data.success) {
+                    //     toast.success(response.data.message);
+                    //     resetForm({ values: "" })
+                    //     handleModalClose(false);
+                    // }
+                } catch (err) {
+                    toast.error(err.message);
+                }
             },
         });
 
@@ -57,7 +230,6 @@ function CustomerProfile() {
         setIsEnable(true);
         setToggle(false);
     }
-
 
     const handleClick = (e) => {
         resetForm({ values: "" })
@@ -81,7 +253,7 @@ function CustomerProfile() {
                 </div>
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" onSubmit={handleSubmit}>
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" enctype='multipart/form-date' action="/customer/update" method="POST" onSubmit={handleSubmit}>
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
@@ -103,7 +275,7 @@ function CustomerProfile() {
                                                                 id="logo"
                                                                 className="rounded-md w-16"
                                                                 accept=".png, .jpg, .jpeg"
-                                                                name="logo"
+                                                                name="photo"
                                                                 onChange={(e) => handleImageUpload(e)}
                                                                 onBlur={handleBlur}
                                                                 onInput={(e) => handleImageUpload(e)}
@@ -126,7 +298,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your First Name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.first_name ? Customer_details?.first_name : values.first_name}
+                                                        value={values.first_name}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
@@ -148,7 +320,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your Last Name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.last_name ? Customer_details?.last_name : values.last_name}
+                                                        value={values.last_name}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '
                                                     />
@@ -166,17 +338,17 @@ function CustomerProfile() {
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        name="whatsapp_no"
+                                                        name="mobile"
                                                         placeholder="Enter Your WhatsApp No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.mobile ? Customer_details?.mobile : values.whatsapp_no}
+                                                        value={values.mobile}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.whatsapp_no && touched.whatsapp_no
-                                                            ? errors.whatsapp_no
+                                                        {errors.mobile && touched.mobile
+                                                            ? errors.mobile
                                                             : null}
                                                     </span>
                                                 </label>
@@ -194,7 +366,7 @@ function CustomerProfile() {
                                                         placeholder="Enter Your Mobile No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.alternate_no ? Customer_details?.alternate_no : values.alternate_no}
+                                                        value={values.alternate_no}
                                                         disabled={isEnable}
                                                         className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none ${errors.alternate_no && 'border-red-600'}`}
                                                     />
@@ -212,16 +384,16 @@ function CustomerProfile() {
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        name="refrence"
+                                                        name="reference_name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.reference_name ? Customer_details?.reference_name : values.refrence}
+                                                        value={values.reference_name}
                                                         disabled={isEnable}
                                                         placeholder="Enter Refeence Name"
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.refrence && touched.refrence
-                                                            ? errors.refrence
+                                                        {errors.reference_name && touched.reference_name
+                                                            ? errors.reference_name
                                                             : null}
                                                     </span>
                                                 </label>
@@ -233,17 +405,17 @@ function CustomerProfile() {
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        name="refrence_no"
+                                                        name="reference_mobile"
                                                         placeholder="Enter Refrence Mobile No"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={Customer_details?.reference_mobile ? Customer_details?.reference_mobile : values.refrence_no}
+                                                        value={values.reference_mobile}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.refrence_no && touched.refrence_no
-                                                            ? errors.refrence_no
+                                                        {errors.reference_mobile && touched.reference_mobile
+                                                            ? errors.reference_mobile
                                                             : null}
                                                     </span>
                                                 </label>
@@ -251,7 +423,7 @@ function CustomerProfile() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                        <div className="flex justify-between w-full">
+                                        {/* <div className="flex justify-between w-full">
                                             <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
                                                 <img
                                                     src="/images/adhar.webp"
@@ -333,7 +505,7 @@ function CustomerProfile() {
                                                         null
                                                 }
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="flex pt-10 ">
                                             <div>
                                                 {!toggle ? (
@@ -358,8 +530,9 @@ function CustomerProfile() {
                                                                 <FaUserEdit className="text-xl" />
                                                                 Cancel
                                                             </button>
-                                                            <button
+                                                            {/* <button
                                                                 type="submit"
+                                                                onClick={handleSubmit}
                                                                 disabled={isLoadingOnSubmit}
                                                                 className={`py-2 px-3 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white 
                                                                 ${isLoadingOnSubmit ? "opacity-40" : "opacity-100"
@@ -367,6 +540,11 @@ function CustomerProfile() {
                                                             >
                                                                 <FaUserEdit className="text-xl" />
                                                                 {isLoadingOnSubmit ? "Loading..." : "SUBMIT"}
+                                                            </button> */}
+                                                            <button
+                                                                type="button"
+                                                                onClick={handleSubmit}>
+                                                                Submit
                                                             </button>
                                                         </div>
                                                     </div>
@@ -414,7 +592,6 @@ function CustomerProfile() {
                                     {
                                         data?.data?.data?.CustomerAllPurchase?.length > 0 ? (
                                             data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
-                                                console.log(item)
                                                 return (
                                                     <tbody key={index} className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                         <tr className=" border-b">

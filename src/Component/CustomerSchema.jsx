@@ -1,5 +1,11 @@
 import * as Yup from "yup";
 
+const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
+
+function isValidFileType(fileName, fileType) {
+  return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
+}
+
 export const customerSchema = Yup.object({
     first_name: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
@@ -23,7 +29,7 @@ export const customerSchema = Yup.object({
         .required("Please Enter Your Last Name")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
-    whatsapp_no: Yup.string()
+    mobile: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -43,7 +49,7 @@ export const customerSchema = Yup.object({
         })
         .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
 
-    refrence: Yup.string()
+        reference_name : Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -53,7 +59,7 @@ export const customerSchema = Yup.object({
         .min(2, "Minimum 2 characters are required")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
-    refrence_no: Yup.string()
+    refrence_mobile: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -64,7 +70,6 @@ export const customerSchema = Yup.object({
         .max(10, "Please enter valid mobile no"),
 
     date: Yup.date()
-        .max(new Date(), 'Please select valid date')
         .required("Please Enter Date")
         .nullable(),
 
@@ -78,8 +83,6 @@ export const customerSchema = Yup.object({
 
     dp: Yup.string().required("Please Enter Down Payment"),
 
-    net_payable: Yup.string(),
-
     note: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
@@ -88,79 +91,80 @@ export const customerSchema = Yup.object({
             return true;
         }),
 
-    adhar_front: Yup.mixed()
-        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-            value => {
-                if (!value) {
-                    return true; // skip validation if value is empty
-                }
-                return isValidFileType(value && value.name.toLowerCase(), "image")
-            })
-        .required("Please Enter Adhar Card")
-        .test("is-valid-size", "Max allowed size is 2MB", value => {
-            if (!value) {
-                return true;
-            }
-            return value && value.size <= 2097152
-        }),
-    adhar_back: Yup.mixed()
-        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-            value => {
-                if (!value) {
-                    return true; // skip validation if value is empty
-                }
-                return isValidFileType(value && value.name.toLowerCase(), "image")
-            })
-        .required("Please Enter Adhar Card")
-        .test("is-valid-size", "Max allowed size is 2MB", value => {
-            if (!value) {
-                return true;
-            }
-            return value && value.size <= 2097152
-        }),
-    pan: Yup.mixed()
-        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-            value => {
-                if (!value) {
-                    return true; // skip validation if value is empty
-                }
-                return isValidFileType(value && value.name.toLowerCase(), "image")
-            })
-        .required("Please Enter Adhar Card")
-        .test("is-valid-size", "Max allowed size is 2MB", value => {
-            if (!value) {
-                return true;
-            }
-            return value && value.size <= 2097152
-        }),
-    light_bill: Yup.mixed()
-        .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-            value => {
-                if (!value) {
-                    return true; // skip validation if value is empty
-                }
-                return isValidFileType(value && value.name.toLowerCase(), "image")
-            })
-        .test("is-valid-size", "Max allowed size is 2MB", value => {
-            if (!value) {
-                return true;
-            }
-            return value && value.size <= 2097152
-        }),
+    // adhar_front: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg , jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // adhar_back: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // pan: Yup.mixed()
+    //     .test("is-valid-type", "PAN Card should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .required("Please Enter Adhar Card")
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
+    // light_bill: Yup.mixed()
+    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
+    //         value => {
+    //             if (!value) {
+    //                 return true; // skip validation if value is empty
+    //             }
+    //             return isValidFileType(value && value.name, "image")
+    //         })
+    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
+    //         if (!value) {
+    //             return true;
+    //         }
+    //         return value && value.size <= 2097152
+    //     }),
 
 });
 
 
 export const initialValues = {
+    photo : "",
     first_name: "",
     last_name: "",
-    whatsapp_no: "",
-    alternate_mobile: "",
+    mobile: "",
+    alternate_no : "",
     dob: "",
     gender: "",
     address: "",
-    refrence: "",
-    refrence_no: "",
+    refrence_name : "",
+    refrence_mobile: "",
     date: "",
     company: "",
     model: "",

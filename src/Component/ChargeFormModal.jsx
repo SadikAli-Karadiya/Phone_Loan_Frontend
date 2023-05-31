@@ -93,7 +93,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Add Model
+          Pay Emi
         </Modal.Title>
         <button
           type="button"

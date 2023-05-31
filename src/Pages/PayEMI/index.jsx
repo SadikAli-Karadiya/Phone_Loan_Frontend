@@ -3,18 +3,18 @@ import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import "../../App.css"
 import { useNavigate } from "react-router-dom";
-import { IoMdInformationCircle } from "react-icons/io";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useMutation } from 'react-query'
+import ChargeFormModal from '../../Component/ChargeFormModal';
 
 
 function PayEMI() {
   const navigate = useNavigate();
 
-  const {isLoading, isError, error, mutate} = useMutation((data)=>{console.log(data)}, {retry: 3})
-
+  const { isLoading, isError, error, mutate } = useMutation((data) => { console.log(data) }, { retry: 3 })
+  const [chargeFormModal, setChargeFormModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [showNotFound, setShowNotFound] = useState(-1)
@@ -252,9 +252,7 @@ function PayEMI() {
                 <td className="px-6 py-5 ">
                   <div className="flex justify-center space-x-3">
                     <button
-                      onClick={() =>{
-                        mutate({name:'sadik', email: 'sadik@email'})
-                        navigate(`/Receipt/Generate`)}}
+                      onClick={() => setChargeFormModal(true)}
                       className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
                       Pay
                     </button>
@@ -278,6 +276,13 @@ function PayEMI() {
                 )
             )
         } */}
+
+        <ChargeFormModal
+          showModal={chargeFormModal}
+          handleShowModal={setChargeFormModal}
+        // refetchData={refetchData}
+        // tournamentDetails={tournamentDetails}
+        />
       </div>
     </>
   )
