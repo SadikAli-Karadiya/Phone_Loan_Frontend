@@ -2,7 +2,6 @@ import * as Yup from "yup";
 
 export const NewPhoneSchema = Yup.object({
     date: Yup.date()
-        .max(new Date(), 'Please select valid date')
         .required("Please Enter Date")
         .nullable(),
 

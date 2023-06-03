@@ -5,7 +5,7 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
-import { getAllPhone, getAllCompanies, getallSpecification } from "../utils/apiCalls";
+import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 
 
@@ -16,19 +16,21 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
   const [Company, setCompany] = useState("");
   const [SelectModel, setSelectModel] = useState([]);
   const [Model, setModel] = useState("");
-  const Company_Details = useQuery('company', getAllCompanies)
   const [SelectSpecification, setSelectSpecification] = useState("");
   const [Specification, setSpecification] = useState("");
+  const [Down_Payment, setDownPayment] = useState("");
+  const Company_Details = useQuery('company', getAllCompanies)
   const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
-  // console.log(specification?.data?.data?.AllSpecification)
+  const Installment = useQuery('installment', getAllInstallment)
+  // console.log(Installment?.data?.data?.AllInstallment)
   // console.log(Company_Details.data.data.all_companies)
 
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues: NewPhoneValues,
       validationSchema: NewPhoneSchema,
-      async onSubmit(date) {
+      async onSubmit(data) {
         try {
           const response = await setdata(data)
           if (response.error) {
@@ -95,23 +97,30 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
     let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
       return n?.phone?.model_name == Model_name;
     });
-    console.log(Model)
     setSelectModel(Model)
   };
 
 
   function handleSelectStorage(event) {
-    let specification = event.target.value
-    setSpecification(specification)
-    let Price = specification?.data?.data?.AllSpecification?.filter((n) => {
-      return n?.ram == specification;
+    let storage = event.target.value
+    setSpecification(storage)
+    let Price = specification?.data?.data?.AllSpecification?.find((n) => {
+      return n?.storage == storage;
     });
-    console.log(Price)
-    // setSelectSpecification(Price)
+    setSelectSpecification(Price.price)
   };
 
+  // function handledp(event) {
+  //   let down_payment = event.target.value
+  //   console.log(down_payment)
+  //   // setDownPayment(storage)
+  // };
 
-
+  
+  let net_payable = ( SelectSpecification + Down_Payment )
+  
+  console.log(net_payable)
+  
   const handleModalClose = () => {
     resetForm("")
     handleShowModal(false);
@@ -156,7 +165,7 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                   <div className="date w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Date *
                       </span>
                       <input
@@ -174,7 +183,7 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                   </div>
                   <div className="selectinst w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Company *
                       </span>
                       <select
@@ -194,12 +203,12 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         }
                       </select>
                     </label>
-                    <span className="text-xs font-semibold text-red-600 px-1">
+                    {/* <span className="text-xs font-semibold text-red-600 px-1">
                       {errors.company && touched.company ? errors.company : null}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
-                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="selectinst w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-white">
@@ -220,11 +229,12 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                                 key={index} value={model.model_name}>{model.model_name}</option>
                             )
                           })
-                        }                      </select>
+                        }
+                      </select>
                     </label>
-                    <span className="text-xs font-semibold text-red-600 px-1">
+                    {/* <span className="text-xs font-semibold text-red-600 px-1">
                       {errors.model && touched.model ? errors.model : null}
-                    </span>
+                    </span> */}
                   </div>
                   <div className="flex items-center w-full gap-2">
                     <div className="storage w-full">
@@ -249,37 +259,16 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                           }
                         </select>
                       </label>
-                      <span className="text-xs font-semibold text-red-600 px-1">
+                      {/* <span className="text-xs font-semibold text-red-600 px-1">
                         {errors.company && touched.company ? errors.company : null}
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
-                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                  <div className="installment w-full">
-                    <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
-                        Installment *
-                      </span>
-                      <select
-                        name="installment"
-                        id="installment"
-                        value={values.installment}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                        <option value="">Select Installment</option>
-                        <option value="2">For 2 Month</option>
-                        <option value="3">For 3 Month</option>
-                      </select>
-                    </label>
-                    <span className="text-xs font-semibold text-red-600 px-1">
-                      {errors.installment && touched.installment ? errors.installment : null}
-                    </span>
-                  </div>
+                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="price w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Price *
                       </span>
                       <input
@@ -291,35 +280,61 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         placeholder="Enter Price"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      <span className="text-xs font-semibold text-red-600 px-1">
+                      {/* <span className="text-xs font-semibold text-red-600 px-1">
                         {errors.price && touched.price ? errors.price : null}
-                      </span>
+                      </span> */}
                     </label>
                   </div>
+                  <div className="installment w-full">
+                    <label className="block">
+                      <span className="block text-sm font-medium text-white">
+                        Installment *
+                      </span>
+                      <select
+                        name="installment"
+                        id="installment"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.installment}
+                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                        <option value="">Select Installment</option>
+                        {
+                          Installment?.data?.data?.AllInstallment?.map((installment, index) => {
+                            return (
+                              <option
+                                key={index} value={installment.month}>{installment.month} Month</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </label>
+                    {/* <span className="text-xs font-semibold text-red-600 px-1">
+                      {errors.installment && touched.installment ? errors.installment : null}
+                    </span> */}
+                  </div>
                 </div>
-                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full ">
                   <div className="dp w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Down Payment *
                       </span>
                       <input
                         type="text"
                         name="dp"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.dp}
+                        onChange={e => setDownPayment(e.target.value)}
+                        value={Down_Payment}
                         placeholder="Enter Down Payment"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      <span className="text-xs font-semibold text-red-600 px-1">
+                      {/* <span className="text-xs font-semibold text-red-600 px-1">
                         {errors.dp && touched.dp ? errors.dp : null}
-                      </span>
+                      </span> */}
                     </label>
                   </div>
                   <div className="totalfee w-full">
                     <label className="block">
-                      <span className="block text-sm font-medium text-slate-700">
+                      <span className="block text-sm font-medium text-white">
                         Total Fee
                       </span>
                       <input
