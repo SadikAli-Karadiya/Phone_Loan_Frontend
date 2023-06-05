@@ -19,6 +19,8 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
   const [SelectSpecification, setSelectSpecification] = useState("");
   const [Specification, setSpecification] = useState("");
   const [Down_Payment, setDownPayment] = useState("");
+  const [SelectInstallment, setSelectInstallment] = useState([]);
+  const [installment, setinstallment] = useState("");
   const Company_Details = useQuery('company', getAllCompanies)
   const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
@@ -31,8 +33,17 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
       initialValues: NewPhoneValues,
       validationSchema: NewPhoneSchema,
       async onSubmit(data) {
+        if (Company === null) {
+          toast.error("Please select team captain");
+          return;
+        }
         try {
-          const response = await setdata(data)
+          const fb = new FormData();
+          let ok = JSON.stringify({
+            PhoneInfo: data,
+            company_name: Company,
+          });
+          // const response = await setdata(data)
           if (response.error) {
             toast.error(response.error.data.message)
           } else if (response.data.success) {
@@ -100,7 +111,6 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
     setSelectModel(Model)
   };
 
-
   function handleSelectStorage(event) {
     let storage = event.target.value
     setSpecification(storage)
@@ -110,21 +120,34 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
     setSelectSpecification(Price.price)
   };
 
+  function handleSelectInstallment(event) {
+    let month = event.target.value
+    setinstallment(month)
+    let Charge = Installment?.data?.data?.AllInstallment?.find((n) => {
+      return n?.month == month;
+    });
+    // console.log(Charge)
+    setSelectInstallment(Charge.charges)
+  };
+
+  const Net_playable = (SelectInstallment + SelectSpecification)
+
   // function handledp(event) {
   //   let down_payment = event.target.value
   //   console.log(down_payment)
   //   // setDownPayment(storage)
   // };
 
-  
-  let net_payable = ( SelectSpecification + Down_Payment )
-  
-  console.log(net_payable)
-  
+
+  // let net_payable = SelectSpecification +
+
+  // console.log(SelectSpecification)
+
   const handleModalClose = () => {
     resetForm("")
     handleShowModal(false);
   };
+
 
   return (
     <Modal open={showModal}
@@ -187,8 +210,8 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         Company *
                       </span>
                       <select
-                        name="company"
-                        id="company"
+                        name="company_name"
+                        id="company_name"
                         value={Company}
                         onChange={handleSelectCompany}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
@@ -215,8 +238,8 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         Model *
                       </span>
                       <select
-                        name="model"
-                        id="model"
+                        name="model_name"
+                        id="model_name"
                         value={Model}
                         onChange={handleSelectModel}
                         onBlur={handleBlur}
@@ -291,11 +314,10 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         Installment *
                       </span>
                       <select
-                        name="installment"
-                        id="installment"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.installment}
+                        name="month"
+                        id="month"
+                        onChange={handleSelectInstallment}
+                        value={installment}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                         <option value="">Select Installment</option>
                         {
@@ -341,17 +363,15 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                         type="text" id='totalfee'
                         name="net_payable"
                         disabled={true}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.net_payable}
+                        value={Net_playable}
                         placeholder="Enter Net Payable Amount"
                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      <span className="text-xs font-semibold text-red-600 px-1">
+                      {/* <span className="text-xs font-semibold text-red-600 px-1">
                         {errors.net_payable && touched.net_payable
                           ? errors.net_payable
                           : null}
-                      </span>
+                      </span> */}
                     </label>
                   </div>
                 </div>

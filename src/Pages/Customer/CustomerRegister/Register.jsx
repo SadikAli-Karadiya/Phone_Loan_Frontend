@@ -4,12 +4,16 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { customerSchema, initialValues } from "../../../Component/CustomerSchema";
 import "../../Customer/CustomerRegister/Customerform.css"
+import { AddCustomer } from "../../../utils/apiCalls"
+import { useMutation, useQuery } from 'react-query'
 
 function CustomerRegister() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = useState(defaultImage);
     const [photo, setPhoto] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+    const { mutate, isLoading , response } = useMutation(AddCustomer)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
 
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
@@ -17,9 +21,21 @@ function CustomerRegister() {
             initialValues: initialValues,
             validationSchema: customerSchema,
             onSubmit: (data) => {
-                console.log(data , photo)
-                setIsLoadingOnSubmit(true);
-                resetForm({ values: "" })
+                const fb = new FormData();
+                let ok = JSON.stringify({
+                    CustomerInfo: data,
+                });
+                fb.append("data", ok);
+                fb.append("team_logo", logo);
+                mutate(fb)
+                // if (response.data.success == false) {
+                //     toast.error(response.data.message);
+                //     console.log(response.data.message)
+                // }
+                // else if (response.data.success) {
+                //     toast.success(response.data.message)
+                //     resetForm({ values: "" })
+                // }
             },
         });
 
@@ -199,7 +215,7 @@ function CustomerRegister() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex flex-col justify-center items-center w-full xl:gap-1">
+                            {/* <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                     <div className="date w-full">
                                         <label className="block">
@@ -371,7 +387,7 @@ function CustomerRegister() {
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                             <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
@@ -453,7 +469,7 @@ function CustomerRegister() {
                                 <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>
                                     CLEAR
                                 </button>
-                                <button type="submit"  className='bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center'>
+                                <button type="submit" className='bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center'>
                                     SUBMIT
                                 </button>
                             </div>

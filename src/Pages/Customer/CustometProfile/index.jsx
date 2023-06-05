@@ -423,7 +423,7 @@ function CustomerProfile() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                        {/* <div className="flex justify-between w-full">
+                                        <div className="flex justify-between w-full">
                                             <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
                                                 <img
                                                     src="/images/adhar.webp"
@@ -505,7 +505,7 @@ function CustomerProfile() {
                                                         null
                                                 }
                                             </div>
-                                        </div> */}
+                                        </div>
                                         <div className="flex pt-10 ">
                                             <div>
                                                 {!toggle ? (
@@ -530,7 +530,7 @@ function CustomerProfile() {
                                                                 <FaUserEdit className="text-xl" />
                                                                 Cancel
                                                             </button>
-                                                            {/* <button
+                                                            <button
                                                                 type="submit"
                                                                 onClick={handleSubmit}
                                                                 disabled={isLoadingOnSubmit}
@@ -540,11 +540,6 @@ function CustomerProfile() {
                                                             >
                                                                 <FaUserEdit className="text-xl" />
                                                                 {isLoadingOnSubmit ? "Loading..." : "SUBMIT"}
-                                                            </button> */}
-                                                            <button
-                                                                type="button"
-                                                                onClick={handleSubmit}>
-                                                                Submit
                                                             </button>
                                                         </div>
                                                     </div>

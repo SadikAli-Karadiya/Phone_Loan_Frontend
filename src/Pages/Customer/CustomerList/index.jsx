@@ -27,8 +27,10 @@ function CustomersList() {
   const [pageNo, setPageNo] = useState(1);
   const [installmentFormModal, setInstallmentFormModal] = useState(false);
   const [InstallmentDetails, setInstallmentDetails] = useState();
+  const [Selectemi, setSelectemi] = useState("")
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
+  // console.log(purchase?.data?.data?.AllPurchase)
   const [data, setdata] = useState([
     {
       id: 1,
@@ -127,7 +129,6 @@ function CustomersList() {
       ]
     },
   ])
-  const [Selectemi, setSelectemi] = useState("")
   const bgColors = [
     "#ffd6d6",
     "#bfdbfe",
@@ -151,6 +152,7 @@ function CustomersList() {
     "#ca8a04",
   ];
 
+
   const handleMouseEnterEdit = () => {
     setIsHoverEdit(true);
   };
@@ -168,8 +170,8 @@ function CustomersList() {
   };
 
   const handlePendingPaidUpClick = (e) => {
-
-    const filteredCustomer = selectedEMI?.filter((item) => {
+    console.log(e.target.value)
+    const filteredCustomer = purchase?.data?.data?.AllPurchase?.filter((item) => {
 
       const emiToBePaid = item.pending_amount;
 
@@ -181,14 +183,15 @@ function CustomersList() {
       if (e.target.value == 1 && emiToBePaid) {
         return item
       }
-      else if (e.target.value == 2 && emiToBePaid <= paidAmount) {
+      else if (e.target.value == 2 && emiToBePaid <= paidAmount) { 
         return item
       }
       else if (e.target.value == 0) {
         return item
       }
     });
-    setSelectedEMI(filteredCustomer)
+    console.log(filteredCustomer)
+    // setSelectedEMI(filteredCustomer)
 
   };
 
@@ -364,8 +367,7 @@ function CustomersList() {
                 onChange={handlePendingPaidUpClick}
                 name=""
                 id=""
-                className="cursor-pointer text-darkblue-500 text-base"
-              >
+                className="cursor-pointer text-darkblue-500 text-base">
                 <option value={0}>All</option>
                 <option value={1}>Pending</option>
                 <option value={2}>Paidup</option>

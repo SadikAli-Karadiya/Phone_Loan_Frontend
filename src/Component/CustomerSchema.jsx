@@ -69,28 +69,6 @@ export const customerSchema = Yup.object({
         .min(10, "Please enter valid mobile no")
         .max(10, "Please enter valid mobile no"),
 
-    date: Yup.date()
-        .required("Please Enter Date")
-        .nullable(),
-
-    company: Yup.string().required("Please Select Company"),
-
-    model: Yup.string().required("Please Select Model"),
-
-    price: Yup.string().required("Please Enter Price"),
-
-    installment: Yup.string().required("Please Select Installment"),
-
-    dp: Yup.string().required("Please Enter Down Payment"),
-
-    note: Yup.string()
-        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-            if (value) {
-                return value.trim() === value;
-            }
-            return true;
-        }),
-
     // adhar_front: Yup.mixed()
     //     .test("is-valid-type", "Logo should be in jpg , jpeg or png format",
     //         value => {
@@ -160,19 +138,8 @@ export const initialValues = {
     last_name: "",
     mobile: "",
     alternate_no : "",
-    dob: "",
-    gender: "",
-    address: "",
     refrence_name : "",
     refrence_mobile: "",
-    date: "",
-    company: "",
-    model: "",
-    price: "",
-    installment: "",
-    dp: "",
-    discount: "",
-    net_payable: "",
     adhar_front: "",
     adhar_back: "",
     pan: "",

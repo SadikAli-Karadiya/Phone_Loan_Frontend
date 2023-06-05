@@ -46,6 +46,23 @@ export const AddInstallment = () => {
   })
 }
 
+formData.append('first_namenth', 'shad');
+
+export const AddCustomer = (data) => {
+  // for (const value of data.values()) {
+  //   console.log(value);
+  // }
+  console.log(data)
+  return instance({
+    'url': '/customer/addcustomer',
+    'method': 'POST',
+    'data': data,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
 export const getAllInstallment = () => {
   return instance({
     'method': 'GET',
