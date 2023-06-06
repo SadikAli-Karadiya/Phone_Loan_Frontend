@@ -170,7 +170,6 @@ function CustomersList() {
   };
 
   const handlePendingPaidUpClick = (e) => {
-    console.log(e.target.value)
     const filteredCustomer = purchase?.data?.data?.AllPurchase?.filter((item) => {
 
       const emiToBePaid = item.pending_amount;
@@ -202,8 +201,14 @@ function CustomersList() {
     setIsEdit(true)
     setInstallmentDetails(Installment);
     setInstallmentFormModal(true);
+    navigate({
+      state: {
+        isEdit: true,
+        installment_id: InstallmentDetails.id,
+      },
+    });
   };
-
+  console.log(InstallmentDetails)
   const handleSelectEMI = (id) => {
     let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
       return n?.installment_id == id;
@@ -475,7 +480,7 @@ function CustomersList() {
           showModal={installmentFormModal}
           handleShowModal={setInstallmentFormModal}
           // refetchData={refetchData}
-          InstallmentDetails={InstallmentDetails}
+          // InstallmentDetails={InstallmentDetails}
           is_Edit={is_Edit}
         />
         {/* 

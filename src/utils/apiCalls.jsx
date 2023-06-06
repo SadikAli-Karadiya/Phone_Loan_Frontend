@@ -30,29 +30,22 @@ const instance = axios.create({
 
 // }
 
-var formData = new FormData();
 
-formData.append('month', '6');
-formData.append('charges', '1000');
-
-export const AddInstallment = () => {
+export const AddInstallment = (data) => {
   return instance({
     'url': '/installment/addinstallment',
     'method': 'POST',
-    'data': formData,
+    'data': data,
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
     },
   })
 }
 
-formData.append('first_namenth', 'shad');
-
 export const AddCustomer = (data) => {
   // for (const value of data.values()) {
   //   console.log(value);
   // }
-  console.log(data)
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',

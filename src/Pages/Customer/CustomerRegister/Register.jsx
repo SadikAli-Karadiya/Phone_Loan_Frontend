@@ -6,36 +6,43 @@ import { customerSchema, initialValues } from "../../../Component/CustomerSchema
 import "../../Customer/CustomerRegister/Customerform.css"
 import { AddCustomer } from "../../../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
+import { AxiosError } from 'axios';
 
 function CustomerRegister() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = useState(defaultImage);
     const [photo, setPhoto] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
-    const { mutate, isLoading , response } = useMutation(AddCustomer)
+    // const { mutate, isLoading, response } = useMutation(AddCustomer)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const navigate = useNavigate();
 
 
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
             validationSchema: customerSchema,
-            onSubmit: (data) => {
-                const fb = new FormData();
-                let ok = JSON.stringify({
-                    CustomerInfo: data,
-                });
-                fb.append("data", ok);
-                fb.append("team_logo", logo);
-                mutate(fb)
-                // if (response.data.success == false) {
-                //     toast.error(response.data.message);
-                //     console.log(response.data.message)
-                // }
-                // else if (response.data.success) {
-                //     toast.success(response.data.message)
-                //     resetForm({ values: "" })
-                // }
+            async onSubmit(data) {
+                try {
+                    const fd = new FormData();
+                    let ok = JSON.stringify({
+                        CustomerInfo: data,
+                    });
+                    fd.append("data", ok);
+                    fd.append("customer_Photo", logo);
+                    // if (value) {
+                    //   fb.append("id", value.id);
+                    //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
+                    // } else {
+                    const response = await AddCustomer(fd)
+                    toast.success(response.data.message);
+                    resetForm({ values: "" })
+                    console.log(response.data.data)
+                    // navigate(`/Customer/profile-detail/${response.data.data.id}`);
+                } catch (err) {
+                    toast.error(err.response.data.message);
+                    // console.log(err.response.data.message, "sjdhvb")
+                }
             },
         });
 

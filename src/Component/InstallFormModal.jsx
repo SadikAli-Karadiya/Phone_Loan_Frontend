@@ -59,18 +59,18 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
 
   const UpdateInstallment = {
     month: InstallmentDetails?.month,
-    charges: InstallmentDetails?.charges 
+    charges: InstallmentDetails?.charges
   }
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: is_Edit == true ? UpdateInstallment : initialValues,
+      initialValues: UpdateInstallment ? UpdateInstallment : initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
         try {
           const fd = new FormData();
           let ok = JSON.stringify({
-            InstallmentInfo: data,
+            data,
           });
           fd.append("data", ok);
           // if (value) {
@@ -78,16 +78,11 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
           //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
           // } else {
           const response = await AddInstallment(fd)
-          console.log(response)
-          if (response.error) {
-            toast.error(response.error.data.message)
-          } else if (response.data.success) {
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleModalClose(false);
-          }
+          toast.success(response.data.message);
+          resetForm({ values: "" })
+          handleModalClose(false);
         } catch (err) {
-          toast.error(err.message);
+          toast.error(err.response.data.message);
         }
       },
     });
