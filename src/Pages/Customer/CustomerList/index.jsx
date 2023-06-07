@@ -480,7 +480,7 @@ function CustomersList() {
           showModal={installmentFormModal}
           handleShowModal={setInstallmentFormModal}
           // refetchData={refetchData}
-          // InstallmentDetails={InstallmentDetails}
+          InstallmentDetails={InstallmentDetails}
           is_Edit={is_Edit}
         />
         {/* 

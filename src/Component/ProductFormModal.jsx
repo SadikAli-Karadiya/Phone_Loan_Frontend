@@ -5,6 +5,8 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
+import { AddCompany } from "../utils/apiCalls"
+import { useQuery } from 'react-query'
 
 
 const createCompany = (label) => ({
@@ -41,25 +43,22 @@ function ProductFormModal({ showModal, handleShowModal }) {
   };
 
   const initialValues = {
-    company: company,
+    company: "",
     model: "",
   }
-
-  // const [value, setValue] = React.useState({
-  //   company: "",
-  //   model: "",
-  // });
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
       validationSchema: productSchema,
       onSubmit(data) {
-        const modeldata = {
-          ...data,
-          company: company,
-          model: Model_Name,
-        }
+        alert("dkfbv")
+        console.log(data)
+        // const modeldata = {
+        //   ...data,
+        //   company: company,
+        //   model: Model_Name,
+        // }
       },
     });
 
@@ -164,7 +163,7 @@ function ProductFormModal({ showModal, handleShowModal }) {
 
         <Modal.Description>
           <div className="px-4 py-4">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form method="POST" action="/model/addmodel" className="space-y-6" enctype='multipart/form-date' onSubmit={handleSubmit}>
               <div className='flex flex-col items-center w-full space-y-5'>
                 <div className='w-full'>
                   <CreatableSelect
@@ -176,15 +175,15 @@ function ProductFormModal({ showModal, handleShowModal }) {
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
                     options={CompanyList}
-                    value={values.company}
+                    value={company}
                     name='company'
                   />
-                  {errors.company &&
+                  {/* {errors.company &&
                     touched.company ? (
                     <small className="form-error text-red-600 text-sm font-semibold">
                       {errors.company}
                     </small>
-                  ) : null}
+                  ) : null} */}
                 </div>
                 <div className="firstname flex flex-col space-y-2 w-full ">
                   <input type="text"
@@ -202,6 +201,14 @@ function ProductFormModal({ showModal, handleShowModal }) {
                 </div>
               </div>
               <div className="mt-5 text-right">
+                {/* <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                >
+                  {isLoading ? 'Loading...' : 'Submit'}
+                </button> */}
                 <button
                   type="button"
                   onClick={handleSubmit}
@@ -209,14 +216,10 @@ function ProductFormModal({ showModal, handleShowModal }) {
                   className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                 >
                   {isLoading ? 'Loading...' : 'Submit'}
+
                 </button>
               </div>
             </form>
-            {error != "" ? (
-              <div className="text-center">
-                <small className="text-red-500">{error}</small>
-              </div>
-            ) : null}
           </div>
         </Modal.Description>
       </Modal.Description>

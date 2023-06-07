@@ -5,7 +5,7 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
-import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment } from "../utils/apiCalls";
+import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPhone } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 
 
@@ -18,6 +18,7 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
   const [Model, setModel] = useState("");
   const [SelectSpecification, setSelectSpecification] = useState("");
   const [Specification, setSpecification] = useState("");
+  const [Ram, setram] = useState("");
   const [Down_Payment, setDownPayment] = useState("");
   const [SelectInstallment, setSelectInstallment] = useState([]);
   const [installment, setinstallment] = useState("");
@@ -33,26 +34,24 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
       initialValues: NewPhoneValues,
       validationSchema: NewPhoneSchema,
       async onSubmit(data) {
-        if (Company === null) {
-          toast.error("Please select team captain");
-          return;
-        }
+        let date = data.date
         try {
-          const fb = new FormData();
-          let ok = JSON.stringify({
-            PhoneInfo: data,
-            company_name: Company,
-          });
-          // const response = await setdata(data)
-          if (response.error) {
-            toast.error(response.error.data.message)
-          } else if (response.data.success) {
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleModalClose(false);
-          }
+          const formdata = new FormData();
+          formdata.append('date', date)
+          formdata.append('company', Company)
+          formdata.append('model', Model)
+          // formdata.append('ram', Ram)
+          // formdata.append('storage', Specification)
+          // formdata.append('price', SelectSpecification)
+          // formdata.append('installment', installment)
+          // formdata.append('dp', Down_Payment)
+          formdata.append('net_payable', Net_playable)
+          const response = await AddNewPhone(formdata)
+          toast.success(response.data.message);
+          resetForm({ values: "" })
+          handleModalClose(false);
         } catch (err) {
-          toast.error(err.message);
+          toast.error(err.response.data.message);
         }
       },
     });
@@ -117,6 +116,7 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
     let Price = specification?.data?.data?.AllSpecification?.find((n) => {
       return n?.storage == storage;
     });
+    setram(Price.ram)
     setSelectSpecification(Price.price)
   };
 
@@ -126,25 +126,13 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
     let Charge = Installment?.data?.data?.AllInstallment?.find((n) => {
       return n?.month == month;
     });
-    // console.log(Charge)
     setSelectInstallment(Charge.charges)
   };
 
-  const Net_playable = (SelectInstallment + SelectSpecification)
-
-  // function handledp(event) {
-  //   let down_payment = event.target.value
-  //   console.log(down_payment)
-  //   // setDownPayment(storage)
-  // };
-
-
-  // let net_payable = SelectSpecification +
-
-  // console.log(SelectSpecification)
+  let Net_playable = (SelectInstallment + SelectSpecification)
 
   const handleModalClose = () => {
-    resetForm("")
+    resetForm({ values: "" })
     handleShowModal(false);
   };
 

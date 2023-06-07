@@ -9,7 +9,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { BiFolderPlus } from "react-icons/bi";
 import NewPhoneFormModel from '../../../Component/NewPhoneFormModal';
-import { getPurchaseCustomerbyId, updateCustomerDetails } from '../../../utils/apiCalls';
+import { getPurchaseCustomerbyId, UpdateCustomer } from '../../../utils/apiCalls';
 import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
 import { toast } from "react-toastify";
@@ -158,10 +158,7 @@ function CustomerProfile() {
     const [isEnable, setIsEnable] = React.useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
     const data = useQuery(['customer', params.id], () => getPurchaseCustomerbyId(params.id))
-    const {mutate, isLoading} = useMutation(updateCustomerDetails)
-    const Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
-
-
+    let Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -182,32 +179,20 @@ function CustomerProfile() {
             async onSubmit(data) {
                 try {
                     const fd = new FormData();
+                    fd.append("id", Customer_details.id)
                     fd.append("first_name", data.first_name)
                     fd.append("last_name", data.last_name)
                     fd.append("mobile", data.mobile)
                     fd.append("alternate_no", data.alternate_no)
-                    fd.append("refrence_name", data.refrence_name)
-                    fd.append("refrence_mobile", data.refrence_mobile)
-                    mutate(fd)
-                    // let ok = JSON.stringify({
-                    //     InstallmentInfo: data,
-                    // });
-                    // fd.append("data", ok);
-                    // // if (value) {
-                    // //   fb.append("id", value.id);
-                    // //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
-                    // // } else {
-                    // const response = await AddInstallment(fd)
-                    // console.log(response)
-                    // if (response.error) {
-                    //     toast.error(response.error.data.message)
-                    // } else if (response.data.success) {
-                    //     toast.success(response.data.message);
-                    //     resetForm({ values: "" })
-                    //     handleModalClose(false);
-                    // }
+                    fd.append("reference_name", data.reference_name)
+                    fd.append("reference_mobile", data.reference_mobile)
+                    const response = UpdateCustomer(fd)
+                    // console.log(response.Promise.PromiseResult, "ksvbd")
+                    // toast.success(success.response.data);
+                    setIsEnable(true);
                 } catch (err) {
-                    toast.error(err.message);
+                    console.log(err)
+                    // toast.error(err.response.data.message);
                 }
             },
         });
@@ -226,14 +211,9 @@ function CustomerProfile() {
 
     function handleCancel(e) {
         e.preventDefault();
-        resetForm({ e: "" })
         setIsEnable(true);
         setToggle(false);
     }
-
-    const handleClick = (e) => {
-        resetForm({ values: "" })
-    };
 
 
     return (
@@ -253,7 +233,7 @@ function CustomerProfile() {
                 </div>
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" enctype='multipart/form-date' action="/customer/update" method="POST" onSubmit={handleSubmit}>
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14"  onSubmit={handleSubmit}>
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">

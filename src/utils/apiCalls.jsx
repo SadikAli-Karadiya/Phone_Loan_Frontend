@@ -56,6 +56,42 @@ export const AddCustomer = (data) => {
   })
 }
 
+export const UpdateCustomer = (data) => {
+  // for (const value of data.values()) {
+  //   console.log(value);
+  // }
+  return instance({
+    'url': `/customer/update`,
+    'method': 'PUT',
+    'data': data,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
+export const AddCompany = (body) => {
+  return instance({
+    'url': '/company/addcompany',
+    'method': 'POST',
+    'data': body,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
+export const AddNewPhone = (formdata) => {
+  return instance({
+    'url': '/phone/addphone',
+    'method': 'POST',
+    'data': formdata,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
 export const getAllInstallment = () => {
   return instance({
     'method': 'GET',
@@ -146,15 +182,3 @@ export const getallReceipt = (search) => {
   })
 }
 
-var formData = new FormData();
-
-export const updateCustomerDetails = () => {
-  return instance({
-    'method': 'POST',
-    'url': `/customer/update`,
-    data: formData,
-    'headers': {
-      'content-type': 'multipart/form-data' // override instance defaults
-    },
-  })
-}

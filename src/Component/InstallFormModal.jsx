@@ -9,6 +9,7 @@ import { AddInstallment } from '../utils/apiCalls';
 
 
 function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
+  console.log(InstallmentDetails, is_Edit)
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -57,14 +58,9 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
     charges: "",
   }
 
-  const UpdateInstallment = {
-    month: InstallmentDetails?.month,
-    charges: InstallmentDetails?.charges
-  }
-
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: UpdateInstallment ? UpdateInstallment : initialValues,
+      initialValues: InstallmentDetails ? InstallmentDetails : initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
         try {
@@ -88,7 +84,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
     });
 
   const handleModalClose = () => {
-    resetForm("")
+    resetForm({ values: "" })
     handleShowModal(false);
   };
 
