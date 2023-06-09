@@ -9,7 +9,8 @@ import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, A
 import { useQuery } from 'react-query'
 
 
-function NewPhoneFormModal({ showModal, handleShowModal }) {
+function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
+  console.log(PhoneDetails)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
@@ -31,9 +32,10 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
 
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
-      initialValues: NewPhoneValues,
+      initialValues: PhoneDetails ? PhoneDetails : NewPhoneValues,
       validationSchema: NewPhoneSchema,
       async onSubmit(data) {
+        Object.assign(data, {company: Company}, {model: Model})
         let date = data.date
         try {
           const formdata = new FormData();
@@ -365,21 +367,28 @@ function NewPhoneFormModal({ showModal, handleShowModal }) {
                 </div>
               </div>
               <div className="mt-5 text-right">
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-                </button>
+                {
+                  is_Edit == true ?
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Update'}
+                    </button>
+                    :
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Submit'}
+                    </button>
+                }
               </div>
             </form>
-            {error != "" ? (
-              <div className="text-center">
-                <small className="text-red-500">{error}</small>
-              </div>
-            ) : null}
           </div>
         </Modal.Description>
       </Modal.Description>

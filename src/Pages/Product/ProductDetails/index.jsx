@@ -16,7 +16,7 @@ import { MdSdStorage } from "react-icons/md";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import SpecificationFormModal from '../../../Component/SpecificationFormModal';
-import { getallSpecificationById } from "../../../utils/apiCalls"
+import { getallSpecificationById, deleteSpecification } from "../../../utils/apiCalls"
 import { useQuery } from 'react-query'
 
 
@@ -29,35 +29,8 @@ function ProductDetails() {
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
     const [specificationFormModal, setspecificationFormModal] = React.useState(false);
     const Spacification = useQuery(['spacification', params.id], () => getallSpecificationById(params.id))
-    console.log(Spacification?.data?.data)
-
-    const handleDelete = async (id) => {
-        Swal.fire({
-            title: 'Are you sure to delete this news?',
-            text: "The news will be deleted",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes',
-            showLoaderOnConfirm: true,
-            allowOutsideClick: false,
-            preConfirm: async () => {
-                const response = await deleteNewsDetails(id)
-                if (response.error) {
-                    toast.error(response.error.data.message)
-                }
-                else if (response.data.success) {
-                    toast.success(response.data.message)
-                }
-            }
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                refetch()
-            }
-        })
-    };
-
+    const [specification, setspecification] = React.useState(Spacification);
+    console.log(specification?.data?.data?.AllSpecification)
 
     const handleUpdatespecification = (id) => {
         setModel(true);
@@ -67,6 +40,33 @@ function ProductDetails() {
         setValue(updatenews)
     };
 
+    const handleDelete = async (id) => {
+        console.log(id)
+        Swal.fire({
+            title: 'Are you sure to delete this Specification?',
+            text: "The specification will be deleted",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: false,
+            preConfirm: async () => {
+                const response = await deleteSpecification(id)
+                if (response.error) {
+                    toast.error(response.error.data.message)
+                }
+                else if (response.data.success) {
+                    toast.success(response.data.message)
+                }
+            }
+        })
+    };
+
+    React.useEffect(()=>{
+        setspecification(specification?.data?.data?.AllSpecification)
+      },[specification])
 
     return (
         <>
@@ -128,13 +128,14 @@ function ProductDetails() {
                                                 <td className="px-6 py-5">
                                                     <div className='flex justify-center items-center space-x-2'>
                                                         <Tippy content="Update Storage">
-                                                            <div onClick={handleUpdatespecification} >
+                                                            <div onClick={handleUpdatespecification}>
                                                                 <FiEdit className='text-[16px] cursor-pointer' />
                                                             </div>
                                                         </Tippy>
                                                         <Tippy content="Delete Storage">
-                                                            <div onClick={() =>
-                                                                navigate(`${item.id}`)}>
+                                                            <div
+                                                                onClick={() => handleDelete(item.id)}
+                                                            >
                                                                 <MdDelete className='text-lg cursor-pointer text-red-600' />
                                                             </div>
                                                         </Tippy>

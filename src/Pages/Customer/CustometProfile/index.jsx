@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import "../../Customer/CustomerRegister/Customerform.css"
 import { FaUserEdit } from "react-icons/fa"
 import { AiFillEye } from "react-icons/ai";
+import { FiEdit } from "react-icons/fi";
 import { BsPhone } from "react-icons/bs";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -153,12 +154,15 @@ function CustomerProfile() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = React.useState(defaultImage);
     const [photo, setPhoto] = React.useState("");
+    const [is_Edit, setIsEdit] = React.useState(false);
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
     const [toggle, setToggle] = React.useState(false);
     const [isEnable, setIsEnable] = React.useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
+    const [PhoneDetails, setPhoneDetails] = React.useState();
     const data = useQuery(['customer', params.id], () => getPurchaseCustomerbyId(params.id))
     let Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
+    // console.log(data.data.data.CustomerAllPurchase)
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -190,6 +194,7 @@ function CustomerProfile() {
                     // console.log(response.Promise.PromiseResult, "ksvbd")
                     // toast.success(success.response.data);
                     setIsEnable(true);
+                    setToggle(false)
                 } catch (err) {
                     console.log(err)
                     // toast.error(err.response.data.message);
@@ -215,6 +220,21 @@ function CustomerProfile() {
         setToggle(false);
     }
 
+    const handleEditPhone = (id) => {
+        let Phone = data.data.data.CustomerAllPurchase?.find((n) => {
+          return n?.id == id;
+        });
+        setIsEdit(true)
+        setPhoneDetails(Phone);
+        setnewPhoneFormModal(true);
+        // navigate({
+        //   state: {
+        //     isEdit: true,
+        //     installment_id: InstallmentDetails.id,
+        //   },
+        // });
+      };
+
 
     return (
         <>
@@ -233,7 +253,7 @@ function CustomerProfile() {
                 </div>
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14"  onSubmit={handleSubmit}>
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" onSubmit={handleSubmit}>
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
@@ -592,12 +612,18 @@ function CustomerProfile() {
                                                             <td className="px-6 py-5">
                                                                 {item.pending_amount}
                                                             </td>
-                                                            <td className="px-6 py-5">
+                                                            <td className="px-6 py-5 flex items-center justify-center space-x-3">
                                                                 <div className="flex justify-center items-center">
                                                                     <AiFillEye
                                                                         className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                                                         onClick={() =>
                                                                             navigate(`/Customer/EMI-History/${item.id}`)}
+                                                                    />
+                                                                </div>
+                                                                <div className="flex justify-center items-center">
+                                                                    <FiEdit
+                                                                        className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
+                                                                        onClick={() => handleEditPhone(item.id)}
                                                                     />
                                                                 </div>
                                                             </td>
@@ -625,8 +651,9 @@ function CustomerProfile() {
                 <NewPhoneFormModel
                     showModal={newPhoneFormModal}
                     handleShowModal={setnewPhoneFormModal}
-                // refetchData={refetchData}
-                // tournamentDetails={tournamentDetails}
+                    PhoneDetails={PhoneDetails}
+                    is_Edit={is_Edit}
+
                 />
             </div>
         </>

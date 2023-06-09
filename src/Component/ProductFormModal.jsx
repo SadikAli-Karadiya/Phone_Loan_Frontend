@@ -5,8 +5,8 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
-import { AddCompany } from "../utils/apiCalls"
-import { useQuery } from 'react-query'
+import { AddCompany, AddNewPhone } from "../utils/apiCalls"
+import { useMutation, useQuery } from 'react-query'
 
 
 const createCompany = (label) => ({
@@ -14,80 +14,60 @@ const createCompany = (label) => ({
   value: label.toLowerCase().replace(/\W/g, ''),
 });
 
-const createModel = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
 
 const productSchema = Yup.object({
-  company: Yup.string().required("Please Enter Company"),
-  model: Yup.string().required("Please Enter Model"),
+  // company: Yup.string().required("Please Enter Company"),
+  model_name: Yup.string().required("Please Enter Model Name"),
 });
 
+function ProductFormModal({ showModal, handleShowModal , ModelDetails , is_Edit }) {
 
-function ProductFormModal({ showModal, handleShowModal }) {
   const [error, setError] = useState("");
   const [CompanyList, setComapnyList] = React.useState([]);
   const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
 
+  const addNewCompany = useMutation(AddCompany)
+
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
+    
     setTimeout(() => {
       const newComapny = createCompany(inputValue);
       setIsLoading(false);
       setComapnyList((prev) => [...prev, newComapny]);
       setCompany(newComapny);
     }, 1000);
+
+
+    addNewCompany.mutate({company: inputValue})
+
   };
 
   const initialValues = {
-    company: "",
-    model: "",
+    company_name: "",
+    model_name: "",
   }
-
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: initialValues,
+      initialValues: ModelDetails ? ModelDetails : initialValues,
       validationSchema: productSchema,
-      onSubmit(data) {
-        alert("dkfbv")
-        console.log(data)
-        // const modeldata = {
-        //   ...data,
-        //   company: company,
-        //   model: Model_Name,
-        // }
+      async onSubmit(data) {
+        try {
+          const fd = new FormData();
+          let model_name = data.model_name
+          fd.append("company_name", company.value);
+          fd.append("model_name", model_name);
+          const response = await AddNewPhone(fd)
+          console.log(response.data , "respons")
+          toast.success(response.data.message);
+          resetForm("")
+          handleShowModal(false);
+        } catch (error) {
+          toast.error(error.response.data.message);
+        }
       },
     });
-
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this news?',
-      text: "The news will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await deleteNewsDetails(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        refetch()
-      }
-    })
-  };
 
   const customStyles = {
     control: (provided, state) => ({
@@ -163,7 +143,7 @@ function ProductFormModal({ showModal, handleShowModal }) {
 
         <Modal.Description>
           <div className="px-4 py-4">
-            <form method="POST" action="/model/addmodel" className="space-y-6" enctype='multipart/form-date' onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col items-center w-full space-y-5'>
                 <div className='w-full'>
                   <CreatableSelect
@@ -176,7 +156,7 @@ function ProductFormModal({ showModal, handleShowModal }) {
                     placeholder="Select Company"
                     options={CompanyList}
                     value={company}
-                    name='company'
+                    name='company_name'
                   />
                   {/* {errors.company &&
                     touched.company ? (
@@ -187,15 +167,15 @@ function ProductFormModal({ showModal, handleShowModal }) {
                 </div>
                 <div className="firstname flex flex-col space-y-2 w-full ">
                   <input type="text"
-                    name="model"
-                    value={values.model}
+                    name="model_name"
+                    value={values.model_name}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
                     placeholder="Enter Model Name " />
-                  {errors.model && touched.model
+                  {errors.model_name && touched.model_name
                     ?
-                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.model}</p>
+                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.model_name}</p>
                     :
                     null}
                 </div>

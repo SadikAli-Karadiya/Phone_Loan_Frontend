@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { BsPhone } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -17,24 +18,23 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal";
 import { useQuery } from 'react-query'
-import { getAllCompanies, getAllPhone } from '../../../utils/apiCalls'
+import { getAllCompanies, getAllPhone, DeletePhone } from '../../../utils/apiCalls'
 
 function ProductList() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [pageNo, setPageNo] = React.useState(1);
-  const [value, setValue] = React.useState();
   const [search, setSearch] = React.useState("");
   const [productFormModal, setProductFormModal] = React.useState(false);
-
+  const [ModelDetails, setModelDetails] = React.useState();
+  const [SelectedCompany, setSelectedCompany] = React.useState();
+  const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
   const phones = useQuery('phones', getAllPhone)
-
-
+  // console.log(phones.data.data.AllModel)
   const handleDelete = async (id) => {
     Swal.fire({
-      title: 'Are you sure to delete this news?',
-      text: "The news will be deleted",
+      title: 'Are you sure to delete this model?',
+      text: "The model will be deleted",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -43,7 +43,7 @@ function ProductList() {
       showLoaderOnConfirm: true,
       allowOutsideClick: false,
       preConfirm: async () => {
-        const response = await deleteNewsDetails(id)
+        const response = await DeletePhone(id)
         if (response.error) {
           toast.error(response.error.data.message)
         }
@@ -51,23 +51,32 @@ function ProductList() {
           toast.success(response.data.message)
         }
       }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        refetch()
-      }
     })
   };
-
-
   const handleUpdatemodel = (id) => {
-    setModel(true);
-    let updatenews = data?.AllNews?.find((n) => {
+    console.log(id)
+    let updateModel = phones?.data?.data?.AllModel?.find((n) => {
       return n?.id == id;
     });
-
-    setValue(updatenews)
+    setIsEdit(true)
+    setModelDetails(updateModel);
+    setProductFormModal(true)
   };
 
+  const handlePendingPaidUpClick = (e) => {
+    const filteredCompany = phones.data.data.AllModel?.filter((item) => {
+      if (e.target.value == 0 ) {
+        return item
+      } else if (e.target.value == item.company.company_name) {
+        return item
+      }
+    });
+    setSelectedCompany(filteredCompany)
+  };
+
+  React.useEffect(()=>{
+    setSelectedCompany(phones?.data?.data?.AllModel)
+  },[phones])
 
   return (
     <>
@@ -111,8 +120,12 @@ function ProductList() {
             <div className='flex justify-between items-center py-5 px-5'>
               <h1 className='font-bold  text-lg'>Product List</h1>
               <div>
-                <select name="" id="" className=' xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg outline-none' >
-                  <option value="">Select Company</option>
+                <select
+                  name="" id=""
+                  onChange={handlePendingPaidUpClick}
+                  className='xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg outline-none' >
+                  {/* <option value="">Select Company</option> */}
+                  <option value={0}>All</option>
                   {
                     companies?.data?.data?.all_companies?.map((company, index) => {
                       return (
@@ -143,8 +156,8 @@ function ProductList() {
                 </tr>
               </thead>
               {
-                phones?.data?.data?.AllModel.length > 0 ? (
-                  phones?.data?.data?.AllModel.map((item, index) => {
+                SelectedCompany?.length > 0 ? (
+                  SelectedCompany?.map((item, index) => {
                     return (
                       <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                         <tr className=" border-b">
@@ -159,15 +172,22 @@ function ProductList() {
                           </td>
                           <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
                             <div className='flex justify-center items-center space-x-3 ' >
-                              <Tippy content="Show Storage">
+                              <Tippy content="Show Specifiaction">
                                 <div onClick={() =>
                                   navigate(`/Product/product-details/${item.id}`)}>
-                                  <AiFillEye className='text-xl cursor-pointer' />
+                                  <AiFillEye className='text-[18px] cursor-pointer' />
                                 </div>
                               </Tippy>
                               <Tippy content="Update Model">
-                                <div onClick={handleUpdatemodel}>
+                                <div onClick={() => handleUpdatemodel(item.id)}>
                                   <FiEdit className='text-[17px] cursor-pointer' />
+                                </div>
+                              </Tippy>
+                              <Tippy content="Delete Model">
+                                <div
+                                  onClick={() => handleDelete(item.id)}
+                                >
+                                  <MdDelete className='text-[19px] text-red-600 cursor-pointer' />
                                 </div>
                               </Tippy>
                             </div>
@@ -181,7 +201,7 @@ function ProductList() {
                 )}
             </table>
             {
-              phones?.data?.data?.AllModel.length > 0 ?
+              SelectedCompany?.length > 0 ?
                 null
                 :
                 <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
@@ -205,8 +225,8 @@ function ProductList() {
       <ProductFormModel
         showModal={productFormModal}
         handleShowModal={setProductFormModal}
-      // refetchData={refetchData}
-      // tournamentDetails={tournamentDetails}
+        ModelDetails={ModelDetails}
+        is_Edit={is_Edit}
       />
       {/* </div>
       </div> */}

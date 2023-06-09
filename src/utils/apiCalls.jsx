@@ -42,10 +42,30 @@ export const AddInstallment = (data) => {
   })
 }
 
+export const DeleteInstallment = (id) => {
+  console.log(id)
+  return instance({
+    'url': `/installment/delete/${id}`,
+    'method': 'DELETE',
+    'data': id,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
+export const UpdateInstallment = (data) => {
+  return instance({
+    'url': `/installment/update/${id}`,
+    'method': 'DELETE',
+    'data': id,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
 export const AddCustomer = (data) => {
-  // for (const value of data.values()) {
-  //   console.log(value);
-  // }
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',
@@ -57,9 +77,6 @@ export const AddCustomer = (data) => {
 }
 
 export const UpdateCustomer = (data) => {
-  // for (const value of data.values()) {
-  //   console.log(value);
-  // }
   return instance({
     'url': `/customer/update`,
     'method': 'PUT',
@@ -70,22 +87,31 @@ export const UpdateCustomer = (data) => {
   })
 }
 
-export const AddCompany = (body) => {
+export const AddCompany = (data) => {
   return instance({
     'url': '/company/addcompany',
     'method': 'POST',
-    'data': body,
+    'data': data,
+  })
+}
+
+export const AddNewPhone = (data) => {
+  return instance({
+    'url': '/phone/addphone',
+    'method': 'POST',
+    'data': data,
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
     },
   })
 }
 
-export const AddNewPhone = (formdata) => {
+export const DeletePhone = (id) => {
+  console.log(id)
   return instance({
-    'url': '/phone/addphone',
-    'method': 'POST',
-    'data': formdata,
+    'url': `/phone/delete/${id}`,
+    'method': 'DELETE',
+    'data': id,
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
     },
@@ -152,7 +178,30 @@ export const getAllPhone = () => {
   })
 }
 
-export const getallSpecification = (id) => {
+export const getallReceipt = (search) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/List/${search}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+// Specifiaction
+
+export const AddSpecification = (data) => {
+  return instance({
+    'url': '/specification/addspecification',
+    'method': 'POST',
+    'data': data,
+    // 'headers': {
+    //   'content-type': "multipart/form-data" // override instance defaults
+    // },
+  })
+}
+
+export const getallSpecification = () => {
   return instance({
     'method': 'GET',
     'url': '/specification',
@@ -172,13 +221,12 @@ export const getallSpecificationById = (id) => {
   })
 }
 
-export const getallReceipt = (search) => {
+export const deleteSpecification = (id) => {
   return instance({
-    'method': 'GET',
-    'url': `/receipt/List/${search}`,
+    'method': 'DELETE',
+    'url': `/specification/Delete/${id}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
   })
 }
-

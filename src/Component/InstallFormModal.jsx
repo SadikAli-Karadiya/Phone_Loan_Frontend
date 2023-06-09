@@ -9,7 +9,11 @@ import { AddInstallment } from '../utils/apiCalls';
 
 
 function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
-  console.log(InstallmentDetails, is_Edit)
+
+  if (!showModal) {
+    return <></>;
+  }
+
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -60,7 +64,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: InstallmentDetails ? InstallmentDetails : initialValues,
+      initialValues: Object.keys(InstallmentDetails).length > 0 ? { month: InstallmentDetails.month, charges: InstallmentDetails.charges } : initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
         try {
@@ -69,10 +73,6 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
             data,
           });
           fd.append("data", ok);
-          // if (value) {
-          //   fb.append("id", value.id);
-          //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
-          // } else {
           const response = await AddInstallment(fd)
           toast.success(response.data.message);
           resetForm({ values: "" })
@@ -122,7 +122,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
 
         <Modal.Description>
           <div className="px-4 py-4">
-            <form method="POST" action="/installment/addinstallment" className="space-y-6" enctype='multipart/form-date' onSubmit={handleSubmit}>
+            <form method="POST" action="/installment/addinstallment" className="space-y-6" encType='multipart/form-date' onSubmit={handleSubmit}>
               <div className="flex xs:flex-col items-center xs:space-y-4">
                 <div className="flex flex-col space-y-2  w-full ">
                   <label htmlFor="company" className="text-white">Installment *</label>

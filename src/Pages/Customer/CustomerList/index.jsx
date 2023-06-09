@@ -13,8 +13,10 @@ import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import InstallmentFormModal from '../../../Component/InstallFormModal';
-import { getAllInstallment, getAllPurchase } from '../../../utils/apiCalls';
+import { getAllInstallment, getAllPurchase, DeleteInstallment } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 
 function CustomersList() {
@@ -182,33 +184,26 @@ function CustomersList() {
       if (e.target.value == 1 && emiToBePaid) {
         return item
       }
-      else if (e.target.value == 2 && emiToBePaid <= paidAmount) { 
+      else if (e.target.value == 2 && emiToBePaid <= paidAmount) {
         return item
       }
       else if (e.target.value == 0) {
         return item
       }
     });
-    console.log(filteredCustomer)
     // setSelectedEMI(filteredCustomer)
 
   };
 
   const handleEditEMI = (id) => {
     let Installment = installment?.data?.data?.AllInstallment?.find((n) => {
-      return n?.id == id;
+      return n.id == id;
     });
     setIsEdit(true)
     setInstallmentDetails(Installment);
     setInstallmentFormModal(true);
-    navigate({
-      state: {
-        isEdit: true,
-        installment_id: InstallmentDetails.id,
-      },
-    });
   };
-  console.log(InstallmentDetails)
+
   const handleSelectEMI = (id) => {
     let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
       return n?.installment_id == id;
@@ -217,9 +212,10 @@ function CustomersList() {
     setSelectemi(id)
   };
 
-  const handleDeleteClass = async (class_id) => {
+  const handleDeleteInstallment = async (id) => {
+    console.log(id)
     Swal.fire({
-      title: "Are you sure to delete class?",
+      title: "Are you sure to delete installment?",
       text: "",
       icon: "warning",
       showCancelButton: true,
@@ -228,10 +224,11 @@ function CustomersList() {
       confirmButtonText: "Delete",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const deleteClassResponse = await deleteClass(class_id);
-        if (deleteClassResponse) {
-          setCall(() => !call);
-          return deleteNotify();
+        const deleteClassResponse = await DeleteInstallment(id);
+        if (deleteClassResponse.data.success) {
+          toast.success(deleteClassResponse.data.message);
+        } else if (deleteClassResponse.data.success == false) {
+          toast.error(deleteClassResponse.data.message);
         }
       }
     });
@@ -305,7 +302,7 @@ function CustomersList() {
                             }}
                             onMouseEnter={handleMouseEnterDelete}
                             onMouseLeave={handleMouseLeaveDelete}
-                            onClick={() => handleDeleteClass(item.id)}
+                            onClick={() => handleDeleteInstallment(item.id)}
                             className={`${Selectemi == item.id ? "block" : "hidden"} edit_delete_btns rounded-md px-[3px] py-[3px] group-hover:block `}
                           >
                             <MdDelete className=' ' />
@@ -385,7 +382,7 @@ function CustomersList() {
             <thead className="text-xs uppercase bg-[#3399ff] ">
               <tr className=" text-sm ">
                 <th scope="col" className="pl-3 py-4">
-                  Customer Id
+                  Serial no
                 </th>
                 <th scope="col" className="pl-3 py-4">
                   Name
@@ -421,7 +418,7 @@ function CustomersList() {
                       className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                       <tr className=" border-b">
                         <th className="py-5 px-6">
-                          {item.customer_id}
+                         {index + 1}
                         </th>
                         <td className="px-6 py-5 text-gray-500">
                           {item.customer.first_name}

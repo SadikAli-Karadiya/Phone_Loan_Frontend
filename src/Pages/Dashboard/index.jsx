@@ -8,10 +8,14 @@ import { GiSmartphone } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { getAllPurchase } from '../../utils/apiCalls';
+import { useQuery } from 'react-query'
 
 
 function Dashboard() {
   const navigate = useNavigate();
+  const purchase = useQuery('purchase', getAllPurchase)
+  // console.log(purchase.data.data.AllPurchase)
   return (
     <div className='px-5 py-5 xl:px-10 '>
       <div className='grid grid-cols-4 my-10 gap-5 '>
@@ -92,11 +96,10 @@ function Dashboard() {
           </div>
           <div className="right flex items-center space-x-3 pr-6">
             <div className='flex items-center space-x-3'>
-              <div className='bg-green-200 rounded-md px-3 shadow-lg py-1 flex flex-col justify-center  items-center'>
+              <div className='bg-green-200 rounded-md px-3 shadow-lg py-[10px] flex flex-col justify-center  items-center'>
                 <h1 className='font-semibold text-sm'>
                   Total : 291840
                 </h1>
-                <p className='text-sm italic'>Transection : 66</p>
               </div>
               <div className='flex justify-end items-end'>
                 <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
@@ -113,9 +116,6 @@ function Dashboard() {
             <tr className=" text-sm">
               <th scope="col" className="pl-3 py-4">
                 Serial No
-              </th>
-              <th scope="col" className="pl-3 py-4">
-                Customer Id
               </th>
               <th scope="col" className="px-6 py-4">
                 Name
@@ -140,55 +140,70 @@ function Dashboard() {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-            <tr className=" border-b">
-              <th className="py-5 px-6">
-                01
-              </th>
-              <td className="px-6 py-5 text-gray-500">
-                001
-              </td>
-              <td className="px-6 py-5 capitalize">
-                Shad
-              </td>
-              <td className="px-6 py-5">
-                1234567890
-              </td>
-              <td className="px-6 py-5">
-                15000
-              </td>
-              <td className="px-6 py-5">
-                5000
-              </td>
-              <td className="px-6 py-5">
-                10000
-              </td>
-              <td className="px-6 py-5">
-                <div className="flex justify-center items-center">
-                  <Tippy content="Customer Profile">
-                    <div>
-                      <AiFillEye
-                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                        onClick={() =>
-                          navigate(`/Customer/profile-detail`)}
-                      />
-                    </div>
-                  </Tippy>
-                </div>
-              </td>
-              <td className="px-6 py-5 ">
-                <div className="flex justify-center space-x-3">
-                  <button
-                    onClick={() =>
-                      navigate(`/Receipt/Generate`)}
-                    className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                    Pay
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+          {
+            purchase?.data?.data?.AllPurchase?.length > 0 ? (
+              purchase?.data?.data?.AllPurchase?.map((item, index) => {
+                return (
+                  <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                    <tr className=" border-b">
+                      <th className="py-5 px-6">
+                        {index + 1}
+                      </th>
+                      <td className="px-6 py-5 capitalize">
+                        {item.customer.first_name}
+                      </td>
+                      <td className="px-6 py-5">
+                        {item.customer.mobile}
+                      </td>
+                      <td className="px-6 py-5">
+                        {item.net_amount}
+                      </td>
+                      <td className="px-6 py-5">
+                        {item.net_amount - item.pending_amount }
+                      </td>
+                      <td className="px-6 py-5">
+                        {item.pending_amount}
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex justify-center items-center">
+                          <Tippy content="Customer Profile">
+                            <div>
+                              <AiFillEye
+                                className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                onClick={() =>
+                                  navigate(`/Customer/profile-detail/${item.id}`)}
+                              />
+                            </div>
+                          </Tippy>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5 ">
+                        <div className="flex justify-center space-x-3">
+                          <button
+                            onClick={() =>
+                              navigate(`/Receipt/Generate/${item.id}`)}
+                            className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                            Pay
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                )
+              })
+            ) : (
+              null
+            )}
         </table>
+        {
+          purchase?.data?.data?.AllPurchase?.length > 0 ?
+            null
+            :
+            <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+              <FaUsers className='text-3xl' />
+              <h1 className='font-semibold'>Customer Not Found</h1>
+            </div>
+        }
       </div>
     </div>
   )

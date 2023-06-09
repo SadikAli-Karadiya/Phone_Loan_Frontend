@@ -5,16 +5,8 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
-
-const createRam = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
-
-const createStorage = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
+import { useQuery } from 'react-query'
+import { AddSpecification } from '../utils/apiCalls';
 
 const productSchema = Yup.object({
   ram: Yup.string().required("Please Enter RAM"),
@@ -23,6 +15,8 @@ const productSchema = Yup.object({
 });
 
 function SpecificationFormModal({ showModal, handleShowModal }) {
+  let PhoneId = useParams();
+  // console.log(PhoneId.id)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = React.useState();
   const [RamList, setRamList] = React.useState([]);
@@ -30,75 +24,29 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
   const [StorageList, setStorageList] = React.useState([]);
   const [Storage, setStorage] = React.useState();
 
-  const handleCreateRam = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newRam = createRam(inputValue);
-      setIsLoading(false);
-      setRamList((prev) => [...prev, newRam]);
-      setRam(newRam);
-    }, 1000);
-  };
-
-  const handleCreateStorage = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const newStorage = createStorage(inputValue);
-      setIsLoading(false);
-      setStorageList((prev) => [...prev, newStorage]);
-      setStorage(newStorage);
-    }, 1000);
-  };
-
   const initialValues = {
     ram: "",
     storage: "",
     price: "",
   }
 
-  // const [value, setValue] = React.useState({
-  // ram : "",
-  // storage: "",
-  // price: "",
-  // });
-
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues: initialValues,
       validationSchema: productSchema,
-      onSubmit(data) {
-        const modeldata = {
-          ...data,
+      async onSubmit(data) {
+        Object.assign(data, {phone_id: PhoneId.id})
+        try {
+          const response = await AddSpecification(data)
+          console.log(response, "response")
+          toast.success(response.data.message);
+          resetForm({ values: "" })
+          handleModalClose(false);
+        } catch (err) {
+          toast.error(err.response.data.message);
         }
       },
     });
-
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this news?',
-      text: "The news will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await deleteNewsDetails(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        refetch()
-      }
-    })
-  };
 
   const customStyles = {
     control: (provided, state) => ({
@@ -176,18 +124,25 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col items-center justify-start w-full space-y-5'>
                 <div className='w-full'>
-                  <CreatableSelect
-                    className='w-full'
-                    isClearable
-                    isDisabled={isLoading}
-                    isLoading={isLoading}
-                    onChange={(newRam) => setRam(newRam)}
-                    onCreateOption={handleCreateRam}
-                    placeholder="Select RAM"
-                    options={RamList}
-                    value={values.Ram}
-                    name='ram'
-                  />
+                  <label className="block">
+                    <span className="block text-sm font-medium text-white">
+                      Ram *
+                    </span>
+                    <select
+                      name="ram"
+                      id="ram"
+                      value={values.ram}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                      <option value="">Select Ram</option>
+                      <option value="2">2 GB</option>
+                      <option value="3">3 GB</option>
+                      <option value="4">4 GB</option>
+                      <option value="6">6 GB</option>
+                      <option value="12">12 GB</option>
+                    </select>
+                  </label>
                   {errors.ram &&
                     touched.ram ? (
                     <small className="form-error text-red-600 text-sm font-semibold">
@@ -196,19 +151,24 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
                   ) : null}
                 </div>
                 <div className='w-full'>
-                  <CreatableSelect
-                    className='w-full'
-                    isClearable
-                    name='storage'
-                    isDisabled={isLoading}
-                    isLoading={isLoading}
-                    onChange={(newstorage) => setStorage(newstorage)}
-                    onCreateOption={handleCreateStorage}
-                    options={StorageList}
-                    placeholder="Select Storage"
-                    onBlur={handleBlur}
-                    value={values.Storage}
-                  />
+                  <label className="block ">
+                    <span className="block text-sm font-medium text-white">
+                      Storage *
+                    </span>
+                    <select
+                      name="storage"
+                      id="storage"
+                      value={values.storage}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                      <option value="">Select Storage</option>
+                      <option value="32">32 GB</option>
+                      <option value="64">64 GB</option>
+                      <option value="128">128 GB</option>
+                      <option value="256">256 GB</option>
+                    </select>
+                  </label>
                   {errors.storage && touched.storage
                     ?
                     <p className='form-error text-red-600 text-sm font-semibold'>{errors.storage}</p>
@@ -216,6 +176,9 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
                     null}
                 </div>
                 <div className="flex flex-col space-y-2 w-full ">
+                  <span className="block text-sm font-medium text-white">
+                    price *
+                  </span>
                   <input type="text"
                     name="price"
                     value={values.price}
@@ -241,11 +204,6 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
                 </button>
               </div>
             </form>
-            {error != "" ? (
-              <div className="text-center">
-                <small className="text-red-500">{error}</small>
-              </div>
-            ) : null}
           </div>
         </Modal.Description>
       </Modal.Description>

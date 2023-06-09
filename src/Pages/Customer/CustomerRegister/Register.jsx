@@ -30,18 +30,12 @@ function CustomerRegister() {
                     });
                     fd.append("data", ok);
                     fd.append("customer_Photo", logo);
-                    // if (value) {
-                    //   fb.append("id", value.id);
-                    //   useUpdateNewsDetailsMutation(fb).then(console.log("update ho gai"));
-                    // } else {
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
                     console.log(response.data.data)
-                    // navigate(`/Customer/profile-detail/${response.data.data.id}`);
                 } catch (err) {
                     toast.error(err.response.data.message);
-                    // console.log(err.response.data.message, "sjdhvb")
                 }
             },
         });
