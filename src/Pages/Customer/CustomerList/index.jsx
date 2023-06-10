@@ -21,18 +21,18 @@ import { toast } from "react-toastify";
 
 function CustomersList() {
   const navigate = useNavigate();
-  const [is_Edit, setIsEdit] = useState(false);
   const [isHoverEdit, setIsHoverEdit] = useState(false);
   const [isHoverDelete, setIsHoverDelete] = useState(false);
   const [selectedEMI, setSelectedEMI] = useState([]);
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [installmentFormModal, setInstallmentFormModal] = useState(false);
+  const [is_Edit, setIsEdit] = useState(false);
   const [InstallmentDetails, setInstallmentDetails] = useState();
   const [Selectemi, setSelectemi] = useState("")
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
-  // console.log(purchase?.data?.data?.AllPurchase)
+  // console.log(installment.data.data)
   const [data, setdata] = useState([
     {
       id: 1,
@@ -363,8 +363,7 @@ function CustomersList() {
             </div>
             <div
               id="year-btn"
-              className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 outline-none "
-            >
+              className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 outline-none">
               <select
                 onChange={handlePendingPaidUpClick}
                 name=""
@@ -418,7 +417,7 @@ function CustomersList() {
                       className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                       <tr className=" border-b">
                         <th className="py-5 px-6">
-                         {index + 1}
+                          {index + 1}
                         </th>
                         <td className="px-6 py-5 text-gray-500">
                           {item.customer.first_name}
@@ -476,7 +475,6 @@ function CustomersList() {
         <InstallmentFormModal
           showModal={installmentFormModal}
           handleShowModal={setInstallmentFormModal}
-          // refetchData={refetchData}
           InstallmentDetails={InstallmentDetails}
           is_Edit={is_Edit}
         />

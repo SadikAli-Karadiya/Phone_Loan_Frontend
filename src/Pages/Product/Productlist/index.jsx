@@ -30,7 +30,7 @@ function ProductList() {
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
   const phones = useQuery('phones', getAllPhone)
-  // console.log(phones.data.data.AllModel)
+
   const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure to delete this model?',
@@ -53,6 +53,7 @@ function ProductList() {
       }
     })
   };
+  
   const handleUpdatemodel = (id) => {
     console.log(id)
     let updateModel = phones?.data?.data?.AllModel?.find((n) => {

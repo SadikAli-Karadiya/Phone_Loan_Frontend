@@ -5,7 +5,7 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
-import { AddCompany, AddNewPhone } from "../utils/apiCalls"
+import { AddCompany, AddNewPhone, getAllCompany } from "../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
 
 
@@ -20,28 +20,30 @@ const productSchema = Yup.object({
   model_name: Yup.string().required("Please Enter Model Name"),
 });
 
-function ProductFormModal({ showModal, handleShowModal , ModelDetails , is_Edit }) {
+function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
 
   const [error, setError] = useState("");
-  const [CompanyList, setComapnyList] = React.useState([]);
   const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
-
   const addNewCompany = useMutation(AddCompany)
+  let Company = useQuery('company', getAllCompany)
+  const [CompanyList, setComapnyList] = React.useState([]);
+  // console.log(CompanyList, "ekjfvn")
 
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
-    
     setTimeout(() => {
       const newComapny = createCompany(inputValue);
       setIsLoading(false);
-      setComapnyList((prev) => [...prev, newComapny]);
+      setComapnyList(Company?.data?.data?.all_companies);
       setCompany(newComapny);
     }, 1000);
-
-
-    addNewCompany.mutate({company: inputValue})
-
+    try {
+      const respons = addNewCompany.mutate({ company: inputValue })
+    } catch (error) {
+      console.log(err)
+    }
+    console.log(respons, "jhsdb")
   };
 
   const initialValues = {
@@ -59,7 +61,7 @@ function ProductFormModal({ showModal, handleShowModal , ModelDetails , is_Edit 
           fd.append("company_name", company.value);
           fd.append("model_name", model_name);
           const response = await AddNewPhone(fd)
-          console.log(response.data , "respons")
+          console.log(response.data, "respons")
           toast.success(response.data.message);
           resetForm("")
           handleShowModal(false);
@@ -154,7 +156,7 @@ function ProductFormModal({ showModal, handleShowModal , ModelDetails , is_Edit 
                     onChange={(newCompany) => setCompany(newCompany)}
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
-                    options={CompanyList}
+                    options={Company?.data?.data?.all_companies}
                     value={company}
                     name='company_name'
                   />
@@ -181,23 +183,26 @@ function ProductFormModal({ showModal, handleShowModal , ModelDetails , is_Edit 
                 </div>
               </div>
               <div className="mt-5 text-right">
-                {/* <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-                </button> */}
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-
-                </button>
+                {
+                  is_Edit == true ?
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Update'}
+                    </button>
+                    :
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isLoading}
+                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    >
+                      {isLoading ? 'Loading...' : 'Submit'}
+                    </button>
+                }
               </div>
             </form>
           </div>

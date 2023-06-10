@@ -23,21 +23,21 @@ import { useQuery } from 'react-query'
 function ProductDetails() {
     const navigate = useNavigate();
     const params = useParams();
-    const [pageNo, setPageNo] = React.useState(1);
-    const [isLoading, setIsLoading] = React.useState();
-    const [value, setValue] = React.useState();
-    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
+    const [is_Edit, setIsEdit] = React.useState(false);
+    const [SpecificationDetails, setSpecificationDetails] = React.useState();
     const [specificationFormModal, setspecificationFormModal] = React.useState(false);
     const Spacification = useQuery(['spacification', params.id], () => getallSpecificationById(params.id))
     const [specification, setspecification] = React.useState(Spacification);
-    console.log(specification?.data?.data?.AllSpecification)
 
     const handleUpdatespecification = (id) => {
-        setModel(true);
-        let updatenews = data?.AllNews?.find((n) => {
+        console.log(id)
+        let UodateSpecification = Spacification?.data?.data?.AllSpecification.find((n) => {
             return n?.id == id;
         });
-        setValue(updatenews)
+        console.log(UodateSpecification)
+        setspecificationFormModal(true)
+        setSpecificationDetails(UodateSpecification);
+        setIsEdit(true)
     };
 
     const handleDelete = async (id) => {
@@ -64,9 +64,9 @@ function ProductDetails() {
         })
     };
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         setspecification(specification?.data?.data?.AllSpecification)
-      },[specification])
+    }, [specification])
 
     return (
         <>
@@ -128,7 +128,7 @@ function ProductDetails() {
                                                 <td className="px-6 py-5">
                                                     <div className='flex justify-center items-center space-x-2'>
                                                         <Tippy content="Update Storage">
-                                                            <div onClick={handleUpdatespecification}>
+                                                            <div onClick={() => handleUpdatespecification(item.id)}>
                                                                 <FiEdit className='text-[16px] cursor-pointer' />
                                                             </div>
                                                         </Tippy>
@@ -173,8 +173,8 @@ function ProductDetails() {
             <SpecificationFormModal
                 showModal={specificationFormModal}
                 handleShowModal={setspecificationFormModal}
-            // refetchData={refetchData}
-            // tournamentDetails={tournamentDetails}
+                is_Edit={is_Edit}
+                SpecificationDetails={SpecificationDetails}
             />
             {/* </div>
             </div> */}

@@ -5,10 +5,11 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useQuery } from 'react-query'
-import { AddInstallment } from '../utils/apiCalls';
+import { AddInstallment, UpdateInstallment } from '../utils/apiCalls';
 
 
 function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
+  let id = InstallmentDetails?.id
 
   if (!showModal) {
     return <></>;
@@ -64,19 +65,24 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: Object.keys(InstallmentDetails).length > 0 ? { month: InstallmentDetails.month, charges: InstallmentDetails.charges } : initialValues,
+      initialValues:
+        JSON.stringify(InstallmentDetails) != {} ? { month: InstallmentDetails?.month, charges: InstallmentDetails?.charges } :
+          initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {
+        Object.assign(data, { id: id })
         try {
-          const fd = new FormData();
-          let ok = JSON.stringify({
-            data,
-          });
-          fd.append("data", ok);
-          const response = await AddInstallment(fd)
-          toast.success(response.data.message);
-          resetForm({ values: "" })
-          handleModalClose(false);
+          if (is_Edit == true) {
+            const response = await UpdateInstallment(data)
+            toast.success(response.data.message);
+            resetForm({ values: "" })
+            handleModalClose(false);
+          } else {
+            const response = await AddInstallment(data)
+            toast.success(response.data.message);
+            resetForm({ values: "" })
+            handleModalClose(false);
+          }
         } catch (err) {
           toast.error(err.response.data.message);
         }
@@ -167,7 +173,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                   is_Edit == true ?
                     <button
                       type="button"
-                      // onClick={handleSubmit}
+                      onClick={handleSubmit}
                       disabled={isLoading}
                       className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     >

@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { useQuery } from 'react-query'
-import { AddSpecification } from '../utils/apiCalls';
+import { AddSpecification , UpdateSpecification } from '../utils/apiCalls';
 
 const productSchema = Yup.object({
   ram: Yup.string().required("Please Enter RAM"),
@@ -14,9 +14,13 @@ const productSchema = Yup.object({
   price: Yup.string().required("Please Enter Price"),
 });
 
-function SpecificationFormModal({ showModal, handleShowModal }) {
+function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetails, is_Edit }) {
+
+  if (!showModal) {
+    return <></>;
+  }
+
   let PhoneId = useParams();
-  // console.log(PhoneId.id)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = React.useState();
   const [RamList, setRamList] = React.useState([]);
@@ -32,16 +36,22 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: initialValues,
+      initialValues: JSON.stringify(SpecificationDetails) != {} ? { ram: SpecificationDetails?.ram, storage: SpecificationDetails?.storage, price: SpecificationDetails?.price } : initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
-        Object.assign(data, {phone_id: PhoneId.id})
+        Object.assign(data, { phone_id: PhoneId.id })
         try {
-          const response = await AddSpecification(data)
-          console.log(response, "response")
-          toast.success(response.data.message);
-          resetForm({ values: "" })
-          handleModalClose(false);
+          if (is_Edit == true) {
+            const response = await UpdateSpecification(data)
+            toast.success(response.data.message);
+            resetForm({ values: "" })
+            handleModalClose(false);
+          } else {
+            const response = await AddSpecification(data)
+            toast.success(response.data.message);
+            resetForm({ values: "" })
+            handleModalClose(false);
+          }
         } catch (err) {
           toast.error(err.response.data.message);
         }
@@ -194,6 +204,15 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
                 </div>
               </div>
               <div className="mt-5 text-right">
+              {is_Edit == true ? 
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                >
+                  {isLoading ? 'Loading...' : 'Update'}
+                </button> :
                 <button
                   type="button"
                   onClick={handleSubmit}
@@ -202,6 +221,7 @@ function SpecificationFormModal({ showModal, handleShowModal }) {
                 >
                   {isLoading ? 'Loading...' : 'Submit'}
                 </button>
+              }
               </div>
             </form>
           </div>

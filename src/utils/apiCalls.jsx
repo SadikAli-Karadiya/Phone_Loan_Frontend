@@ -30,40 +30,33 @@ const instance = axios.create({
 
 // }
 
+// Installment --------------------------------------------
 
 export const AddInstallment = (data) => {
   return instance({
     'url': '/installment/addinstallment',
     'method': 'POST',
     'data': data,
-    'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
-    },
   })
 }
 
 export const DeleteInstallment = (id) => {
-  console.log(id)
   return instance({
     'url': `/installment/delete/${id}`,
     'method': 'DELETE',
     'data': id,
-    'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
-    },
   })
 }
 
 export const UpdateInstallment = (data) => {
   return instance({
-    'url': `/installment/update/${id}`,
-    'method': 'DELETE',
-    'data': id,
-    'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
-    },
+    'url': `/installment/update/${data.id}`,
+    'method': 'PUT',
+    'data': data,
   })
 }
+
+// Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
   return instance({
@@ -87,6 +80,9 @@ export const UpdateCustomer = (data) => {
   })
 }
 
+
+// Company -------------------------------------------------------------------
+
 export const AddCompany = (data) => {
   return instance({
     'url': '/company/addcompany',
@@ -94,6 +90,15 @@ export const AddCompany = (data) => {
     'data': data,
   })
 }
+
+export const getAllCompany = () => {
+  return instance({
+    'method': 'GET',
+    'url': '/company',
+  })
+}
+
+
 
 export const AddNewPhone = (data) => {
   return instance({
@@ -221,12 +226,18 @@ export const getallSpecificationById = (id) => {
   })
 }
 
+export const UpdateSpecification = (data) => {
+  console.log(data)
+  return instance({
+    'url': `/specification/update/${data.id}`,
+    'method': 'PUT',
+    'data': data,
+  })
+}
+
 export const deleteSpecification = (id) => {
   return instance({
     'method': 'DELETE',
     'url': `/specification/Delete/${id}`,
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
   })
 }
