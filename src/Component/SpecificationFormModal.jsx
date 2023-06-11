@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { useQuery } from 'react-query'
-import { AddSpecification , UpdateSpecification } from '../utils/apiCalls';
+import { AddSpecification, UpdateSpecification } from '../utils/apiCalls';
 
 const productSchema = Yup.object({
   ram: Yup.string().required("Please Enter RAM"),
@@ -40,14 +40,16 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
       validationSchema: productSchema,
       async onSubmit(data) {
         Object.assign(data, { phone_id: PhoneId.id })
+        let UpdateData =  Object.assign(data , { id: SpecificationDetails?.id })
+        console.log(UpdateData)
         try {
           if (is_Edit == true) {
-            const response = await UpdateSpecification(data)
+            const response = await UpdateSpecification(UpdateData)
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleModalClose(false);
           } else {
-            const response = await AddSpecification(data)
+            const response = await AddSpecification(data, { phone_id: PhoneId.id })
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleModalClose(false);
@@ -173,6 +175,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                       onBlur={handleBlur}
                       className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                       <option value="">Select Storage</option>
+                      <option value="16">16 GB</option>
                       <option value="32">32 GB</option>
                       <option value="64">64 GB</option>
                       <option value="128">128 GB</option>
@@ -204,24 +207,24 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                 </div>
               </div>
               <div className="mt-5 text-right">
-              {is_Edit == true ? 
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Update'}
-                </button> :
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-                </button>
-              }
+                {is_Edit == true ?
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                  >
+                    {isLoading ? 'Loading...' : 'Update'}
+                  </button> :
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                  >
+                    {isLoading ? 'Loading...' : 'Submit'}
+                  </button>
+                }
               </div>
             </form>
           </div>

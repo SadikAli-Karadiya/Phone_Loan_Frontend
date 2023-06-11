@@ -59,6 +59,9 @@ export const UpdateInstallment = (data) => {
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
+  for (var value of data) {
+    console.log(value); 
+}
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',
@@ -98,16 +101,13 @@ export const getAllCompany = () => {
   })
 }
 
-
+// Phone ----------------------------------------------------------------
 
 export const AddNewPhone = (data) => {
   return instance({
     'url': '/phone/addphone',
     'method': 'POST',
-    'data': data,
-    'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
-    },
+    'data': data,AddCustomer
   })
 }
 
@@ -117,8 +117,23 @@ export const DeletePhone = (id) => {
     'url': `/phone/delete/${id}`,
     'method': 'DELETE',
     'data': id,
+  })
+}
+
+export const UpdatePhone = (data) => {
+  return instance({
+    'url': `/phone/update/${data.id}`,
+    'method': 'PUT',
+    'data': data,
+  })
+}
+
+export const getAllPhone = () => {
+  return instance({
+    'method': 'GET',
+    'url': '/phone',
     'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
+      'content-type': 'application/json' // override instance defaults
     },
   })
 }
@@ -173,16 +188,6 @@ export const getAllCompanies = () => {
   })
 }
 
-export const getAllPhone = () => {
-  return instance({
-    'method': 'GET',
-    'url': '/phone',
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
-  })
-}
-
 export const getallReceipt = (search) => {
   return instance({
     'method': 'GET',
@@ -193,7 +198,7 @@ export const getallReceipt = (search) => {
   })
 }
 
-// Specifiaction
+// Specifiaction ------------------------------------------------------
 
 export const AddSpecification = (data) => {
   return instance({
@@ -227,7 +232,6 @@ export const getallSpecificationById = (id) => {
 }
 
 export const UpdateSpecification = (data) => {
-  console.log(data)
   return instance({
     'url': `/specification/update/${data.id}`,
     'method': 'PUT',

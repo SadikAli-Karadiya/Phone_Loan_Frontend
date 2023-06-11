@@ -5,7 +5,7 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
-import { AddCompany, AddNewPhone, getAllCompany } from "../utils/apiCalls"
+import { AddCompany, AddNewPhone, UpdatePhone, getAllCompany } from "../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
 
 
@@ -16,12 +16,11 @@ const createCompany = (label) => ({
 
 
 const productSchema = Yup.object({
-  // company: Yup.string().required("Please Enter Company"),
   model_name: Yup.string().required("Please Enter Model Name"),
 });
 
 function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
-
+  console.log(ModelDetails?.id)
   const [error, setError] = useState("");
   const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
@@ -29,13 +28,14 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   let Company = useQuery('company', getAllCompany)
   const [CompanyList, setComapnyList] = React.useState([]);
   // console.log(CompanyList, "ekjfvn")
-
+  let Companies = Company?.data?.data?.all_companies
+  console.log(Companies)
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
       const newComapny = createCompany(inputValue);
       setIsLoading(false);
-      setComapnyList(Company?.data?.data?.all_companies);
+      setComapnyList();
       setCompany(newComapny);
     }, 1000);
     try {
@@ -52,19 +52,24 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   }
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: ModelDetails ? ModelDetails : initialValues,
+      initialValues:
+        JSON.stringify(ModelDetails) != {} ? { company: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name } :
+          initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
+        Object.assign(data, { company: company.value, id: ModelDetails?.id })
         try {
-          const fd = new FormData();
-          let model_name = data.model_name
-          fd.append("company_name", company.value);
-          fd.append("model_name", model_name);
-          const response = await AddNewPhone(fd)
-          console.log(response.data, "respons")
-          toast.success(response.data.message);
-          resetForm("")
-          handleShowModal(false);
+          if (is_Edit == true) {
+            const response = await UpdatePhone(data)
+            toast.success(response.data.message);
+            resetForm("")
+            handleShowModal(false);
+          } else {
+            const response = await AddNewPhone(data)
+            toast.success(response.data.message);
+            resetForm("")
+            handleShowModal(false);
+          }
         } catch (error) {
           toast.error(error.response.data.message);
         }

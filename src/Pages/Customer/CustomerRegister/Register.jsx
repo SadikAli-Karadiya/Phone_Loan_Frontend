@@ -12,12 +12,12 @@ function CustomerRegister() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = useState(defaultImage);
     const [photo, setPhoto] = useState("");
+    const [Adhar_front , setadharfront] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
     // const { mutate, isLoading, response } = useMutation(AddCustomer)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
-
-
+    console.log(Adhar_front)
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
@@ -29,7 +29,8 @@ function CustomerRegister() {
                         CustomerInfo: data,
                     });
                     fd.append("data", ok);
-                    fd.append("customer_Photo", logo);
+                    fd.append("photo", photo);
+                    fd.append("adhar_front", Adhar_front);
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
@@ -43,6 +44,10 @@ function CustomerRegister() {
     function handleImageUpload(e) {
         setPhoto(() => e.target.files[0]);
         setImg(URL.createObjectURL(e.target.files[0]));
+    }
+
+    function handleAdharFUpload(e) {
+        setadharfront(() => e.target.files[0]);
     }
 
     const handleClick = (e) => {
@@ -216,179 +221,6 @@ function CustomerRegister() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                    <div className="date w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Date *
-                                            </span>
-                                            <input
-                                                type="date"
-                                                name="date"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.date}
-                                                className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.date && touched.date ? errors.date : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="selectinst w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Company *
-                                            </span>
-                                            <select
-                                                name="company"
-                                                id="company"
-                                                value={values.company}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                                                <option value="">Select Company</option>
-                                                <option value="Oppo">Oppo</option>
-                                                <option value="Vivo">Vivo</option>
-                                            </select>
-                                        </label>
-                                        <span className="text-xs font-semibold text-red-600 px-1">
-                                            {errors.company && touched.company ? errors.company : null}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                    <div className="selectinst w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Model *
-                                            </span>
-                                            <select
-                                                name="model"
-                                                id="model"
-                                                value={values.model}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-
-                                            >
-                                                <option value="">Select Model</option>
-                                                <option value="F17">F17</option>
-                                            </select>
-                                        </label>
-                                        <span className="text-xs font-semibold text-red-600 px-1">
-                                            {errors.model && touched.model ? errors.model : null}
-                                        </span>
-                                    </div>
-                                    <div className="dp w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Price *
-                                            </span>
-                                            <input
-                                                type="text"
-                                                name="price"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.price}
-                                                placeholder="Enter Down Payment"
-                                                className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.price && touched.price ? errors.price : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                    <div className="selectinst w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Installment *
-                                            </span>
-                                            <select
-                                                name="installment"
-                                                id="installment"
-                                                value={values.installment}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                                                <option value="">Select Installment</option>
-                                                <option value="2">For 2 Month</option>
-                                                <option value="3">For 3 Month</option>
-                                            </select>
-                                        </label>
-                                        <span className="text-xs font-semibold text-red-600 px-1">
-                                            {errors.installment && touched.installment ? errors.installment : null}
-                                        </span>
-                                    </div>
-                                    <div className="dp w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Down Payment *
-                                            </span>
-                                            <input
-                                                type="text"
-                                                name="dp"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.dp}
-                                                placeholder="Enter Down Payment"
-                                                className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.dp && touched.dp ? errors.dp : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                    <div className="discount w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Discount
-                                            </span>
-                                            <input
-                                                type="text" id='discount'
-                                                name="discount"
-                                                placeholder="Enter Your Discount"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.discount}
-                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.discount && touched.discount
-                                                    ? errors.discount
-                                                    : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="totalfee w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Total Fee
-                                            </span>
-                                            <input
-                                                type="text" id='totalfee'
-                                                name="net_payable"
-                                                disabled={true}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.net_payable}
-                                                placeholder="Enter Net Payable Amount"
-                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.net_payable && touched.net_payable
-                                                    ? errors.net_payable
-                                                    : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                         <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                             <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
@@ -400,8 +232,9 @@ function CustomerRegister() {
                                         <input
                                             type="file"
                                             name="adhar_front"
-                                            onChange={handleChange}
+                                            onChange={(e) => handleAdharFUpload(e)}
                                             onBlur={handleBlur}
+                                            onInput={(e) => handleAdharFUpload(e)}
                                             value={values.adhar_front}
                                             className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                         />
