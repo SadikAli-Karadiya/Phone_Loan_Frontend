@@ -53,7 +53,7 @@ function ProductList() {
       }
     })
   };
-  
+
   const handleUpdatemodel = (id) => {
     console.log(id)
     let updateModel = phones?.data?.data?.AllModel?.find((n) => {
@@ -66,18 +66,16 @@ function ProductList() {
 
   const handlePendingPaidUpClick = (e) => {
     const filteredCompany = phones.data.data.AllModel?.filter((item) => {
-      if (e.target.value == 0 ) {
-        return item
-      } else if (e.target.value == item.company.company_name) {
+      if (e.target.value == item.company.company_name) {
         return item
       }
     });
     setSelectedCompany(filteredCompany)
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setSelectedCompany(phones?.data?.data?.AllModel)
-  },[phones])
+  }, [phones?.data?.data?.AllModel])
 
   return (
     <>

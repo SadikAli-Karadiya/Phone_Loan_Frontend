@@ -10,7 +10,6 @@ import { useQuery } from 'react-query'
 
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
-  console.log(PhoneDetails)
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
@@ -27,8 +26,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
-  // console.log(Installment?.data?.data?.AllInstallment)
-  // console.log(Company_Details.data.data.all_companies)
 
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({

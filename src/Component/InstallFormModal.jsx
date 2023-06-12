@@ -9,6 +9,7 @@ import { AddInstallment, UpdateInstallment } from '../utils/apiCalls';
 
 
 function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
+  
   let id = InstallmentDetails?.id
 
   if (!showModal) {
@@ -66,7 +67,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
-        JSON.stringify(InstallmentDetails) != {} ? { month: InstallmentDetails?.month, charges: InstallmentDetails?.charges } :
+        JSON.stringify(InstallmentDetails) != {} ? { month : InstallmentDetails?.month , charges : InstallmentDetails?.charges } :
           initialValues,
       validationSchema: installmentSchema,
       async onSubmit(data) {

@@ -10,7 +10,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { BiFolderPlus } from "react-icons/bi";
 import NewPhoneFormModel from '../../../Component/NewPhoneFormModal';
-import { getPurchaseCustomerbyId, UpdateCustomer } from '../../../utils/apiCalls';
+import { getPurchaseCustomerbyId, getCustomerByid, UpdateCustomer } from '../../../utils/apiCalls';
 import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
 import { toast } from "react-toastify";
@@ -72,6 +72,7 @@ const customerSchema = Yup.object({
             }
             return true;
         })
+        .nullable()
         .min(2, "Minimum 2 characters are required")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
@@ -84,73 +85,11 @@ const customerSchema = Yup.object({
         })
         .min(10, "Please enter valid mobile no")
         .max(10, "Please enter valid mobile no"),
-
-    // adhar_front: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg , jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // adhar_back: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // pan: Yup.mixed()
-    //     .test("is-valid-type", "PAN Card should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // light_bill: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-
 });
 
 function CustomerProfile() {
     const navigate = useNavigate();
     const params = useParams();
-    const location = useLocation();
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = React.useState(defaultImage);
     const [photo, setPhoto] = React.useState("");
@@ -160,9 +99,10 @@ function CustomerProfile() {
     const [isEnable, setIsEnable] = React.useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
     const [PhoneDetails, setPhoneDetails] = React.useState();
-    const data = useQuery(['customer', params.id], () => getPurchaseCustomerbyId(params.id))
-    let Customer_details = data?.data?.data?.CustomerAllPurchase[0]?.customer
-    // console.log(data.data.data.CustomerAllPurchase)
+    const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
+    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
+    let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
+    console.log(SingleCustomerDetails)
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -178,12 +118,12 @@ function CustomerProfile() {
 
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
-            initialValues: Customer_details ? Customer_details : initialValues,
+            initialValues: SingleCustomerDetails ? SingleCustomerDetails : initialValues,
             validationSchema: customerSchema,
             async onSubmit(data) {
                 try {
                     const fd = new FormData();
-                    fd.append("id", Customer_details.id)
+                    fd.append("id", SingleCustomerDetails?.id)
                     fd.append("first_name", data.first_name)
                     fd.append("last_name", data.last_name)
                     fd.append("mobile", data.mobile)
@@ -222,7 +162,7 @@ function CustomerProfile() {
 
     const handleEditPhone = (id) => {
         let Phone = data.data.data.CustomerAllPurchase?.find((n) => {
-          return n?.id == id;
+            return n?.id == id;
         });
         setIsEdit(true)
         setPhoneDetails(Phone);
@@ -233,7 +173,7 @@ function CustomerProfile() {
         //     installment_id: InstallmentDetails.id,
         //   },
         // });
-      };
+    };
 
 
     return (

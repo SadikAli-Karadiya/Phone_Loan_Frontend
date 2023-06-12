@@ -7,17 +7,29 @@ import "../../Customer/CustomerRegister/Customerform.css"
 import { AddCustomer } from "../../../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
 import { AxiosError } from 'axios';
+import defaultadharfront from "../../../../public/images/adhar.webp";
+import defaultadharback from "../../../../public/images/adhar_back.jpg";
+import defaultpan from "../../../../public/images/pan.webp";
+import defaultbill from "../../../../public/images/bill.webp";
 
 function CustomerRegister() {
     const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = useState(defaultImage);
+    const [DefaultadharFront, setdefaultadharfront] = useState(defaultadharfront);
+    const [DefaultadharBack, setdefaultadharback] = useState(defaultadharback);
+    const [DefaultPan, setdefaultpan] = useState(defaultpan);
+    const [DefaultBill, setdefaultbill] = useState(defaultbill);
     const [photo, setPhoto] = useState("");
-    const [Adhar_front , setadharfront] = useState("");
+    const [Adhar_front, setadharfront] = useState("");
+    const [Adhar_back, setadharback] = useState("");
+    const [Pan, setpan] = useState("");
+    const [Bill, setbill] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
     // const { mutate, isLoading, response } = useMutation(AddCustomer)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
-    console.log(Adhar_front)
+    // console.log(Adhar_front)
+    // console.log(photo)
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
@@ -31,10 +43,13 @@ function CustomerRegister() {
                     fd.append("data", ok);
                     fd.append("photo", photo);
                     fd.append("adhar_front", Adhar_front);
+                    fd.append("adhar_back", Adhar_back);
+                    fd.append("pan", Pan);
+                    fd.append("bill", Bill);
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
-                    console.log(response.data.data)
+                    navigate("/")
                 } catch (err) {
                     toast.error(err.response.data.message);
                 }
@@ -48,6 +63,19 @@ function CustomerRegister() {
 
     function handleAdharFUpload(e) {
         setadharfront(() => e.target.files[0]);
+        setdefaultadharfront(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharBUpload(e) {
+        setadharback(() => e.target.files[0]);
+        setdefaultadharback(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharPanUpload(e) {
+        setpan(() => e.target.files[0]);
+        setdefaultpan(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharBillUpload(e) {
+        setbill(() => e.target.files[0]);
+        setdefaultbill(URL.createObjectURL(e.target.files[0]));
     }
 
     const handleClick = (e) => {
@@ -185,15 +213,15 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="refrence_name"
+                                                name="reference_name"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.refrence_name}
-                                                placeholder="Enter Refeence Name"
+                                                value={values.reference_name}
+                                                placeholder="Enter Reference Name"
                                                 className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.refrence_name && touched.refrence_name
-                                                    ? errors.refrence_name
+                                                {errors.reference_name && touched.reference_name
+                                                    ? errors.reference_name
                                                     : null}
                                             </span>
                                         </label>
@@ -205,16 +233,16 @@ function CustomerRegister() {
                                             </span>
                                             <input
                                                 type="text"
-                                                name="refrence_mobile"
-                                                placeholder="Enter Refrence Mobile No"
+                                                name="reference_mobile"
+                                                placeholder="Enter Reference Mobile No"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.refrence_mobile}
+                                                value={values.reference_mobile}
                                                 className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                             />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.refrence_mobile && touched.refrence_mobile
-                                                    ? errors.refrence_mobile
+                                                {errors.reference_mobile && touched.reference_mobile
+                                                    ? errors.reference_mobile
                                                     : null}
                                             </span>
                                         </label>
@@ -226,80 +254,127 @@ function CustomerRegister() {
                             <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
                                 <div className="adhar_front w-full">
                                     <label className="block">
-                                        <span className="block text-sm font-medium text-slate-700">
+                                        <span className="block text-sm text-center pb-2 font-medium text-slate-700">
                                             Adhar Card Front *
                                         </span>
-                                        <input
-                                            type="file"
-                                            name="adhar_front"
-                                            onChange={(e) => handleAdharFUpload(e)}
-                                            onBlur={handleBlur}
-                                            onInput={(e) => handleAdharFUpload(e)}
-                                            value={values.adhar_front}
-                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                        />
-                                        <span className="text-xs font-semibold text-red-600 px-1">
-                                            {errors.adhar_front && touched.adhar_front ? errors.adhar_front : null}
-                                        </span>
+                                        <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                            <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src={DefaultadharFront}
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain "
+                                                    alt="student profile"
+                                                />
+                                                <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                    <input
+                                                        type="file"
+                                                        id="adhar_front"
+                                                        className="rounded-md w-16"
+                                                        accept=".png, .jpg, .jpeg"
+                                                        name="adhar_front"
+                                                        onChange={(e) => handleAdharFUpload(e)}
+                                                        onBlur={handleBlur}
+                                                        onInput={(e) => handleAdharFUpload(e)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </label>
                                 </div>
                                 <div className="adhar_back w-full">
                                     <label className="block">
-                                        <span className="block text-sm font-medium text-slate-700">
+                                        <span className="block text-center pb-2 text-sm font-medium text-slate-700">
                                             Adhar Card Back *
                                         </span>
-                                        <input
-                                            type="file"
-                                            name="adhar_back"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.adhar_back}
-                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                        />
+                                        <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                            <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src={DefaultadharBack}
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain "
+                                                    alt="student profile"
+                                                />
+                                                <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                    <input
+                                                        type="file"
+                                                        id="adhar_back"
+                                                        className="rounded-md w-16"
+                                                        accept=".png, .jpg, .jpeg"
+                                                        name="adhar_back"
+                                                        onChange={(e) => handleAdharBUpload(e)}
+                                                        onBlur={handleBlur}
+                                                        onInput={(e) => handleAdharBUpload(e)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </label>
-                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                        {errors.adhar_back && touched.adhar_back ? errors.adhar_back : null}
-                                    </span>
                                 </div>
                                 <div className="pan w-full">
                                     <label className="block">
-                                        <span className="block text-sm font-medium text-slate-700">
+                                        <span className="block text-sm text-center pb-2 font-medium text-slate-700">
                                             PAN *
                                         </span>
-                                        <input
-                                            type="file"
-                                            name="pan"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.pan}
-                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                        />
-                                        <span className="text-xs font-semibold text-red-600 px-1">
-                                            {errors.pan && touched.pan ? errors.pan : null}
-                                        </span>
+                                        <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                            <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src={DefaultPan}
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain "
+                                                    alt="student profile"
+                                                />
+                                                <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                    <input
+                                                        type="file"
+                                                        id="pan"
+                                                        className="rounded-md w-16"
+                                                        accept=".png, .jpg, .jpeg"
+                                                        name="pan"
+                                                        onChange={(e) => handleAdharPanUpload(e)}
+                                                        onBlur={handleBlur}
+                                                        onInput={(e) => handleAdharPanUpload(e)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </label>
                                 </div>
                                 <div className="lightbill w-full">
                                     <label className="block">
-                                        <span className="block text-sm font-medium text-slate-700">
+                                        <span className="block text-sm text-center pb-2 font-medium text-slate-700">
                                             Light Bill
                                         </span>
-                                        <input
-                                            type="file"
-                                            name="light_bill"
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.light_bill}
-                                            className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                        />
+                                        <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                            <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                <img
+                                                    src={DefaultBill}
+                                                    width="100%"
+                                                    height="100%"
+                                                    className="object-contain "
+                                                    alt="student profile"
+                                                />
+                                                <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                    <input
+                                                        type="file"
+                                                        id="light_bill"
+                                                        className="rounded-md w-16"
+                                                        accept=".png, .jpg, .jpeg"
+                                                        name="light_bill"
+                                                        onChange={(e) => handleAdharBillUpload(e)}
+                                                        onBlur={handleBlur}
+                                                        onInput={(e) => handleAdharBillUpload(e)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </label>
-                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                        {errors.light_bill && touched.light_bill ? errors.light_bill : null}
-                                    </span>
                                 </div>
 
                             </div>
-                            <div className="flex py-2 ">
+                            <div className="flex pt-10 ">
                                 <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>
                                     CLEAR
                                 </button>

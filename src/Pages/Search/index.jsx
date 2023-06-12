@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { getAllCustomer } from '../../utils/apiCalls';
+import { useQuery } from 'react-query'
+import { FaUsers } from "react-icons/fa";
+
 
 function Search() {
     const navigate = useNavigate();
@@ -13,6 +17,8 @@ function Search() {
     const [loading, setLoading] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
     const [showNotFound, setShowNotFound] = React.useState(-1)
+    const AllCustomer = useQuery('customer', getAllCustomer)
+    console.log(AllCustomer?.data?.data?.AllCustomer)
     return (
         <>
             <div className=' sm:px-5 xl:px-10 py-5 h-full'>
@@ -30,15 +36,6 @@ function Search() {
                         </div>
                     </div>
                 </div>
-                {/* {
-                    loading
-                        ?
-                        <LoaderSmall />
-                        :
-
-                        (
-                            data?.length > 0
-                                ? ( */}
                 <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5 mt-5">
                     <h1 className='font-bold text-lg'>Customer List</h1>
                     <table
@@ -48,97 +45,79 @@ function Search() {
                         <thead className="text-xs uppercase bg-[#0d0d48]">
                             <tr className="text-sm">
                                 <th scope="col" className="pl-3 py-4">
-                                    Customer Id
+                                Serial No
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    Name
+                                    first name 
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    last name 
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Phone
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    Company
-                                </th>
-                                <th scope="col" className="px-6 py-4">
-                                    Model
-                                </th>
-                                <th scope="col" className="px-6 py-4">
-                                    Total
-                                </th>
-                                <th scope="col" className="px-6 py-4">
-                                    Pending
-                                </th>
-                                <th scope="col" className="px-6 py-4">
                                     Profile
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    Action
+                                    status
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                            <tr className=" border-b">
-                                <td className="px-6 py-5 font-bold">
-                                    001
-                                </td>
-                                <td className="px-6 py-5 capitalize">
-                                    Shad
-                                </td>
-                                <td className="px-6 py-5">
-                                    1234567890
-                                </td>
-                                <td className="px-6 py-5">
-                                    Vivo
-                                </td>
-                                <td className="px-6 py-5">
-                                    F17
-                                </td>
-                                <td className="px-6 py-5">
-                                    <h1 className='bg-blue-100 py-[2px] rounded-md font-bold text-blue-900'>
-                                        15000
-                                    </h1>
-                                </td>
-                                <td className="px-6 py-5">
-                                    <h1 className='bg-red-100 py-[2px] rounded-md font-bold text-red-900'>
-                                        15000
-                                    </h1>
-                                </td>
-                                <td className="px-6 py-5">
-                                    <div className="flex justify-center items-center">
-                                        <Tippy content="Customer Profile">
-                                            <div>
-                                                <AiFillEye
-                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                    onClick={() =>
-                                                        navigate(`/Customer/profile-detail`)}
-                                                />
-                                            </div>
-                                        </Tippy>
-                                    </div>
-                                </td>
-                                <td className="px-6 py-5 ">
-                                    <h1 className='italic font-semibold text-green-600'>
-                                        Current
-                                    </h1>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                {/* )
-                                : (
-                                    showNotFound != -1
-                                        ?
-                                        <div className="bg-red-200 font-bold justify-center items-center p-2 rounded mx-3 flex space-x-2">
-                                            <IoMdInformationCircle className="text-xl text-red-600" />
+                        {
+                            AllCustomer?.data?.data?.AllCustomer?.length > 0 ? (
+                                AllCustomer?.data?.data?.AllCustomer?.map((item, index) => {
+                                    return (
+                                        <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                            <tr className=" border-b">
+                                                <td className="px-6 py-5 font-bold">
+                                                    {index + 1 }
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.first_name}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item.last_name}
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    {item?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    <div className="flex justify-center items-center">
+                                                        <Tippy content="Customer Profile">
+                                                            <div>
+                                                                <AiFillEye
+                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                    onClick={() =>
+                                                                        navigate(`/Customer/profile-detail/${item?.id}`)} />
+                                                            </div>
+                                                        </Tippy>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-5 ">
+                                                    <h1 className='italic font-semibold text-green-600'>
+                                                        Running
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    )
+                                })
+                            ) : (
+                                null
+                            )}
 
-                                            <h1 className="text-red-800">No Student Found </h1>
-                                        </div>
-                                        :
-                                        null
-                                )
-                        )
-                } */}
+                    </table>
+                    {
+                        AllCustomer?.data?.data?.AllCustomer?.length > 0 ?
+                            null
+                            :
+                            <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                                <FaUsers className='text-3xl' />
+                                <h1 className='font-semibold'>Customer Not Found</h1>
+                            </div>
+                    }
+                </div>
             </div>
         </>
     )

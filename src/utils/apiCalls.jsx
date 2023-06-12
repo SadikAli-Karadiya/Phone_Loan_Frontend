@@ -40,6 +40,16 @@ export const AddInstallment = (data) => {
   })
 }
 
+export const getAllInstallment = () => {
+  return instance({
+    'method': 'GET',
+    'url': '/installment',
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 export const DeleteInstallment = (id) => {
   return instance({
     'url': `/installment/delete/${id}`,
@@ -59,13 +69,23 @@ export const UpdateInstallment = (data) => {
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
-  for (var value of data) {
-    console.log(value); 
-}
+  //   for (var value of data) {
+  //     console.log(value); 
+  // }
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',
     'data': data,
+    'headers': {
+      'content-type': "multipart/form-data" // override instance defaults
+    },
+  })
+}
+
+export const getAllCustomer = () => {
+  return instance({
+    'url': '/customer',
+    'method': 'GET',
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
     },
@@ -83,10 +103,20 @@ export const UpdateCustomer = (data) => {
   })
 }
 
+export const getCustomerByid = (id) => {
+  console.log(id , "jsvdhb")
+  return instance({
+    'url': `/customer/details/${id}`,
+    'method': 'GET',
+    'data': id,
+  })
+}
+
 
 // Company -------------------------------------------------------------------
 
 export const AddCompany = (data) => {
+  console.log(data, "ksdhvb")
   return instance({
     'url': '/company/addcompany',
     'method': 'POST',
@@ -107,7 +137,7 @@ export const AddNewPhone = (data) => {
   return instance({
     'url': '/phone/addphone',
     'method': 'POST',
-    'data': data,AddCustomer
+    'data': data,
   })
 }
 
@@ -132,16 +162,6 @@ export const getAllPhone = () => {
   return instance({
     'method': 'GET',
     'url': '/phone',
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
-  })
-}
-
-export const getAllInstallment = () => {
-  return instance({
-    'method': 'GET',
-    'url': '/installment',
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },

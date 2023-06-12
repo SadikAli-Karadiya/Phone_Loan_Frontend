@@ -59,7 +59,7 @@ export const customerSchema = Yup.object({
         .min(2, "Minimum 2 characters are required")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
-    refrence_mobile: Yup.string()
+    reference_mobile: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -68,66 +68,6 @@ export const customerSchema = Yup.object({
         })
         .min(10, "Please enter valid mobile no")
         .max(10, "Please enter valid mobile no"),
-
-    // adhar_front: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg , jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // adhar_back: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // pan: Yup.mixed()
-    //     .test("is-valid-type", "PAN Card should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .required("Please Enter Adhar Card")
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
-    // light_bill: Yup.mixed()
-    //     .test("is-valid-type", "Logo should be in jpg, jpeg or png format",
-    //         value => {
-    //             if (!value) {
-    //                 return true; // skip validation if value is empty
-    //             }
-    //             return isValidFileType(value && value.name, "image")
-    //         })
-    //     .test("is-valid-size", "Max allowed size is 2MB", value => {
-    //         if (!value) {
-    //             return true;
-    //         }
-    //         return value && value.size <= 2097152
-    //     }),
 
 });
 
@@ -138,8 +78,8 @@ export const initialValues = {
     last_name: "",
     mobile: "",
     alternate_no : "",
-    refrence_name : "",
-    refrence_mobile: "",
+    reference_name : "",
+    reference_mobile: "",
     adhar_front: "",
     adhar_back: "",
     pan: "",

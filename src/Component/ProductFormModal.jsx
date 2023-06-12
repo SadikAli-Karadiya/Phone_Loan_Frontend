@@ -20,16 +20,17 @@ const productSchema = Yup.object({
 });
 
 function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
-  console.log(ModelDetails?.id)
+
+  if (!showModal) {
+    return <></>;
+  }
+
   const [error, setError] = useState("");
   const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
-  const addNewCompany = useMutation(AddCompany)
   let Company = useQuery('company', getAllCompany)
   const [CompanyList, setComapnyList] = React.useState([]);
-  // console.log(CompanyList, "ekjfvn")
   let Companies = Company?.data?.data?.all_companies
-  console.log(Companies)
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -38,12 +39,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
       setComapnyList();
       setCompany(newComapny);
     }, 1000);
-    try {
-      const respons = addNewCompany.mutate({ company: inputValue })
-    } catch (error) {
-      console.log(err)
-    }
-    console.log(respons, "jhsdb")
+    const respons = AddCompany({ inputValue })
   };
 
   const initialValues = {
@@ -53,11 +49,15 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
-        JSON.stringify(ModelDetails) != {} ? { company: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name } :
+        JSON.stringify(ModelDetails) != {} ? { model_name: ModelDetails?.model_name }
+          :
           initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
-        Object.assign(data, { company: company.value, id: ModelDetails?.id })
+        if (company == null) {
+          toast("Please Select Company")
+        }
+        Object.assign(data, { company_name: company?.values, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
             const response = await UpdatePhone(data)
@@ -110,6 +110,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
       height: "44px",
     }),
   };
+  console.log(values?.model_name)
 
   const handleModalClose = () => {
     resetForm("")
@@ -158,19 +159,16 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
+                    value={is_Edit == true ? ModelDetails?.model_name : null}
                     onChange={(newCompany) => setCompany(newCompany)}
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
-                    options={Company?.data?.data?.all_companies}
-                    value={company}
+                    options={Companies?.map(item => {
+                      return { values: item?.company_name, label: item?.company_name };
+                    })
+                    }
                     name='company_name'
                   />
-                  {/* {errors.company &&
-                    touched.company ? (
-                    <small className="form-error text-red-600 text-sm font-semibold">
-                      {errors.company}
-                    </small>
-                  ) : null} */}
                 </div>
                 <div className="firstname flex flex-col space-y-2 w-full ">
                   <input type="text"
