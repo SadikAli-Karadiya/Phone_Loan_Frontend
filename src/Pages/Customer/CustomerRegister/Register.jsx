@@ -49,7 +49,7 @@ function CustomerRegister() {
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
-                    navigate(`/Customer/profile-detail/${response.data.id}`)
+                    navigate(`/Customer/profile-detail/${response?.data?.data?.id}`)
                 } catch (err) {
                     toast.error(err.response.data.message);
                 }

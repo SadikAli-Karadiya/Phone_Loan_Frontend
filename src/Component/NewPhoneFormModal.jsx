@@ -5,11 +5,13 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
-import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPhone } from "../utils/apiCalls";
+import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
+  const params = useParams();
+  let customer_id = params?.id
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
@@ -26,26 +28,26 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
-
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues: PhoneDetails ? PhoneDetails : NewPhoneValues,
       validationSchema: NewPhoneSchema,
       async onSubmit(data) {
-        Object.assign(data, {company: Company}, {model: Model})
-        let date = data.date
+        Object.assign(data,
+          { customer_id: customer_id },
+          { company_name: Company },
+          { model: Model },
+          { ram : Ram },
+          { Specification: Specification },
+          { price : SelectSpecification },
+          { month : installment },
+          { Down_Payment: Down_Payment },
+          { net_payable : Net_playable },
+        )
+        // console.log(data)
         try {
-          const formdata = new FormData();
-          formdata.append('date', date)
-          formdata.append('company', Company)
-          formdata.append('model', Model)
-          // formdata.append('ram', Ram)
-          // formdata.append('storage', Specification)
-          // formdata.append('price', SelectSpecification)
-          // formdata.append('installment', installment)
-          // formdata.append('dp', Down_Payment)
-          formdata.append('net_payable', Net_playable)
-          const response = await AddNewPhone(formdata)
+          const response = await AddNewPurchase(data)
+          console.log(response)
           toast.success(response.data.message);
           resetForm({ values: "" })
           handleModalClose(false);

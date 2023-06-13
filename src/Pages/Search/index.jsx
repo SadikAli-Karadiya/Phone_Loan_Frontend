@@ -2,13 +2,16 @@ import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../App.css"
 import { AiFillEye } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllCustomer } from '../../utils/apiCalls';
+import { getAllCustomer , DeleteCustomer } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import { FaUsers } from "react-icons/fa";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 
 function Search() {
@@ -18,6 +21,27 @@ function Search() {
     const [searchValue, setSearchValue] = React.useState('');
     const [showNotFound, setShowNotFound] = React.useState(-1)
     const AllCustomer = useQuery('customer', getAllCustomer)
+
+    const handleDeleteInstallment = async (id) => {
+        Swal.fire({
+            title: "Are you sure to delete customer?",
+            text: "",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const deleteCustomerResponse = await DeleteCustomer(id);
+                if (deleteCustomerResponse.data.success) {
+                    toast.success(deleteCustomerResponse.data.message);
+                } else if (deleteCustomerResponse.data.success == false) {
+                    toast.error(deleteCustomerResponse.data.message);
+                }
+            }
+        });
+    };
 
     return (
         <>
@@ -45,13 +69,13 @@ function Search() {
                         <thead className="text-xs uppercase bg-[#0d0d48]">
                             <tr className="text-sm">
                                 <th scope="col" className="pl-3 py-4">
-                                Serial No
+                                    Serial No
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    first name 
+                                    first name
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    last name 
+                                    last name
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Phone
@@ -71,7 +95,7 @@ function Search() {
                                         <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                             <tr className=" border-b">
                                                 <td className="px-6 py-5 font-bold">
-                                                    {index + 1 }
+                                                    {index + 1}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.first_name}
@@ -82,16 +106,28 @@ function Search() {
                                                 <td className="px-6 py-5">
                                                     {item?.mobile}
                                                 </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="flex justify-center items-center">
-                                                        <Tippy content="Customer Profile">
-                                                            <div>
-                                                                <AiFillEye
-                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                    onClick={() =>
-                                                                        navigate(`/Customer/profile-detail/${item?.id}`)} />
-                                                            </div>
-                                                        </Tippy>
+                                                <td className="px-6 py-5 flex justify-center items-center">
+                                                    <div className='flex items-center space-x-2'>
+                                                        <div className="flex justify-center items-center">
+                                                            <Tippy content="Customer Profile">
+                                                                <div>
+                                                                    <AiFillEye
+                                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                        onClick={() =>
+                                                                            navigate(`/Customer/profile-detail/${item?.id}`)} />
+                                                                </div>
+                                                            </Tippy>
+                                                        </div>
+                                                        <div className="flex justify-center items-center">
+                                                            <Tippy content="Delete Customer">
+                                                                <div>
+                                                                    <MdDelete
+                                                                        className="xs:text-base text-red-500 md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                        onClick={() => handleDeleteInstallment(item.id)}
+                                                                    />
+                                                                </div>
+                                                            </Tippy>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-5 ">
@@ -118,7 +154,7 @@ function Search() {
                             </div>
                     }
                 </div>
-            </div>
+            </div >
         </>
     )
 }

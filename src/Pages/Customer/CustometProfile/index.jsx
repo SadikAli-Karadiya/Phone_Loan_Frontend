@@ -10,7 +10,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { BiFolderPlus } from "react-icons/bi";
 import NewPhoneFormModel from '../../../Component/NewPhoneFormModal';
-import { getPurchaseCustomerbyId, getCustomerByid, UpdateCustomer } from '../../../utils/apiCalls';
+import { getPurchaseCustomerbyId, getCustomerByid, UpdateCustomer, DeletePurchase } from '../../../utils/apiCalls';
 import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
 import { toast } from "react-toastify";
@@ -20,6 +20,9 @@ import defaultadharback from "../../../../public/images/adhar_back.jpg";
 import defaultpan from "../../../../public/images/pan.webp";
 import defaultbill from "../../../../public/images/bill.webp";
 import defaultImage from "../../../../public/images/user.png";
+import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
+
 
 const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
 
@@ -202,12 +205,29 @@ function CustomerProfile() {
         setIsEdit(true)
         setPhoneDetails(Phone);
         setnewPhoneFormModal(true);
-        // navigate({
-        //   state: {
-        //     isEdit: true,
-        //     installment_id: InstallmentDetails.id,
-        //   },
-        // });
+    };
+
+    const handleDeletePhone = async (id) => {
+        console.log(id)
+        Swal.fire({
+            title: "Are you sure to delete phone?",
+            text: "",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const deletePurchaseResponse = await DeletePurchase(id);
+                console.log(deletePurchaseResponse , "dkjfvb")
+                if (deletePurchaseResponse.data.success) {
+                    toast.success(deletePurchaseResponse.data.message);
+                } else {
+                    toast.error(deletePurchaseResponse.data.message);
+                }
+            }
+        });
     };
 
 
@@ -605,6 +625,7 @@ function CustomerProfile() {
                                     {
                                         data?.data?.data?.CustomerAllPurchase?.length > 0 ? (
                                             data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
+                                                console.log(item)
                                                 return (
                                                     <tbody key={index} className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                         <tr className=" border-b">
@@ -631,18 +652,32 @@ function CustomerProfile() {
                                                                 {item.pending_amount}
                                                             </td>
                                                             <td className="px-6 py-5 flex items-center justify-center space-x-3">
+                                                                <Tippy content="Phone Detail">
+                                                                    <div className="flex justify-center items-center">
+                                                                        <AiFillEye
+                                                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                            onClick={() =>
+                                                                                navigate(`/Customer/EMI-History/${item.id}`)}
+                                                                        />
+                                                                    </div>
+                                                                </Tippy>
+                                                                <Tippy content="Edit Phone">
+                                                                    <div className="flex justify-center items-center">
+                                                                        <FiEdit
+                                                                            className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
+                                                                            onClick={() => handleEditPhone(item.id)}
+                                                                        />
+                                                                    </div>
+                                                                </Tippy>
                                                                 <div className="flex justify-center items-center">
-                                                                    <AiFillEye
-                                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                        onClick={() =>
-                                                                            navigate(`/Customer/EMI-History/${item.id}`)}
-                                                                    />
-                                                                </div>
-                                                                <div className="flex justify-center items-center">
-                                                                    <FiEdit
-                                                                        className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
-                                                                        onClick={() => handleEditPhone(item.id)}
-                                                                    />
+                                                                    <Tippy content="Delete Phone">
+                                                                        <div>
+                                                                            <MdDelete
+                                                                                className="xs:text-base text-red-500 md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                                onClick={() => handleDeletePhone(item.id)}
+                                                                            />
+                                                                        </div>
+                                                                    </Tippy>
                                                                 </div>
                                                             </td>
                                                         </tr>

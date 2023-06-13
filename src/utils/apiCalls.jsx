@@ -93,9 +93,9 @@ export const getAllCustomer = () => {
 }
 
 export const UpdateCustomer = (data) => {
-    for (var value of data) {
-      console.log(value); 
-  }
+  //   for (var value of data) {
+  //     console.log(value); 
+  // }
   return instance({
     'url': `/customer/update`,
     'method': 'PUT',
@@ -114,6 +114,14 @@ export const getCustomerByid = (id) => {
   })
 }
 
+export const DeleteCustomer = (id) => {
+  return instance({
+    'url': `/customer/delete/${id}`,
+    'method': 'DELETE',
+    'data': id,
+  })
+}
+
 
 // Company -------------------------------------------------------------------
 
@@ -126,10 +134,13 @@ export const AddCompany = (data) => {
   })
 }
 
-export const getAllCompany = () => {
+export const getAllCompanies = () => {
   return instance({
     'method': 'GET',
     'url': '/company',
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
   })
 }
 
@@ -170,6 +181,18 @@ export const getAllPhone = () => {
   })
 }
 
+
+// Purchase ----------------------------------------------------------
+
+export const AddNewPurchase = (data) => {
+  console.log(data)
+  return instance({
+    'url': `/purchase/addpurchase`,
+    'method': 'POST',
+    'data': data,
+  })
+}
+
 export const getAllPurchase = () => {
   return instance({
     'method': 'GET',
@@ -190,6 +213,16 @@ export const getPurchaseCustomerbyId = (id) => {
   })
 }
 
+export const DeletePurchase = (id) => {
+  return instance({
+    'url': `/purchase/delete/${id}`,
+    'method': 'DELETE',
+    'data': id,
+  })
+}
+
+// EMI ----------------------------------------------------------------
+
 export const getEmiPurchasebyId = (id) => {
   return instance({
     'method': 'GET',
@@ -200,16 +233,7 @@ export const getEmiPurchasebyId = (id) => {
   })
 }
 
-export const getAllCompanies = () => {
-  return instance({
-    'method': 'GET',
-    'url': '/company',
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
-  })
-}
-
+// Reciept ------------------------------------------------------------
 export const getallReceipt = (search) => {
   return instance({
     'method': 'GET',
@@ -227,9 +251,6 @@ export const AddSpecification = (data) => {
     'url': '/specification/addspecification',
     'method': 'POST',
     'data': data,
-    // 'headers': {
-    //   'content-type': "multipart/form-data" // override instance defaults
-    // },
   })
 }
 
@@ -237,9 +258,6 @@ export const getallSpecification = () => {
   return instance({
     'method': 'GET',
     'url': '/specification',
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
   })
 }
 
@@ -247,9 +265,6 @@ export const getallSpecificationById = (id) => {
   return instance({
     'method': 'GET',
     'url': `/specification/${id}`,
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
   })
 }
 

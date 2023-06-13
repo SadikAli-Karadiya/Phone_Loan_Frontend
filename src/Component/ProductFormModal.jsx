@@ -5,7 +5,7 @@ import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
-import { AddCompany, AddNewPhone, UpdatePhone, getAllCompany } from "../utils/apiCalls"
+import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
 
 
@@ -28,10 +28,12 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   const [error, setError] = useState("");
   const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
-  let Company = useQuery('company', getAllCompany)
+  let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
   let Companies = Company?.data?.data?.all_companies
+  
   const handleCreateCompany = (inputValue) => {
+    console.log(inputValue)
     setIsLoading(true);
     setTimeout(() => {
       const newComapny = createCompany(inputValue);
@@ -110,7 +112,6 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
       height: "44px",
     }),
   };
-  console.log(values?.model_name)
 
   const handleModalClose = () => {
     resetForm("")
