@@ -93,6 +93,9 @@ export const getAllCustomer = () => {
 }
 
 export const UpdateCustomer = (data) => {
+    for (var value of data) {
+      console.log(value); 
+  }
   return instance({
     'url': `/customer/update`,
     'method': 'PUT',
@@ -104,7 +107,6 @@ export const UpdateCustomer = (data) => {
 }
 
 export const getCustomerByid = (id) => {
-  console.log(id , "jsvdhb")
   return instance({
     'url': `/customer/details/${id}`,
     'method': 'GET',

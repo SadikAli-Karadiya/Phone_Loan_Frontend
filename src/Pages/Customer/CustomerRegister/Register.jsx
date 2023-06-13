@@ -11,9 +11,9 @@ import defaultadharfront from "../../../../public/images/adhar.webp";
 import defaultadharback from "../../../../public/images/adhar_back.jpg";
 import defaultpan from "../../../../public/images/pan.webp";
 import defaultbill from "../../../../public/images/bill.webp";
+import defaultImage from "../../../../public/images/user.png";
 
 function CustomerRegister() {
-    const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
     const [img, setImg] = useState(defaultImage);
     const [DefaultadharFront, setdefaultadharfront] = useState(defaultadharfront);
     const [DefaultadharBack, setdefaultadharback] = useState(defaultadharback);
@@ -49,7 +49,7 @@ function CustomerRegister() {
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
-                    navigate("/")
+                    navigate(`/Customer/profile-detail/${response.data.id}`)
                 } catch (err) {
                     toast.error(err.response.data.message);
                 }
@@ -372,7 +372,6 @@ function CustomerRegister() {
                                         </div>
                                     </label>
                                 </div>
-
                             </div>
                             <div className="flex pt-10 ">
                                 <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>

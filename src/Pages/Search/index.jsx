@@ -18,7 +18,7 @@ function Search() {
     const [searchValue, setSearchValue] = React.useState('');
     const [showNotFound, setShowNotFound] = React.useState(-1)
     const AllCustomer = useQuery('customer', getAllCustomer)
-    console.log(AllCustomer?.data?.data?.AllCustomer)
+
     return (
         <>
             <div className=' sm:px-5 xl:px-10 py-5 h-full'>

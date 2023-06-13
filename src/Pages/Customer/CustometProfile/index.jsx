@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import "../../Customer/CustomerRegister/Customerform.css"
@@ -15,6 +15,11 @@ import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import defaultadharfront from "../../../../public/images/adhar.webp";
+import defaultadharback from "../../../../public/images/adhar_back.jpg";
+import defaultpan from "../../../../public/images/pan.webp";
+import defaultbill from "../../../../public/images/bill.webp";
+import defaultImage from "../../../../public/images/user.png";
 
 const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
 
@@ -90,30 +95,37 @@ const customerSchema = Yup.object({
 function CustomerProfile() {
     const navigate = useNavigate();
     const params = useParams();
-    const defaultImage = "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?w=740&t=st=1683614366~exp=1683614966~hmac=e4712c90f5b79a2388c0152ab9a4897eb2b2fb866c9c2e4635dc52938019b159";
-    const [img, setImg] = React.useState(defaultImage);
-    const [photo, setPhoto] = React.useState("");
-    const [is_Edit, setIsEdit] = React.useState(false);
-    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = React.useState(false);
-    const [toggle, setToggle] = React.useState(false);
-    const [isEnable, setIsEnable] = React.useState(true);
-    const [newPhoneFormModal, setnewPhoneFormModal] = React.useState(false);
-    const [PhoneDetails, setPhoneDetails] = React.useState();
+    const [img, setImg] = useState(defaultImage);
+    const [photo, setPhoto] = useState("");
+    const [is_Edit, setIsEdit] = useState(false);
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+    const [toggle, setToggle] = useState(false);
+    const [isEnable, setIsEnable] = useState(true);
+    const [newPhoneFormModal, setnewPhoneFormModal] = useState(false);
+    const [PhoneDetails, setPhoneDetails] = useState();
+    const [DefaultadharFront, setdefaultadharfront] = useState(defaultadharfront);
+    const [DefaultadharBack, setdefaultadharback] = useState(defaultadharback);
+    const [DefaultPan, setdefaultpan] = useState(defaultpan);
+    const [DefaultBill, setdefaultbill] = useState(defaultbill);
+    const [Adhar_front, setadharfront] = useState("");
+    const [Adhar_back, setadharback] = useState("");
+    const [Pan, setpan] = useState("");
+    const [Bill, setbill] = useState("");
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-    console.log(SingleCustomerDetails)
+
     const initialValues = {
         first_name: "",
         last_name: "",
         mobile: "",
         alternate_no: "",
-        refrence_name: "",
-        refrence_mobile: "",
-        // adhar_front: "",
-        // adhar_back: "",
-        // pan: "",
-        // light_bill: ""
+        reference_name: "",
+        reference_mobile: "",
+        adhar_front: "",
+        adhar_back: "",
+        pan: "",
+        light_bill: ""
     }
 
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
@@ -124,20 +136,26 @@ function CustomerProfile() {
                 try {
                     const fd = new FormData();
                     fd.append("id", SingleCustomerDetails?.id)
+                    fd.append("document_id", SingleCustomerDetails?.document_id)
+                    fd.append("photo", photo);
+                    fd.append("adhar_front", Adhar_front);
+                    fd.append("adhar_back", Adhar_back);
+                    fd.append("pan", Pan);
+                    fd.append("bill", Bill);
                     fd.append("first_name", data.first_name)
                     fd.append("last_name", data.last_name)
                     fd.append("mobile", data.mobile)
                     fd.append("alternate_no", data.alternate_no)
                     fd.append("reference_name", data.reference_name)
                     fd.append("reference_mobile", data.reference_mobile)
-                    const response = UpdateCustomer(fd)
-                    // console.log(response.Promise.PromiseResult, "ksvbd")
-                    // toast.success(success.response.data);
+                    const response = await UpdateCustomer(fd)
+                    console.log(response, "ksvbd")
+                    toast.success(response.data.message);
                     setIsEnable(true);
                     setToggle(false)
                 } catch (err) {
                     console.log(err)
-                    // toast.error(err.response.data.message);
+                    toast.error(response.data.message);
                 }
             },
         });
@@ -145,6 +163,23 @@ function CustomerProfile() {
     function handleImageUpload(e) {
         setPhoto(() => e.target.files[0]);
         setImg(URL.createObjectURL(e.target.files[0]));
+    }
+
+    function handleAdharFUpload(e) {
+        setadharfront(() => e.target.files[0]);
+        setdefaultadharfront(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharBUpload(e) {
+        setadharback(() => e.target.files[0]);
+        setdefaultadharback(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharPanUpload(e) {
+        setpan(() => e.target.files[0]);
+        setdefaultpan(URL.createObjectURL(e.target.files[0]));
+    }
+    function handleAdharBillUpload(e) {
+        setbill(() => e.target.files[0]);
+        setdefaultbill(URL.createObjectURL(e.target.files[0]));
     }
 
     function handleedit(e) {
@@ -200,7 +235,7 @@ function CustomerProfile() {
                                         <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                             <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
                                                 <img
-                                                    src={img}
+                                                    src={SingleCustomerDetails?.photo ? SingleCustomerDetails?.photo : img}
                                                     width="100%"
                                                     height="100%"
                                                     className="object-contain "
@@ -363,87 +398,130 @@ function CustomerProfile() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                        <div className="flex justify-between w-full">
-                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
-                                                <img
-                                                    src="/images/adhar.webp"
-                                                    width="100%"
-                                                    height="100%"
-                                                    className="object-contain"
-                                                    alt="student profile"
-                                                />
-                                                {
-                                                    !isEnable
-                                                        ?
-                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
-                                                            <input
-                                                                type="file"
-                                                                id="logo"
-                                                                className="rounded-md w-16"
-                                                                accept=".png, .jpg, .jpeg"
-                                                                name="logo"
-                                                                onChange={(e) => handleImageUpload(e)}
-                                                                onBlur={handleBlur}
-                                                                onInput={(e) => handleImageUpload(e)}
+                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                                            <div className="adhar_front w-full">
+                                                <label className="block">
+                                                    <span className="block text-sm text-center pb-2 font-medium text-slate-700">
+                                                        Adhar Card Front *
+                                                    </span>
+                                                    <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                                        <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg ">
+                                                            <img
+                                                                src={SingleCustomerDetails?.document?.adhar_front ? SingleCustomerDetails?.document?.adhar_front : DefaultadharFront}
+                                                                width="100%"
+                                                                height="100%"
+                                                                className="object-contain "
+                                                                alt="student profile"
                                                             />
+                                                            <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                                <input
+                                                                    type="file"
+                                                                    id="adhar_front"
+                                                                    className="rounded-md w-16"
+                                                                    disabled={isEnable}
+                                                                    accept=".png, .jpg, .jpeg"
+                                                                    name="adhar_front"
+                                                                    onChange={(e) => handleAdharFUpload(e)}
+                                                                    onBlur={handleBlur}
+                                                                    onInput={(e) => handleAdharFUpload(e)}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        :
-                                                        null
-                                                }
+                                                    </div>
+                                                </label>
                                             </div>
-                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
-                                                <img
-                                                    src="/images/adhar_back.jpg"
-                                                    width="100%"
-                                                    height="100%"
-                                                    className="object-contain"
-                                                    alt="student profile"
-                                                />
-                                                {
-                                                    !isEnable
-                                                        ?
-                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
-                                                            <input
-                                                                type="file"
-                                                                id="logo"
-                                                                className="rounded-md w-16"
-                                                                accept=".png, .jpg, .jpeg"
-                                                                name="logo"
-                                                                onChange={(e) => handleImageUpload(e)}
-                                                                onBlur={handleBlur}
-                                                                onInput={(e) => handleImageUpload(e)}
+                                            <div className="adhar_back w-full">
+                                                <label className="block">
+                                                    <span className="block text-center pb-2 text-sm font-medium text-slate-700">
+                                                        Adhar Card Back *
+                                                    </span>
+                                                    <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                                        <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                            <img
+                                                                src={SingleCustomerDetails?.document?.adhar_back ? SingleCustomerDetails?.document?.adhar_back : DefaultadharBack}
+                                                                width="100%"
+                                                                height="100%"
+                                                                className="object-contain "
+                                                                alt="student profile"
                                                             />
+                                                            <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                                <input
+                                                                    type="file"
+                                                                    id="adhar_back"
+                                                                    className="rounded-md w-16"
+                                                                    accept=".png, .jpg, .jpeg"
+                                                                    name="adhar_back"
+                                                                    disabled={isEnable}
+                                                                    onChange={(e) => handleAdharBUpload(e)}
+                                                                    onBlur={handleBlur}
+                                                                    onInput={(e) => handleAdharBUpload(e)}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        :
-                                                        null
-                                                }
+                                                    </div>
+                                                </label>
                                             </div>
-                                            <div className="document_img_div flex justify-center items-center border-2 border-gray-500 shadow-lg">
-                                                <img
-                                                    src="/images/pan.webp"
-                                                    width="100%"
-                                                    height="100%"
-                                                    className="object-contain"
-                                                    alt="student profile"
-                                                />
-                                                {
-                                                    !isEnable
-                                                        ?
-                                                        <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
-                                                            <input
-                                                                type="file"
-                                                                id="logo"
-                                                                className="rounded-md w-16"
-                                                                accept=".png, .jpg, .jpeg"
-                                                                name="logo"
-                                                                onChange={(e) => handleImageUpload(e)}
-                                                                onBlur={handleBlur}
-                                                                onInput={(e) => handleImageUpload(e)}
+                                            <div className="pan w-full">
+                                                <label className="block">
+                                                    <span className="block text-sm text-center pb-2 font-medium text-slate-700">
+                                                        PAN *
+                                                    </span>
+                                                    <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                                        <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                            <img
+                                                                src={SingleCustomerDetails?.document?.pancard ? SingleCustomerDetails?.document?.pancard : DefaultPan}
+                                                                width="100%"
+                                                                height="100%"
+                                                                className="object-contain "
+                                                                alt="student profile"
                                                             />
+                                                            <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                                <input
+                                                                    type="file"
+                                                                    id="pan"
+                                                                    className="rounded-md w-16"
+                                                                    accept=".png, .jpg, .jpeg"
+                                                                    name="pan"
+                                                                    disabled={isEnable}
+                                                                    onChange={(e) => handleAdharPanUpload(e)}
+                                                                    onBlur={handleBlur}
+                                                                    onInput={(e) => handleAdharPanUpload(e)}
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        :
-                                                        null
-                                                }
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div className="lightbill w-full">
+                                                <label className="block">
+                                                    <span className="block text-sm text-center pb-2 font-medium text-slate-700">
+                                                        Light Bill
+                                                    </span>
+                                                    <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                                        <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
+                                                            <img
+                                                                src={SingleCustomerDetails?.document?.light_bill ? SingleCustomerDetails?.document?.light_bill : DefaultBill}
+                                                                width="100%"
+                                                                height="100%"
+                                                                className="object-contain "
+                                                                alt="student profile"
+                                                            />
+                                                            <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
+                                                                <input
+                                                                    type="file"
+                                                                    id="light_bill"
+                                                                    className="rounded-md w-16"
+                                                                    accept=".png, .jpg, .jpeg"
+                                                                    name="light_bill"
+                                                                    disabled={isEnable}
+                                                                    onChange={(e) => handleAdharBillUpload(e)}
+                                                                    onBlur={handleBlur}
+                                                                    onInput={(e) => handleAdharBillUpload(e)}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </label>
                                             </div>
                                         </div>
                                         <div className="flex pt-10 ">
