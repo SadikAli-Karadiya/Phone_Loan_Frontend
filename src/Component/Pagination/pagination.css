@@ -12,7 +12,7 @@
   border: 1px solid #cccccc;
   padding: 5px 13px;
   border-radius: 5px;
-  color: #ee6730;
+  color: #0d0d48;
   text-decoration: none;
 }
 
@@ -22,7 +22,7 @@
 
 .page-item.active .page-link {
   color: #ffffff;
-  background-color: #ee6730;
+  background-color: #0d0d48;
 }
 
 .page-item.disabled .page-link {

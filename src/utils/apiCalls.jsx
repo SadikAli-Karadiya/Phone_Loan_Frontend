@@ -213,6 +213,18 @@ export const getPurchaseCustomerbyId = (id) => {
   })
 }
 
+export const getPurchaseCustomerbyNumber = (search) => {
+//  let search = search.search
+ console.log(search)
+  return instance({
+    'method': 'GET',
+    'url': `/purchase/search/${search.pageNo}/${search.search}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 export const DeletePurchase = (id) => {
   return instance({
     'url': `/purchase/delete/${id}`,
@@ -243,6 +255,17 @@ export const getallReceipt = (search) => {
     },
   })
 }
+
+export const onerecieptDetailsbyNumber = (search) => {
+  console.log(search)
+    return instance({
+      'method': 'GET',
+      'url': `/receipt/search/${search.pageNo}/${search.search}`,
+      'headers': {
+        'content-type': 'application/json' // override instance defaults
+      },
+    })
+  }
 
 // Specifiaction ------------------------------------------------------
 

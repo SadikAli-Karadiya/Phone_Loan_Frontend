@@ -5,145 +5,25 @@ import "../../App.css"
 import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
+import { FaUsers } from 'react-icons/fa';
 import 'tippy.js/dist/tippy.css';
-import { useMutation } from 'react-query'
+import { useQuery } from 'react-query'
 import ChargeFormModal from '../../Component/ChargeFormModal';
-
+import { getPurchaseCustomerbyNumber } from '../../utils/apiCalls';
+import Pagination from 'react-responsive-pagination'
+import '../../Component/Pagination/pagination.css'
 
 function PayEMI() {
   const navigate = useNavigate();
-
-  const { isLoading, isError, error, mutate } = useMutation((data) => { console.log(data) }, { retry: 3 })
+  // const { isLoading, isError, error, mutate } = useMutation((data) => { console.log(data) }, { retry: 3 })
   const [chargeFormModal, setChargeFormModal] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showNotFound, setShowNotFound] = useState(-1)
-  const [data, setdata] = useState([
-    // {
-    //   id: 1,
-    //   installment: 1,
-    //   dp: 40,
-    //   charge: 1500,
-    //   CustomersList: [
-    //     {
-    //       id: 1,
-    //       customer_id: 1,
-    //       name: "shad",
-    //       mobile: 1234567890,
-    //       total: 15000,
-    //       pending: 7500,
-    //     },
-    //     {
-    //       id: 2,
-    //       customer_id: 2,
-    //       name: "xyz",
-    //       mobile: 1234567890,
-    //       total: 10000,
-    //       pending: 7500,
-    //     }
-    //   ]
-    // },
-    // {
-    //   id: 2,
-    //   installment: 2,
-    //   dp: 45,
-    //   charge: 1600,
-    //   CustomersList: [
-    //     {
-    //       id: 1,
-    //       customer_id: 1,
-    //       name: "shad",
-    //       mobile: 1234567890,
-    //       total: 15000,
-    //       pending: 7500,
-    //     },
-    //     {
-    //       id: 2,
-    //       customer_id: 2,
-    //       name: "xyz",
-    //       mobile: 1234567890,
-    //       total: 10000,
-    //       pending: 7500,
-    //     }
-    //   ]
-    // },
-    // {
-    //   id: 3,
-    //   installment: 3,
-    //   dp: 50,
-    //   charge: 1800,
-    //   CustomersList: [
-    //     {
-    //       id: 1,
-    //       customer_id: 1,
-    //       name: "shad",
-    //       mobile: 1234567890,
-    //       total: 15000,
-    //       pending: 7500,
-    //     },
-    //     {
-    //       id: 2,
-    //       customer_id: 2,
-    //       name: "xyz",
-    //       mobile: 1234567890,
-    //       total: 10000,
-    //       pending: 7500,
-    //     }
-    //   ]
-    // },
-    // {
-    //   id: 4,
-    //   installment: 4,
-    //   dp: 55,
-    //   charge: 2000,
-    //   CustomersList: [
-    //     {
-    //       id: 1,
-    //       customer_id: 1,
-    //       name: "shad",
-    //       mobile: 1234567890,
-    //       total: 15000,
-    //       pending: 7500,
-    //     },
-    //     {
-    //       id: 2,
-    //       customer_id: 2,
-    //       name: "xyz",
-    //       mobile: 1234567890,
-    //       total: 10000,
-    //       pending: 7500,
-    //     }
-    //   ]
-    // },
-  ])
-
-  async function searchStudent() {
-    try {
-      if (searchValue == '' || searchValue == ' ') {
-        return;
-      }
-      setLoading(true);
-      const res = await getStudentDetails(searchValue, section == 'primary' ? 1 : 0)
-      setLoading(false);
-      setdata(res?.data?.data?.students_detail?.length > 0 ? res?.data?.data?.students_detail : null);
-      setShowNotFound(1)
-    }
-    catch (err) {
-      setLoading(false);
-      if (err instanceof AxiosError) {
-        if (err.response) {
-          Toaster("error", err?.response?.data?.message);
-        }
-        else {
-          Toaster("error", err.message);
-        }
-      }
-      else {
-        Toaster("error", err.message);
-      }
-    }
-  }
-
+  const [search, setSearch] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const purchase = useQuery(['purchase', pageNo, search], () => getPurchaseCustomerbyNumber({
+    pageNo: pageNo - 1,
+    search
+  }))
+  console.log(purchase?.data?.data)
 
   return (
     <>
@@ -154,29 +34,15 @@ function PayEMI() {
             <input
               type="search"
               autoFocus={true}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder='Search Customer  (BY : ID , Name , Whatsapp Number)'
-              className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              placeholder='Search Customer  (BY : Name , Whatsapp Number)'
+              className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-lg w-2/3'
             />
-            <div
-              onClick={searchStudent}
-              className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
-            shadow-xl cursor-pointer text-white text-2xl '>
-              <BiSearch className='search group-hover:scale-125 duration-300' />
-            </div>
           </div>
         </div>
-        {/* 
-        {
-          loading
-            ?
-            <LoaderSmall />
-            :
-            (
-              data?.length > 0
-                ?
-                ( */}
         <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5 mt-5">
           <h1 className='font-bold text-lg'>Customer List</h1>
           <table
@@ -184,9 +50,6 @@ function PayEMI() {
             id="table-to-xls">
             <thead className="text-xs uppercase bg-[#0d0d48]">
               <tr className=" text-sm">
-                <th scope="col" className="pl-3 py-4">
-                  Customer Id
-                </th>
                 <th scope="col" className="px-6 py-4">
                   Name
                 </th>
@@ -194,10 +57,10 @@ function PayEMI() {
                   Phone
                 </th>
                 <th scope="col" className="px-6 py-4">
-                  Company
+                  Model
                 </th>
                 <th scope="col" className="px-6 py-4">
-                  Model
+                  EMI Date
                 </th>
                 <th scope="col" className="px-6 py-4">
                   Total
@@ -213,69 +76,85 @@ function PayEMI() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-              <tr className=" border-b">
-                <td className="px-6 py-5 font-bold">
-                  001
-                </td>
-                <td className="px-6 py-5 capitalize">
-                  Shad
-                </td>
-                <td className="px-6 py-5">
-                  1234567890
-                </td>
-                <td className="px-6 py-5">
-                  Vivo
-                </td>
-                <td className="px-6 py-5">
-                  F17
-                </td>
-                <td className="px-6 py-5">
-                  15000
-                </td>
-                <td className="px-6 py-5">
-                  5000
-                </td>
-                <td className="px-6 py-5">
-                  <div className="flex justify-center items-center">
-                    <Tippy content="Customer Profile">
-                      <div>
-                        <AiFillEye
-                          className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                          onClick={() =>
-                            navigate(`/Customer/profile-detail`)}
-                        />
-                      </div>
-                    </Tippy>
-                  </div>
-                </td>
-                <td className="px-6 py-5 ">
-                  <div className="flex justify-center space-x-3">
-                    <button
-                      onClick={() => setChargeFormModal(true)}
-                      className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                      Pay
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            {
+              purchase?.data?.data?.data?.length > 0 ? (
+                purchase?.data?.data?.data?.map((item, index) => {
+                  return (
+                    <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                      <tr className=" border-b">
+                        <td className="px-6 py-5 capitalize space-x-2">
+                          <span>{item.customer.first_name}</span>
+                          <span>{item.customer.last_name}</span>
+                        </td>
+                        <td className="px-6 py-5">
+                          {item.customer.mobile}
+                        </td>
+                        <td className="px-6  py-5">
+                          <span>{item.phone.company.company_name}</span> || <span>{item.phone.model_name}</span>
+                        </td>
+                        <td className="px-6 py-5">
+                          10 / 12 / 23
+                        </td>
+                        <td className="px-6 py-5">
+                          {item.net_amount}
+                        </td>
+                        <td className="px-6 py-5">
+                          {item.pending_amount}
+                        </td>
+                        <td className="px-6 py-5">
+                          <div className="flex justify-center items-center">
+                            <Tippy content="Customer Profile">
+                              <div>
+                                <AiFillEye
+                                  className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                  onClick={() =>
+                                    navigate(`/Customer/profile-detail/${item.customer.customer_id}`)}
+                                />
+                              </div>
+                            </Tippy>
+                          </div>
+                        </td>
+                        <td className="px-6 py-5 ">
+                          <div className="flex justify-center space-x-3">
+                            <button
+                              onClick={() => setChargeFormModal(true)}
+                              className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                              Pay
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  )
+                })
+              ) : (
+                null
+              )}
           </table>
+          {
+            purchase?.data?.data?.data?.length > 0 ?
+              null
+              :
+              <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                <FaUsers className='text-2xl' />
+                <h1 className='text-sm font-bold'>No customers </h1>
+              </div>
+          }
         </div>
-        {/* )
-                : (
-                  showNotFound != -1
-                    ?
-                    <div className="bg-red-200 font-bold justify-center items-center p-2 rounded mx-3 flex space-x-2">
-                      <IoMdInformationCircle className="text-xl text-red-600" />
 
-                      <h1 className="text-red-800">No Curtomer Found </h1>
-                    </div>
-                    :
-                    null
-                )
-            )
-        } */}
+        {
+          purchase?.data?.data?.data?.length > 0 ?
+            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
+              <Pagination
+                total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
+                current={pageNo}
+                onPageChange={(page) => setPageNo(page)}
+              // previousLabel="Previous" nextLabel="Next"
+              />
+            </div>
+            :
+            null
+        }
 
         <ChargeFormModal
           showModal={chargeFormModal}

@@ -15,7 +15,7 @@ import { useQuery } from 'react-query'
 function Dashboard() {
   const navigate = useNavigate();
   const purchase = useQuery('purchase', getAllPurchase)
-  // console.log(purchase.data.data.AllPurchase)
+  // console.log(purchase?.data?.data?.AllPurchase[0]?.pending_amount)
   return (
     <div className='px-5 py-5 xl:px-10 '>
       <div className='grid grid-cols-4 my-10 gap-5 '>
@@ -38,7 +38,7 @@ function Dashboard() {
                 <FaUsers />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
+                {purchase?.data?.data?.AllPurchase?.length}
               </h1>
             </div>
           </div>
@@ -81,7 +81,6 @@ function Dashboard() {
 
       </div>
       <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
-        <h1 className='font-bold text-lg'>Customer List</h1>
         <div className='flex justify-between items-center py-5'>
           <div className='flex justify-start items-center w-1/3 '>
             <input
@@ -199,9 +198,9 @@ function Dashboard() {
           purchase?.data?.data?.AllPurchase?.length > 0 ?
             null
             :
-            <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-              <FaUsers className='text-3xl' />
-              <h1 className='font-semibold'>Customer Not Found</h1>
+            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+              <FaUsers className='text-2xl' />
+              <h1 className='text-sm font-bold'>No customers with pending fees</h1>
             </div>
         }
       </div>

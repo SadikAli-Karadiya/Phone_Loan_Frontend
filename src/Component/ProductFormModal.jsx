@@ -32,16 +32,15 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   const [CompanyList, setComapnyList] = React.useState([]);
   let Companies = Company?.data?.data?.all_companies
   
-  const handleCreateCompany = (inputValue) => {
-    console.log(inputValue)
+   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
-      const newComapny = createCompany(inputValue);
+      // const newComapny = createCompany(inputValue);
+      const respons = AddCompany({ inputValue })
       setIsLoading(false);
       setComapnyList();
-      setCompany(newComapny);
+      // setCompany(newComapny);
     }, 1000);
-    const respons = AddCompany({ inputValue })
   };
 
   const initialValues = {
@@ -51,7 +50,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
-        JSON.stringify(ModelDetails) != {} ? { model_name: ModelDetails?.model_name }
+        JSON.stringify(ModelDetails) != {} ? {company_name: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name }
           :
           initialValues,
       validationSchema: productSchema,
@@ -64,12 +63,12 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
           if (is_Edit == true) {
             const response = await UpdatePhone(data)
             toast.success(response.data.message);
-            resetForm("")
+            resetForm({ values: "" })
             handleShowModal(false);
           } else {
             const response = await AddNewPhone(data)
             toast.success(response.data.message);
-            resetForm("")
+            resetForm({ values: "" })
             handleShowModal(false);
           }
         } catch (error) {
@@ -114,7 +113,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   };
 
   const handleModalClose = () => {
-    resetForm("")
+    resetForm({ values : "" })
     handleShowModal(false);
   };
 
@@ -160,12 +159,13 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
-                    value={is_Edit == true ? ModelDetails?.model_name : null}
-                    onChange={(newCompany) => setCompany(newCompany)}
+                    defaultValue={ is_Edit == true ? {value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name} : null}
+                    onChange={(e) => {setFieldValue('company_name', e.value); setCompany(e)}}
+                    onBlur={handleBlur}
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
                     options={Companies?.map(item => {
-                      return { values: item?.company_name, label: item?.company_name };
+                      return { value: item?.company_name, label: item?.company_name };
                     })
                     }
                     name='company_name'

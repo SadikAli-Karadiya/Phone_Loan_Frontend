@@ -32,8 +32,7 @@ function CustomersList() {
   const [Selectemi, setSelectemi] = useState("")
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
-
-
+  console.log(purchase.data.data.AllPurchase)
   const bgColors = [
     "#ffd6d6",
     "#bfdbfe",
@@ -287,25 +286,13 @@ function CustomersList() {
                   Serial no
                 </th>
                 <th scope="col" className="pl-3 py-4">
-                  Name
+                  first name
+                </th>
+                <th scope="col" className="pl-3 py-4">
+                  last name
                 </th>
                 <th scope="col" className="px-6 py-4">
                   Mobile
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Compnay
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Model
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Total
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Paidup
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Pending
                 </th>
                 <th scope="col" className="px-6 py-4">
                   Profile
@@ -322,26 +309,14 @@ function CustomersList() {
                         <th className="py-5 px-6">
                           {index + 1}
                         </th>
-                        <td className="px-6 py-5 text-gray-500">
+                        <td className="px-6 py-5 ">
                           {item.customer.first_name}
+                        </td>
+                        <td className="px-6 py-5 ">
+                          {item.customer.last_name}
                         </td>
                         <td className="px-6 py-5 capitalize">
                           {item.customer.mobile}
-                        </td>
-                        <td className="px-6 py-5">
-                          Oppo
-                        </td>
-                        <td className="px-6 py-5">
-                          F17
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.net_amount}
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.net_amount - item.pending_amount}
-                        </td>
-                        <td className="px-6 py-5">
-                          {item.pending_amount}
                         </td>
                         <td className="px-6 py-5">
                           <div className="flex justify-center items-center">
@@ -369,9 +344,9 @@ function CustomersList() {
             selectedEMI?.length > 0 ?
               null
               :
-              <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                <FaUsers className='text-3xl' />
-                <h1 className='font-semibold'>Customer Not Found</h1>
+              <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                <FaUsers className='text-2xl' />
+                <h1 className='text-sm font-bold'>No customers </h1>
               </div>
           }
         </div>

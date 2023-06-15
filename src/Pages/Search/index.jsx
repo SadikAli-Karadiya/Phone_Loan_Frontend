@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllCustomer , DeleteCustomer } from '../../utils/apiCalls';
+import { getAllCustomer, DeleteCustomer } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import { FaUsers } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -81,10 +81,10 @@ function Search() {
                                     Phone
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    Profile
+                                    status
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    status
+                                    Profile
                                 </th>
                             </tr>
                         </thead>
@@ -105,6 +105,11 @@ function Search() {
                                                 </td>
                                                 <td className="px-6 py-5">
                                                     {item?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5 ">
+                                                    <h1 className='italic font-semibold text-green-600'>
+                                                        Running
+                                                    </h1>
                                                 </td>
                                                 <td className="px-6 py-5 flex justify-center items-center">
                                                     <div className='flex items-center space-x-2'>
@@ -129,11 +134,6 @@ function Search() {
                                                             </Tippy>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-5 ">
-                                                    <h1 className='italic font-semibold text-green-600'>
-                                                        Running
-                                                    </h1>
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -5,43 +5,19 @@ import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getallReceipt } from '../../../utils/apiCalls';
+import { onerecieptDetailsbyNumber } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import moment from 'moment'
 
 
 function SearchReciept() {
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [CustomerReceipts, setCustomerReceipts] = useState([])
-  const [showNotFound, setShowNotFound] = useState(-1)
-  const data = useQuery(['receipt', searchValue], () => getallReceipt(searchValue))
-
-  const searchAllReceipts = async (e) => {
-    try {
-      e.preventDefault();
-      if (searchValue == '' || searchValue == ' ') {
-        return;
-      }
-
-      setLoading(true);
-      const res = await searchReceipt(searchValue, section == 'primary' ? 1 : 0)
-      setLoading(false);
-
-      setCustomerReceipts(res.data.student_receipts)
-      setShowNotFound(1)
-    }
-    catch (err) {
-      setLoading(false);
-      if (err instanceof AxiosError) {
-        Toaster("error", err.response.data.message);
-      }
-      else {
-        Toaster("error", err.message);
-      }
-    }
-  }
+  const [search, setSearch] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const data = useQuery(['receipt', pageNo, search], () => onerecieptDetailsbyNumber({
+    pageNo: pageNo - 1,
+    search
+  }))
 
   return (
     <>
@@ -52,13 +28,14 @@ function SearchReciept() {
             <input
               type="search"
               autoFocus={true}
-              value={searchValue}
-              onChange={(e) => { setSearchValue(e.target.value) }}
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
               placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
               className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
             />
             <div
-              onClick={searchAllReceipts}
               className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
             shadow-xl cursor-pointer text-white text-2xl '>
               <BiSearch className='search group-hover:scale-125 duration-300' />
