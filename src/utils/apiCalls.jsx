@@ -214,8 +214,8 @@ export const getPurchaseCustomerbyId = (id) => {
 }
 
 export const getPurchaseCustomerbyNumber = (search) => {
-//  let search = search.search
- console.log(search)
+  //  let search = search.search
+  console.log(search)
   return instance({
     'method': 'GET',
     'url': `/purchase/search/${search.pageNo}/${search.search}`,
@@ -246,26 +246,22 @@ export const getEmiPurchasebyId = (id) => {
 }
 
 // Reciept ------------------------------------------------------------
-export const getallReceipt = (search) => {
+export const getallReceipt = () => {
   return instance({
     'method': 'GET',
-    'url': `/receipt/List/${search}`,
+    'url': `/receipt/List`,
+  })
+}
+
+export const onerecieptDetailsbyNumber = (search) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/search/${search.pageNo}/${search.search}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
   })
 }
-
-export const onerecieptDetailsbyNumber = (search) => {
-  console.log(search)
-    return instance({
-      'method': 'GET',
-      'url': `/receipt/search/${search.pageNo}/${search.search}`,
-      'headers': {
-        'content-type': 'application/json' // override instance defaults
-      },
-    })
-  }
 
 // Specifiaction ------------------------------------------------------
 
