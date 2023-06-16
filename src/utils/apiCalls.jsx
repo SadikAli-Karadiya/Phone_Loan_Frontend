@@ -253,6 +253,16 @@ export const getallReceipt = () => {
   })
 }
 
+export const getReceiptbyPurchaseId = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/search/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 export const onerecieptDetailsbyNumber = (search) => {
   return instance({
     'method': 'GET',

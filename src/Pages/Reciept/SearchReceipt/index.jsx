@@ -140,7 +140,7 @@ function SearchReciept() {
             (
               <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
                 <IoMdInformationCircle className='text-xl text-red-600' />
-                <h1 className='text-sm font-bold text-red-800'>No Receipt </h1>
+                <h1 className='text-sm font-bold text-red-800'>No Receipt Found </h1>
               </div>
             )
         }

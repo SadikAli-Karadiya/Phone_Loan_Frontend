@@ -152,6 +152,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                       <option value="3">3 GB</option>
                       <option value="4">4 GB</option>
                       <option value="6">6 GB</option>
+                      <option value="8">8 GB</option>
                       <option value="12">12 GB</option>
                     </select>
                   </label>

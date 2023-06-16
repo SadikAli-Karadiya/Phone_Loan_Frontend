@@ -31,8 +31,8 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
   let Companies = Company?.data?.data?.all_companies
-  
-   const handleCreateCompany = (inputValue) => {
+
+  const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
     setTimeout(() => {
       // const newComapny = createCompany(inputValue);
@@ -47,10 +47,11 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
     company_name: "",
     model_name: "",
   }
+
   const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
-        JSON.stringify(ModelDetails) != {} ? {company_name: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name }
+        JSON.stringify(ModelDetails) != {} ? { company_name: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name }
           :
           initialValues,
       validationSchema: productSchema,
@@ -58,7 +59,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
         if (company == null) {
           toast("Please Select Company")
         }
-        Object.assign(data, { company_name: company?.values, id: ModelDetails?.id })
+        Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
             const response = await UpdatePhone(data)
@@ -113,7 +114,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   };
 
   const handleModalClose = () => {
-    resetForm({ values : "" })
+    resetForm({ values: "" })
     handleShowModal(false);
   };
 
@@ -159,8 +160,8 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
-                    defaultValue={ is_Edit == true ? {value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name} : null}
-                    onChange={(e) => {setFieldValue('company_name', e.value); setCompany(e)}}
+                    defaultValue={is_Edit == true ? { value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name } : null}
+                    onChange={(e) => { setFieldValue('company_name', e.value); setCompany(e) }}
                     onBlur={handleBlur}
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"

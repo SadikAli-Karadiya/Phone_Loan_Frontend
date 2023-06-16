@@ -60,8 +60,8 @@ function Search() {
                         </div>
                     </div>
                 </div>
-                <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5 mt-5">
-                    <h1 className='font-bold text-lg'>Customer List</h1>
+                <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5 mt-5">
+                    <h1 className='font-bold text-lg pl-5'>Customer List</h1>
                     <table
                         className="w-full text-sm text-center rounded-xl  text-white  mt-5"
                         id="table-to-xls"

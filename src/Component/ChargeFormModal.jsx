@@ -8,7 +8,6 @@ import { MdDelete } from "react-icons/md"
 import { FiPlus } from "react-icons/fi"
 
 const productSchema = Yup.object({
-  charge: Yup.string().required("Please Enter Charge"),
   price: Yup.string().required("Please Enter Price"),
 });
 
@@ -19,6 +18,8 @@ function ChargeFormModal({ showModal, handleShowModal }) {
   const [ram, setRam] = React.useState();
   const [StorageList, setStorageList] = React.useState([]);
   const [Charge, setCharge] = React.useState(false);
+  const [Charge_amount, setchargeamount] = React.useState();
+  const [EMI_Amount, setemiamount] = React.useState();
 
 
   const initialValues = {
@@ -31,9 +32,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
       initialValues: initialValues,
       validationSchema: productSchema,
       onSubmit(data) {
-        const modeldata = {
-          ...data,
-        }
+        console.log(data)
       },
     });
 
@@ -86,6 +85,18 @@ function ChargeFormModal({ showModal, handleShowModal }) {
     setCharge(false)
   }
 
+  function handleCharge(event) {
+    setchargeamount(event.target.value)
+  };
+
+  function handleemi(event) {
+    setemiamount(event.target.value)
+  };
+
+  let Total = (EMI_Amount) + (Charge_amount)
+
+  console.log(Total)
+
   return (
     <Modal open={showModal}
       onClose={handleModalClose}>
@@ -93,7 +104,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Pay Emi
+          Pay EMI
         </Modal.Title>
         <button
           type="button"
@@ -118,44 +129,53 @@ function ChargeFormModal({ showModal, handleShowModal }) {
         </button>
 
         <Modal.Description>
-          <div className="px-4 py-4">
+          <div className="px-4 pb-4">
+            <div className="flex justify-start items-start pb-5 ">
+              <select name="" id="" className="w-20 py-1 rounded-md px-2 outline-none">
+                <option value="1">1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col justify-start w-full'>
                 <div className="flex flex-col space-y-2 w-full ">
                   <input type="text"
                     name="price"
-                    value={values.price}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    value={EMI_Amount}
+                    onChange={handleemi}
                     className="rounded-md py-2 px-3 outline-non"
                     placeholder="Enter Phone Price " />
-                  {errors.price && touched.price
-                    ?
-                    <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
-                    :
-                    null}
+
                 </div>
                 {
                   Charge == true ?
-                    <div className="mt-5 flex items-center justify-start space-x-3">
-                      <div className="flex flex-col w-full ">
-                        <input type="text"
-                          name="charge"
-                          value={values.charge}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className="rounded-md py-2 px-3 outline-non"
-                          placeholder="Enter Charge " />
-                        {errors.charge && touched.charge
-                          ?
-                          <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
-                          :
-                          null}
+                    <div className="mt-5 flex flex-col ">
+                      <div className="flex items-center justify-start space-x-3">
+                        <div className="flex flex-col w-full ">
+                          <input type="text"
+                            name="charge"
+                            value={Charge_amount}
+                            onChange={handleCharge}
+                            onBlur={handleBlur}
+                            className="rounded-md py-2 px-3 outline-non"
+                            placeholder="Enter Charge " />
+                          {errors.charge && touched.charge
+                            ?
+                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
+                            :
+                            null}
+                        </div>
+                        <div className="flex items-center space-x-2 group cursor-pointer bg-red-600 py-2 px-2 rounded-md hover:bg-white "
+                          onClick={handleremovecharge}
+                        >
+                          <MdDelete className="text-white text-lg group-hover:text-red-600" />
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2 group cursor-pointer bg-red-600 py-2 px-2 rounded-md hover:bg-white "
-                        onClick={handleremovecharge}
-                      >
-                        <MdDelete className="text-white text-lg group-hover:text-red-600" />
+                      <div className="mt-5 w-full">
+                        <div
+                          className="rounded-md py-2 bg-white px-3 w-full outline-non">
+                          Total : {Total}
+                        </div>
                       </div>
                     </div>
                     :
@@ -163,13 +183,13 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                 }
                 {
                   Charge == false ?
-                    <div className="flex items-center space-x-2 pt-3 cursor-pointer"
+                    <div className="flex items-center bg-white  mt-5 py-1 pl-1 hover:text-red-600 w-28  rounded-md text-gray-600 cursor-pointer"
                       onClick={handlecharge}
                     >
-                      <div className="bg-white px-1 py-1 rounded-md text-lg">
+                      <div className="px-1 py-1 rounded-md text-lg">
                         <FiPlus />
                       </div>
-                      <h1 className="font-semibold text-white  text-start">Add Charge</h1>
+                      <h1 className="font-semibold text-sm text-start">Add Charge</h1>
                     </div>
                     :
                     ""
@@ -193,8 +213,8 @@ function ChargeFormModal({ showModal, handleShowModal }) {
             ) : null}
           </div>
         </Modal.Description>
-      </Modal.Description>
-    </Modal>
+      </Modal.Description >
+    </Modal >
   );
 }
 

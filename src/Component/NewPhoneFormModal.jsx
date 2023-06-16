@@ -7,47 +7,59 @@ import { useFormik } from "formik";
 import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
+import moment from 'moment'
 
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
+
+  // console.log(PhoneDetails?.phone)
+
+  if (!showModal) {
+    return <></>;
+  }
+
   const params = useParams();
   let customer_id = params?.id
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
-  const [Company, setCompany] = useState("");
   const [SelectModel, setSelectModel] = useState([]);
-  const [Model, setModel] = useState("");
+  const [Model, setModel] = useState(is_Edit == true ? PhoneDetails?.phone?.model_name : "");
   const [SelectSpecification, setSelectSpecification] = useState("");
   const [Specification, setSpecification] = useState("");
   const [Ram, setram] = useState("");
   const [Down_Payment, setDownPayment] = useState("");
   const [SelectInstallment, setSelectInstallment] = useState([]);
   const [installment, setinstallment] = useState("");
+  const [Company, setCompany] = useState(is_Edit == true ? PhoneDetails?.phone?.company?.company_name : "");
   const Company_Details = useQuery('company', getAllCompanies)
   const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
-      initialValues: PhoneDetails ? PhoneDetails : NewPhoneValues,
+      initialValues:
+        JSON.stringify(PhoneDetails) != {} ? {
+          date: PhoneDetails?.createdAt,
+          Company: PhoneDetails?.phone?.company?.company_name,
+          Model: PhoneDetails?.phone?.model_name
+        } : NewPhoneValues,
       validationSchema: NewPhoneSchema,
       async onSubmit(data) {
         Object.assign(data,
           { customer_id: customer_id },
           { company_name: Company },
           { model: Model },
-          { ram : Ram },
+          { ram: Ram },
           { Specification: Specification },
-          { price : SelectSpecification },
-          { month : installment },
+          { price: SelectSpecification },
+          { month: installment },
           { Down_Payment: Down_Payment },
-          { net_payable : Net_playable },
+          { net_payable: Net_playable },
         )
         // console.log(data)
         try {
           const response = await AddNewPurchase(data)
-          console.log(response)
           toast.success(response.data.message);
           resetForm({ values: "" })
           handleModalClose(false);
@@ -92,13 +104,14 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     }),
   };
 
-
+  console.log(Company)
   function handleSelectCompany(event) {
     let company_name = event.target.value
     setCompany(company_name)
     let Company = Phone_Details?.data?.data?.AllModel?.filter((n) => {
       return n?.company?.company_name == company_name;
     });
+    console.log(Company , "sjdhb")
     setSelectedCompany(Company)
   };
 
@@ -118,6 +131,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       return n?.storage == storage;
     });
     setram(Price.ram)
+    console.log(Price)
     setSelectSpecification(Price.price)
   };
 
@@ -146,7 +160,12 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Add Model
+          {
+            is_Edit == true ?
+              "Update Model"
+              :
+              "Add Model"
+          }
         </Modal.Title>
         <button
           type="button"
@@ -244,9 +263,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         }
                       </select>
                     </label>
-                    {/* <span className="text-xs font-semibold text-red-600 px-1">
-                      {errors.model && touched.model ? errors.model : null}
-                    </span> */}
                   </div>
                   <div className="flex items-center w-full gap-2">
                     <div className="storage w-full">

@@ -32,7 +32,7 @@ function CustomersList() {
   const [Selectemi, setSelectemi] = useState("")
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
-  console.log(purchase.data.data.AllPurchase)
+
   const bgColors = [
     "#ffd6d6",
     "#bfdbfe",

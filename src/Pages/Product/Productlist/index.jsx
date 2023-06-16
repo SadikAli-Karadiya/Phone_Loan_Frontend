@@ -115,7 +115,7 @@ function ProductList() {
 
           </div>
 
-          <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
+          <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5">
             <div className='flex justify-between items-center py-5 px-5'>
               <h1 className='font-bold  text-lg'>Product List</h1>
               <div>

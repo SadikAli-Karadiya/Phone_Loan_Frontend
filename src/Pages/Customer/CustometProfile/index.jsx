@@ -625,7 +625,6 @@ function CustomerProfile() {
                                     {
                                         data?.data?.data?.CustomerAllPurchase?.length > 0 ? (
                                             data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
-                                                console.log(item)
                                                 return (
                                                     <tbody key={index} className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                         <tr className=" border-b">
