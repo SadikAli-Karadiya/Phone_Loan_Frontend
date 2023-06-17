@@ -1,11 +1,18 @@
-import React from 'react'
+import { React, useState } from 'react'
 import { AiFillEye } from "react-icons/ai";
+import { IoMdInformationCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useQuery } from 'react-query'
+import { getallTransection } from '../../utils/apiCalls';
 
 function Report() {
   const navigate = useNavigate();
+  const [pageNo, setPageNo] = useState(1);
+  const Receipt = useQuery(['transection'], () => getallTransection(pageNo - 1))
+  console.log(Receipt?.data?.data?.AllTransaction)
+
   const noOfTransaction = [
     {
       id: 1,
@@ -87,7 +94,7 @@ function Report() {
         <div className="flex justify-center items-center w-full">
           <div className="flex flex-wrap justify-center gap-5 pt-5 w-4/5 items-center">
             {noOfTransaction?.map((data, i) => {
-              console.log(data)
+              {/* console.log(data) */ }
               return (
                 <div key={i} className="rounded-xl shadow-2xl bg-white w-32 ">
                   <h1 className=" text-sm py-1 font-semibold bg-green-300 rounded-t-xl text-center">
@@ -106,7 +113,7 @@ function Report() {
           </div>
         </div>
         <div className='px-5 py-5 xl:px-10 bg-white drop-shadow-md mt-10 '>
-          <h1 className='font-bold px-5 pt-4 text-lg'>Customer List</h1>
+          <h1 className='font-bold px-5 pt-4 text-lg'>Transactions List</h1>
           <div className='px-6 py-7 flex xs:flex-col xs:space-y-10 lg:flex-row lg:justify-between lg:items-center'>
             <form action="" className='flex xs:flex-col xs:space-x-0 xs:space-y-3 sm:flex-row sm:space-y-0 sm:items-center sm:space-x-3 '>
               <div className='flex flex-col'>
@@ -138,80 +145,87 @@ function Report() {
             </div>
           </div>
           <div className="xs:overflow-x-scroll xl:overflow-x-hidden">
-            <table className="w-full whitespace-nowrap">
-              <thead>
-                <tr className="bg-gray-100 h-16 w-full text-sm leading-none font-bold text-[#0d0d48]">
-                  <th className="text-left pl-10">Date</th>
-                  <th className="text-left  px-2 xl:px-0">
-                    Reciept No
-                  </th>
-                  <th className="text-left px-2 xl:px-0">
-                    Student Name
-                  </th>
-                  <th className="text-left px-2 xl:px-0">
-                    Class
-                  </th>
-                  <th className="text-left  px-2 xl:px-0">
-                    Installment
-                  </th>
-                  <th className="text-left px-2 xl:px-0">
-                    Amount
-                  </th>
-                  <th className="text-left px-2 xl:px-0">
-                    Admin
-                  </th>
-                  <th className="text-center px-2 xl:px-0">
-                    Detail
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="w-full">
-                {/* {
+            {
+              Receipt?.data?.data?.AllTransaction?.length > 0 ? <table className="w-full whitespace-nowrap">
+                <thead>
+                  <tr className="bg-gray-100 h-16 w-full text-sm leading-none text-[#0d0d48]">
+                    <th className="font-normal text-left pl-10">Date</th>
+                    <th className="font-normal text-left  px-2 xl:px-0">
+                      Reciept No
+                    </th>
+                    <th className="font-normal text-left px-2 xl:px-0">
+                      Student Name
+                    </th>
+                    <th className="font-normal text-left px-2 xl:px-0">
+                      Class
+                    </th>
+                    <th className="font-normal text-left  px-2 xl:px-0">
+                      Installment
+                    </th>
+                    <th className="font-normal text-left px-2 xl:px-0">
+                      Amount
+                    </th>
+                    <th className="font-normal text-left px-2 xl:px-0">
+                      Admin
+                    </th>
+                    <th className="font-normal text-center px-2 xl:px-0">
+                      Detail
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="w-full">
+                  {/* {
                   currentItems?.map((m, key) => {
                     return ( */}
-                <tr
-                  // key={key}
-                  className="h-20 text-sm leading-none text-gray-800 border-b border-gray-100"
-                >
-                  <td className="pl-8">
-                    02 / 05 / 2023
-                  </td>
-                  <td className=" px-2 font-bold xl:px-0">
-                    002
-                  </td>
-                  <td className="px-2 xl:px-0 capitalize">
-                    Shad
-                  </td>
-                  <td className="px-2 xl:px-0 capitalize">
-                    Vivo F17 Pro
-                  </td>
-                  <td className=" px-2 xl:px-0">
-                    002
-                  </td>
-                  <td>
-                    <span className="bg-blue-200 px-4 text-darkblue-500 font-bold rounded">
-                      1500
-                    </span>
-                  </td>
-                  <td>
-                    <span className="capitalize">Israil</span>
-                  </td>
-                  <td className="px-5">
-                    <span className='flex justify-center items-center '>
-                      <Tippy content="Show Reciept">
-                        <div onClick={() =>
-                          navigate(`/Receipt/Receipt`)}>
-                          <AiFillEye className="text-xl cursor-pointer" />
-                        </div>
-                      </Tippy>
-                    </span>
-                  </td>
-                </tr>
-                {/* );
+                  <tr
+                    // key={key}
+                    className="h-20 text-sm leading-none text-gray-800 border-b border-gray-100"
+                  >
+                    <td className="pl-8">
+                      02 / 05 / 2023
+                    </td>
+                    <td className=" px-2 font-bold xl:px-0">
+                      002
+                    </td>
+                    <td className="px-2 xl:px-0 capitalize">
+                      Shad
+                    </td>
+                    <td className="px-2 xl:px-0 capitalize">
+                      Vivo F17 Pro
+                    </td>
+                    <td className=" px-2 xl:px-0">
+                      002
+                    </td>
+                    <td>
+                      <span className="bg-blue-200 px-4 text-darkblue-500 font-bold rounded">
+                        1500
+                      </span>
+                    </td>
+                    <td>
+                      <span className="capitalize">Israil</span>
+                    </td>
+                    <td className="px-5">
+                      <span className='flex justify-center items-center '>
+                        <Tippy content="Show Reciept">
+                          <div onClick={() =>
+                            navigate(`/Receipt/Receipt`)}>
+                            <AiFillEye className="text-xl cursor-pointer" />
+                          </div>
+                        </Tippy>
+                      </span>
+                    </td>
+                  </tr>
+                  {/* );
                   })
                 } */}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+                :
+                <div className='flex w-full justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
+                  <IoMdInformationCircle className='text-xl text-red-600' />
+                  <h1 className='text-sm font-bold text-red-800'>No Transection </h1>
+                </div>
+            }
           </div>
         </div>
       </div>

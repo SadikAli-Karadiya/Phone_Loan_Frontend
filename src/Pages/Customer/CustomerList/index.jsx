@@ -32,7 +32,7 @@ function CustomersList() {
   const [Selectemi, setSelectemi] = useState("")
   const installment = useQuery('installment', getAllInstallment)
   const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
-
+  
   const bgColors = [
     "#ffd6d6",
     "#bfdbfe",
@@ -115,7 +115,6 @@ function CustomersList() {
   };
 
   const handleDeleteInstallment = async (id) => {
-    console.log(id)
     Swal.fire({
       title: "Are you sure to delete installment?",
       text: "",

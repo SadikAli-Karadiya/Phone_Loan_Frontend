@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useState } from 'react'
 import { IoMdInformationCircle } from "react-icons/io"
 import { AiFillEye } from "react-icons/ai";
 import "../../../App.css"
@@ -12,9 +12,20 @@ import LoaderSmall from '../../../Component/LoaderSmall';
 function EMIHistory() {
     const navigate = useNavigate();
     const params = useParams();
-    const [chargeFormModal, setChargeFormModal] = React.useState(false);
+    const [chargeFormModal, setChargeFormModal] = useState(false);
+    const [is_Edit, setIsEdit] = useState(false);
+    const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-    // console.log(data?.data?.data?.AllEmi)
+    // console.log(data.data.data.AllEmi)
+    const handlePayEMI = (id) => {
+        let EMI = data?.data?.data?.AllEmi?.find((n) => {
+            return n.id == id;
+        });
+        setChargeFormModal(true);
+        setIsEdit(true)
+        setEMIDetails(EMI);
+    };
+
     return (
         <>
             <div className='xs:px-5 sm:px-10 sm:py-5 h-full'>
@@ -45,9 +56,6 @@ function EMIHistory() {
                                                         Amount
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
-                                                        Installment
-                                                    </th>
-                                                    <th scope="col" className="px-6 py-4">
                                                         charge
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
@@ -61,44 +69,42 @@ function EMIHistory() {
 
                                             {
                                                 data?.data?.data?.AllEmi?.map((item, index) => {
+                                                    console.log(item.paid_date)
                                                     return (
-                                                        <tbody className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                                        <tbody key={index} className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                             <tr className=" border-b">
                                                                 <th className="py-5 px-6">
                                                                     01
                                                                 </th>
                                                                 <td className="px-6 py-5 ">
-                                                                    {moment(item.due_date).format("DD / MM / YYYY")}
+                                                                    {moment(item.due_date).format("DD / MM")}
                                                                 </td>
                                                                 <td className="px-6 py-5 ">
-                                                                    {moment(item.paid_date).format("DD / MM / YYYY")}
+                                                                    {moment(item.paid_date).format("DD / MM")}
                                                                 </td>
                                                                 <td className="px-6 py-5 capitalize">
                                                                     {item.amount}
-                                                                </td>
-                                                                <td className="px-6 py-5">
-                                                                    2
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     0
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
-                                                                        item.status == 0 ?
-                                                                            <h1 className='bg-red-300 text-red-900 font-bold py-[2px] rounded-md'>
+                                                                        item.status == "pending" ?
+                                                                            <h1 className='bg-red-300 text-red-900 font-bold px-1 py-[2px] rounded-md'>
                                                                                 Pending
                                                                             </h1>
                                                                             :
-                                                                            <h1 className='bg-green-300 text-green-900 font-bold py-[2px] rounded-md'>
+                                                                            <h1 className='bg-green-300 text-green-900 font-bold px-1 py-[2px] rounded-md'>
                                                                                 Paid
                                                                             </h1>
                                                                     }
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
-                                                                        item.status == 0 ?
+                                                                        item.status == "pending" ?
                                                                             <div
-                                                                                onClick={() => setChargeFormModal(true)}
+                                                                                onClick={() => handlePayEMI(item.id)}
                                                                                 className="flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg cursor-pointer text-white font-semibold">
                                                                                 Pay
                                                                             </div>
@@ -129,11 +135,12 @@ function EMIHistory() {
                                 )
                         )
                 }
+
                 <ChargeFormModal
                     showModal={chargeFormModal}
                     handleShowModal={setChargeFormModal}
-                // refetchData={refetchData}
-                // tournamentDetails={tournamentDetails}
+                    EMI_Details={EMI_Details}
+                    is_Edit={is_Edit}
                 />
             </div>
         </>

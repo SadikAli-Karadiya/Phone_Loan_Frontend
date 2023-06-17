@@ -245,11 +245,29 @@ export const getEmiPurchasebyId = (id) => {
   })
 }
 
-// Reciept ------------------------------------------------------------
-export const getallReceipt = () => {
+// Transections ------------------------------------------------------------
+
+export const AddTransection = (data) => {
+  return instance({
+    'url': `/transaction/addtransaction`,
+    'method': 'POST',
+    'data': data,
+  })
+}
+
+export const getallTransection = (pageNo) => {
+  console.log(pageNo)
   return instance({
     'method': 'GET',
-    'url': `/receipt/List`,
+    'url': `/transaction/List/${pageNo}`,
+  })
+}
+
+// Reciept ------------------------------------------------------------
+export const getallReceipt = (pageNo) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/List/${pageNo}`,
   })
 }
 

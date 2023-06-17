@@ -60,6 +60,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
         // console.log(data)
         try {
           const response = await AddNewPurchase(data)
+          console.log(response)
           toast.success(response.data.message);
           resetForm({ values: "" })
           handleModalClose(false);
@@ -104,7 +105,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     }),
   };
 
-  console.log(Company)
   function handleSelectCompany(event) {
     let company_name = event.target.value
     setCompany(company_name)

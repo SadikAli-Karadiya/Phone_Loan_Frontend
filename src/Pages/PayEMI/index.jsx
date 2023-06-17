@@ -8,8 +8,8 @@ import Tippy from '@tippyjs/react';
 import { IoMdInformationCircle } from 'react-icons/io';
 import 'tippy.js/dist/tippy.css';
 import { useQuery } from 'react-query'
-import ChargeFormModal from '../../Component/ChargeFormModal';
 import { getPurchaseCustomerbyNumber } from '../../utils/apiCalls';
+import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
 
@@ -19,12 +19,12 @@ function PayEMI() {
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
+  const [showNotFound, setShowNotFound] = useState(-1)
   const purchase = useQuery(['purchase', pageNo, search], () => getPurchaseCustomerbyNumber({
     pageNo: pageNo - 1,
     search
   }))
-  console.log(purchase?.data?.data)
-
+  console.log(purchase?.data?.data?.data)
   return (
     <>
       <div className=' sm:px-5 xl:px-10 py-5 h-full'>
@@ -142,14 +142,17 @@ function PayEMI() {
             )
             :
             (
-              <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
-                <IoMdInformationCircle className='text-xl text-red-600' />
-                <h1 className='text-sm font-bold text-red-800'>No Customer Found </h1>
-              </div>
+              search.length > 0 ?
+                <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
+                  <IoMdInformationCircle className='text-xl text-red-600' />
+                  <h1 className='text-sm font-bold text-red-800'>No Customer Found</h1>
+                </div>
+                :
+                null
             )
         }
 
-        {/* {
+        {
           purchase?.data?.data?.data?.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
               <Pagination
@@ -161,7 +164,7 @@ function PayEMI() {
             </div>
             :
             null
-        } */}
+        }
 
         <ChargeFormModal
           showModal={chargeFormModal}

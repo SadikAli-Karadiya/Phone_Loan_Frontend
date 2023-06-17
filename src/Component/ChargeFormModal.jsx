@@ -6,35 +6,107 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { MdDelete } from "react-icons/md"
 import { FiPlus } from "react-icons/fi"
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
+import { AddTransection } from '../utils/apiCalls';
+import { useQuery } from 'react-query'
 
-const productSchema = Yup.object({
-  price: Yup.string().required("Please Enter Price"),
-});
 
-function ChargeFormModal({ showModal, handleShowModal }) {
+function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
+
+  if (!showModal) {
+    return <></>;
+  }
+
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = React.useState();
-  const [RamList, setRamList] = React.useState([]);
-  const [ram, setRam] = React.useState();
-  const [StorageList, setStorageList] = React.useState([]);
+  const [selectPayment, setSelectPayment] = React.useState("1");
+  const [status, setstatus] = React.useState("compalete");
   const [Charge, setCharge] = React.useState(false);
-  const [Charge_amount, setchargeamount] = React.useState();
-  const [EMI_Amount, setemiamount] = React.useState();
+  const [Charge_amount, setchargeamount] = React.useState("");
+  const [upi_number, setupinumber] = React.useState("");
 
+  const [chequeNo, setChequeNo] = React.useState('');
+  const [chequeDate, setChequeDate] = React.useState('');
+  const [upiNo, setUpiNo] = React.useState('');
+  const [toggleCheque, setToggleCheque] = React.useState(false);
+  const [toggleUpi, setToggleUpi] = React.useState(false);
+  const [toggleCash, setToggleCash] = React.useState(true);
 
   const initialValues = {
-    charge: "",
+    upi_number: "",
+    payment: "",
     price: "",
   }
 
-  const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
+  const [errors, setErrors] = React.useState({
+    amount: '',
+    discount: '',
+    upi: '',
+    cheque: '',
+    chequeDate: '',
+    invalid_pin: '',
+    month: ''
+  });
+
+  const { values, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
     useFormik({
-      initialValues: initialValues,
-      validationSchema: productSchema,
-      onSubmit(data) {
-        console.log(data)
+      initialValues: JSON.stringify(EMI_Details) != {} ? { amount: EMI_Details?.amount } :
+        initialValues,
+      async onSubmit(data) {
+        let err = 0;
+        if (toggleUpi && upiNo == '') {
+          err++;
+          setErrors((prevData) => {
+            return {
+              ...prevData,
+              upi: '*Please Enter UPI Number'
+            }
+          })
+        }
+
+        if (toggleCheque && chequeNo == '') {
+          err++;
+          setErrors((prevData) => {
+            return {
+              ...prevData,
+              cheque: '*Please enter cheque number'
+            }
+          })
+        }
+
+        if (toggleCheque && chequeDate == '') {
+          err++;
+          setErrors((prevData) => {
+            return {
+              ...prevData,
+              chequeDate: '*Please select cheque date'
+            }
+          })
+        }
+
+        Object.assign(data, {
+          purchase_id: EMI_Details.id,
+          Charge_amount: Charge_amount,
+          status: status,
+          payment: selectPayment,
+          upi_number: upiNo,
+          chequeDate: chequeDate,
+          chequeNo: chequeNo
+        })
+        try {
+          const response = await AddTransection(data)
+          console.log(response)
+          toast.success(response.data.message);
+          handleModalClose(false);
+        } catch (err) {
+          toast.error(err.response.data.message);
+        }
+
       },
     });
+
+
 
   const customStyles = {
     control: (provided, state) => ({
@@ -71,6 +143,114 @@ function ChargeFormModal({ showModal, handleShowModal }) {
     }),
   };
 
+  function handlePaymentMethod(e) {
+    setUpiNo('')
+    setChequeNo('')
+    setChequeDate('');
+    setErrors((prevData) => {
+      return {
+        ...prevData,
+        upi: '',
+        cheque: '',
+        chequeDate: ''
+      }
+    })
+
+    if (e.target.value == 1) {
+      setSelectPayment(e.target.value);
+      setToggleCash(true);
+      setToggleCheque(false);
+      setToggleUpi(false);
+    }
+    else if (e.target.value == 2) {
+      setSelectPayment(e.target.value);
+      setToggleCheque(false);
+      setToggleCash(false)
+      setToggleUpi(true);
+    }
+    else {
+      setSelectPayment(e.target.value);
+      setToggleUpi(false);
+      setToggleCash(false);
+      setToggleCheque(true);
+    }
+  }
+
+  const handleUpiNo = (e) => {
+    const regex = new RegExp(/^[0-9 A-Za-z@]+$/)
+
+    if (regex.test(e.target.value)) {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          upi: ''
+        }
+      })
+    }
+    else {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          upi: '*Enter only numbers'
+        }
+      })
+    }
+    setUpiNo(e.target.value)
+  }
+  const handleChequeNo = (e) => {
+    const regex = new RegExp(/^[0-9]+$/)
+
+    if (regex.test(e.target.value)) {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          cheque: ''
+        }
+      })
+    }
+    else {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          cheque: '*Enter only numbers'
+        }
+      })
+    }
+    setChequeNo(e.target.value)
+  }
+
+  const handleChequeDate = (e) => {
+    if (e.target.value == '') {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          chequeDate: '*Please select cheque date'
+        }
+      })
+    }
+    else if (isSameDay(e.target.value)) {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          chequeDate: ''
+        }
+      })
+    }
+    else if (new Date(e.target.value).getTime() < new Date().getTime()) {
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          chequeDate: '*Cheque date should be greater than today\'s date'
+        }
+      })
+    }
+    setChequeDate(e.target.value)
+  }
+
+  const handleChangeDate = (e) => {
+    setReceiptDate(e.target.value);
+  }
+
   const handleModalClose = () => {
     resetForm("")
     handleShowModal(false);
@@ -82,6 +262,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
   }
 
   function handleremovecharge() {
+    setchargeamount("")
     setCharge(false)
   }
 
@@ -89,13 +270,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
     setchargeamount(event.target.value)
   };
 
-  function handleemi(event) {
-    setemiamount(event.target.value)
-  };
-
-  let Total = (EMI_Amount) + (Charge_amount)
-
-  console.log(Total)
+  let Total = (EMI_Details?.amount + Charge_amount)
 
   return (
     <Modal open={showModal}
@@ -104,7 +279,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Pay EMI
+          Generate EMI Receipt
         </Modal.Title>
         <button
           type="button"
@@ -130,20 +305,14 @@ function ChargeFormModal({ showModal, handleShowModal }) {
 
         <Modal.Description>
           <div className="px-4 pb-4">
-            <div className="flex justify-start items-start pb-5 ">
-              <select name="" id="" className="w-20 py-1 rounded-md px-2 outline-none">
-                <option value="1">1</option>
-                <option value="2">2</option>
-              </select>
-            </div>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col justify-start w-full'>
                 <div className="flex flex-col space-y-2 w-full ">
                   <input type="text"
                     name="price"
-                    value={EMI_Amount}
-                    onChange={handleemi}
-                    className="rounded-md py-2 px-3 outline-non"
+                    value={values.amount}
+                    disabled={true}
+                    className="rounded-md py-[6px] px-3 outline-none"
                     placeholder="Enter Phone Price " />
 
                 </div>
@@ -157,7 +326,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                             value={Charge_amount}
                             onChange={handleCharge}
                             onBlur={handleBlur}
-                            className="rounded-md py-2 px-3 outline-non"
+                            className="rounded-md py-[6px] px-3 outline-none"
                             placeholder="Enter Charge " />
                           {errors.charge && touched.charge
                             ?
@@ -173,7 +342,7 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                       </div>
                       <div className="mt-5 w-full">
                         <div
-                          className="rounded-md py-2 bg-white px-3 w-full outline-non">
+                          className="rounded-md py-[6px] bg-white px-3 w-full outline-non">
                           Total : {Total}
                         </div>
                       </div>
@@ -183,18 +352,110 @@ function ChargeFormModal({ showModal, handleShowModal }) {
                 }
                 {
                   Charge == false ?
-                    <div className="flex items-center bg-white  mt-5 py-1 pl-1 hover:text-red-600 w-28  rounded-md text-gray-600 cursor-pointer"
+                    <div className="flex items-center bg-white  mt-5 py-1 pl-1 hover:text-red-600 w-1/4  rounded-md text-gray-600 cursor-pointer"
                       onClick={handlecharge}
                     >
                       <div className="px-1 py-1 rounded-md text-lg">
                         <FiPlus />
                       </div>
-                      <h1 className="font-semibold text-sm text-start">Add Charge</h1>
+                      <h1 className="font-semibold text-sm text-start">Charge</h1>
                     </div>
                     :
                     ""
                 }
               </div>
+              <div className="flex flex-col ">
+                <div className="flex  space-x-5">
+                  <div
+                    className="bg-white space-x-1 px-6 rounded-md py-[4px] cursor-pointer">
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      id="sme"
+                      className=""
+                      value="1"
+                      checked={toggleCash ? 'checked' : ''}
+                      onChange={handlePaymentMethod}
+                    />
+                    <span className="font-semibold text-sm"> Cash </span>
+                  </div>
+                  <div className="bg-white space-x-1 px-6 rounded-md py-[4px] cursor-pointer">
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      id="sme"
+                      className=""
+                      value="2"
+                      onChange={handlePaymentMethod}
+                    />
+                    <span className="font-semibold text-sm"> UPI </span>
+                  </div>
+                  <div className="bg-white space-x-1 px-6 rounded-md py-[4px] cursor-pointer">
+                    <input
+                      type="radio"
+                      name="payment_method"
+                      id="sme"
+                      className=""
+                      value="3"
+                      onChange={handlePaymentMethod}
+                    />
+                    <span className="font-semibold text-sm"> Cheque </span>
+                  </div>
+                </div>
+              </div>
+              {
+                toggleCheque
+                  ?
+                  <div className="flex w-full space-x-5">
+                    <div className="flex flex-col w-full ">
+                      <div className="flex rounded-md w-full ">
+                        <input
+                          type="text"
+                          autoFocus={true}
+                          placeholder="Enter Cheque Number"
+                          className="px-1 py-[5px] w-full rounded-md outline-none"
+                          value={chequeNo}
+                          onChange={handleChequeNo}
+                        />
+                      </div>
+                      {errors.cheque != '' ? (<small className="text-red-700 mt-2">{errors.cheque}</small>) : null}
+                    </div>
+                    <div className="flex flex-col w-full">
+                      <Tippy content="Select Cheque Date">
+                        <span>
+                          <input
+                            type="date"
+                            className="placeholder-black p-1 w-full rounded-md outline-none"
+                            onChange={handleChequeDate}
+                          />
+                        </span>
+                      </Tippy>
+                      {errors.chequeDate != '' ? (<small className="text-red-700 mt-2">{errors.chequeDate}</small>) : null}
+                    </div>
+                  </div>
+                  :
+                  null
+              }
+              {
+                toggleUpi
+                  ?
+                  <div className="flex flex-col">
+                    <div className="flex rounded-md w-full">
+                      <input
+                        type="text"
+                        autoFocus={true}
+                        placeholder="Enter Upi Number/id"
+                        className="px-3 py-[5px] w-full rounded-md outline-none "
+                        value={upiNo}
+                        onChange={handleUpiNo}
+                      />
+                    </div>
+                    {errors.upi != '' ? (<small className="text-red-700 mt-2">{errors.upi}</small>) : null}
+                  </div>
+                  :
+                  null
+              }
+
               <div className="mt-5 text-right">
                 <button
                   type="button"
@@ -213,8 +474,8 @@ function ChargeFormModal({ showModal, handleShowModal }) {
             ) : null}
           </div>
         </Modal.Description>
-      </Modal.Description >
-    </Modal >
+      </Modal.Description>
+    </Modal>
   );
 }
 
