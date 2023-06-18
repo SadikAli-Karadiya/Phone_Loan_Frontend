@@ -12,14 +12,15 @@ import moment from 'moment'
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
 
-  // console.log(PhoneDetails?.phone)
-
   if (!showModal) {
     return <></>;
   }
 
   const params = useParams();
   let customer_id = params?.id
+  const DATE = new Date();
+  const defaultValue = DATE.toLocaleDateString('en-CA');
+  const [date, setDate] = useState(defaultValue);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
@@ -57,7 +58,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
         )
-        // console.log(data)
         try {
           const response = await AddNewPurchase(data)
           console.log(response)
@@ -108,30 +108,19 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   function handleSelectCompany(event) {
     let company_name = event.target.value
     setCompany(company_name)
-    let Company = Phone_Details?.data?.data?.AllModel?.filter((n) => {
-      return n?.company?.company_name == company_name;
+    let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
+      return n?.phone?.company?.company_name == company_name;
     });
-    console.log(Company , "sjdhb")
-    setSelectedCompany(Company)
+    setSelectedCompany(Model)
   };
 
   function handleSelectModel(event) {
-    let Model_name = event.target.value
+    const Model_name = event.target.value
+    console.log(Model_name, "sjvdhb")
     setModel(Model_name)
-    let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
-      return n?.phone?.model_name == Model_name;
-    });
-    setSelectModel(Model)
-  };
-
-  function handleSelectStorage(event) {
-    let storage = event.target.value
-    setSpecification(storage)
     let Price = specification?.data?.data?.AllSpecification?.find((n) => {
-      return n?.storage == storage;
+      return n?.id == Model_name;
     });
-    setram(Price.ram)
-    console.log(Price)
     setSelectSpecification(Price.price)
   };
 
@@ -142,6 +131,11 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       return n?.month == month;
     });
     setSelectInstallment(Charge.charges)
+  };
+
+  function handleChangeDate(event) {
+    setDate(event.target.value)
+
   };
 
   let Net_playable = (SelectInstallment + SelectSpecification)
@@ -202,9 +196,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                       <input
                         type="date"
                         name="date"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.date}
+                        onChange={handleChangeDate}
+                        value={date}
                         className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">
@@ -234,9 +227,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         }
                       </select>
                     </label>
-                    {/* <span className="text-xs font-semibold text-red-600 px-1">
-                      {errors.company && touched.company ? errors.company : null}
-                    </span> */}
                   </div>
                 </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
@@ -257,14 +247,16 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           SelectedCompany.map((model, index) => {
                             return (
                               <option
-                                key={index} value={model.model_name}>{model.model_name}</option>
+                                key={index} value={model.id}>
+                                <span>{model.phone?.model_name}</span>  ( <span>{model.ram}</span> / <span>{model.storage}</span> )
+                              </option>
                             )
                           })
                         }
                       </select>
                     </label>
                   </div>
-                  <div className="flex items-center w-full gap-2">
+                  {/* <div className="flex items-center w-full gap-2">
                     <div className="storage w-full">
                       <label className="block">
                         <span className="block text-sm font-medium text-white">
@@ -287,11 +279,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           }
                         </select>
                       </label>
-                      {/* <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.company && touched.company ? errors.company : null}
-                      </span> */}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="price w-full">

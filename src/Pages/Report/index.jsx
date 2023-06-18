@@ -10,8 +10,13 @@ import { getallTransection } from '../../utils/apiCalls';
 function Report() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
-  const Receipt = useQuery(['transection'], () => getallTransection(pageNo - 1))
-  console.log(Receipt?.data?.data?.AllTransaction)
+  const [data, setData] = useState([]);
+  const [date, setDate] = useState(() => {
+    new Date()?.toISOString().slice(0, 10).split("-").reverse().join("-");
+  });
+  const [transaction, setTransaction] = useState("?");
+  const [nextDate, setNextDate] = useState("");
+  const reportData = useQuery(['transection'], () => getallTransection(pageNo - 1))
 
   const noOfTransaction = [
     {
@@ -87,6 +92,59 @@ function Report() {
       total: 2580
     },
   ]
+
+  function handleDataFilter(filterDate) {
+    const preDate = new Date(`${filterDate},23:59:00`);
+    const previous = preDate.setDate(preDate.getDate() - 1);
+
+    const postDate = new Date(`${filterDate},0:00:00`);
+    const post = postDate.setDate(postDate.getDate() + 1);
+    return [previous, post];
+  }
+
+  function handle_data(e) {
+
+    const [previous, post] = handleDataFilter(e.target.value);
+    setDate(e.target.value);
+
+    if (nextDate) {
+      handleNextDate(nextDate);
+    } else {
+      const newData = reportData?.data?.data?.AllTransaction.filter(
+        (recipet) =>
+          new Date(recipet.date).getTime() > previous &&
+          new Date(recipet.date).getTime() < post
+      );
+      setData(() => newData);
+    }
+    setTransaction("?");
+  }
+
+  function handleNextDate(e) {
+    const [_, post] = handleDataFilter(e);
+    const dateData = handleDataFilter(date);
+
+    setNextDate(() => e);
+
+    const newData = reportData.data.data.filter(
+      (recipet) =>
+        new Date(recipet.date).getTime() > dateData[0] &&
+        new Date(recipet.date).getTime() < post
+    );
+    setData(() => newData.reverse());
+    setTransaction("?");
+  }
+
+  function calcaulateTotal() {
+    let total = 0;
+    data?.map((d) => {
+      total += d.transaction[0].amount;
+    });
+
+    setTransaction(total);
+    return total;
+  }
+
   return (
     <>
       <div className='px-5 py-5'>
@@ -94,7 +152,6 @@ function Report() {
         <div className="flex justify-center items-center w-full">
           <div className="flex flex-wrap justify-center gap-5 pt-5 w-4/5 items-center">
             {noOfTransaction?.map((data, i) => {
-              {/* console.log(data) */ }
               return (
                 <div key={i} className="rounded-xl shadow-2xl bg-white w-32 ">
                   <h1 className=" text-sm py-1 font-semibold bg-green-300 rounded-t-xl text-center">
@@ -118,14 +175,32 @@ function Report() {
             <form action="" className='flex xs:flex-col xs:space-x-0 xs:space-y-3 sm:flex-row sm:space-y-0 sm:items-center sm:space-x-3 '>
               <div className='flex flex-col'>
                 <label htmlFor="From" className='text-sm text-slate-400'>From</label>
-                <input type="date" name="" id="" className='border py-2 rounded-md px-2 hover:cursor-pointer' />
+                <input
+                  type="date"
+                  name=""
+                  id=""
+                  value={date}
+                  onChange={(e) => handle_data(e)}
+                  className='border py-2 rounded-md px-2 hover:cursor-pointer outline-none' />
               </div>
               <div className='flex flex-col'>
                 <label htmlFor="From" className='text-sm text-slate-400'>To</label>
-                <input type="date" name="" id="" className='border py-2 rounded-md px-2 hover:cursor-pointer' />
+                <input type="date"
+                  name=""
+                  id=""
+                  value={nextDate}
+                  onChange={(e) => handleNextDate(e.target.value)}
+                  disabled={date ? false : true}
+                  className='border py-2 rounded-md px-2 hover:cursor-pointer outline-none' />
               </div>
               <div className='flex sm:pt-5 '>
-                <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
+                <button
+
+                  onClick={(e) => {
+                    setData(reportData?.data?.data?.AllTransaction);
+                    setDate("");
+                    setNextDate("");
+                  }} className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
                   Clear Filter
                 </button>
               </div>
@@ -133,18 +208,20 @@ function Report() {
             <div className='flex items-center space-x-3'>
               <div className='bg-green-200 rounded-md px-3 shadow-lg py-1 flex flex-col justify-center  items-center'>
                 <h1 className='font-semibold text-sm'>
-                  Total : 291840
+                  Total : {transaction}
                 </h1>
-                <p className='text-sm italic'>Transection : 66</p>
+                <p className='text-sm italic'>Transection : {transaction === "?" ? "?" : ' ' + data?.length}</p>
               </div>
               <div className='flex justify-end items-end'>
-                <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
+                <button
+                  onClick={calcaulateTotal}
+                  className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
                   Calculate Total
                 </button>
               </div>
             </div>
           </div>
-          <div className="xs:overflow-x-scroll xl:overflow-x-hidden">
+          {/* <div className="xs:overflow-x-scroll xl:overflow-x-hidden">
             {
               Receipt?.data?.data?.AllTransaction?.length > 0 ? <table className="w-full whitespace-nowrap">
                 <thead>
@@ -174,11 +251,7 @@ function Report() {
                   </tr>
                 </thead>
                 <tbody className="w-full">
-                  {/* {
-                  currentItems?.map((m, key) => {
-                    return ( */}
                   <tr
-                    // key={key}
                     className="h-20 text-sm leading-none text-gray-800 border-b border-gray-100"
                   >
                     <td className="pl-8">
@@ -215,9 +288,6 @@ function Report() {
                       </span>
                     </td>
                   </tr>
-                  {/* );
-                  })
-                } */}
                 </tbody>
               </table>
                 :
@@ -226,7 +296,7 @@ function Report() {
                   <h1 className='text-sm font-bold text-red-800'>No Transection </h1>
                 </div>
             }
-          </div>
+          </div> */}
         </div>
       </div>
     </>
