@@ -29,8 +29,8 @@ function ProductList() {
   const [SelectedCompany, setSelectedCompany] = React.useState();
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
-  const phones = useQuery('phones', getAllPhone)
-
+  const phones = useQuery(['phones', pageNo], () => getAllPhone({ pageNo: pageNo - 1, }))
+  // console.log(phones.data.data)
   const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure to delete this model?',
@@ -117,7 +117,7 @@ function ProductList() {
 
           <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5">
             <div className='flex justify-between items-center py-5 px-5'>
-              <h1 className='font-bold  text-lg'>Product List</h1>
+              <h1 className='font-bold  text-lg'></h1>
               <div>
                 <select
                   name="" id=""
@@ -203,22 +203,22 @@ function ProductList() {
               SelectedCompany?.length > 0 ?
                 null
                 :
-                <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                  <BsPhone className='text-3xl' />
-                  <h1 className=' font-semibold'>Model Not Found</h1>
+                <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
+                  <BsPhone className='text-2xl' />
+                  <h1 className='text-sm font-bold'>Model Not Found</h1>
                 </div>
             }
           </div>
         </div>
 
-        {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
-              <Pagination
-              // total={data && data.pageCount ? data.pageCount : 0}
-              // current={pageNo}
-              // onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
-              />
-            </div> */}
+        <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
+          <Pagination
+          total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
+          current={pageNo}
+          onPageChange={(page) => setPageNo(page)}
+          previousLabel="Previous" nextLabel="Next"
+          />
+        </div>
 
       </div>
       <ProductFormModel

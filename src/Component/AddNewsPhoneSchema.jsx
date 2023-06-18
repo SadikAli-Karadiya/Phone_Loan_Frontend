@@ -1,15 +1,8 @@
 import * as Yup from "yup";
 
-export const NewPhoneSchema = Yup.object({
-    date: Yup.date()
-        .required("Please Enter Date")
-        .nullable(),
-});
-
-let Today = new Date()
 export const NewPhoneValues = {
     date: "",
-    company: "",
+    company_name: "",
     ram: "",
     storage: "",
     model: "",

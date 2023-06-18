@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { NewPhoneSchema, NewPhoneValues } from "../Component/AddNewsPhoneSchema";
+import { NewPhoneValues } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 import moment from 'moment'
@@ -21,20 +21,18 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const DATE = new Date();
   const defaultValue = DATE.toLocaleDateString('en-CA');
   const [date, setDate] = useState(defaultValue);
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
-  const [SelectModel, setSelectModel] = useState([]);
   const [Model, setModel] = useState(is_Edit == true ? PhoneDetails?.phone?.model_name : "");
-  const [SelectSpecification, setSelectSpecification] = useState("");
-  const [Specification, setSpecification] = useState("");
+  const [Phone_Price, setPhonePrice] = useState("");
   const [Ram, setram] = useState("");
+  const [Storage, setstorage] = useState("");
+  const [Model_Name, setModelName] = useState("");
   const [Down_Payment, setDownPayment] = useState("");
   const [SelectInstallment, setSelectInstallment] = useState([]);
   const [installment, setinstallment] = useState("");
   const [Company, setCompany] = useState(is_Edit == true ? PhoneDetails?.phone?.company?.company_name : "");
   const Company_Details = useQuery('company', getAllCompanies)
-  const Phone_Details = useQuery('phone', getAllPhone)
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
@@ -45,15 +43,15 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           Company: PhoneDetails?.phone?.company?.company_name,
           Model: PhoneDetails?.phone?.model_name
         } : NewPhoneValues,
-      validationSchema: NewPhoneSchema,
       async onSubmit(data) {
         Object.assign(data,
+          { date : date },
           { customer_id: customer_id },
-          { company_name: Company },
-          { model: Model },
+          { company_name : Company },
+          { model_name : Model_Name },
           { ram: Ram },
-          { Specification: Specification },
-          { price: SelectSpecification },
+          { storage : Storage },
+          { price: Phone_Price },
           { month: installment },
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
@@ -115,13 +113,15 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   };
 
   function handleSelectModel(event) {
-    const Model_name = event.target.value
-    console.log(Model_name, "sjvdhb")
-    setModel(Model_name)
+    const Model = event.target.value
+    setModel(Model)
     let Price = specification?.data?.data?.AllSpecification?.find((n) => {
-      return n?.id == Model_name;
+      return n?.id == Model;
     });
-    setSelectSpecification(Price.price)
+    setram(Price.ram)
+    setModelName(Price.phone.model_name)
+    setstorage(Price.storage)
+    setPhonePrice(Price.price)
   };
 
   function handleSelectInstallment(event) {
@@ -138,7 +138,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
 
   };
 
-  let Net_playable = (SelectInstallment + SelectSpecification)
+  let Net_playable = (SelectInstallment + Phone_Price)
 
   const handleModalClose = () => {
     resetForm({ values: "" })
@@ -256,31 +256,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                       </select>
                     </label>
                   </div>
-                  {/* <div className="flex items-center w-full gap-2">
-                    <div className="storage w-full">
-                      <label className="block">
-                        <span className="block text-sm font-medium text-white">
-                          Storage *
-                        </span>
-                        <select
-                          name="storage"
-                          id="storage"
-                          value={Specification}
-                          onChange={handleSelectStorage}
-                          className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                          <option value="">RAM / Storage</option>
-                          {
-                            SelectModel?.map((specification, index) => {
-                              return (
-                                <option
-                                  key={index} value={specification.ram && specification.storage}>{specification.ram} / {specification.storage}</option>
-                              )
-                            })
-                          }
-                        </select>
-                      </label>
-                    </div>
-                  </div> */}
                 </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="price w-full">
@@ -293,13 +268,10 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         name="price"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={SelectSpecification}
+                        value={Phone_Price}
                         placeholder="Enter Price"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      {/* <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.price && touched.price ? errors.price : null}
-                      </span> */}
                     </label>
                   </div>
                   <div className="installment w-full">
@@ -324,9 +296,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         }
                       </select>
                     </label>
-                    {/* <span className="text-xs font-semibold text-red-600 px-1">
-                      {errors.installment && touched.installment ? errors.installment : null}
-                    </span> */}
                   </div>
                 </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full ">
@@ -343,9 +312,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         placeholder="Enter Down Payment"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      {/* <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.dp && touched.dp ? errors.dp : null}
-                      </span> */}
                     </label>
                   </div>
                   <div className="totalfee w-full">
@@ -361,11 +327,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         placeholder="Enter Net Payable Amount"
                         className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
-                      {/* <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.net_payable && touched.net_payable
-                          ? errors.net_payable
-                          : null}
-                      </span> */}
                     </label>
                   </div>
                 </div>

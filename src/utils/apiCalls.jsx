@@ -171,10 +171,10 @@ export const UpdatePhone = (data) => {
   })
 }
 
-export const getAllPhone = () => {
+export const getAllPhone = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': '/phone',
+    'url': `/phone/List/${pageNo.pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
@@ -214,8 +214,6 @@ export const getPurchaseCustomerbyId = (id) => {
 }
 
 export const getPurchaseCustomerbyNumber = (search) => {
-  //  let search = search.search
-  console.log(search)
   return instance({
     'method': 'GET',
     'url': `/purchase/search/${search.pageNo}/${search.search}`,
@@ -256,7 +254,6 @@ export const AddTransection = (data) => {
 }
 
 export const getallTransection = (pageNo) => {
-  console.log(pageNo)
   return instance({
     'method': 'GET',
     'url': `/transaction/List/${pageNo}`,
