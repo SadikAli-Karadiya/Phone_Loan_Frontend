@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { FaUserEdit } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { Admindetails, UpdateAdmin } from "../../../utils/apiCalls"
+import { useQuery } from 'react-query'
 
 let adminSchema = Yup.object({
 
-  full_name: Yup.string()
+  first_name: Yup.string()
     .test('trim', 'Must not contain leading or trailing spaces', (value) => {
       if (value) {
         return value.trim() === value;
@@ -16,10 +17,21 @@ let adminSchema = Yup.object({
       return true;
     })
     .min(2, "Minimum 2 characters are required")
-    .required("Please Enter Full Name")
+    .required("Please Enter First Name")
     .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
-  email: Yup.string().email()
+  last_name: Yup.string()
+    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+      if (value) {
+        return value.trim() === value;
+      }
+      return true;
+    })
+    .min(2, "Minimum 2 characters are required")
+    .required("Please Enter Last Name")
+    .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
+
+  username: Yup.string().email()
     .test('trim', 'Must not contain leading or trailing spaces', (value) => {
       if (value) {
         return value.trim() === value;
@@ -28,6 +40,23 @@ let adminSchema = Yup.object({
     })
     .required("Please Enter Email"),
 
+  username: Yup.string().email()
+    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+      if (value) {
+        return value.trim() === value;
+      }
+      return true;
+    })
+    .required("Please Enter Email"),
+
+  password: Yup.string()
+    .required("Please Enter Password")
+    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+      if (value) {
+        return value.trim() === value;
+      }
+      return true;
+    }),
 
   pin: Yup.string()
     .test('trim', 'Must not contain leading or trailing spaces', (value) => {
@@ -40,7 +69,7 @@ let adminSchema = Yup.object({
     .max(4, "Please enter valid pin")
     .required("Please Enter PIN"),
 
-  whatsapp_no: Yup.string()
+  mobile: Yup.string()
     .test('trim', 'Must not contain leading or trailing spaces', (value) => {
       if (value) {
         return value.trim() === value;
@@ -50,47 +79,6 @@ let adminSchema = Yup.object({
     .min(10, "Please enter valid mobile no")
     .max(10, "Please enter valid mobile no")
     .required("Please Enter Mobile Number"),
-
-  alternate_mobile: Yup.string()
-    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-      if (value) {
-        return value.trim() === value;
-      }
-      return true;
-    })
-    .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
-
-  dateofbirth
-    : Yup.date()
-      .max(new Date(), 'Please select valid DOB')
-      .required("Please enter your date of birth")
-      .nullable(),
-
-  gender: Yup.string().required("Please Select Gender"),
-
-  address: Yup.string()
-    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-      if (value) {
-        return value.trim() === value;
-      }
-      return true;
-    })
-    .required("Please Enter Address"),
-
-  qualification: Yup.string()
-    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-      if (value) {
-        return value.trim() === value;
-      }
-      return true;
-    })
-    .required("Please Enter Qualification"),
-
-
-  dateofjoining: Yup.date()
-    .max(new Date(), 'Please select valid date')
-    .required("Please Enter Date")
-    .nullable(),
 });
 
 
@@ -100,25 +88,33 @@ const Updateprofile = () => {
   const [toggle, setToggle] = React.useState(false);
   const navigate = useNavigate();
   const [isEnable, setIsEnable] = useState(true);
+  const id = 1
+  const data = useQuery(['admin', id], () => Admindetails(id));
+  const AdminDetails = data?.data?.data?.SingleAdmin
+
   const initialValues = {
-    full_name: "",
-    email: "",
-    whatsapp_no: "",
-    alternate_mobile: "",
-    security_pin: "",
-    address: "",
-    dob: "",
-    pin : "",
-    dateofbirth : "",
-    qualification: ""
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    mobile: "",
+    pin: "",
   };
 
   const { values, resetForm, touched, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
-      initialValues: initialValues,
+      initialValues: AdminDetails ? AdminDetails : initialValues,
       validationSchema: adminSchema,
-      onSubmit: (values) => {
-        resetForm({ values: "" })
+      async onSubmit (data) {
+        try {
+          const response = await UpdateAdmin(data)
+          console.log(response)
+          toast.success(response.data.message);
+          setIsEnable(true);
+          setToggle(false)
+        } catch (err) {
+          toast.error(err.response.data.message);
+        }
       },
     });
 
@@ -140,10 +136,10 @@ const Updateprofile = () => {
       {/* {admin ? ( */}
       <section className="">
         <form
-          className="flex justify-center items-center  w-full h-full"
+          className="flex justify-center items-center"
           onSubmit={handleSubmit}
         >
-          <div className="w-2/3 grid grid-cols-1 rounded-lg drop-shadow-md truncate bg-white p-10 my-5">
+          <div className=" grid grid-cols-1 rounded-lg drop-shadow-md truncate bg-white p-10 mt-10">
             <div className="title mb-5">
               <h1 className="text-3xl text-center font-medium text-[#020D46]">
                 Update Profile
@@ -154,46 +150,94 @@ const Updateprofile = () => {
                 <div className="fullname">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
-                      Full Name
+                      First Name
                     </span>
                     <input
                       type="text"
-                      name="full_name"
+                      name="first_name"
                       disabled={isEnable}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.full_name}
+                      value={values.first_name}
                       placeholder="First Name, Middle Name, Last Name"
                       className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
                         rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                     />
                   </label>
                   <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.full_name && touched.full_name
-                      ? errors.full_name
+                    {errors.first_name && touched.first_name
+                      ? errors.first_name
                       : null}
                   </span>
                 </div>
-                <div className="email">
+                <div className="fullname">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
-                      Email
+                      Last Name
                     </span>
                     <input
                       type="text"
+                      name="last_name"
                       disabled={isEnable}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.email}
-                      name="email"
-                      placeholder="Enter Your Email"
-                      className='w-72 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm 
-                        shadow-sm placeholder-slate-400 outline-none'
+                      value={values.last_name}
+                      placeholder="First Name, Middle Name, Last Name"
+                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
+                        rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                     />
                   </label>
                   <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.email && touched.email
-                      ? errors.email
+                    {errors.last_name && touched.last_name
+                      ? errors.last_name
+                      : null}
+                  </span>
+                </div>
+              </div>
+              <div div className="flex lg:flex-row md:flex-col gap-4 ">
+                <div className="fullname">
+                  <label className="block">
+                    <span className="block text-sm font-medium text-slate-700">
+                      Username
+                    </span>
+                    <input
+                      type="text"
+                      name="username"
+                      disabled={isEnable}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.username}
+                      placeholder="First Name, Middle Name, Last Name"
+                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
+                        rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                    />
+                  </label>
+                  <span className="text-xs font-semibold text-red-600 px-1">
+                    {errors.username && touched.username
+                      ? errors.username
+                      : null}
+                  </span>
+                </div>
+                <div className="fullname">
+                  <label className="block">
+                    <span className="block text-sm font-medium text-slate-700">
+                      Password
+                    </span>
+                    <input
+                      type="password"
+                      name="password"
+                      disabled={isEnable}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      placeholder="First Name, Middle Name, Last Name"
+                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
+                        rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                    />
+                  </label>
+                  <span className="text-xs font-semibold text-red-600 px-1">
+                    {errors.password && touched.password
+                      ? errors.password
                       : null}
                   </span>
                 </div>
@@ -210,40 +254,17 @@ const Updateprofile = () => {
                       placeholder="Enter Your WhatsApp No"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.whatsapp_no}
-                      name="whatsapp_no"
+                      value={values.mobile}
+                      name="mobile"
                       className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm 
                         shadow-sm placeholder-slate-400 outline-none' />
                   </label>
                   <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.whatsapp_no && touched.whatsapp_no
-                      ? errors.whatsapp_no
+                    {errors.mobile && touched.mobile
+                      ? errors.mobile
                       : null}
                   </span>
                 </div>
-                <div className="mobileno">
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">
-                      Mobile No
-                    </span>
-                    <input
-                      type="text"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.alternate_mobile}
-                      name="alternate_mobile"
-                      placeholder="Enter Your Mobile No"
-                      className='w-72 mt-1 block px-3 py-2 bg-white border border-slate-300 rounded-md text-sm 
-                        shadow-sm placeholder-slate-400 outline-none'/>
-                  </label>
-                  <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.alternate_mobile && touched.alternate_mobile
-                      ? errors.alternate_mobile
-                      : null}
-                  </span>
-                </div>
-              </div>
-              <div className="flex lg:flex-row md:flex-col gap-4">
                 <div className="security_pin">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
@@ -264,73 +285,6 @@ const Updateprofile = () => {
                     {errors.pin && touched.pin
                       ? errors.pin
                       : ""}
-                  </span>
-                </div>
-                <div className="address">
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">
-                      Address
-                    </span>
-                    <input
-                      type="text"
-                      disabled={isEnable}
-                      name="address"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.address}
-                      placeholder="Enter Your Address"
-                      className='w-72 mt-1 block w-full px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm
-                         placeholder-slate-400 outline-none' />
-                  </label>
-                  <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.address && touched.address
-                      ? errors.address
-                      : ""}
-                  </span>
-                </div>
-              </div>
-              <div className="flex lg:flex-row md:flex-col gap-4">
-                <div className="dateofbirth">
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">
-                      Date Of Birth
-                    </span>
-                    <input
-                      disabled={isEnable}
-                      type="date"
-                      name="dateofbirth"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.dateofbirth}
-                      className='w-72 hover:cursor-pointer mt-1 block w-full px-3 py-2 bg-white border border-slate-300 
-                        rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'/>
-                  </label>
-                  <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.dateofbirth && touched.dateofbirth
-                      ? errors.dateofbirth
-                      : null}
-                  </span>
-                </div>
-                <div className="qualification">
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">
-                      Qualification
-                    </span>
-                    <input
-                      disabled={isEnable}
-                      type="text"
-                      name="qualification"
-                      placeholder="Enter Qualification"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.qualification}
-                      className='w-72 hover:cursor-pointer mt-1 block w-full px-3 py-2 bg-white border border-slate-300 
-                        rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'/>
-                  </label>
-                  <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.qualification && touched.qualification
-                      ? errors.qualification
-                      : null}
                   </span>
                 </div>
               </div>
@@ -376,9 +330,6 @@ const Updateprofile = () => {
           </div>
         </form>
       </section>
-      {/* ) : (
-        "......"
-      )} */}
     </>
   );
 };

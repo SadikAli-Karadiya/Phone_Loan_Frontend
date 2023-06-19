@@ -59,37 +59,6 @@ function Header() {
                             </li>
                         </Link>
 
-                        <Link
-                            to="/admin/Addadmin">
-                            <li
-                                onClick={handleToggle}
-                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
-                                <div className="flex items-center space-x-3 text-blue-500">
-                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
-                                        <BiUserPlus />
-                                    </div>
-                                    <h1 className="text-sm font-roboto">Add Admin</h1>
-                                </div>
-                                <FiChevronRight className="text-blue-500" />
-                            </li>
-                        </Link>
-
-
-                        <Link
-                            to="/admin/List"
-                        >
-                            <li
-                                onClick={handleToggle}
-                                className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
-                                <div className="flex items-center space-x-3 text-blue-500">
-                                    <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
-                                        <BiUserPlus />
-                                    </div>
-                                    <h1 className="text-sm font-roboto">Admin List</h1>
-                                </div>
-                                <FiChevronRight className="text-blue-500" />
-                            </li>
-                        </Link>
                         <Link to={"/"}>
                             <li
                                 onClick={handleToggle}

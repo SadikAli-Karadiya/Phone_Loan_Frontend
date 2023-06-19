@@ -25,11 +25,7 @@ function CustomerRegister() {
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
-    // const { mutate, isLoading, response } = useMutation(AddCustomer)
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
-    // console.log(Adhar_front)
-    // console.log(photo)
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
@@ -49,7 +45,7 @@ function CustomerRegister() {
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
-                    navigate(`/Customer/profile-detail/${response?.data?.data?.id}`)
+                    navigate(`/InstallmentList/profile-detail/${response?.data?.data?.id}`)
                 } catch (err) {
                     toast.error(err.response.data.message);
                 }

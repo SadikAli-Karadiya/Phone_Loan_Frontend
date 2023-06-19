@@ -35,6 +35,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const Company_Details = useQuery('company', getAllCompanies)
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
+  const Phone = useQuery('phone', getAllPhone)
+
   const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues:
@@ -45,17 +47,18 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
         } : NewPhoneValues,
       async onSubmit(data) {
         Object.assign(data,
-          { date : date },
+          { date: date },
           { customer_id: customer_id },
-          { company_name : Company },
-          { model_name : Model_Name },
+          { company_name: Company },
+          { model_name: Model_Name },
           { ram: Ram },
-          { storage : Storage },
+          { storage: Storage },
           { price: Phone_Price },
           { month: installment },
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
         )
+        return
         try {
           const response = await AddNewPurchase(data)
           console.log(response)
@@ -102,25 +105,38 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       height: "44px",
     }),
   };
-
+  // console.log(Phone?.data?.data?.AllModel)
   function handleSelectCompany(event) {
     let company_name = event.target.value
     setCompany(company_name)
-    let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
-      return n?.phone?.company?.company_name == company_name;
+    let Model = Phone?.data?.data?.AllModel?.filter((n) => {
+      return n?.company?.company_name == company_name;
     });
     setSelectedCompany(Model)
   };
 
   function handleSelectModel(event) {
-    const Model = event.target.value
+    const id = event.target.value
+    setModel(Model)
+    let storage = specification?.data?.data?.AllSpecification?.find((n) => {
+      return n?.id == id;
+    });
+    console.log(storage)
+    // setModelName(Price.phone.model_name)
+    // setram(Price.ram)
+    // setstorage(Price.storage)
+    // setPhonePrice(Price.price)
+  };
+
+  function handleSelectStorage(event) {
+    const Storage = event.target.value
     setModel(Model)
     let Price = specification?.data?.data?.AllSpecification?.find((n) => {
       return n?.id == Model;
     });
-    setram(Price.ram)
     setModelName(Price.phone.model_name)
-    setstorage(Price.storage)
+    // setram(Price.ram)
+    // setstorage(Price.storage)
     setPhonePrice(Price.price)
   };
 
@@ -247,8 +263,36 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           SelectedCompany.map((model, index) => {
                             return (
                               <option
-                                key={index} value={model.id}>
-                                <span>{model.phone?.model_name}</span>  ( <span>{model.ram}</span> / <span>{model.storage}</span> )
+                                key={index} id={model.id}
+                                value={Model_Name}>
+                                <span>{model.model_name}</span>
+                              </option>
+                            )
+                          })
+                        }
+                      </select>
+                    </label>
+                  </div>
+                  <div className="selectinst w-full">
+                    <label className="block">
+                      <span className="block text-sm font-medium text-white">
+                        Storage *
+                      </span>
+                      <select
+                        name="model_name"
+                        id="model_name"
+                        value={Model}
+                        onChange={handleSelectModel}
+                        onBlur={handleBlur}
+                        className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                        <option value="">Select Model</option>
+                        {
+                          SelectedCompany.map((storage, index) => {
+                            console.log(storage)
+                            return (
+                              <option
+                                key={index} >
+                                <span></span>
                               </option>
                             )
                           })

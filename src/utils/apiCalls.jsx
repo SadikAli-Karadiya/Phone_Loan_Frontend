@@ -66,6 +66,23 @@ export const UpdateInstallment = (data) => {
   })
 }
 
+// Admin -------------------------------------------------------
+
+export const Admindetails = (id) => {
+  return instance({
+    'url': `/admin/details/${id}`,
+    'method': 'GET',
+  })
+}
+
+export const UpdateAdmin = (data) => {
+  return instance({
+    'url': `/admin/update`,
+    'method': 'PUT',
+    'data': data,
+  })
+}
+
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
@@ -84,7 +101,7 @@ export const AddCustomer = (data) => {
 
 export const getAllCustomer = () => {
   return instance({
-    'url': '/customer',
+    'url': '/customer/List',
     'method': 'GET',
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
@@ -93,9 +110,6 @@ export const getAllCustomer = () => {
 }
 
 export const UpdateCustomer = (data) => {
-  //   for (var value of data) {
-  //     console.log(value); 
-  // }
   return instance({
     'url': `/customer/update`,
     'method': 'PUT',

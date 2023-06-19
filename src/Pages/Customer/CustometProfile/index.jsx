@@ -117,7 +117,7 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-
+    // console.log(SingleCustomerDetails)
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -206,30 +206,6 @@ function CustomerProfile() {
         setPhoneDetails(Phone);
         setnewPhoneFormModal(true);
     };
-
-    const handleDeletePhone = async (id) => {
-        console.log(id)
-        Swal.fire({
-            title: "Are you sure to delete phone?",
-            text: "",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Delete",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const deletePurchaseResponse = await DeletePurchase(id);
-                console.log(deletePurchaseResponse , "dkjfvb")
-                if (deletePurchaseResponse.data.success) {
-                    toast.success(deletePurchaseResponse.data.message);
-                } else {
-                    toast.error(deletePurchaseResponse.data.message);
-                }
-            }
-        });
-    };
-
 
     return (
         <>
@@ -668,16 +644,6 @@ function CustomerProfile() {
                                                                         />
                                                                     </div>
                                                                 </Tippy>
-                                                                <div className="flex justify-center items-center">
-                                                                    <Tippy content="Delete Phone">
-                                                                        <div>
-                                                                            <MdDelete
-                                                                                className="xs:text-base text-red-500 md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                                onClick={() => handleDeletePhone(item.id)}
-                                                                            />
-                                                                        </div>
-                                                                    </Tippy>
-                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>

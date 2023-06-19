@@ -11,6 +11,8 @@ import Customer from '../Pages/Customer'
 import Index from '../Pages/Reciept'
 import Admin from '../Pages/AdminProfile'
 import Error from '../Component/Error'
+import InstallmentList from '../Pages/Installment/installmentlist'
+import CustomerProfile from '../Pages/Customer/CustometProfile'
 
 function PrivateRoutes() {
   return (
@@ -25,6 +27,8 @@ function PrivateRoutes() {
             <Route path='/Product/*' element={<Product />}  />
             <Route path='/Search' element={<Search />}  />
             <Route path='/Customer/*' element={<Customer />}  />
+            <Route path='/InstallmentList' element={<InstallmentList />} />
+            <Route path="/InstallmentList/profile-detail/:id" element={<CustomerProfile />} />
             <Route path='/admin/*' element={<Admin />}  />
             {/* <Route path='/' element={<Navigate to='/dashboard' />} /> */}
             <Route path='/*' element={<Error />}  />

@@ -30,29 +30,6 @@ function ProductList() {
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
   const phones = useQuery(['phones', pageNo], () => getAllPhone({ pageNo: pageNo - 1, }))
-  // console.log(phones.data.data)
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this model?',
-      text: "The model will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await DeletePhone(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    })
-  };
 
   const handleUpdatemodel = (id) => {
     console.log(id)
@@ -180,13 +157,6 @@ function ProductList() {
                               <Tippy content="Update Model">
                                 <div onClick={() => handleUpdatemodel(item.id)}>
                                   <FiEdit className='text-[17px] cursor-pointer' />
-                                </div>
-                              </Tippy>
-                              <Tippy content="Delete Model">
-                                <div
-                                  onClick={() => handleDelete(item.id)}
-                                >
-                                  <MdDelete className='text-[19px] text-red-600 cursor-pointer' />
                                 </div>
                               </Tippy>
                             </div>
