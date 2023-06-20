@@ -7,7 +7,8 @@ import { useFormik } from "formik";
 import { NewPhoneValues } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
-import moment from 'moment'
+import CreatableSelect from 'react-select/creatable';
+
 
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
@@ -23,9 +24,11 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const [date, setDate] = useState(defaultValue);
   const [isLoading, setIsLoading] = useState();
   const [SelectedCompany, setSelectedCompany] = useState([]);
+  const [SelectedModel, setSelectedModel] = useState([]);
   const [Model, setModel] = useState(is_Edit == true ? PhoneDetails?.phone?.model_name : "");
   const [Phone_Price, setPhonePrice] = useState("");
-  const [Ram, setram] = useState("");
+  const [Ram, setRam] = useState("");
+  const [ram, setram] = useState("");
   const [Storage, setstorage] = useState("");
   const [Model_Name, setModelName] = useState("");
   const [Down_Payment, setDownPayment] = useState("");
@@ -37,7 +40,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const Installment = useQuery('installment', getAllInstallment)
   const Phone = useQuery('phone', getAllPhone)
 
-  const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
+  const { values, touched, resetForm, errors, setFieldValue, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues:
         JSON.stringify(PhoneDetails) != {} ? {
@@ -50,15 +53,14 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           { date: date },
           { customer_id: customer_id },
           { company_name: Company },
-          { model_name: Model_Name },
-          { ram: Ram },
+          { model_name: Model },
+          { ram: ram },
           { storage: Storage },
           { price: Phone_Price },
           { month: installment },
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
         )
-        return
         try {
           const response = await AddNewPurchase(data)
           console.log(response)
@@ -105,7 +107,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       height: "44px",
     }),
   };
-  // console.log(Phone?.data?.data?.AllModel)
+
   function handleSelectCompany(event) {
     let company_name = event.target.value
     setCompany(company_name)
@@ -116,30 +118,27 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   };
 
   function handleSelectModel(event) {
-    const id = event.target.value
-    setModel(Model)
-    let storage = specification?.data?.data?.AllSpecification?.find((n) => {
-      return n?.id == id;
+    let Model_name = event.target.value
+    setModel(Model_name)
+    let storage = specification?.data?.data?.AllSpecification?.filter((n) => {
+      return n?.phone?.model_name == Model_name;
     });
-    console.log(storage)
-    // setModelName(Price.phone.model_name)
-    // setram(Price.ram)
-    // setstorage(Price.storage)
-    // setPhonePrice(Price.price)
+    setSelectedModel(storage)
   };
 
   function handleSelectStorage(event) {
-    const Storage = event.target.value
-    setModel(Model)
+    const storage = event.target.value
+    setRam(storage)
+    const index = event.target.selectedIndex;
+    const el = event.target.childNodes[index]
+    const option = el.getAttribute('id');
     let Price = specification?.data?.data?.AllSpecification?.find((n) => {
-      return n?.id == Model;
+      return n?.id == option;
     });
-    setModelName(Price.phone.model_name)
-    // setram(Price.ram)
-    // setstorage(Price.storage)
+    setram(Price.ram)
+    setstorage(Price.storage)
     setPhonePrice(Price.price)
   };
-
   function handleSelectInstallment(event) {
     let month = event.target.value
     setinstallment(month)
@@ -161,7 +160,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     handleShowModal(false);
   };
 
-
+  console.log(Model)
   return (
     <Modal open={showModal}
       onClose={handleModalClose}
@@ -245,12 +244,28 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                     </label>
                   </div>
                 </div>
-                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
+                <div className="flex items-center xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="selectinst w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-white">
                         Model *
                       </span>
+                      {/* <div className='w-full mt-1'>
+                        <CreatableSelect
+                          className='w-full'
+                          isClearable
+                          isDisabled={isLoading}
+                          isLoading={isLoading}
+                          onChange={(e) => { setFieldValue('model_name', e.value); setModel(e) }}
+                          onBlur={handleBlur}
+                          placeholder="Select Model"
+                          options={SelectedCompany?.map(item => {
+                            return { value: item?.model_name, label: item?.model_name };
+                          })
+                          }
+                          name='storage'
+                        />
+                      </div> */}
                       <select
                         name="model_name"
                         id="model_name"
@@ -264,7 +279,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                             return (
                               <option
                                 key={index} id={model.id}
-                                value={Model_Name}>
+                                value={model?.model_name}>
                                 <span>{model.model_name}</span>
                               </option>
                             )
@@ -281,18 +296,20 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                       <select
                         name="model_name"
                         id="model_name"
-                        value={Model}
-                        onChange={handleSelectModel}
+                        value={Ram}
+                        onChange={handleSelectStorage}
                         onBlur={handleBlur}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
-                        <option value="">Select Model</option>
+                        <option value="">Select Storage</option>
                         {
-                          SelectedCompany.map((storage, index) => {
-                            console.log(storage)
+                          SelectedModel.map((storage, index) => {
                             return (
                               <option
-                                key={index} >
-                                <span></span>
+                                key={index}
+                                id={storage.id}
+                                value={storage.id}
+                              >
+                                <span>{storage?.ram} / {storage?.storage}</span>
                               </option>
                             )
                           })

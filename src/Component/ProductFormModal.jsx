@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
-import { useMutation, useQuery } from 'react-query'
-
-
-const createCompany = (label) => ({
-  label,
-  value: label.toLowerCase().replace(/\W/g, ''),
-});
+import {useQuery } from 'react-query'
 
 
 const productSchema = Yup.object({

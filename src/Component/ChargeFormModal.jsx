@@ -8,7 +8,7 @@ import { MdDelete } from "react-icons/md"
 import { FiPlus } from "react-icons/fi"
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { AddTransection } from '../utils/apiCalls';
+import { AddTransection, getEmiPurchasebyId } from '../utils/apiCalls';
 import { useQuery } from 'react-query'
 
 
@@ -25,13 +25,14 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const [Charge, setCharge] = React.useState(false);
   const [Charge_amount, setchargeamount] = React.useState("");
   const [upi_number, setupinumber] = React.useState("");
-
   const [chequeNo, setChequeNo] = React.useState('');
   const [chequeDate, setChequeDate] = React.useState('');
   const [upiNo, setUpiNo] = React.useState('');
   const [toggleCheque, setToggleCheque] = React.useState(false);
   const [toggleUpi, setToggleUpi] = React.useState(false);
   const [toggleCash, setToggleCash] = React.useState(true);
+  const data = useQuery(['emi', EMI_Details], () => getEmiPurchasebyId(EMI_Details));
+  console.log(data?.data?.data?.AllEmi)
 
   const initialValues = {
     upi_number: "",

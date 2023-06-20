@@ -10,6 +10,7 @@ import { MdDelete } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import ChargeFormModal from '../../Component/ChargeFormModal';
 import InstallmentFormModal from '../../Component/InstallFormModal';
 import { getAllInstallment, getAllPurchase, DeleteInstallment } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
@@ -24,6 +25,8 @@ function InstallmentList() {
     const [selectedEmiCustomer, setSelectedEmiCustomer] = useState([]);
     const [search, setSearch] = useState("");
     const [pageNo, setPageNo] = useState(1);
+    const [EMI_Details, setEMIDetails] = useState("");
+    const [chargeFormModal, setChargeFormModal] = useState(false);
     const [installmentFormModal, setInstallmentFormModal] = useState(false);
     const [is_Edit, setIsEdit] = useState(false);
     const [InstallmentDetails, setInstallmentDetails] = useState();
@@ -132,7 +135,6 @@ function InstallmentList() {
             }
         });
     };
-    console.log(selectedEmiCustomer)
 
     const handleSearchCustomer = (e) => {
         setSelectedEmiCustomer(() =>
@@ -159,6 +161,12 @@ function InstallmentList() {
         );
     };
 
+    const handlePayEMI = (id) => {
+        setChargeFormModal(true);
+        setIsEdit(true)
+        setEMIDetails(id);
+    };
+    
     return (
         <>
             <div className='xl:px-5 h-full'>
@@ -305,16 +313,28 @@ function InstallmentList() {
                                     Serial no
                                 </th>
                                 <th scope="col" className="pl-3 py-4">
-                                    first name
-                                </th>
-                                <th scope="col" className="pl-3 py-4">
-                                    last name
+                                    Full name
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Mobile
                                 </th>
                                 <th scope="col" className="px-6 py-4">
+                                    Phone
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Total
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    PaidUp
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Pending
+                                </th>
+                                <th scope="col" className="px-6 py-4">
                                     Profile
+                                </th>
+                                <th scope="col" className="px-6 py-4">
+                                    Action
                                 </th>
                             </tr>
                         </thead>
@@ -329,13 +349,22 @@ function InstallmentList() {
                                                     {index + 1}
                                                 </th>
                                                 <td className="px-6 py-5 ">
-                                                    {item.customer.first_name}
-                                                </td>
-                                                <td className="px-6 py-5 ">
-                                                    {item.customer.last_name}
+                                                    {item.customer.first_name} {item?.customer?.last_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item.customer.mobile}
+                                                    {item?.customer?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.phone?.company?.company_name} || {item?.phone?.model_name}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.net_amount}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.net_amount - item?.pending_amount}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.pending_amount}
                                                 </td>
                                                 <td className="px-6 py-5">
                                                     <div className="flex justify-center items-center">
@@ -350,6 +379,18 @@ function InstallmentList() {
                                                             </div>
                                                         </Tippy>
                                                     </div>
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    {
+                                                        item.pending_amount.length > 0 ?
+                                                            <div
+                                                                onClick={() => handlePayEMI(item.id)}
+                                                                className="flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg cursor-pointer text-white font-semibold">
+                                                                Pay
+                                                            </div>
+                                                            :
+                                                            null
+                                                    }
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -384,6 +425,13 @@ function InstallmentList() {
               // previousLabel="Previous" nextLabel="Next"
               />
             </div> */}
+
+                <ChargeFormModal
+                    showModal={chargeFormModal}
+                    handleShowModal={setChargeFormModal}
+                    EMI_Details={EMI_Details}
+                    is_Edit={is_Edit}
+                />
             </div>
 
         </>

@@ -117,7 +117,7 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-    // console.log(SingleCustomerDetails)
+    console.log(SingleCustomerDetails)
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -606,10 +606,10 @@ function CustomerProfile() {
                                                         <tr className=" border-b">
 
                                                             <td className="px-6 py-5 ">
-                                                                {moment(item.phone.createdAt).format("DD / MM / YYYY")}
+                                                                {moment(item.createdAt).format("DD / MM / YYYY")}
                                                             </td>
                                                             <td className="px-6 py-5 ">
-                                                                Vivo
+                                                                {item?.phone?.company?.company_name}
                                                             </td>
                                                             <td className="px-6 py-5 capitalize">
                                                                 {item.phone.model_name}
