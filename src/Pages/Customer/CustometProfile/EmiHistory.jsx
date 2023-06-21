@@ -16,7 +16,7 @@ function EMIHistory() {
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-
+    console.log(data?.data?.data?.AllEmi)
     const handlePayEMI = (id) => {
         let EMI = data?.data?.data?.AllEmi?.find((n) => {
             return n.id == id;
@@ -80,7 +80,12 @@ function EMIHistory() {
                                                                     {moment(item.due_date).format("DD / MM")}
                                                                 </td>
                                                                 <td className="px-6 py-5 ">
-                                                                    {moment(item.paid_date).format("DD / MM")}
+                                                                    {
+                                                                        item.paid_date ?
+                                                                            moment(item.paid_date).format("DD / MM")
+                                                                            :
+                                                                        "--"
+                                                                    }
                                                                 </td>
                                                                 <td className="px-6 py-5 capitalize">
                                                                     {item.amount}

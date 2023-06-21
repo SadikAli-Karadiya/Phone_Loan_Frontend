@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
@@ -39,6 +39,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const specification = useQuery('specification', getallSpecification)
   const Installment = useQuery('installment', getAllInstallment)
   const Phone = useQuery('phone', getAllPhone)
+  const navigate = useNavigate();
 
   const { values, touched, resetForm, errors, setFieldValue, handleChange, handleSubmit, handleBlur } =
     useFormik({
@@ -67,6 +68,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           toast.success(response.data.message);
           resetForm({ values: "" })
           handleModalClose(false);
+          navigate(`/Customer/EMI-History/${response?.data?.data?.id}`)
         } catch (err) {
           toast.error(err.response.data.message);
         }
@@ -160,7 +162,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     handleShowModal(false);
   };
 
-  console.log(Model)
   return (
     <Modal open={showModal}
       onClose={handleModalClose}

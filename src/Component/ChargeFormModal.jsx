@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
@@ -31,8 +31,14 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const [toggleCheque, setToggleCheque] = React.useState(false);
   const [toggleUpi, setToggleUpi] = React.useState(false);
   const [toggleCash, setToggleCash] = React.useState(true);
-  const data = useQuery(['emi', EMI_Details], () => getEmiPurchasebyId(EMI_Details));
-  console.log(data?.data?.data?.AllEmi)
+  const navigate = useNavigate();
+  // {
+  //   is_Edit == true ?
+  //   const data = useQuery(['emi', EMI_Details], () => getEmiPurchasebyId(EMI_Details));
+  //   : 
+  //   nu
+  // }
+  const today = new Date();
 
   const initialValues = {
     upi_number: "",
@@ -90,23 +96,26 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
           purchase_id: EMI_Details.id,
           Charge_amount: Charge_amount,
           status: status,
-          payment: selectPayment,
+          is_by_cash: toggleCash ? 1 : 0,
+          is_by_cheque: toggleCheque ? 1 : 0,
+          is_by_upi: toggleUpi ? 1 : 0,
           upi_number: upiNo,
           chequeDate: chequeDate,
-          chequeNo: chequeNo
+          chequeNo: chequeNo,
+          paid_date: today
         })
         try {
           const response = await AddTransection(data)
           console.log(response)
           toast.success(response.data.message);
           handleModalClose(false);
+          navigate(`/Receipt/Receipt/${response?.data?.data?.receipt_id}`)
         } catch (err) {
           toast.error(err.response.data.message);
         }
 
       },
     });
-
 
 
   const customStyles = {
@@ -218,6 +227,16 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
       })
     }
     setChequeNo(e.target.value)
+  }
+
+  function isSameDay(selectedDate) {
+    const date = new Date(selectedDate);
+    const currentDate = new Date();
+
+    return date.getFullYear() === currentDate.getFullYear()
+      && date.getDate() === currentDate.getDate()
+      && date.getMonth() === currentDate.getMonth();
+
   }
 
   const handleChequeDate = (e) => {
@@ -414,7 +433,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                           type="text"
                           autoFocus={true}
                           placeholder="Enter Cheque Number"
-                          className="px-1 py-[5px] w-full rounded-md outline-none"
+                          className="px-2 py-[5px] w-full rounded-md outline-none"
                           value={chequeNo}
                           onChange={handleChequeNo}
                         />

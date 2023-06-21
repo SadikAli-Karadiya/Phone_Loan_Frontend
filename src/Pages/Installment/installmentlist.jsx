@@ -4,7 +4,6 @@ import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
 import { FaUsers } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { RiFolderUserFill } from "react-icons/ri";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
@@ -16,7 +15,8 @@ import { getAllInstallment, getAllPurchase, DeleteInstallment } from '../../util
 import { useQuery } from 'react-query'
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-
+import Pagination from 'react-responsive-pagination'
+import '../../Component/Pagination/pagination.css'
 
 function InstallmentList() {
     const navigate = useNavigate();
@@ -24,7 +24,6 @@ function InstallmentList() {
     const [isHoverDelete, setIsHoverDelete] = useState(false);
     const [selectedEmiCustomer, setSelectedEmiCustomer] = useState([]);
     const [search, setSearch] = useState("");
-    const [pageNo, setPageNo] = useState(1);
     const [EMI_Details, setEMIDetails] = useState("");
     const [chargeFormModal, setChargeFormModal] = useState(false);
     const [installmentFormModal, setInstallmentFormModal] = useState(false);
@@ -32,7 +31,8 @@ function InstallmentList() {
     const [InstallmentDetails, setInstallmentDetails] = useState();
     const [Selectemi, setSelectemi] = useState("")
     const installment = useQuery('installment', getAllInstallment)
-    const purchase = useQuery(['purchase', search], () => getAllPurchase(search))
+    const [pageNo, setPageNo] = useState(1);
+    const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
 
     const bgColors = [
         "#ffd6d6",
@@ -166,7 +166,7 @@ function InstallmentList() {
         setIsEdit(true)
         setEMIDetails(id);
     };
-    
+
     return (
         <>
             <div className='xl:px-5 h-full'>
@@ -410,22 +410,27 @@ function InstallmentList() {
                             </div>
                     }
                 </div>
+
+                {
+                    selectedEmiCustomer?.length > 0 ?
+                        <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
+                            <Pagination
+                                total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
+                                current={pageNo}
+                                onPageChange={(page) => setPageNo(page)}
+                            // previousLabel="Previous" nextLabel="Next"
+                            />
+                        </div>
+                        :
+                        null
+                }
+
                 <InstallmentFormModal
                     showModal={installmentFormModal}
                     handleShowModal={setInstallmentFormModal}
                     InstallmentDetails={InstallmentDetails}
                     is_Edit={is_Edit}
                 />
-                {/* 
-            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
-              <Pagination
-                total={data && data.pageCount ? data.pageCount : 0}
-                current={pageNo}
-                onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
-              />
-            </div> */}
-
                 <ChargeFormModal
                     showModal={chargeFormModal}
                     handleShowModal={setChargeFormModal}

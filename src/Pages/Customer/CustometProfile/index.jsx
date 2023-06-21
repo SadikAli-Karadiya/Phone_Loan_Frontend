@@ -117,7 +117,7 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-    console.log(SingleCustomerDetails)
+    // console.log(SingleCustomerDetails)
     const initialValues = {
         first_name: "",
         last_name: "",
@@ -152,12 +152,10 @@ function CustomerProfile() {
                     fd.append("reference_name", data.reference_name)
                     fd.append("reference_mobile", data.reference_mobile)
                     const response = await UpdateCustomer(fd)
-                    console.log(response, "ksvbd")
                     toast.success(response.data.message);
                     setIsEnable(true);
                     setToggle(false)
                 } catch (err) {
-                    console.log(err)
                     toast.error(response.data.message);
                 }
             },

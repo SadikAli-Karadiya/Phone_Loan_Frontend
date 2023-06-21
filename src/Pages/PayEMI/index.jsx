@@ -96,6 +96,7 @@ function PayEMI() {
                       if (item.net_amount > paidAmount) {
                         isPending = true;
                       }
+
                       return (
                         <tbody key={index} className={`${isPending ? "bg-red-100" : "bg-green-100"} text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden`}>
                           <tr className=" border-b">

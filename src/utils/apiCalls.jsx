@@ -207,10 +207,10 @@ export const AddNewPurchase = (data) => {
   })
 }
 
-export const getAllPurchase = () => {
+export const getAllPurchase = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': '/purchase/List',
+    'url': `/purchase/List/${pageNo.pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
@@ -274,6 +274,16 @@ export const getallTransection = (pageNo) => {
   })
 }
 
+export const getReceiptbyReceiptId = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/transaction/ReceiptId/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 // Reciept ------------------------------------------------------------
 export const getallReceipt = (pageNo) => {
   return instance({
@@ -286,6 +296,16 @@ export const getReceiptbyPurchaseId = (id) => {
   return instance({
     'method': 'GET',
     'url': `/receipt/search/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+export const getReceiptbyEmiId = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/searchbyEmi/${id}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
