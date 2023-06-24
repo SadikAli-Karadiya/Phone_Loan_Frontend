@@ -93,7 +93,7 @@ function Dashboard() {
               <BiSearch className='search group-hover:scale-125 duration-300' />
             </div>
           </div>
-          <div className="right flex items-center space-x-3 pr-6">
+          {/* <div className="right flex items-center space-x-3 pr-6">
             <div className='flex items-center space-x-3'>
               <div className='bg-green-200 rounded-md px-3 shadow-lg py-[10px] flex flex-col justify-center  items-center'>
                 <h1 className='font-semibold text-sm'>
@@ -106,13 +106,13 @@ function Dashboard() {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <table
-          className="w-full text-sm text-center rounded-xl  text-white bg-[#3399ff]"
+          className="w-full text-sm text-center rounded-t-xl  text-white bg-[#3399ff]"
           id="table-to-xls">
           <thead className="text-xs uppercase">
-            <tr className=" text-sm">
+            <tr className="text-sm">
               <th scope="col" className="pl-3 py-4">
                 Serial No
               </th>
@@ -200,7 +200,7 @@ function Dashboard() {
             :
             <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
               <FaUsers className='text-2xl' />
-              <h1 className='text-sm font-bold'>No customers with pending fees</h1>
+              <h1 className='text-sm font-bold'>No customers with pending EMI</h1>
             </div>
         }
       </div>

@@ -109,8 +109,10 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     let company_name = event.target.value
     setCompany(company_name)
     let Model = specification?.data?.data?.AllSpecification?.filter((n) => {
+      console.log(n)
       return n?.phone?.company?.company_name == company_name;
     });
+    console.log(Model);
     setSelectedCompany(Model)
   };
 
@@ -245,6 +247,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         <option value="">Select Model</option>
                         {
                           SelectedCompany.map((model, index) => {
+
                             return (
                               <option
                                 key={index} value={model.id}>
