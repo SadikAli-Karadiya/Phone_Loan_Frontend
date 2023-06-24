@@ -30,6 +30,38 @@ const instance = axios.create({
 
 // }
 
+
+
+// User --------------------------------------------
+
+export const SignUp = (data) => {
+  return instance({
+    'url': '/user/Usersignup',
+    'method': 'POST',
+    'data': data,
+  })
+}
+
+export const SignIn = (data) => {
+  return instance({
+    'url': '/user/login',
+    'method': 'POST',
+    'data': data,
+  })
+}
+
+export const userDetail = () => {
+  return instance({
+    'url': '/user/detail',
+    'method': 'GET',
+  })
+}
+
+
+
+
+
+
 // Installment --------------------------------------------
 
 export const AddInstallment = (data) => {
@@ -199,7 +231,6 @@ export const getAllPhone = (pageNo) => {
 // Purchase ----------------------------------------------------------
 
 export const AddNewPurchase = (data) => {
-  console.log(data)
   return instance({
     'url': `/purchase/addpurchase`,
     'method': 'POST',
@@ -260,6 +291,8 @@ export const getEmiPurchasebyId = (id) => {
 // Transections ------------------------------------------------------------
 
 export const AddTransection = (data) => {
+  console.log(data)
+  return
   return instance({
     'url': `/transaction/addtransaction`,
     'method': 'POST',

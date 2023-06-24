@@ -137,6 +137,13 @@ function InstallmentList() {
     };
 
     const handleSearchCustomer = (e) => {
+        const model_name = e.target.value
+        let Customer = selectedEmiCustomer.filter((item) => {
+            return item?.phone?.company?.company_name == model_name
+        })
+        // setSelectedEmiCustomer(Customer)
+        console.log(Customer)
+        return
         setSelectedEmiCustomer(() =>
             selectedEmiCustomer?.filter((data) => {
                 let searched_value = e.target.value;
@@ -193,7 +200,7 @@ function InstallmentList() {
                                         onClick={() => handleSelectEMI(item.id)}>
                                         <div className='flex justify-between items-center '>
                                             <div>
-                                                <h1 className='text-gray-900 font-semibold'><span className='text-sm'>{item.charges} Charge</span></h1>
+                                                <h1 className='text-slate-600 font-semibold'><span className='text-sm'>{item.charges} Charge</span></h1>
                                             </div>
                                             <div className='flex justify-end items-center space-x-2'>
                                                 <Tippy content="Edit EMI">
@@ -275,7 +282,7 @@ function InstallmentList() {
                         )}
                     </div>
                 </div>
-                <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 mx-5 my-5 py-5">
+                <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-7 mx-5 my-5 py-5">
                     <h1 className='font-bold text-lg'>Customer List</h1>
                     <div className='flex justify-between items-center py-5'>
                         <div className='flex justify-start items-center w-1/3 '>
@@ -292,7 +299,7 @@ function InstallmentList() {
                         </div>
                         <div
                             id="year-btn"
-                            className=" flex items-center border bg-white p-2 xl:p-2 xl:py-1 rounded-lg shadow-2xl space-x-1 outline-none">
+                            className=" flex items-center border bg-white px-1 shadow-md xl:py-1 rounded-lg  space-x-1 outline-none">
                             <select
                                 onChange={handlePendingPaidUpClick}
                                 name=""
@@ -309,31 +316,31 @@ function InstallmentList() {
                         id="table-to-xls" >
                         <thead className="text-xs uppercase bg-[#3399ff] ">
                             <tr className=" text-sm ">
-                                <th scope="col" className="pl-3 py-4">
-                                    Serial no
+                                <th scope="col" className="pl-3 py-2">
+                                    Sr no
                                 </th>
-                                <th scope="col" className="pl-3 py-4">
-                                    Full name
+                                <th scope="col" className="pl-3 py-2">
+                                    name
                                 </th>
-                                <th scope="col" className="px-6 py-4">
-                                    Mobile
-                                </th>
-                                <th scope="col" className="px-6 py-4">
+                                <th scope="col" className="px-6 py-2">
                                     Phone
                                 </th>
-                                <th scope="col" className="px-6 py-4">
+                                <th scope="col" className="px-6 py-2">
+                                    Model
+                                </th>
+                                <th scope="col" className="px-6 py-2">
+                                    Total EMI
+                                </th>
+                                <th scope="col" className="px-6 py-2">
                                     Total
                                 </th>
-                                <th scope="col" className="px-6 py-4">
-                                    PaidUp
-                                </th>
-                                <th scope="col" className="px-6 py-4">
+                                <th scope="col" className="px-6 py-2">
                                     Pending
                                 </th>
-                                <th scope="col" className="px-6 py-4">
+                                <th scope="col" className="px-6 py-2">
                                     Profile
                                 </th>
-                                <th scope="col" className="px-6 py-4">
+                                <th scope="col" className="px-6 py-2">
                                     Action
                                 </th>
                             </tr>
@@ -341,6 +348,7 @@ function InstallmentList() {
                         {
                             selectedEmiCustomer?.length > 0 ? (
                                 selectedEmiCustomer?.map((item, index) => {
+                                    console.log(item)
                                     return (
                                         <tbody key={index}
                                             className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
@@ -358,10 +366,10 @@ function InstallmentList() {
                                                     {item?.phone?.company?.company_name} || {item?.phone?.model_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item?.net_amount}
+                                                    {item?.installment?.month}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item?.net_amount - item?.pending_amount}
+                                                    {item?.net_amount}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.pending_amount}

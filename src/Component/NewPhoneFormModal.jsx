@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { NewPhoneValues } from "../Component/AddNewsPhoneSchema";
+import { NewPhoneValues, PhoneSchema } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 import CreatableSelect from 'react-select/creatable';
@@ -49,7 +49,12 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           Company: PhoneDetails?.phone?.company?.company_name,
           Model: PhoneDetails?.phone?.model_name
         } : NewPhoneValues,
+      validationSchema: PhoneSchema,
       async onSubmit(data) {
+        console.log(data)
+        if (Company == "") {
+          toast.error("Please Select Cuompany")
+        }
         Object.assign(data,
           { date: date },
           { customer_id: customer_id },
@@ -319,6 +324,29 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                     </label>
                   </div>
                 </div>
+                <div className="flex items-center xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                  <div className="selectinst w-full">
+                    <label className="block">
+                      <span className="block text-sm font-medium text-white">
+                        IEMI Number *
+                      </span>
+                      <input
+                        type="text"
+                        name="iemi"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.iemi}
+                        placeholder="IEMI Number"
+                        className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                      />
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.iemi && touched.iemi
+                          ? errors.iemi
+                          : null}
+                      </span>
+                    </label>
+                  </div>
+                </div>
                 <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full pb-6">
                   <div className="price w-full">
                     <label className="block">
@@ -379,7 +407,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                   <div className="totalfee w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-white">
-                        Total Fee
+                        Total Amount
                       </span>
                       <input
                         type="text" id='totalfee'

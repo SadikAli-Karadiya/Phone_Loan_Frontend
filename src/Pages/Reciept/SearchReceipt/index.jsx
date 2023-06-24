@@ -59,10 +59,7 @@ function SearchReciept() {
                         Name
                       </th>
                       <th scope="col" className="px-3 py-4 text-start font-normal">
-                        Phone
-                      </th>
-                      <th scope="col" className="px-6 py-4 font-normal">
-                        Installment
+                        Model
                       </th>
                       <th scope="col" className="px-6 py-4 font-normal">
                         Paid
@@ -97,10 +94,6 @@ function SearchReciept() {
                             </td>
                             <td className="px-3 text-start py-5">
                               <span>{item.emi.purchase.phone.company.company_name}</span> |  <span>{item.emi.purchase.phone.model_name}</span>
-
-                            </td>
-                            <td className="px-6 py-5">
-                              5
                             </td>
                             <td className="px-6 py-5">
                               <h1 className='bg-green-300 text-green-900 font-bold rounded-md'>

@@ -4,23 +4,24 @@ import PrivateRoutes from './PrivateRoutes'
 import PublicRoutes from './PublicRoutes'
 
 function AppRoutes() {
-    const currentUser = false;
+
+    const token = localStorage.getItem('token');
+    console.log(token)
     return (
         <BrowserRouter>
             <Routes>
-                {/* {currentUser ? (
+                {token ? (
                     <>
                         <Route path='/*' element={<PrivateRoutes />} />
-                        <Route index element={<Navigate to='/' />} />
                     </>
                 ) : (
                     <>
                         <Route path='/*' element={<PublicRoutes />} />
                         <Route path='*' element={<Navigate to='/' />} />
                     </>
-                )} */}
-                <Route path='/*' element={<PrivateRoutes />} />
-                <Route path='*' element={<Navigate to='/' />} />
+                )}
+                {/* <Route path='/*' element={<PublicRoutes />} />
+                <Route path='*' element={<Navigate to='/' />} /> */}
                 {/* <Route path='/*' element={<PublicRoutes />} />
                 <Route path='*' element={<Navigate to='/' />} /> */}
 

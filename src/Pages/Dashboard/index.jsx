@@ -5,6 +5,7 @@ import { BiSearch } from "react-icons/bi"
 import { FaUsers } from "react-icons/fa";
 import { BiRupee } from "react-icons/bi";
 import { GiSmartphone } from "react-icons/gi";
+import { GiTakeMyMoney } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -21,7 +22,7 @@ function Dashboard() {
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
-  console.log(purchase?.data?.data)
+
   const handlePayEMI = (id) => {
     setChargeFormModal(true);
     setIsEdit(true)
@@ -29,7 +30,6 @@ function Dashboard() {
   };
 
   const handleSearchStudents = (e) => {
-    console.log(e.target.value)
     let last_name = e.target.value
     const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
       return n.customer.last_name == last_name
@@ -79,6 +79,22 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
+        <div className='bg-[#321fdb] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
+          <div className='flex flex-col space-y-4 '>
+            <p className="text-white text-lg font-semibold ">Total Model</p>
+            <div className='flex items-center space-x-5'>
+              <div className='bg-white text-[#321fdb] px-2 py-2 text-3xl rounded-md'>
+                <GiSmartphone />
+              </div>
+              <h1 className="text-white font-roboto font-bold text-3xl">
+                5000
+              </h1>
+            </div>
+          </div>
+          <div className='flex justify-end items-end'>
+            <BiDotsVerticalRounded className='text-white' />
+          </div>
+        </div>
         <div className='bg-[#3399ff] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4 '>
             <p className="text-white text-lg font-semibold ">Total Pending Payment</p>
@@ -95,12 +111,13 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
-        <div className='bg-[#321fdb] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
+
+        <div className='bg-[#de4141] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4 '>
-            <p className="text-white text-lg font-semibold ">Total Model</p>
+            <p className="text-white text-lg font-semibold ">Today's Collection</p>
             <div className='flex items-center space-x-5'>
-              <div className='bg-white text-[#321fdb] px-2 py-2 text-3xl rounded-md'>
-                <GiSmartphone />
+              <div className='bg-white text-[#de4141] px-2 py-2 text-3xl rounded-md'>
+                <GiTakeMyMoney />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
                 5000
@@ -157,13 +174,13 @@ function Dashboard() {
                 Mobile
               </th>
               <th scope="col" className="px-6 py-3">
-                Phone
+                Model
               </th>
               <th scope="col" className="px-6 py-3">
                 EMI Date
               </th>
               <th scope="col" className="px-6 py-3">
-                Total
+                EMI Amount
               </th>
               <th scope="col" className="px-6 py-3">
                 Pending
@@ -186,7 +203,7 @@ function Dashboard() {
                         {index + 1}
                       </th>
                       <td className="px-6 py-5 capitalize">
-                        {item.customer.first_name} {item?.customer?.last_name}
+                        {item.customer.full_name}
                       </td>
                       <td className="px-6 py-5">
                         {item.customer.mobile}

@@ -24,13 +24,13 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const [status, setstatus] = React.useState("compalete");
   const [Charge, setCharge] = React.useState(false);
   const [Charge_amount, setchargeamount] = React.useState("");
-  const [upi_number, setupinumber] = React.useState("");
   const [chequeNo, setChequeNo] = React.useState('');
   const [chequeDate, setChequeDate] = React.useState('');
   const [upiNo, setUpiNo] = React.useState('');
   const [toggleCheque, setToggleCheque] = React.useState(false);
   const [toggleUpi, setToggleUpi] = React.useState(false);
   const [toggleCash, setToggleCash] = React.useState(true);
+  const [toggle, setToggle] = useState(false);
   const navigate = useNavigate();
   // {
   //   is_Edit == true ?
@@ -42,8 +42,8 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
 
   const initialValues = {
     upi_number: "",
-    payment: "",
     price: "",
+    pin: ""
   }
 
   const [errors, setErrors] = React.useState({
@@ -102,8 +102,9 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
           upi_number: upiNo,
           chequeDate: chequeDate,
           chequeNo: chequeNo,
-          paid_date: today
+          paid_date: today,
         })
+
         try {
           const response = await AddTransection(data)
           console.log(response)
@@ -265,6 +266,10 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
       })
     }
     setChequeDate(e.target.value)
+  }
+
+  const handleDone = (e) => {
+    setToggle(true);
   }
 
   const handleChangeDate = (e) => {
@@ -476,16 +481,46 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                   null
               }
 
-              <div className="mt-5 text-right">
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                  className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                >
-                  {isLoading ? 'Loading...' : 'Submit'}
-                </button>
-              </div>
+              {!toggle ? (
+                <div className="mt-5 text-right">
+                  <button
+                    type="button"
+                    onClick={handleDone}
+                    className='w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 
+                  py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                  >
+                    Done
+                  </button>
+                </div>
+              ) : null}
+
+              {
+                toggle ? (
+                  <div>
+                    <div className="flex flex-col space-y-2 w-full ">
+                      <input type="text"
+                        name="pin"
+                        value={values.pin}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="rounded-md py-[6px] px-3 outline-none"
+                        placeholder="Enter Phone Pin " />
+
+                    </div>
+                    <div className="mt-5 text-right">
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={isLoading}
+                        className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                      >
+                        {isLoading ? 'Loading...' : 'Submit'}
+                      </button>
+                    </div>
+                  </div>
+                )
+                  : null
+              }
             </form>
             {error != "" ? (
               <div className="text-center">
