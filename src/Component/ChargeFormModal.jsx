@@ -14,7 +14,6 @@ import { AxiosError } from "axios";
 import moment from 'moment'
 
 function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
-  console.log(EMI_Details.id , "sjdvc")
 
   if (!showModal) {
     return <></>;
@@ -132,6 +131,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
         upi_no: upiNo,
         user_id: "3",
         purchase_id: EMI_Details?.purchase?.id,
+        Emi_id: EMI_Details?.id,
         status: "compelete",
         Charge_amount: Charge_amount,
         amount: emi_amount + Charge_amount,

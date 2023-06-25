@@ -18,7 +18,7 @@ function EMIHistory() {
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-    console.log(data?.data?.data?.AllEmi)
+
     const handlePayEMI = (id) => {
         let EMI = data?.data?.data?.AllEmi?.find((n) => {
             return n.id == id;
@@ -71,6 +71,7 @@ function EMIHistory() {
 
                                             {
                                                 data?.data?.data?.AllEmi?.map((item, index) => {
+                                                    console.log(item)
                                                     return (
                                                         <tbody key={index} className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                             <tr className=" border-b">
@@ -123,7 +124,7 @@ function EMIHistory() {
                                                                                     <AiFillEye
                                                                                         className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                                                                         onClick={() =>
-                                                                                            navigate(`/Receipt/Receipt/${item.id}`)}
+                                                                                            navigate(`/Receipt/Receipt/${item?.receipt?.id}`)}
                                                                                     />
                                                                                 </div>
                                                                             </Tippy>
