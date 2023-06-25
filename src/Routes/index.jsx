@@ -3,10 +3,9 @@ import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom'
 import PrivateRoutes from './PrivateRoutes'
 import PublicRoutes from './PublicRoutes'
 
+const token = localStorage.getItem('token');
 function AppRoutes() {
 
-    const token = localStorage.getItem('token');
-    console.log(token)
     return (
         <BrowserRouter>
             <Routes>
