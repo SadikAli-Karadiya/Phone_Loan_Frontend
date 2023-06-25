@@ -117,7 +117,9 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
+    
     console.log(SingleCustomerDetails)
+
     const initialValues = {
         full_name: "",
         mobile: "",

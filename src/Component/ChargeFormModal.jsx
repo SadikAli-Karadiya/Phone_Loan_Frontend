@@ -10,9 +10,11 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { AddTransection, getEmiPurchasebyId } from '../utils/apiCalls';
 import { useQuery } from 'react-query'
-
+import { AxiosError } from "axios";
+import moment from 'moment'
 
 function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
+  console.log(EMI_Details.id , "sjdvc")
 
   if (!showModal) {
     return <></>;
@@ -27,24 +29,17 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const [chequeNo, setChequeNo] = React.useState('');
   const [chequeDate, setChequeDate] = React.useState('');
   const [upiNo, setUpiNo] = React.useState('');
+  const [pin, setPin] = React.useState("");
   const [toggleCheque, setToggleCheque] = React.useState(false);
   const [toggleUpi, setToggleUpi] = React.useState(false);
   const [toggleCash, setToggleCash] = React.useState(true);
   const [toggle, setToggle] = useState(false);
+  const [emi_amount, setemiamount] = React.useState(EMI_Details.amount);
   const navigate = useNavigate();
-  // {
-  //   is_Edit == true ?
-  //   const data = useQuery(['emi', EMI_Details], () => getEmiPurchasebyId(EMI_Details));
-  //   : 
-  //   nu
-  // }
   const today = new Date();
+  const [receiptDate, setReceiptDate] = React.useState(today);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const initialValues = {
-    upi_number: "",
-    price: "",
-    pin: ""
-  }
 
   const [errors, setErrors] = React.useState({
     amount: '',
@@ -56,68 +51,126 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
     month: ''
   });
 
-  const { values, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: JSON.stringify(EMI_Details) != {} ? { amount: EMI_Details?.amount } :
-        initialValues,
-      async onSubmit(data) {
-        let err = 0;
-        if (toggleUpi && upiNo == '') {
-          err++;
-          setErrors((prevData) => {
-            return {
-              ...prevData,
-              upi: '*Please Enter UPI Number'
-            }
-          })
+  const onSubmit = () => {
+    let err = 0;
+    if (emi_amount == '') {
+      err++;
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          amount: '*Please enter amount'
         }
+      })
+    }
 
-        if (toggleCheque && chequeNo == '') {
-          err++;
-          setErrors((prevData) => {
-            return {
-              ...prevData,
-              cheque: '*Please enter cheque number'
-            }
-          })
+    if (toggleUpi && upiNo == '') {
+      err++;
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          upi: '*Please Enter UPI Number'
         }
-
-        if (toggleCheque && chequeDate == '') {
-          err++;
-          setErrors((prevData) => {
-            return {
-              ...prevData,
-              chequeDate: '*Please select cheque date'
-            }
-          })
+      })
+    }
+    if (toggleCheque && chequeNo == '') {
+      err++;
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          cheque: '*Please enter cheque number'
         }
+      })
+    }
 
-        Object.assign(data, {
-          purchase_id: EMI_Details.id,
-          Charge_amount: Charge_amount,
-          status: status,
-          is_by_cash: toggleCash ? 1 : 0,
-          is_by_cheque: toggleCheque ? 1 : 0,
-          is_by_upi: toggleUpi ? 1 : 0,
-          upi_number: upiNo,
-          chequeDate: chequeDate,
-          chequeNo: chequeNo,
-          paid_date: today,
-        })
-
-        try {
-          const response = await AddTransection(data)
-          console.log(response)
-          toast.success(response.data.message);
-          handleModalClose(false);
-          navigate(`/Receipt/Receipt/${response?.data?.data?.receipt_id}`)
-        } catch (err) {
-          toast.error(err.response.data.message);
+    if (toggleCheque && chequeDate == '') {
+      err++;
+      setErrors((prevData) => {
+        return {
+          ...prevData,
+          chequeDate: '*Please select cheque date'
         }
+      })
+    }
 
-      },
-    });
+    if ((errors.amount != '' && errors.amount != undefined) || (errors.upi != '' && errors.upi != undefined) || (errors.cheque != '' && errors.cheque != undefined) || (errors.chequeDate != '' && errors.chequeDate != undefined) || (errors.month != '' && errors.month != undefined)) {
+      err++;
+    }
 
+    if (err == 0) {
+      setSelectPayment(
+        toggleCheque
+          ?
+          'Cheque'
+          :
+          toggleUpi
+            ?
+            'UPI'
+            :
+            'Cash'
+      )
+      setToggle(true);
+    }
+    else {
+      return;
+    }
+
+  }
+
+  async function handlePINsubmit() {
+    try {
+
+      if (pin == "") {
+        return toast.error("Please Enter Pin")
+      }
+
+      const EMIData = {
+        is_by_cash: toggleCash ? 1 : 0,
+        is_by_cheque: toggleCheque ? 1 : 0,
+        is_by_upi: toggleUpi ? 1 : 0,
+        cheque_no: chequeNo,
+        cheque_date: chequeDate,
+        upi_no: upiNo,
+        user_id: "3",
+        purchase_id: EMI_Details?.purchase?.id,
+        status: "compelete",
+        Charge_amount: Charge_amount,
+        amount: emi_amount + Charge_amount,
+        // admin_id: admin?._id,
+        security_pin: pin,
+        customer_id: EMI_Details?.purchase?.customer?.id,
+        date: receiptDate
+      };
+
+      setIsSubmitting(true);
+
+      const res = await AddTransection(EMIData)
+
+      setIsSubmitting(false);
+
+      if (res.data.success == true) {
+        console.log(res.data)
+        toast.success('Receipt generated successfully')
+        navigate(`/receipt/receipt/${res?.data?.data?.receipt_id}`);
+      } else {
+        setErrors((prevData) => {
+          return {
+            ...prevData,
+            invalid_pin: res.data.message
+          }
+        });
+      }
+
+    }
+    catch (err) {
+      setIsSubmitting(false);
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data?.message)
+      }
+      else {
+        toast(err.message)
+      }
+    }
+  }
 
   const customStyles = {
     control: (provided, state) => ({
@@ -268,16 +321,11 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
     setChequeDate(e.target.value)
   }
 
-  const handleDone = (e) => {
-    setToggle(true);
-  }
-
   const handleChangeDate = (e) => {
     setReceiptDate(e.target.value);
   }
 
   const handleModalClose = () => {
-    resetForm("")
     handleShowModal(false);
     setCharge(false)
   };
@@ -330,16 +378,26 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
 
         <Modal.Description>
           <div className="px-4 pb-4">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+            <form className="space-y-6">
               <div className='flex flex-col justify-start w-full'>
-                <div className="flex flex-col space-y-2 w-full ">
-                  <input type="text"
-                    name="price"
-                    value={values.amount}
-                    disabled={true}
-                    className="rounded-md py-[6px] px-3 outline-none"
-                    placeholder="Enter Phone Price " />
+                <div className="flex items-center w-full space-x-5">
+                  <div className="flex flex-col space-y-2 w-full ">
+                    <input type="text"
+                      name="price"
+                      value={emi_amount}
+                      disabled={true}
+                      className="rounded-md py-[6px] px-3 outline-none w-full"
+                      placeholder="Enter Phone Price " />
 
+                  </div>
+                  <div className="flex flex-col space-y-2 w-full ">
+                    <input type="date"
+                      name="receiptDate"
+                      value={moment(receiptDate).format("DD / MM / YYYY")}
+                      className="rounded-md py-[6px] px-3 outline-none w-full"
+                      placeholder="Enter Phone Price " />
+
+                  </div>
                 </div>
                 {
                   Charge == true ?
@@ -349,8 +407,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                           <input type="text"
                             name="charge"
                             value={Charge_amount}
-                            onChange={handleCharge}
-                            onBlur={handleBlur}
+                            handleCharge={handleCharge}
                             className="rounded-md py-[6px] px-3 outline-none"
                             placeholder="Enter Charge " />
                           {errors.charge && touched.charge
@@ -485,7 +542,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                 <div className="mt-5 text-right">
                   <button
                     type="button"
-                    onClick={handleDone}
+                    onClick={onSubmit}
                     className='w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 
                   py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
                   >
@@ -500,21 +557,31 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                     <div className="flex flex-col space-y-2 w-full ">
                       <input type="text"
                         name="pin"
-                        value={values.pin}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        value={pin}
+                        onChange={(e) => setPin(e.target.value)}
                         className="rounded-md py-[6px] px-3 outline-none"
                         placeholder="Enter Phone Pin " />
-
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {
+                          errors.invalid_pin != ''
+                            ?
+                            <h1 className=" text-red-700  text-sm font-bold w-full pr-44  text-right">
+                              {errors.invalid_pin}
+                            </h1>
+                            :
+                            null
+                        }
+                      </span>
                     </div>
+
                     <div className="mt-5 text-right">
                       <button
                         type="button"
-                        onClick={handleSubmit}
-                        disabled={isLoading}
-                        className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                        onClick={handlePINsubmit}
+                        disabled={isSubmitting}
+                        className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                       >
-                        {isLoading ? 'Loading...' : 'Submit'}
+                        {isSubmitting ? 'Loading...' : 'Submit'}
                       </button>
                     </div>
                   </div>
@@ -522,11 +589,6 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                   : null
               }
             </form>
-            {error != "" ? (
-              <div className="text-center">
-                <small className="text-red-500">{error}</small>
-              </div>
-            ) : null}
           </div>
         </Modal.Description>
       </Modal.Description>

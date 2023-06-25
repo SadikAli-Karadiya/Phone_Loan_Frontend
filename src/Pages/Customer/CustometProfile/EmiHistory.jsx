@@ -18,7 +18,7 @@ function EMIHistory() {
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-    // console.log(data?.data?.data?.AllEmi)
+    console.log(data?.data?.data?.AllEmi)
     const handlePayEMI = (id) => {
         let EMI = data?.data?.data?.AllEmi?.find((n) => {
             return n.id == id;

@@ -288,11 +288,19 @@ export const getEmiPurchasebyId = (id) => {
   })
 }
 
+export const getPendingEmi = () => {
+  return instance({
+    'method': 'GET',
+    'url': '/emi/pending',
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 // Transections ------------------------------------------------------------
 
 export const AddTransection = (data) => {
-  console.log(data)
-  return
   return instance({
     'url': `/transaction/addtransaction`,
     'method': 'POST',

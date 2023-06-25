@@ -6,7 +6,6 @@ import { customerSchema, initialValues } from "../../../Component/CustomerSchema
 import "../../Customer/CustomerRegister/Customerform.css"
 import { AddCustomer } from "../../../utils/apiCalls"
 import { useMutation, useQuery } from 'react-query'
-import { AxiosError } from 'axios';
 import defaultadharfront from "../../../../public/images/adhar.webp";
 import defaultadharback from "../../../../public/images/adhar_back.jpg";
 import defaultpan from "../../../../public/images/pan.webp";

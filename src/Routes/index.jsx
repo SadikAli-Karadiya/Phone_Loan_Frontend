@@ -10,7 +10,7 @@ function AppRoutes() {
     return (
         <BrowserRouter>
             <Routes>
-                {token ? (
+                {/* {token ? (
                     <>
                         <Route path='/*' element={<PrivateRoutes />} />
                     </>
@@ -19,9 +19,9 @@ function AppRoutes() {
                         <Route path='/*' element={<PublicRoutes />} />
                         <Route path='*' element={<Navigate to='/' />} />
                     </>
-                )}
-                {/* <Route path='/*' element={<PublicRoutes />} />
-                <Route path='*' element={<Navigate to='/' />} /> */}
+                )} */}
+                <Route path='/*' element={<PrivateRoutes />} />
+                <Route path='*' element={<Navigate to='/' />} />
                 {/* <Route path='/*' element={<PublicRoutes />} />
                 <Route path='*' element={<Navigate to='/' />} /> */}
 
