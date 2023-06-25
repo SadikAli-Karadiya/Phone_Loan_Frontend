@@ -1,18 +1,25 @@
 import * as Yup from "yup";
 
-export const NewPhoneSchema = Yup.object({
-    date: Yup.date()
-        .required("Please Enter Date")
-        .nullable(),
+export const PhoneSchema = Yup.object({
+    iemi: Yup.string()
+        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
+            if (value) {
+                return value.trim() === value;
+            }
+            return true;
+        })
+        .min(10, "Please enter valid IEMI no")
+        .max(10, "Please enter valid IEMI no")
+        .required("Please Enter IEMI Number"),
 });
 
-let Today = new Date()
 export const NewPhoneValues = {
     date: "",
-    company: "",
+    company_name: "",
     ram: "",
     storage: "",
     model: "",
+    iemi : "",
     price: "",
     installment: "",
     dp: "",

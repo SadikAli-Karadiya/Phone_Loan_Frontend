@@ -22,27 +22,6 @@ function Search() {
     const [showNotFound, setShowNotFound] = React.useState(-1)
     const AllCustomer = useQuery('customer', getAllCustomer)
 
-    const handleDeleteInstallment = async (id) => {
-        Swal.fire({
-            title: "Are you sure to delete customer?",
-            text: "",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Delete",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const deleteCustomerResponse = await DeleteCustomer(id);
-                if (deleteCustomerResponse.data.success) {
-                    toast.success(deleteCustomerResponse.data.message);
-                } else if (deleteCustomerResponse.data.success == false) {
-                    toast.error(deleteCustomerResponse.data.message);
-                }
-            }
-        });
-    };
-
     return (
         <>
             <div className=' sm:px-5 xl:px-10 py-5 h-full'>
@@ -52,12 +31,8 @@ function Search() {
                         <input
                             type="search"
                             placeholder='Search Receipt (BY : Customer ID , Name , Whatsapp Number)'
-                            className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
+                            className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-lg w-2/3'
                         />
-                        <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
-            shadow-xl cursor-pointer text-white text-2xl '>
-                            <BiSearch className='search group-hover:scale-125 duration-300' />
-                        </div>
                     </div>
                 </div>
                 <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5 mt-5">
@@ -79,9 +54,6 @@ function Search() {
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Phone
-                                </th>
-                                <th scope="col" className="px-6 py-4">
-                                    status
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Profile
@@ -106,11 +78,6 @@ function Search() {
                                                 <td className="px-6 py-5">
                                                     {item?.mobile}
                                                 </td>
-                                                <td className="px-6 py-5 ">
-                                                    <h1 className='italic font-semibold text-green-600'>
-                                                        Running
-                                                    </h1>
-                                                </td>
                                                 <td className="px-6 py-5 flex justify-center items-center">
                                                     <div className='flex items-center space-x-2'>
                                                         <div className="flex justify-center items-center">
@@ -119,17 +86,7 @@ function Search() {
                                                                     <AiFillEye
                                                                         className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                                                         onClick={() =>
-                                                                            navigate(`/Customer/profile-detail/${item?.id}`)} />
-                                                                </div>
-                                                            </Tippy>
-                                                        </div>
-                                                        <div className="flex justify-center items-center">
-                                                            <Tippy content="Delete Customer">
-                                                                <div>
-                                                                    <MdDelete
-                                                                        className="xs:text-base text-red-500 md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                        onClick={() => handleDeleteInstallment(item.id)}
-                                                                    />
+                                                                            navigate(`/InstallmentList/profile-detail/${item?.id}`)} />
                                                                 </div>
                                                             </Tippy>
                                                         </div>

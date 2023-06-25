@@ -3,24 +3,24 @@ import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom'
 import PrivateRoutes from './PrivateRoutes'
 import PublicRoutes from './PublicRoutes'
 
+const token = localStorage.getItem('token');
 function AppRoutes() {
-    const currentUser = false;
+
     return (
         <BrowserRouter>
             <Routes>
-                {/* {currentUser ? (
+                {token ? (
                     <>
                         <Route path='/*' element={<PrivateRoutes />} />
-                        <Route index element={<Navigate to='/' />} />
                     </>
                 ) : (
                     <>
                         <Route path='/*' element={<PublicRoutes />} />
                         <Route path='*' element={<Navigate to='/' />} />
                     </>
-                )} */}
-                <Route path='/*' element={<PrivateRoutes />} />
-                <Route path='*' element={<Navigate to='/' />} />
+                )}
+                {/* <Route path='/*' element={<PublicRoutes />} />
+                <Route path='*' element={<Navigate to='/' />} /> */}
                 {/* <Route path='/*' element={<PublicRoutes />} />
                 <Route path='*' element={<Navigate to='/' />} /> */}
 

@@ -25,11 +25,7 @@ function CustomerRegister() {
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
-    // const { mutate, isLoading, response } = useMutation(AddCustomer)
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate();
-    // console.log(Adhar_front)
-    // console.log(photo)
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
             initialValues: initialValues,
@@ -49,7 +45,7 @@ function CustomerRegister() {
                     const response = await AddCustomer(fd)
                     toast.success(response.data.message);
                     resetForm({ values: "" })
-                    navigate(`/Customer/profile-detail/${response?.data?.data?.id}`)
+                    navigate(`/InstallmentList/profile-detail/${response?.data?.data?.id}`)
                 } catch (err) {
                     toast.error(err.response.data.message);
                 }
@@ -91,7 +87,7 @@ function CustomerRegister() {
                     </h1>
                 </div>
                 <form className="flex justify-center items-center pt-5 xs:px-5 xl:px-14" onSubmit={handleSubmit} >
-                    <div className="w-full rounded-lg truncate bg-white py-9 shadow-2xl  xs:px-5 md:px-7 xl:px-14  ">
+                    <div className="w-3/4 rounded-lg truncate bg-white py-9 shadow-2xl  xs:px-5 md:px-7 xl:px-14  ">
                         <div className="w-full items-end flex xs:flex-col xs:gap-4 xl:flex-row xl:space-x-8">
                             <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                 <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
@@ -121,41 +117,20 @@ function CustomerRegister() {
                                     <div className="firtname w-full">
                                         <label className="block">
                                             <span className="block text-sm font-medium text-slate-700">
-                                                First Name *
+                                                Full Name *
                                             </span>
                                             <input
                                                 type="text"
-                                                name="first_name"
+                                                name="full_name"
                                                 placeholder="Enter Your First Name"
                                                 onChange={handleChange}
                                                 onBlur={handleBlur}
-                                                value={values.first_name}
+                                                value={values.full_name}
                                                 className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                             />
                                             <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.first_name && touched.first_name
-                                                    ? errors.first_name
-                                                    : null}
-                                            </span>
-                                        </label>
-                                    </div>
-                                    <div className="lastname w-full">
-                                        <label className="block">
-                                            <span className="block text-sm font-medium text-slate-700">
-                                                Last Name *
-                                            </span>
-                                            <input
-                                                type="text"
-                                                name="last_name"
-                                                placeholder="Enter Your Last Name"
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                value={values.last_name}
-                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '
-                                            />
-                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                {errors.last_name && touched.last_name
-                                                    ? errors.last_name
+                                                {errors.full_name && touched.full_name
+                                                    ? errors.full_name
                                                     : null}
                                             </span>
                                         </label>

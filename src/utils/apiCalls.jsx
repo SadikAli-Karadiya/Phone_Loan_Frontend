@@ -30,6 +30,38 @@ const instance = axios.create({
 
 // }
 
+
+
+// User --------------------------------------------
+
+export const SignUp = (data) => {
+  return instance({
+    'url': '/user/Usersignup',
+    'method': 'POST',
+    'data': data,
+  })
+}
+
+export const SignIn = (data) => {
+  return instance({
+    'url': '/user/login',
+    'method': 'POST',
+    'data': data,
+  })
+}
+
+export const userDetail = () => {
+  return instance({
+    'url': '/user/detail',
+    'method': 'GET',
+  })
+}
+
+
+
+
+
+
 // Installment --------------------------------------------
 
 export const AddInstallment = (data) => {
@@ -66,6 +98,23 @@ export const UpdateInstallment = (data) => {
   })
 }
 
+// Admin -------------------------------------------------------
+
+export const Admindetails = (id) => {
+  return instance({
+    'url': `/admin/details/${id}`,
+    'method': 'GET',
+  })
+}
+
+export const UpdateAdmin = (data) => {
+  return instance({
+    'url': `/admin/update`,
+    'method': 'PUT',
+    'data': data,
+  })
+}
+
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
@@ -84,7 +133,7 @@ export const AddCustomer = (data) => {
 
 export const getAllCustomer = () => {
   return instance({
-    'url': '/customer',
+    'url': '/customer/List',
     'method': 'GET',
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
@@ -93,9 +142,6 @@ export const getAllCustomer = () => {
 }
 
 export const UpdateCustomer = (data) => {
-  //   for (var value of data) {
-  //     console.log(value); 
-  // }
   return instance({
     'url': `/customer/update`,
     'method': 'PUT',
@@ -171,10 +217,17 @@ export const UpdatePhone = (data) => {
   })
 }
 
-export const getAllPhone = () => {
+export const searchPhone = (modelName) => {
+  return instance({
+    'url': `/phone/search/${modelName}`,
+    'method': 'GET',
+  })
+}
+
+export const getAllPhone = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': '/phone',
+    'url': `/phone/List/${pageNo.pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
@@ -185,7 +238,6 @@ export const getAllPhone = () => {
 // Purchase ----------------------------------------------------------
 
 export const AddNewPurchase = (data) => {
-  console.log(data)
   return instance({
     'url': `/purchase/addpurchase`,
     'method': 'POST',
@@ -193,10 +245,10 @@ export const AddNewPurchase = (data) => {
   })
 }
 
-export const getAllPurchase = () => {
+export const getAllPurchase = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': '/purchase/List',
+    'url': `/purchase/List/${pageNo.pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
@@ -214,8 +266,6 @@ export const getPurchaseCustomerbyId = (id) => {
 }
 
 export const getPurchaseCustomerbyNumber = (search) => {
-  //  let search = search.search
-  console.log(search)
   return instance({
     'method': 'GET',
     'url': `/purchase/search/${search.pageNo}/${search.search}`,
@@ -248,6 +298,8 @@ export const getEmiPurchasebyId = (id) => {
 // Transections ------------------------------------------------------------
 
 export const AddTransection = (data) => {
+  console.log(data)
+  return
   return instance({
     'url': `/transaction/addtransaction`,
     'method': 'POST',
@@ -256,10 +308,19 @@ export const AddTransection = (data) => {
 }
 
 export const getallTransection = (pageNo) => {
-  console.log(pageNo)
   return instance({
     'method': 'GET',
     'url': `/transaction/List/${pageNo}`,
+  })
+}
+
+export const getReceiptbyReceiptId = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/transaction/ReceiptId/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
   })
 }
 
@@ -275,6 +336,16 @@ export const getReceiptbyPurchaseId = (id) => {
   return instance({
     'method': 'GET',
     'url': `/receipt/search/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+export const getReceiptbyEmiId = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/receipt/searchbyEmi/${id}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },

@@ -117,10 +117,9 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-
+    console.log(SingleCustomerDetails)
     const initialValues = {
-        first_name: "",
-        last_name: "",
+        full_name: "",
         mobile: "",
         alternate_no: "",
         reference_name: "",
@@ -152,12 +151,10 @@ function CustomerProfile() {
                     fd.append("reference_name", data.reference_name)
                     fd.append("reference_mobile", data.reference_mobile)
                     const response = await UpdateCustomer(fd)
-                    console.log(response, "ksvbd")
                     toast.success(response.data.message);
                     setIsEnable(true);
                     setToggle(false)
                 } catch (err) {
-                    console.log(err)
                     toast.error(response.data.message);
                 }
             },
@@ -206,30 +203,6 @@ function CustomerProfile() {
         setPhoneDetails(Phone);
         setnewPhoneFormModal(true);
     };
-
-    const handleDeletePhone = async (id) => {
-        console.log(id)
-        Swal.fire({
-            title: "Are you sure to delete phone?",
-            text: "",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Delete",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const deletePurchaseResponse = await DeletePurchase(id);
-                console.log(deletePurchaseResponse , "dkjfvb")
-                if (deletePurchaseResponse.data.success) {
-                    toast.success(deletePurchaseResponse.data.message);
-                } else {
-                    toast.error(deletePurchaseResponse.data.message);
-                }
-            }
-        });
-    };
-
 
     return (
         <>
@@ -289,22 +262,22 @@ function CustomerProfile() {
                                                     </span>
                                                     <input
                                                         type="text"
-                                                        name="first_name"
+                                                        name="full_name"
                                                         placeholder="Enter Your First Name"
                                                         onChange={handleChange}
                                                         onBlur={handleBlur}
-                                                        value={values.first_name}
+                                                        value={values.full_name}
                                                         disabled={isEnable}
                                                         className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                                                     />
                                                     <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.first_name && touched.first_name
-                                                            ? errors.first_name
+                                                        {errors.full_name && touched.full_name
+                                                            ? errors.full_name
                                                             : null}
                                                     </span>
                                                 </label>
                                             </div>
-                                            <div className="lastname w-full">
+                                            {/* <div className="lastname w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
                                                         Last Name *
@@ -325,7 +298,7 @@ function CustomerProfile() {
                                                             : null}
                                                     </span>
                                                 </label>
-                                            </div>
+                                            </div> */}
                                             <div className="whatsappno w-full">
                                                 <label className="block">
                                                     <span className="block text-sm font-medium text-slate-700">
@@ -630,10 +603,10 @@ function CustomerProfile() {
                                                         <tr className=" border-b">
 
                                                             <td className="px-6 py-5 ">
-                                                                {moment(item.phone.createdAt).format("DD / MM / YYYY")}
+                                                                {moment(item.createdAt).format("DD / MM / YYYY")}
                                                             </td>
                                                             <td className="px-6 py-5 ">
-                                                                Vivo
+                                                                {item?.phone?.company?.company_name}
                                                             </td>
                                                             <td className="px-6 py-5 capitalize">
                                                                 {item.phone.model_name}
@@ -668,16 +641,6 @@ function CustomerProfile() {
                                                                         />
                                                                     </div>
                                                                 </Tippy>
-                                                                <div className="flex justify-center items-center">
-                                                                    <Tippy content="Delete Phone">
-                                                                        <div>
-                                                                            <MdDelete
-                                                                                className="xs:text-base text-red-500 md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                                onClick={() => handleDeletePhone(item.id)}
-                                                                            />
-                                                                        </div>
-                                                                    </Tippy>
-                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>

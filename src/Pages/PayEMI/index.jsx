@@ -20,14 +20,22 @@ function PayEMI() {
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [showNotFound, setShowNotFound] = useState(-1)
+  const [EMI_Details, setEMIDetails] = useState("");
+  const [is_Edit, setIsEdit] = useState(false);
   const purchase = useQuery(['purchase', pageNo, search], () => getPurchaseCustomerbyNumber({
     pageNo: pageNo - 1,
     search
   }))
-  console.log(purchase?.data?.data?.data)
+
+  const handlePayEMI = (id) => {
+    setChargeFormModal(true);
+    setIsEdit(true)
+    setEMIDetails(id);
+  };
+
   return (
     <>
-      <div className=' sm:px-5 xl:px-10 py-5 h-full'>
+      <div className=' sm:px-5 xl:px-10 pt-5 h-full'>
         <div className=' py-5 px-5'>
           <h1 className='text-[#0d0d48] text-2xl font-bold'>Pay EMI</h1>
           <div className='flex justify-center items-center mt-10 '>
@@ -88,6 +96,7 @@ function PayEMI() {
                       if (item.net_amount > paidAmount) {
                         isPending = true;
                       }
+
                       return (
                         <tbody key={index} className={`${isPending ? "bg-red-100" : "bg-green-100"} text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden`}>
                           <tr className=" border-b">
@@ -102,7 +111,7 @@ function PayEMI() {
                               <span>{item.phone.company.company_name}</span> || <span>{item.phone.model_name}</span>
                             </td>
                             <td className="px-6 py-5">
-                              10 / 12 / 23
+                              10 / 12
                             </td>
                             <td className="px-6 py-5">
                               {item.net_amount}
@@ -117,20 +126,22 @@ function PayEMI() {
                                     <AiFillEye
                                       className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                       onClick={() =>
-                                        navigate(`/Customer/profile-detail/${item.customer.customer_id}`)}
+                                        navigate(`/InstallmentList/profile-detail/${item.customer.id}`)}
                                     />
                                   </div>
                                 </Tippy>
                               </div>
                             </td>
                             <td className="px-6 py-5 ">
-                              <div className="flex justify-center space-x-3">
-                                <button
-                                  onClick={() => setChargeFormModal(true)}
-                                  className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                  Pay
-                                </button>
-                              </div>
+                              <Tippy content="Pay EMI">
+                                <div className="flex justify-center space-x-3">
+                                  <button
+                                    onClick={() => handlePayEMI(item.id)}
+                                    className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                    Pay
+                                  </button>
+                                </div>
+                              </Tippy>
                             </td>
                           </tr>
                         </tbody>
@@ -154,7 +165,7 @@ function PayEMI() {
 
         {
           purchase?.data?.data?.data?.length > 0 ?
-            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-16'>
+            <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
                 current={pageNo}
@@ -169,9 +180,10 @@ function PayEMI() {
         <ChargeFormModal
           showModal={chargeFormModal}
           handleShowModal={setChargeFormModal}
-        // refetchData={refetchData}
-        // tournamentDetails={tournamentDetails}
+          is_Edit={is_Edit}
+          EMI_Details={EMI_Details}
         />
+
       </div>
     </>
   )

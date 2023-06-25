@@ -8,7 +8,7 @@ import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 import "../../App.css"
 import { RiDashboardFill } from "react-icons/ri";
-import { FaUsers } from "react-icons/fa";
+import { FaWallet } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
 import { IoMdPersonAdd } from "react-icons/io";
 
@@ -56,10 +56,10 @@ const Sidebar = () => {
                 <li className="xs:px-3 xl:px-5 my-3">
                   <NavLink
                     activeclassname="active"
-                    to="/Customer/list">
+                    to="/InstallmentList">
                     <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
-                      <FaUsers className="text-lg" />
-                      <h1 className="text-sm hidden xl:block">Customers</h1>
+                      <FaWallet className="text-lg" />
+                      <h1 className="text-sm hidden xl:block">Installments</h1>
                     </div>
                   </NavLink>
                 </li>
@@ -69,7 +69,7 @@ const Sidebar = () => {
                     to="/EMI">
                     <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                       <BiRupee className="text-lg" />
-                      <h1 className="text-sm hidden xl:block">EMI</h1>
+                      <h1 className="text-sm hidden xl:block">Pay EMI</h1>
                     </div>
                   </NavLink>
                 </li>
@@ -99,7 +99,7 @@ const Sidebar = () => {
                     to="/Search">
                     <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                       <BiSearch className="text-lg" />
-                      <h1 className="text-sm hidden xl:block">Search</h1>
+                      <h1 className="text-sm hidden xl:block">Search Custo.</h1>
                     </div>
                   </NavLink>
                 </li>

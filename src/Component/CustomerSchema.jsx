@@ -3,11 +3,11 @@ import * as Yup from "yup";
 const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
 
 function isValidFileType(fileName, fileType) {
-  return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
+    return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
 }
 
 export const customerSchema = Yup.object({
-    first_name: Yup.string()
+    full_name: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -15,18 +15,7 @@ export const customerSchema = Yup.object({
             return true;
         })
         .min(2, "Minimum 2 characters are required")
-        .required("Please Enter Your First Name")
-        .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
-
-    last_name: Yup.string()
-        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-            if (value) {
-                return value.trim() === value;
-            }
-            return true;
-        })
-        .min(2, "Minimum 2 characters are required")
-        .required("Please Enter Your Last Name")
+        .required("Please Enter Your Full Name")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
     mobile: Yup.string()
@@ -49,7 +38,7 @@ export const customerSchema = Yup.object({
         })
         .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
 
-        reference_name : Yup.string()
+    reference_name: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -73,12 +62,11 @@ export const customerSchema = Yup.object({
 
 
 export const initialValues = {
-    photo : "",
-    first_name: "",
-    last_name: "",
+    photo: "",
+    full_name: "",
     mobile: "",
-    alternate_no : "",
-    reference_name : "",
+    alternate_no: "",
+    reference_name: "",
     reference_mobile: "",
     adhar_front: "",
     adhar_back: "",

@@ -17,8 +17,9 @@ import { BiFolderPlus } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal";
-import { useQuery } from 'react-query'
-import { getAllCompanies, getAllPhone, DeletePhone } from '../../../utils/apiCalls'
+import { useQuery, useMutation } from 'react-query'
+import { getAllCompanies, getAllPhone, DeletePhone, searchPhone } from '../../../utils/apiCalls'
+import LoaderSmall from '../../../Component/LoaderSmall';
 
 function ProductList() {
   const navigate = useNavigate();
@@ -29,33 +30,10 @@ function ProductList() {
   const [SelectedCompany, setSelectedCompany] = React.useState();
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
-  const phones = useQuery('phones', getAllPhone)
-
-  const handleDelete = async (id) => {
-    Swal.fire({
-      title: 'Are you sure to delete this model?',
-      text: "The model will be deleted",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      showLoaderOnConfirm: true,
-      allowOutsideClick: false,
-      preConfirm: async () => {
-        const response = await DeletePhone(id)
-        if (response.error) {
-          toast.error(response.error.data.message)
-        }
-        else if (response.data.success) {
-          toast.success(response.data.message)
-        }
-      }
-    })
-  };
+  const searchPhoneWithName = useMutation(searchPhone)
+  const phones = useQuery(['phones', pageNo], () => getAllPhone({ pageNo: pageNo - 1, }))
 
   const handleUpdatemodel = (id) => {
-    console.log(id)
     let updateModel = phones?.data?.data?.AllModel?.find((n) => {
       return n?.id == id;
     });
@@ -63,6 +41,15 @@ function ProductList() {
     setModelDetails(updateModel);
     setProductFormModal(true)
   };
+
+  const handlePhoneSearch = async (e) =>{
+    setSearch(e.target.value)
+    if(e.target.value == ''){
+      setSelectedCompany(phones?.data?.data?.AllModel)
+      return;
+    }
+    searchPhoneWithName.mutate(e.target.value)
+  }
 
   const handlePendingPaidUpClick = (e) => {
     const filteredCompany = phones.data.data.AllModel?.filter((item) => {
@@ -76,6 +63,10 @@ function ProductList() {
   React.useEffect(() => {
     setSelectedCompany(phones?.data?.data?.AllModel)
   }, [phones?.data?.data?.AllModel])
+
+  React.useEffect(() => {
+    setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
+  },[searchPhoneWithName.isSuccess, searchPhoneWithName.data])
 
   return (
     <>
@@ -96,9 +87,7 @@ function ProductList() {
         <div className='flex justify-center items-center xs:py-3'>
           <input
             type="search"
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
+            onChange={handlePhoneSearch}
             value={search}
             placeholder='Search Receipt (BY : Company Name , Model Name)'
             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
@@ -117,7 +106,7 @@ function ProductList() {
 
           <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5">
             <div className='flex justify-between items-center py-5 px-5'>
-              <h1 className='font-bold  text-lg'>Product List</h1>
+              <h1 className='font-bold  text-lg'></h1>
               <div>
                 <select
                   name="" id=""
@@ -155,70 +144,74 @@ function ProductList() {
                 </tr>
               </thead>
               {
-                SelectedCompany?.length > 0 ? (
-                  SelectedCompany?.map((item, index) => {
-                    return (
-                      <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                        <tr className=" border-b">
-                          <td className="px-6 py-5 font-bold">
-                            {index + 1}
-                          </td>
-                          <td className="px-6 py-5 capitalize">
-                            {item.company.company_name}
-                          </td>
-                          <td className="px-6 py-5">
-                            {item.model_name}
-                          </td>
-                          <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                            <div className='flex justify-center items-center space-x-3 ' >
-                              <Tippy content="Show Specifiaction">
-                                <div onClick={() =>
-                                  navigate(`/Product/product-details/${item.id}`)}>
-                                  <AiFillEye className='text-[18px] cursor-pointer' />
-                                </div>
-                              </Tippy>
-                              <Tippy content="Update Model">
-                                <div onClick={() => handleUpdatemodel(item.id)}>
-                                  <FiEdit className='text-[17px] cursor-pointer' />
-                                </div>
-                              </Tippy>
-                              <Tippy content="Delete Model">
-                                <div
-                                  onClick={() => handleDelete(item.id)}
-                                >
-                                  <MdDelete className='text-[19px] text-red-600 cursor-pointer' />
-                                </div>
-                              </Tippy>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    )
-                  })
-                ) : (
-                  null
-                )}
-            </table>
-            {
-              SelectedCompany?.length > 0 ?
-                null
+                companies.isLoading || searchPhoneWithName.isLoading
+                ?
+                  <tr>
+                    <td colSpan="4">
+                      <LoaderSmall />
+                    </td>
+                  </tr>
                 :
-                <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                  <BsPhone className='text-3xl' />
-                  <h1 className=' font-semibold'>Model Not Found</h1>
-                </div>
-            }
+                  SelectedCompany?.length > 0 ? (
+                    SelectedCompany?.map((item, index) => {
+                      return (
+                        <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                          <tr className=" border-b">
+                            <td className="px-6 py-5 font-bold">
+                              {index + 1}
+                            </td>
+                            <td className="px-6 py-5 capitalize">
+                              {item.company.company_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.model_name}
+                            </td>
+                            <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                              <div className='flex justify-center items-center space-x-3 ' >
+                                <Tippy content="Show Specifiaction">
+                                  <div onClick={() =>
+                                    navigate(`/Product/product-details/${item.id}`)}>
+                                    <AiFillEye className='text-[18px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                                <Tippy content="Update Model">
+                                  <div onClick={() => handleUpdatemodel(item.id)}>
+                                    <FiEdit className='text-[17px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      )
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="4">
+                        <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
+                          <BsPhone className='text-2xl' />
+                          <h1 className='text-sm font-bold'>Model Not Found</h1>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+            </table>
           </div>
         </div>
-
-        {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
+        {
+          SelectedCompany?.length > 0
+          ?
+            <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
-              // total={data && data.pageCount ? data.pageCount : 0}
-              // current={pageNo}
-              // onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
+              total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
+              current={pageNo}
+              onPageChange={(page) => setPageNo(page)}
+              previousLabel="Previous" nextLabel="Next"
               />
-            </div> */}
+            </div>
+          :
+           null
+        }
 
       </div>
       <ProductFormModel
