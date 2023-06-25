@@ -41,7 +41,7 @@ function PrivateRoutes() {
           <Route path='/InstallmentList' element={<InstallmentList />} />
           <Route path="/InstallmentList/profile-detail/:id" element={<CustomerProfile />} />
           <Route path='/admin/*' element={<Admin />} />
-          {/* <Route path='/' element={<Navigate to='/dashboard' />} /> */}
+          {/* <Route path='/' element={<Navigate to='/' />} /> */}
           <Route path='/*' element={<Error />} />
         </Route>
       </Routes>

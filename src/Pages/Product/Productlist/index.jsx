@@ -17,8 +17,9 @@ import { BiFolderPlus } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal";
-import { useQuery } from 'react-query'
-import { getAllCompanies, getAllPhone, DeletePhone } from '../../../utils/apiCalls'
+import { useQuery, useMutation } from 'react-query'
+import { getAllCompanies, getAllPhone, DeletePhone, searchPhone } from '../../../utils/apiCalls'
+import LoaderSmall from '../../../Component/LoaderSmall';
 
 function ProductList() {
   const navigate = useNavigate();
@@ -29,10 +30,10 @@ function ProductList() {
   const [SelectedCompany, setSelectedCompany] = React.useState();
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
+  const searchPhoneWithName = useMutation(searchPhone)
   const phones = useQuery(['phones', pageNo], () => getAllPhone({ pageNo: pageNo - 1, }))
 
   const handleUpdatemodel = (id) => {
-    console.log(id)
     let updateModel = phones?.data?.data?.AllModel?.find((n) => {
       return n?.id == id;
     });
@@ -40,6 +41,15 @@ function ProductList() {
     setModelDetails(updateModel);
     setProductFormModal(true)
   };
+
+  const handlePhoneSearch = async (e) =>{
+    setSearch(e.target.value)
+    if(e.target.value == ''){
+      setSelectedCompany(phones?.data?.data?.AllModel)
+      return;
+    }
+    searchPhoneWithName.mutate(e.target.value)
+  }
 
   const handlePendingPaidUpClick = (e) => {
     const filteredCompany = phones.data.data.AllModel?.filter((item) => {
@@ -53,6 +63,10 @@ function ProductList() {
   React.useEffect(() => {
     setSelectedCompany(phones?.data?.data?.AllModel)
   }, [phones?.data?.data?.AllModel])
+
+  React.useEffect(() => {
+    setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
+  },[searchPhoneWithName.isSuccess, searchPhoneWithName.data])
 
   return (
     <>
@@ -73,9 +87,7 @@ function ProductList() {
         <div className='flex justify-center items-center xs:py-3'>
           <input
             type="search"
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
+            onChange={handlePhoneSearch}
             value={search}
             placeholder='Search Receipt (BY : Company Name , Model Name)'
             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
@@ -132,63 +144,74 @@ function ProductList() {
                 </tr>
               </thead>
               {
-                SelectedCompany?.length > 0 ? (
-                  SelectedCompany?.map((item, index) => {
-                    return (
-                      <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                        <tr className=" border-b">
-                          <td className="px-6 py-5 font-bold">
-                            {index + 1}
-                          </td>
-                          <td className="px-6 py-5 capitalize">
-                            {item.company.company_name}
-                          </td>
-                          <td className="px-6 py-5">
-                            {item.model_name}
-                          </td>
-                          <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                            <div className='flex justify-center items-center space-x-3 ' >
-                              <Tippy content="Show Specifiaction">
-                                <div onClick={() =>
-                                  navigate(`/Product/product-details/${item.id}`)}>
-                                  <AiFillEye className='text-[18px] cursor-pointer' />
-                                </div>
-                              </Tippy>
-                              <Tippy content="Update Model">
-                                <div onClick={() => handleUpdatemodel(item.id)}>
-                                  <FiEdit className='text-[17px] cursor-pointer' />
-                                </div>
-                              </Tippy>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    )
-                  })
-                ) : (
-                  null
-                )}
-            </table>
-            {
-              SelectedCompany?.length > 0 ?
-                null
+                companies.isLoading || searchPhoneWithName.isLoading
+                ?
+                  <tr>
+                    <td colSpan="4">
+                      <LoaderSmall />
+                    </td>
+                  </tr>
                 :
-                <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
-                  <BsPhone className='text-2xl' />
-                  <h1 className='text-sm font-bold'>Model Not Found</h1>
-                </div>
-            }
+                  SelectedCompany?.length > 0 ? (
+                    SelectedCompany?.map((item, index) => {
+                      return (
+                        <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                          <tr className=" border-b">
+                            <td className="px-6 py-5 font-bold">
+                              {index + 1}
+                            </td>
+                            <td className="px-6 py-5 capitalize">
+                              {item.company.company_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.model_name}
+                            </td>
+                            <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                              <div className='flex justify-center items-center space-x-3 ' >
+                                <Tippy content="Show Specifiaction">
+                                  <div onClick={() =>
+                                    navigate(`/Product/product-details/${item.id}`)}>
+                                    <AiFillEye className='text-[18px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                                <Tippy content="Update Model">
+                                  <div onClick={() => handleUpdatemodel(item.id)}>
+                                    <FiEdit className='text-[17px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      )
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="4">
+                        <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
+                          <BsPhone className='text-2xl' />
+                          <h1 className='text-sm font-bold'>Model Not Found</h1>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+            </table>
           </div>
         </div>
-
-        <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
-          <Pagination
-          total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
-          current={pageNo}
-          onPageChange={(page) => setPageNo(page)}
-          previousLabel="Previous" nextLabel="Next"
-          />
-        </div>
+        {
+          SelectedCompany?.length > 0
+          ?
+            <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
+              <Pagination
+              total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
+              current={pageNo}
+              onPageChange={(page) => setPageNo(page)}
+              previousLabel="Previous" nextLabel="Next"
+              />
+            </div>
+          :
+           null
+        }
 
       </div>
       <ProductFormModel

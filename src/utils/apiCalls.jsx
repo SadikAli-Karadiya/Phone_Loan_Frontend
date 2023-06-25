@@ -217,6 +217,13 @@ export const UpdatePhone = (data) => {
   })
 }
 
+export const searchPhone = (modelName) => {
+  return instance({
+    'url': `/phone/search/${modelName}`,
+    'method': 'GET',
+  })
+}
+
 export const getAllPhone = (pageNo) => {
   return instance({
     'method': 'GET',
