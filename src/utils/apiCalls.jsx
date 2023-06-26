@@ -72,6 +72,13 @@ export const AddInstallment = (data) => {
   })
 }
 
+export const getCustomersByInstallment = (installment_id) => {
+  return instance({
+    'url': `/installment/${installment_id}`,
+    'method': 'GET',
+  })
+}
+
 export const getAllInstallment = () => {
   return instance({
     'method': 'GET',
