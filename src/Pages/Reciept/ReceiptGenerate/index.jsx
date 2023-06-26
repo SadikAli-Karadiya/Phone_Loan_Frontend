@@ -5,14 +5,18 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AxiosError } from "axios";
 import moment from 'moment'
-import { FiPlus } from "react-icons/fi"
 import { BiRupee } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
-
+import { getSingleEmi , AddTransection } from '../../../utils/apiCalls';
+import { useMutation, useQuery } from 'react-query'
+import Tippy from '@tippyjs/react';
+import 'tippy.js/dist/tippy.css';
 
 function GenerateReceipt() {
 
-
+    const location = useLocation();
+    const Emi_Details = useQuery(['emi', location?.state?.emi_id], () => getSingleEmi(location?.state.emi_id))
+    console.log(Emi_Details?.data?.data?.SingleEmi?.id)
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState();
     const [selectPayment, setSelectPayment] = useState("1");
@@ -27,7 +31,7 @@ function GenerateReceipt() {
     const [toggleUpi, setToggleUpi] = useState(false);
     const [toggleCash, setToggleCash] = useState(true);
     const [toggle, setToggle] = useState(false);
-    const [emi_amount, setemiamount] = useState();
+    const [emi_amount, setemiamount] = useState(Emi_Details?.data?.data?.SingleEmi?.amount ? Emi_Details?.data?.data?.SingleEmi?.amount : "");
     const [model, setModel] = useState();
     const navigate = useNavigate();
     const today = new Date();
@@ -123,13 +127,13 @@ function GenerateReceipt() {
                 cheque_date: chequeDate,
                 upi_no: upiNo,
                 user_id: "3",
-                // purchase_id: EMI_Details?.purchase?.id,
-                // Emi_id: EMI_Details?.id,
+                purchase_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.id,
+                Emi_id: Emi_Details?.data?.data?.SingleEmi?.id,
                 status: "compelete",
                 Charge_amount: Charge_amount,
                 amount: emi_amount + Charge_amount,
                 security_pin: pin,
-                customer_id: EMI_Details?.purchase?.customer?.id,
+                customer_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.id,
                 date: receiptDate
             };
 
@@ -371,15 +375,15 @@ function GenerateReceipt() {
                                     <div className="flex xs:flex-col sm:flex-row py-4 justify-between">
                                         <div className="flex xs:flex-col xs:space-y-2 lg:space-y-1 xl:space-y-2 px-7 text-sm xs:order-2 sm:order-1">
                                             <div>
-                                                <h2 className="font-bold text-lg tracking-wide">NAME : Shad</h2>
+                                                <h2 className="font-bold text-lg tracking-wide uppercase">NAME : {Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.full_name}</h2>
                                             </div>
                                             <div className="flex xs:space-y-5 lg:space-y-1 xs:flex-col">
                                                 <div className="flex xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-5 lg:space-y-0">
-                                                    <h2 className="font-roboto">Company : Vivo</h2>
-                                                    <h2 className="font-roboto">Model : F17</h2>
+                                                    <h2 className="font-roboto">Company : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.company?.company_name}</h2>
+                                                    <h2 className="font-roboto">Model : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.model_name}</h2>
                                                     <h2 className="font-roboto">RAM : 4/64</h2>
                                                 </div>
-                                                <h3 className="font-roboto">Net Amount : 15000</h3>
+                                                <h3 className="font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</h3>
                                                 <h3 className="font-roboto">Pending Amount : 10000</h3>
                                             </div>
                                         </div>
@@ -393,7 +397,7 @@ function GenerateReceipt() {
                                             Paid : {emi_amount}
                                         </span>
                                         <span className="px-4 py-1 bg-red-200 text-red-900 font-bold text-sm rounded shadow-xl ">
-                                            Charge : {Charge_amount}
+                                            Charge : {Charge_amount ? Charge_amount : 0}
                                         </span>
                                         <span className="px-4 py-1 bg-blue-200 text-[#0d0d48] font-bold text-sm rounded shadow-xl ">
                                             Total : {Number(emi_amount) + Number(Charge_amount)}
@@ -466,13 +470,13 @@ function GenerateReceipt() {
                             <div className='flex flex-col justify-start w-full'>
                                 <div className="flex justify-between items-center w-full">
                                     <div className="w-full">
-                                        <span className="font-bold uppercase w-full">Name : </span>
+                                        <span className="font-bold uppercase w-full">Name : {Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.full_name}</span>
                                     </div>
                                     <div className="flex w-full items-center justify-end">
                                         <span>Date : </span>
                                         <input type="date"
                                             name="receiptDate"
-                                            defaultValue={moment(receiptDate).format("DD / MM / YYYY")}
+                                            defaultValue={moment(Emi_Details?.data?.data?.SingleEmi?.due_date).format("yyyy-mm-dd")}
                                             className="ml-4"
                                         />
                                     </div>
@@ -480,11 +484,11 @@ function GenerateReceipt() {
                             </div>
                             <div className="flex flex-col space-y-2 py-2">
                                 <div className="space-x-5">
-                                    <span className="text-[14.5px] font-roboto">Company : </span>
-                                    <span className="text-[14.5px] font-roboto">Model : </span>
+                                    <span className="text-[14.5px] font-roboto">Company : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.company?.company_name} </span>
+                                    <span className="text-[14.5px] font-roboto">Model : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.model_name}</span>
                                     <span className="text-[14.5px] font-roboto">Storage : </span>
                                 </div>
-                                <span className=" text-[14.5px] font-roboto">Net Amount : </span>
+                                <span className=" text-[14.5px] font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</span>
                                 <span className=" text-[14.5px] font-roboto">Pending  : </span>
                             </div>
                             <div className="flex items-center w-full justify-between pt-5 ">
@@ -585,25 +589,25 @@ function GenerateReceipt() {
                                 toggleCheque
                                     ?
                                     <div className="flex w-full space-x-5">
-                                        <div className="flex flex-col w-full ">
-                                            <div className="flex rounded-md w-full ">
+                                        <div className="flex flex-col ">
+                                            <div className="flex rounded-md w-40 ">
                                                 <input
                                                     type="text"
                                                     autoFocus={true}
                                                     placeholder="Enter Cheque Number"
-                                                    className="px-2 py-[5px] w-full rounded-md outline-none"
+                                                    className="px-2 py-[5px] w-full border-2 border-slate-500 rounded-md outline-none"
                                                     value={chequeNo}
                                                     onChange={handleChequeNo}
                                                 />
                                             </div>
                                             {errors.cheque != '' ? (<small className="text-red-700 mt-2">{errors.cheque}</small>) : null}
                                         </div>
-                                        <div className="flex flex-col w-full">
+                                        <div className="flex flex-col w-40">
                                             <Tippy content="Select Cheque Date">
                                                 <span>
                                                     <input
                                                         type="date"
-                                                        className="placeholder-black p-1 w-full rounded-md outline-none"
+                                                        className="placeholder-black border-2 border-slate-500 p-1 w-full rounded-md outline-none"
                                                         onChange={handleChequeDate}
                                                     />
                                                 </span>
@@ -618,12 +622,12 @@ function GenerateReceipt() {
                                 toggleUpi
                                     ?
                                     <div className="flex flex-col">
-                                        <div className="flex rounded-md w-full">
+                                        <div className="flex rounded-md w-52">
                                             <input
                                                 type="text"
                                                 autoFocus={true}
                                                 placeholder="Enter Upi Number/id"
-                                                className="px-3 py-[5px] w-full rounded-md outline-none "
+                                                className="px-3 py-[5px] w-full border-2 border-slate-500 rounded-md outline-none "
                                                 value={upiNo}
                                                 onChange={handleUpiNo}
                                             />
@@ -635,7 +639,7 @@ function GenerateReceipt() {
                             }
 
                             <div className="mt-5 w-full flex items-center justify-between">
-                            <span className="text-sm font-semibold">Admin : </span>
+                                <span className="text-sm font-semibold">Admin : </span>
                                 <button
                                     type="button"
                                     onClick={onSubmit}

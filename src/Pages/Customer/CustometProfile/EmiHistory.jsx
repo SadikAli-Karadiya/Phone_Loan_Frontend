@@ -18,14 +18,15 @@ function EMIHistory() {
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-
+    
     const handlePayEMI = (id) => {
-        let EMI = data?.data?.data?.AllEmi?.find((n) => {
-            return n.id == id;
-        });
-        setChargeFormModal(true);
-        setIsEdit(true)
-        setEMIDetails(EMI);
+        navigate(`/receipt/Generate/${id}`,
+            {
+                state: {
+                    emi_id: id,
+                }
+            })
+
     };
 
     return (

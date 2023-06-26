@@ -313,6 +313,16 @@ export const getemibycustomername = (search) => {
   })
 }
 
+export const getSingleEmi = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/emi/details/${id}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
 
 
 // Transections ------------------------------------------------------------
