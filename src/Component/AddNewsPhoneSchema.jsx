@@ -8,8 +8,8 @@ export const PhoneSchema = Yup.object({
             }
             return true;
         })
-        .min(10, "Please enter valid IEMI no")
-        .max(10, "Please enter valid IEMI no")
+        .min(15, "Please enter valid IEMI no")
+        .max(15, "Please enter valid IEMI no")
         .required("Please Enter IEMI Number"),
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import {React , useRef , useState} from "react";
 import { BiRupee } from "react-icons/bi";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -8,12 +8,16 @@ import { useParams } from "react-router-dom";
 import { getReceiptbyReceiptId } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import moment from 'moment'
+import ReactToPrint from "react-to-print";
+
 
 
 function Receipt() {
     const params = useParams();
+    const printRef = useRef();
+    const [print, setPrint] = useState(false);
     const data = useQuery(['transection', params.id], () => getReceiptbyReceiptId(params.id));
-    // console.log(data?.data?.data?.SingleTransaction)
+    console.log(data?.data?.data)
     const handleDeleteReceipt = async () => {
         Swal.fire({
             title: "Are you sure to delete installment?",
@@ -68,8 +72,7 @@ function Receipt() {
                                 <h1 className=" font-semibold w-[230px]">Customer Name <span className="ml-5">:</span></h1>
                                 <div className="text-xl w-full border-dotted border-b-2 border-slate-300">
                                     <span className=" uppercase font-semibold text-[16px] space-x-2">
-                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.first_name}</span>
-                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.last_name}</span>
+                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.full_name}</span>
                                     </span>
                                 </div>
                             </div>
@@ -154,11 +157,11 @@ function Receipt() {
                                                     data?.data?.data?.SingleTransaction?.is_by_cheque == true
                                                         ?
                                                         <div>
-                                                        <span> Cheque </span>
-                                                        <div>
-                                                            <span> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
-                                                            <span>( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
-                                                        </div>
+                                                            <span> Cheque </span>
+                                                            <div>
+                                                                <span> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
+                                                                <span>( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
+                                                            </div>
                                                         </div>
                                                         :
                                                         null
@@ -186,9 +189,24 @@ function Receipt() {
                         <MdDelete className="text-blue-400" />
                         <h1 className="text-sm">Delete</h1>
                     </button>
-                    <button className="bg-[#0d0d48]  px-2 py-[5px] text-sm rounded-md hover:bg-slate-500 text-white">Download/Print</button>
+                    <ReactToPrint
+                        trigger={() => (
+                            <button className="bg-[#0d0d48]  py-1 px-3 rounded-md hover:opacity-60">
+                                <span className="text-white text-sm">Download/Print</span>
+                            </button>
+                        )}
+                        content={() => printRef.current}
+                        onBeforeGetContent={() => {
+                            return new Promise((resolve) => {
+                                setPrint(true);
+                                resolve();
+                            });
+                        }}
+                        onAfterPrint={() => setPrint(false)}
+                    />
+                    {/* <button className="bg-[#0d0d48]  px-2 py-[5px] text-sm rounded-md hover:bg-slate-500 text-white">Download/Print</button> */}
                 </div>
-            </div >
+            </div>
         </>
     )
 }

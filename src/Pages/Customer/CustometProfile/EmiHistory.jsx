@@ -93,7 +93,7 @@ function EMIHistory() {
                                                                     {item.amount}
                                                                 </td>
                                                                 <td className="px-6 py-5">
-                                                                    0
+                                                                    {item?.receipt?.extra_charge == "" ? "--" : item?.receipt?.extra_charge}
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
