@@ -1,4 +1,4 @@
-import { React, useRef, useState } from 'react'
+import React, {useRef, useState, useEffect } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
@@ -11,8 +11,8 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import InstallmentFormModal from '../../Component/InstallFormModal';
-import { getAllInstallment, getAllPurchase, DeleteInstallment } from '../../utils/apiCalls';
-import { useQuery } from 'react-query'
+import { getAllInstallment, getCustomersByInstallment, getAllPurchase, DeleteInstallment } from '../../utils/apiCalls';
+import { useQuery, useMutation } from 'react-query'
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import Pagination from 'react-responsive-pagination'
@@ -31,6 +31,7 @@ function InstallmentList() {
     const [InstallmentDetails, setInstallmentDetails] = useState();
     const [Selectemi, setSelectemi] = useState("")
     const installment = useQuery('installment', getAllInstallment)
+    const customersByInstallment = useMutation(getCustomersByInstallment)
     const [pageNo, setPageNo] = useState(1);
     const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
 
@@ -108,10 +109,10 @@ function InstallmentList() {
     };
 
     const handleSelectEMI = (id) => {
-        let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-            return n?.installment_id == id;
-        });
-        setSelectedEmiCustomer(Customer)
+        // let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
+        //     return n?.installment_id == id;
+        // });
+        customersByInstallment.mutate(id)
         setSelectemi(id)
     };
 
@@ -137,32 +138,38 @@ function InstallmentList() {
     };
 
     const handleSearchCustomer = (e) => {
-        const model_name = e.target.value
-        let Customer = selectedEmiCustomer.filter((item) => {
-            return item?.phone?.company?.company_name == model_name
+        const searchedValue = e.target.value.toLowerCase();
+
+        if(searchedValue == ''){
+            setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers);
+            return;
+        }
+
+        //considering search value as phone model
+        let model = customersByInstallment.data?.data.allCustomers.filter((item) => {
+            const model_name = item.phone.model_name?.toLowerCase();
+
+            if (model_name.indexOf(searchedValue) > -1) {
+                return true;
+            }
+            return false
         })
-        // setSelectedEmiCustomer(Customer)
-        console.log(Customer)
-        return
+        if(model.length > 0){
+            setSelectedEmiCustomer(model)
+            return
+        }
+
         setSelectedEmiCustomer(() =>
-            selectedEmiCustomer?.filter((data) => {
-                let searched_value = e.target.value;
-                const last_name =
-                    data?.customer?.last_name?.toLowerCase();
+            customersByInstallment.data?.data.allCustomers?.filter((data) => {
+                const full_name = data?.customer?.full_name?.toLowerCase();
                 let isNameFound = false;
 
-                if (isNaN(searched_value)) {
-                    searched_value = searched_value.toLowerCase();
-                }
-
-                if (last_name.indexOf(searched_value) > -1) {
+                if (full_name.indexOf(searchedValue) > -1) {
                     isNameFound = true;
                 }
 
                 return (
-                    data?.customer?.id == searched_value ||
-                    isNameFound ||
-                    data?.customer?.mobile == searched_value
+                    isNameFound || data?.customer?.mobile == searchedValue
                 );
             })
         );
@@ -173,6 +180,11 @@ function InstallmentList() {
         setIsEdit(true)
         setEMIDetails(id);
     };
+
+    React.useEffect(() => {
+        console.log('customers ', customersByInstallment.data?.data.allCustomers)
+        setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers)
+    },[customersByInstallment.isSuccess, customersByInstallment.data])
 
     return (
         <>
@@ -267,7 +279,7 @@ function InstallmentList() {
                                                     headingBgColor[index % headingBgColor.length],
                                             }}
                                         >
-                                            <p className='text-white text-center text-sm font-roboto'>Total Customer : 15</p>
+                                            <p className='text-white text-center text-sm font-roboto'>Total Customer : {item.purchases.length}</p>
                                         </div>
                                     </div>
                                 );
@@ -357,7 +369,7 @@ function InstallmentList() {
                                                     {index + 1}
                                                 </th>
                                                 <td className="px-6 py-5 ">
-                                                    {item.customer.first_name} {item?.customer?.last_name}
+                                                    {item.customer.full_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.customer?.mobile}
