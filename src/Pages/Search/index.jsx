@@ -47,13 +47,13 @@ function Search() {
                                     Serial No
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    first name
+                                    Full Name
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    last name
+                                    Mobile
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                    Phone
+                                alternate_no
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Profile
@@ -63,6 +63,7 @@ function Search() {
                         {
                             AllCustomer?.data?.data?.AllCustomer?.length > 0 ? (
                                 AllCustomer?.data?.data?.AllCustomer?.map((item, index) => {
+                                    console.log(item)
                                     return (
                                         <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                             <tr className=" border-b">
@@ -70,13 +71,13 @@ function Search() {
                                                     {index + 1}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item?.first_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item.last_name}
+                                                    {item?.full_name}
                                                 </td>
                                                 <td className="px-6 py-5">
                                                     {item?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    {item?.alternate_no ? item?.alternate_no : "--"}
                                                 </td>
                                                 <td className="px-6 py-5 flex justify-center items-center">
                                                     <div className='flex items-center space-x-2'>

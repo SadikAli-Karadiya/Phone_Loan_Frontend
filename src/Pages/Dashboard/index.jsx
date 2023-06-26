@@ -9,7 +9,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllPurchase } from '../../utils/apiCalls';
+import { getAllPurchase , getPendingEmi } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
@@ -19,6 +19,8 @@ function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
   const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
+  const PendingEMI = useQuery('purchase', getPendingEmi)
+  console.log(PendingEMI?.data?.data)
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
