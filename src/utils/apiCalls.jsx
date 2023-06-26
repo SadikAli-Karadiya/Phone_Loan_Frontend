@@ -272,15 +272,6 @@ export const getPurchaseCustomerbyId = (id) => {
   })
 }
 
-export const getPurchaseCustomerbyNumber = (search) => {
-  return instance({
-    'method': 'GET',
-    'url': `/purchase/search/${search.pageNo}/${search.search}`,
-    'headers': {
-      'content-type': 'application/json' // override instance defaults
-    },
-  })
-}
 
 export const DeletePurchase = (id) => {
   return instance({
@@ -302,15 +293,27 @@ export const getEmiPurchasebyId = (id) => {
   })
 }
 
-export const getPendingEmi = () => {
+export const getPendingEmi = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': '/emi/pending',
+    'url': `/emi/pending/${pageNo?.pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
   })
 }
+
+export const getemibycustomername = (search) => {
+  return instance({
+    'method': 'GET',
+    'url': `/emi/search/${search.pageNo}/${search.search}`,
+    'headers': {
+      'content-type': 'application/json' // override instance defaults
+    },
+  })
+}
+
+
 
 // Transections ------------------------------------------------------------
 

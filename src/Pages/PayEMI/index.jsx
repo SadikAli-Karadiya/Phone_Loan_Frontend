@@ -8,7 +8,7 @@ import Tippy from '@tippyjs/react';
 import { IoMdInformationCircle } from 'react-icons/io';
 import 'tippy.js/dist/tippy.css';
 import { useQuery } from 'react-query'
-import { getPurchaseCustomerbyNumber } from '../../utils/apiCalls';
+import { getemibycustomername } from '../../utils/apiCalls';
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
@@ -22,11 +22,11 @@ function PayEMI() {
   const [showNotFound, setShowNotFound] = useState(-1)
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
-  const purchase = useQuery(['purchase', pageNo, search], () => getPurchaseCustomerbyNumber({
+  const EMI = useQuery(['emi', pageNo, search], () => getemibycustomername({
     pageNo: pageNo - 1,
     search
   }))
-
+  console.log(EMI?.data?.data)
   const handlePayEMI = (id) => {
     setChargeFormModal(true);
     setIsEdit(true)
@@ -51,7 +51,7 @@ function PayEMI() {
             />
           </div>
         </div>
-
+{/* 
         {
           purchase?.data?.data?.data?.length > 0 ?
             (
@@ -161,9 +161,9 @@ function PayEMI() {
                 :
                 null
             )
-        }
+        } */}
 
-        {
+        {/* {
           purchase?.data?.data?.data?.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
@@ -175,7 +175,7 @@ function PayEMI() {
             </div>
             :
             null
-        }
+        } */}
 
         <ChargeFormModal
           showModal={chargeFormModal}

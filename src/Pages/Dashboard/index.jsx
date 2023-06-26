@@ -9,7 +9,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllPurchase , getPendingEmi } from '../../utils/apiCalls';
+import { getAllPurchase, getPendingEmi } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
@@ -18,9 +18,11 @@ import '../../Component/Pagination/pagination.css'
 function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
-  const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
-  const PendingEMI = useQuery('purchase', getPendingEmi)
+  const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi({ pageNo: pageNo - 1, }))
   console.log(PendingEMI?.data?.data)
+  const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
+  const Today_Collection = PendingEMI?.data?.data?.todaysCollection
+  const Today_Model = PendingEMI?.data?.data?.totalModels
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
@@ -33,10 +35,9 @@ function Dashboard() {
 
   const handleSearchStudents = (e) => {
     let last_name = e.target.value
-    const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-      return n.customer.last_name == last_name
-    })
-    console.log(Customer)
+    // const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
+    //   return n.customer.last_name == last_name
+    // })
     return
     setClassStudents(() =>
       allClassStudents?.filter((data) => {
@@ -73,7 +74,9 @@ function Dashboard() {
                 <FaUsers />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                {purchase?.data?.data?.AllPurchase?.length}
+                {
+                  Pending_Customer
+                }
               </h1>
             </div>
           </div>
@@ -89,7 +92,7 @@ function Dashboard() {
                 <GiSmartphone />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
+                {Today_Model}
               </h1>
             </div>
           </div>
@@ -105,7 +108,6 @@ function Dashboard() {
                 <BiRupee />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
               </h1>
             </div>
           </div>
@@ -122,7 +124,7 @@ function Dashboard() {
                 <GiTakeMyMoney />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
+                {Today_Collection}
               </h1>
             </div>
           </div>
@@ -196,8 +198,8 @@ function Dashboard() {
             </tr>
           </thead>
           {
-            purchase?.data?.data?.AllPurchase?.length > 0 ? (
-              purchase?.data?.data?.AllPurchase?.map((item, index) => {
+            PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ? (
+              PendingEMI?.data?.data?.pendingEmiCustomers?.map((item, index) => {
                 return (
                   <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                     <tr className=" border-b">
@@ -238,7 +240,8 @@ function Dashboard() {
                       <td className="px-6 py-5 ">
                         <div className="flex justify-center space-x-3">
                           <button
-                            onClick={() => handlePayEMI(item.id)}
+                            onClick={() =>
+                              navigate(`/receipt/Generate/${item.id}`)}
                             className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
                             Pay
                           </button>
@@ -253,7 +256,7 @@ function Dashboard() {
             )}
         </table>
         {
-          purchase?.data?.data?.AllPurchase?.length > 0 ?
+          PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
             null
             :
             <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
@@ -264,10 +267,10 @@ function Dashboard() {
       </div>
 
       {
-        purchase?.data?.data.AllPurchase?.length > 0 ?
+        PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
-              total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
+              total={PendingEMI && PendingEMI?.data?.data?.pageCount ? PendingEMI?.data?.data?.pageCount : 0}
               current={pageNo}
               onPageChange={(page) => setPageNo(page)}
             // previousLabel="Previous" nextLabel="Next"

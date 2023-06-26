@@ -38,7 +38,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const today = new Date();
   const [receiptDate, setReceiptDate] = React.useState(today);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
- const [errors, setErrors] = React.useState({
+  const [errors, setErrors] = React.useState({
     amount: '',
     discount: '',
     upi: '',

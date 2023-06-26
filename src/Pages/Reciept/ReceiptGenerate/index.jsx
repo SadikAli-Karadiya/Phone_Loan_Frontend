@@ -1,256 +1,236 @@
-import React from "react";
+import { React, useState } from "react";
 import { toast } from 'react-toastify';
 import { AiFillCloseCircle } from "react-icons/ai";
-import { FaRupeeSign } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AxiosError } from "axios";
+import moment from 'moment'
+import { FiPlus } from "react-icons/fi"
+import { BiRupee } from "react-icons/bi";
+import { MdDelete } from "react-icons/md"
+
 
 function GenerateReceipt() {
 
 
-    const [fee, setFee] = React.useState('');
-    const [discount, setDiscount] = React.useState('');
-    const [charge, setCharge] = React.useState('');
-    const [payment, setPayment] = React.useState("cash");
-    const [chequeNo, setChequeNo] = React.useState('');
-    const [upiNo, setUpiNo] = React.useState('');
-    const [toggleCheque, setToggleCheque] = React.useState(false);
-    const [toggleUpi, setToggleUpi] = React.useState(false);
-    const [toggleCash, setToggleCash] = React.useState(true);
-    const [deduction, setDeduction] = React.useState(0);
-    const [charges, setCharges] = React.useState(0);
-    const [discountAppliedMsg, setDiscountAppliedMsg] = React.useState(true);
-    const [chargeAppliedMsg, setChargeAppliedMsg] = React.useState(true);
-    const [model, setModel] = React.useState(false);
-    const [pin, setPin] = React.useState("");
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [isdiscount, setdiscount] = React.useState(false);
-    const [ischarge, setcharge] = React.useState(false);
+    const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState();
+    const [selectPayment, setSelectPayment] = useState("1");
+    const [status, setstatus] = useState("compalete");
+    const [Charge, setCharge] = useState(false);
+    const [Charge_amount, setchargeamount] = useState("");
+    const [chequeNo, setChequeNo] = useState('');
+    const [chequeDate, setChequeDate] = useState('');
+    const [upiNo, setUpiNo] = useState('');
+    const [pin, setPin] = useState("");
+    const [toggleCheque, setToggleCheque] = useState(false);
+    const [toggleUpi, setToggleUpi] = useState(false);
+    const [toggleCash, setToggleCash] = useState(true);
+    const [toggle, setToggle] = useState(false);
+    const [emi_amount, setemiamount] = useState();
+    const [model, setModel] = useState();
     const navigate = useNavigate();
-
-    const [errors, setErrors] = React.useState({
+    const today = new Date();
+    const [receiptDate, setReceiptDate] = useState(today);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errors, setErrors] = useState({
         amount: '',
-        charge: "",
         discount: '',
         upi: '',
         cheque: '',
-        invalid_pin: ''
+        chequeDate: '',
+        invalid_pin: '',
+        month: ''
     });
-    function handleDiscount(e) {
-        if (discount == '') {
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    discount: '*Please enter discount'
-                }
-            })
-            return;
-        }
-        if (Number(discount) > Number(fee)) {
-            return;
-        }
-        if (fee == '' || fee == 0 || fee == undefined) {
+
+    const onSubmit = () => {
+        let err = 0;
+        if (emi_amount == '') {
+            err++;
             setErrors((prevData) => {
                 return {
                     ...prevData,
                     amount: '*Please enter amount'
                 }
             })
-            return;
         }
-        setFee(fee - discount);
-        setDeduction(discount);
-        setDiscountAppliedMsg(false);
-    }
-    function handleCharge(e) {
-        if (charge == '') {
+
+        if (toggleUpi && upiNo == '') {
+            err++;
             setErrors((prevData) => {
                 return {
                     ...prevData,
-                    charge: '*Please enter charge'
+                    upi: '*Please Enter UPI Number'
                 }
             })
-            return;
         }
-        if (Number(discount) > Number(fee)) {
-            return;
-        }
-        if (fee == '' || fee == 0 || fee == undefined) {
+        if (toggleCheque && chequeNo == '') {
+            err++;
             setErrors((prevData) => {
                 return {
                     ...prevData,
-                    amount: '*Please enter amount'
+                    cheque: '*Please enter cheque number'
                 }
             })
+        }
+
+        if (toggleCheque && chequeDate == '') {
+            err++;
+            setErrors((prevData) => {
+                return {
+                    ...prevData,
+                    chequeDate: '*Please select cheque date'
+                }
+            })
+        }
+
+        if ((errors.amount != '' && errors.amount != undefined) || (errors.upi != '' && errors.upi != undefined) || (errors.cheque != '' && errors.cheque != undefined) || (errors.chequeDate != '' && errors.chequeDate != undefined) || (errors.month != '' && errors.month != undefined)) {
+            err++;
+        }
+
+        if (err == 0) {
+            setSelectPayment(
+                toggleCheque
+                    ?
+                    'Cheque'
+                    :
+                    toggleUpi
+                        ?
+                        'UPI'
+                        :
+                        'Cash'
+            )
+            setModel(true);
+        }
+        else {
             return;
         }
-        setFee(charge + fee);
-        setCharges(charge);
-        setChargeAppliedMsg(false);
+
     }
-    console.log(fee)
-    function handleRemoveDiscount() {
-        setFee(Number(fee) + Number(deduction));
-        setDeduction(0);
-        setDiscountAppliedMsg(true);
+
+    async function handlePINsubmit() {
+        try {
+
+            if (pin == "") {
+                return toast.error("Please Enter Pin")
+            }
+
+            const EMIData = {
+                is_by_cash: toggleCash ? 1 : 0,
+                is_by_cheque: toggleCheque ? 1 : 0,
+                is_by_upi: toggleUpi ? 1 : 0,
+                cheque_no: chequeNo,
+                cheque_date: chequeDate,
+                upi_no: upiNo,
+                user_id: "3",
+                // purchase_id: EMI_Details?.purchase?.id,
+                // Emi_id: EMI_Details?.id,
+                status: "compelete",
+                Charge_amount: Charge_amount,
+                amount: emi_amount + Charge_amount,
+                security_pin: pin,
+                customer_id: EMI_Details?.purchase?.customer?.id,
+                date: receiptDate
+            };
+
+            setIsSubmitting(true);
+
+            const res = await AddTransection(EMIData)
+
+            setIsSubmitting(false);
+
+            if (res.data.success == true) {
+                toast.success('Receipt generated successfully')
+                navigate(`/receipt/receipt/${res?.data?.data?.receipt_id}`);
+            } else {
+                setErrors((prevData) => {
+                    return {
+                        ...prevData,
+                        invalid_pin: res.data.message
+                    }
+                });
+            }
+
+        }
+        catch (err) {
+            setIsSubmitting(false);
+            if (err instanceof AxiosError) {
+                toast.error(err.response?.data?.message)
+            }
+            else {
+                toast(err.message)
+            }
+        }
     }
-    function handleRemoveCharge() {
-        setFee(Number(fee) - Number(charge));
-        setCharges(0);
-        setChargeAppliedMsg(true);
-    }
+
+    const customStyles = {
+        control: (provided, state) => ({
+            ...provided,
+            backgroundColor: "rgb(75 85 99)",
+            borderColor: "rgb(107 114 128)",
+            borderRadius: "8px",
+            minHeight: "44px",
+            height: "44px",
+            boxShadow: state.isFocused ? null : null,
+        }),
+
+        valueContainer: (provided, state) => ({
+            ...provided,
+            height: "44px",
+            padding: "0 6px",
+        }),
+
+        singleValue: (provided) => ({
+            ...provided,
+            color: "white",
+        }),
+
+        input: (provided, state) => ({
+            ...provided,
+            margin: "0px",
+        }),
+        indicatorSeparator: (state) => ({
+            display: "none",
+        }),
+        indicatorsContainer: (provided, state) => ({
+            ...provided,
+            height: "44px",
+        }),
+    };
+
     function handlePaymentMethod(e) {
         setUpiNo('')
         setChequeNo('')
+        setChequeDate('');
         setErrors((prevData) => {
             return {
                 ...prevData,
-                upi: ''
+                upi: '',
+                cheque: '',
+                chequeDate: ''
             }
         })
-        setErrors((prevData) => {
-            return {
-                ...prevData,
-                cheque: ''
-            }
-        })
+
         if (e.target.value == 1) {
-            setPayment(e.target.value);
+            setSelectPayment(e.target.value);
             setToggleCash(true);
             setToggleCheque(false);
             setToggleUpi(false);
         }
         else if (e.target.value == 2) {
-            setPayment(e.target.value);
+            setSelectPayment(e.target.value);
             setToggleCheque(false);
             setToggleCash(false)
             setToggleUpi(true);
         }
         else {
-            setPayment(e.target.value);
+            setSelectPayment(e.target.value);
             setToggleUpi(false);
             setToggleCash(false);
             setToggleCheque(true);
         }
     }
-    const handleFeesValidation = (e) => {
-        const regex = new RegExp(/^[0-9]+$/)
 
-        let err = 0;
-        if (regex.test(e.target.value)) {
-            err++;
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    amount: ''
-                }
-            })
-        }
-        else {
-            err++;
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    amount: '*Enter only numbers'
-                }
-            })
-        }
-
-        if (Number(e.target.value) < (discount ? Number(discount) : 0)) {
-            err++;
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    amount: '*Amount should be greater than Discount'
-                }
-            })
-        }
-        if (err > 0) {
-            setFee(e.target.value);
-            return;
-        }
-        setDeduction(0);
-        setDiscountAppliedMsg(true);
-    }
-    const handleDiscountValidation = (e) => {
-        const regex = new RegExp(/^[0-9]+$/)
-        if (e.target.value != '') {
-            if (regex.test(e.target.value)) {
-                setErrors((prevData) => {
-                    return {
-                        ...prevData,
-                        discount: ''
-                    }
-                })
-            }
-            else {
-                setErrors((prevData) => {
-                    return {
-                        ...prevData,
-                        discount: '*Enter only numbers'
-                    }
-                })
-            }
-        }
-        else {
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    discount: ''
-                }
-            })
-        }
-
-        if (Number(e.target.value) > Number(fee)) {
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    discount: '*Discount should be less than Amount'
-                }
-            })
-        }
-        setDiscount(e.target.value)
-    }
-    const handleChargeValidation = (e) => {
-        const regex = new RegExp(/^[0-9]+$/)
-        if (e.target.value != '') {
-            if (regex.test(e.target.value)) {
-                setErrors((prevData) => {
-                    return {
-                        ...prevData,
-                        charge: ''
-                    }
-                })
-            }
-            else {
-                setErrors((prevData) => {
-                    return {
-                        ...prevData,
-                        discount: '*Enter only numbers'
-                    }
-                })
-            }
-        }
-        else {
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    charge: ''
-                }
-            })
-        }
-
-        // if (Number(e.target.value) > Number(fee)) {
-        //     setErrors((prevData) => {
-        //         return {
-        //             ...prevData,
-        //             charge: '*Discount should be less than Amount'
-        //         }
-        //     })
-        // }
-        setCharge(e.target.value)
-    }
     const handleUpiNo = (e) => {
         const regex = new RegExp(/^[0-9 A-Za-z@]+$/)
 
@@ -293,123 +273,70 @@ function GenerateReceipt() {
         }
         setChequeNo(e.target.value)
     }
-    function handlediscounttoggle() {
-        setdiscount(true)
-        setcharge(false)
-    }
-    function handlechargetoggle() {
-        setcharge(true)
-        setdiscount(false)
+
+    function isSameDay(selectedDate) {
+        const date = new Date(selectedDate);
+        const currentDate = new Date();
+
+        return date.getFullYear() === currentDate.getFullYear()
+            && date.getDate() === currentDate.getDate()
+            && date.getMonth() === currentDate.getMonth();
+
     }
 
-
-    const onSubmit = () => {
-        let err = 0;
-        if (fee == '') {
-            err++;
+    const handleChequeDate = (e) => {
+        if (e.target.value == '') {
             setErrors((prevData) => {
                 return {
                     ...prevData,
-                    amount: '*Please enter amount'
+                    chequeDate: '*Please select cheque date'
                 }
             })
         }
-        if (toggleUpi && upiNo == '') {
-            err++;
+        else if (isSameDay(e.target.value)) {
             setErrors((prevData) => {
                 return {
                     ...prevData,
-                    upi: '*Please Enter UPI Number'
+                    chequeDate: ''
                 }
             })
         }
-        if (toggleCheque && chequeNo == '') {
-            err++;
+        else if (new Date(e.target.value).getTime() < new Date().getTime()) {
             setErrors((prevData) => {
                 return {
                     ...prevData,
-                    cheque: '*Please Enter Cheque Number'
+                    chequeDate: '*Cheque date should be greater than today\'s date'
                 }
             })
         }
-        if ((errors.amount != '' && errors.amount != undefined) || (errors.upi != '' && errors.upi != undefined) || (errors.cheque != '' && errors.cheque != undefined)) {
-            err++;
-        }
-
-        if (err == 0) {
-            setPayment(
-                toggleCheque
-                    ?
-                    'Cheque'
-                    :
-                    toggleUpi
-                        ?
-                        'UPI'
-                        :
-                        'Cash'
-            )
-            setModel(true);
-        }
-        else {
-            return;
-        }
-
+        setChequeDate(e.target.value)
     }
 
-    async function handlePINsubmit() {
-        try {
-            const feesData = {
-                is_by_cash: toggleCash ? 1 : 0,
-                is_by_cheque: toggleCheque ? 1 : 0,
-                is_by_upi: toggleUpi ? 1 : 0,
-                cheque_no: chequeNo,
-                upi_no: upiNo,
-                amount: Number(fee) + Number(deduction),
-                discount: deduction,
-                admin_id: admin._id,
-                security_pin: pin,
-                student_id: student.rollno
-            };
-
-            setIsSubmitting(true);
-
-            // const res = await generateStudentReceipt(feesData)
-            const res = true
-
-            setIsSubmitting(false);
-
-            if (res == true) {
-                toast('success', 'Receipt generated successfully')
-                navigate("/Receipt/Receipt",
-                    {
-                        state: {
-                            isStaff: false,
-                            is_cancelled: 0,
-                            fees_receipt_id: res.data.data.fees_receipt_details.fees_receipt_id,
-                            prevPath: location.pathname
-                        }
-                    });
-            } else {
-                setErrors((prevData) => {
-                    return {
-                        ...prevData,
-                        invalid_pin: res.data.message
-                    }
-                });
-            }
-
-        }
-        catch (err) {
-            setIsSubmitting(false);
-            if (err instanceof AxiosError) {
-                toast('success', err.response?.data?.message)
-            }
-            else {
-                toast('success', err.message)
-            }
-        }
+    const handleChangeDate = (e) => {
+        setReceiptDate(e.target.value);
     }
 
+    const handleModalClose = () => {
+        handleShowModal(false);
+        setCharge(false)
+    };
+
+    function handlecharge() {
+        setCharge(true)
+    }
+
+    function handleremovecharge() {
+        setchargeamount("")
+        setCharge(false)
+    }
+
+    function handleCharge(event) {
+        setchargeamount(event.target.value)
+    };
+
+    let Total = (
+        // EMI_Details?.amount 
+        + Charge_amount)
 
     return (
         <>
@@ -417,8 +344,8 @@ function GenerateReceipt() {
                 {model && (
                     <div className='absolute w-full h-full  z-30 ' >
 
-                        <div className="flex justify-center xs:px-4 mt-4 bg-white ">
-                            <div className="absolute xs:h-[81%] md:h-[68%] xl:h-[74%] mx-auto  opacity-100 shadow-2xl rounded bg-white h-full xs:w-[80%]  w-2/3 z-50">
+                        <div className="flex justify-center xs:px-4 mt-10  bg-white ">
+                            <div className="absolute xs:h-[81%] md:h-[68%] xl:h-[70%] mx-auto  opacity-100 shadow-2xl rounded bg-white h-full xs:w-[60%]  z-50">
                                 <div className="flex justify-end">
                                     <button
                                         onClick={(e) => {
@@ -446,16 +373,14 @@ function GenerateReceipt() {
                                             <div>
                                                 <h2 className="font-bold text-lg tracking-wide">NAME : Shad</h2>
                                             </div>
-                                            <div className="flex xs:space-y-2 lg:space-y-1 xs:flex-col">
+                                            <div className="flex xs:space-y-5 lg:space-y-1 xs:flex-col">
                                                 <div className="flex xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-5 lg:space-y-0">
                                                     <h2 className="font-roboto">Company : Vivo</h2>
                                                     <h2 className="font-roboto">Model : F17</h2>
                                                     <h2 className="font-roboto">RAM : 4/64</h2>
                                                 </div>
-                                                <h3 className="font-roboto">Customer ID : 05</h3>
                                                 <h3 className="font-roboto">Net Amount : 15000</h3>
                                                 <h3 className="font-roboto">Pending Amount : 10000</h3>
-                                                <h3 className="font-roboto">Last Paid Upto : 5000</h3>
                                             </div>
                                         </div>
                                         <div className="px-7 font-mono xs:order-1 sm:order-2 py-2 flex justify-end">
@@ -465,18 +390,18 @@ function GenerateReceipt() {
 
                                     <div className="flex xs:flex-col xs:space-x-0 xs:space-y-4 xs:py-1 sm:flex-row sm:space-y-0 sm:space-x-5 px-12 py-5  space-x-4">
                                         <span className="px-4 py-1 bg-green-200 text-green-900 font-bold text-sm rounded shadow-xl ">
-                                            Paid : {fee}
+                                            Paid : {emi_amount}
                                         </span>
                                         <span className="px-4 py-1 bg-red-200 text-red-900 font-bold text-sm rounded shadow-xl ">
-                                            Discount : {deduction}
+                                            Charge : {Charge_amount}
                                         </span>
                                         <span className="px-4 py-1 bg-blue-200 text-[#0d0d48] font-bold text-sm rounded shadow-xl ">
-                                            Total : {Number(fee) + Number(deduction)}
+                                            Total : {Number(emi_amount) + Number(Charge_amount)}
                                         </span>
                                     </div>
                                     <div className="flex xs:flex-col md:flex-row md:items-center justify-between xs:px-5">
                                         <div className="px-6 py-3 text-[#0d0d48] ">
-                                            <h2 className="font-bold">* Paid by : <span className="font-medium text-gray-600">{payment}</span></h2>
+                                            <h2 className="font-bold">* Paid by : <span className="font-medium text-gray-600">{selectPayment}</span></h2>
                                             {
                                                 toggleCheque
                                                     ?
@@ -535,226 +460,191 @@ function GenerateReceipt() {
                         </div>
 
                     </div>
-                    <div className="bg-white px-1 py-3 mt-9 shadow-2xl rounded-2xl ">
-                        <div className="flex xs:flex-col sm:flex-row py-4 xl:py-2 justify-between">
-                            <div className="flex xs:flex-col xs:space-y-2 lg:space-y-1 xl:space-y-2 px-7 text-sm xs:order-2 sm:order-1">
-                                <div>
-                                    <h2 className="font-bold text-lg tracking-wide">NAME : Shad</h2>
-                                </div>
-                                <div className="flex xs:space-y-2 sm:space-y-1 xs:flex-col">
-                                    <div className="flex xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-5 lg:space-y-0">
-                                        <h2 className="font-roboto">Company : Vivo</h2>
-                                        <h2 className="font-roboto">Model : F17</h2>
-                                        <h2 className="font-roboto">RAM : 4/64</h2>
-                                    </div>
-                                    <h3 className="font-roboto">Customer ID: 05</h3>
-                                    <h3 className="font-roboto">Net Amount : 15000</h3>
-                                    <h3 className="font-roboto">Pending Amount : 10000</h3>
-                                    <h3 className="font-roboto bgye">Last Paid Upto : <span className="bg-yellow-100 px-2 py-[2px] text-yellow-900 font-semibold">5000</span></h3>
-                                </div>
-                            </div>
-                            <div className="px-7 font-mono xs:order-1 sm:order-2 py-2 flex justify-end">
-                                <h3 className=""> Date : 05/02/2023</h3>
-                            </div>
-                        </div>
 
-                        <div className="flex xs:flex-col lg:flex-row lg:items-center sm:items-start xs:space-y-5 px-6 lg:justify-between  ">
-                            <div className="flex xs:flex-col xs:items-start sm:flex-row w-full sm:justify-between md:justify-start sm:items-center ">
-                                <div className="flex flex-col xs:mt-2 sm:mt-4 xs:order-2 sm:order-1 ">
-                                    <div className="flex items-center border-2 shadow-2xl border-[#0d0d48] w-fit  rounded-3xl">
-                                        <span className="py-2 bg-[#0d0d48] text-white ml-[-1px] mr-4 font-bold border-2 border-[#0d0d48] rounded-full p-2">
-                                            <FaRupeeSign />
-                                        </span>
-                                        <input
-                                            type="text"
-                                            className="px-2 mr-4 text-xl font-bold outline-none w-32"
-                                            placeholder="Enter fees"
-                                            value={fee}
-                                            onChange={handleFeesValidation}
+                    <div className="flex justify-center items-center pt-10">
+                        <form className="w-[90%] bg-white shadow-xl rounded-xl px-7 py-6">
+                            <div className='flex flex-col justify-start w-full'>
+                                <div className="flex justify-between items-center w-full">
+                                    <div className="w-full">
+                                        <span className="font-bold uppercase w-full">Name : </span>
+                                    </div>
+                                    <div className="flex w-full items-center justify-end">
+                                        <span>Date : </span>
+                                        <input type="date"
+                                            name="receiptDate"
+                                            defaultValue={moment(receiptDate).format("DD / MM / YYYY")}
+                                            className="ml-4"
                                         />
                                     </div>
-                                    {errors.amount != '' ? (<small className="text-red-700 mt-2">{errors.amount}</small>) : null}
-                                </div>
-                                <div className=" xs:ml-2 sm:ml-10 flex flex-col xs:order-1 sm:order-2">
-                                    <h2 className="text-[14px]">No. of Months</h2>
-                                    <select className="w-28 border-2 mt-2 px-2 py-1 outline-none rounded-md" >
-                                        <option value="" className="text-gray-400">select</option>
-                                        <option value="" className="text-gray-400">1</option>
-                                        <option value="" className="text-gray-400">2</option>
-                                    </select>
-                                    {errors.month != '' ? (<small className="text-red-700 mt-2">{errors.month}</small>) : null}
                                 </div>
                             </div>
-                            <div className=" space-y-5">
-                                <div className="flex items-center space-x-5">
-                                    <button className="bg-green-600 rounded-full hover:shadow-xl px-3 py-1 text-sm text-white" onClick={handlediscounttoggle}>
-                                        Discound
-                                    </button>
-                                    <button className="bg-red-600 rounded-full hover:shadow-xl px-3 py-1 text-sm text-white" onClick={handlechargetoggle}>
-                                        Charge
-                                    </button>
+                            <div className="flex flex-col space-y-2 py-2">
+                                <div className="space-x-5">
+                                    <span className="text-[14.5px] font-roboto">Company : </span>
+                                    <span className="text-[14.5px] font-roboto">Model : </span>
+                                    <span className="text-[14.5px] font-roboto">Storage : </span>
                                 </div>
-                                {
-                                    isdiscount == true ?
-                                        <div className="">
-                                            <h1 className="font-bold  text-lg">
-                                                Discount : <span> {deduction}</span>
-                                            </h1>
-                                            {discountAppliedMsg ? (
-                                                <div className="flex flex-col">
-                                                    <div className="flex rounded-l-md border-2 mr-2 my-2 h-8 rounded-r-lg border-[#0d0d48] items-center">
-                                                        <input
-                                                            placeholder="Enter Discount "
-                                                            className="outline-none px-2 py-0 w-32 rounded-l-md "
-                                                            value={discount}
-                                                            onChange={handleDiscountValidation}
-                                                        />
-                                                        <button
-                                                            className=" text-white py-1  px-4 bg-[#0d0d48] rounded-r-md"
-                                                            onClick={handleDiscount}
-                                                        >
-                                                            Apply
-                                                        </button>
+                                <span className=" text-[14.5px] font-roboto">Net Amount : </span>
+                                <span className=" text-[14.5px] font-roboto">Pending  : </span>
+                            </div>
+                            <div className="flex items-center w-full justify-between pt-5 ">
+                                <div className="flex items-center w-1/4 border-2 border-[#0d0d48] rounded-full ">
+                                    <div className="bg-[#0d0d48] text-white text-xl py-[7px] px-[7px] rounded-full">
+                                        <BiRupee className="" />
+                                    </div>
+                                    <input type="text"
+                                        name="price"
+                                        value={emi_amount}
+                                        disabled={true}
+                                        className="bg-white w-28 ml-2 "
+                                    />
+
+                                </div>
+                                <div className="w-1/4">
+                                    {
+                                        Charge == false ?
+                                            <div className="flex items-center justify-end"
+                                                onClick={handlecharge}
+                                            >
+                                                <h1 className="bg-red-600 py-[5px] px-2 text-sm rounded-md text-white  cursor-pointer">Charge</h1>
+                                            </div>
+                                            :
+                                            ""
+                                    }
+
+                                    {
+                                        Charge == true ?
+                                            <div className="flex w-full justify-end">
+                                                <div className="flex items-center justify-start space-x-3 border shadow-xl rounded-full px-2 py-[5px]">
+                                                    <div className="flex flex-col w-full ">
+                                                        <input type="text"
+                                                            name="charge"
+                                                            value={Charge_amount}
+                                                            handleCharge={handleCharge}
+                                                            className="outline-none w-24  pl-1 "
+                                                            placeholder="Charge " />
+                                                        {errors.charge && touched.charge
+                                                            ?
+                                                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
+                                                            :
+                                                            null}
                                                     </div>
-                                                    {errors.discount != '' ? (<small className="text-red-700">{errors.discount}</small>) : null}
+                                                    <div className="flex items-center space-x-2 group cursor-pointer hover:bg-red-600 group py-[5px] px-[5px] rounded-full  "
+                                                        onClick={handleremovecharge}
+                                                    >
+                                                        <MdDelete className="text-red-600 group-hover:text-white" />
+                                                    </div>
                                                 </div>
-                                            )
-                                                :
-                                                <div className="flex flex-col items-end">
-                                                    <h1 className="text-green-800 font-bold">
-                                                        Discount Applied Successfully !
-                                                    </h1>
-                                                    <button className="text-center text-sm font-semibold hover:bg-red-300 text-white bg-red-400 rounded-md px-2 py-[5px] mt-2" onClick={() => handleRemoveDiscount()}>
-                                                        Remove Discount
-                                                    </button>
-                                                </div>
-                                            }
-                                        </div>
-                                        :
-                                        ischarge == true ?
-                                            <div className="">
-                                                <h1 className="font-bold  text-lg">
-                                                    Charge : <span> {charge}</span>
-                                                </h1>
-                                                {chargeAppliedMsg ? (
-                                                    <div className="flex flex-col">
-                                                        <div className="flex rounded-l-md border-2 mr-2 my-2 h-8 rounded-r-lg border-[#0d0d48] items-center">
-                                                            <input
-                                                                placeholder="Enter Charge "
-                                                                className="outline-none px-2 py-0 w-32 rounded-l-md "
-                                                                value={charge}
-                                                                onChange={handleChargeValidation}
-                                                            />
-                                                            <button
-                                                                className=" text-white py-1  px-4 bg-[#0d0d48] rounded-r-md"
-                                                                onClick={handleCharge}
-                                                            >
-                                                                Apply
-                                                            </button>
-                                                        </div>
-                                                        {errors.charge != '' ? (<small className="text-red-700">{errors.charge}</small>) : null}
-                                                    </div>
-                                                )
-                                                    :
-                                                    <div className="flex flex-col items-end">
-                                                        <h1 className="text-green-800 font-bold">
-                                                            Charge Applied Successfully !
-                                                        </h1>
-                                                        <button className="text-center text-sm font-semibold hover:bg-red-300 text-white bg-red-400 rounded-md px-2 py-[5px] mt-2" onClick={() => handleRemoveCharge()}>
-                                                            Remove Charge
-                                                        </button>
-                                                    </div>
-                                                }
                                             </div>
                                             :
                                             null
-                                }
-                            </div>
-
-                        </div>
-                        <div className="flex flex-col py-4 px-6">
-                            <div className="flex items-center space-x-2">
-                                <strong className="text-xl"> By</strong>
-                                <input
-                                    type="radio"
-                                    name="payment_method"
-                                    id="sme"
-                                    className=""
-                                    value="1"
-                                    checked={toggleCash ? 'checked' : ''}
-                                    onChange={handlePaymentMethod}
-                                />
-                                <span className="text-[15px]"> Cash </span>
-                                <input
-                                    type="radio"
-                                    name="payment_method"
-                                    id="sme"
-                                    className=""
-                                    value="2"
-                                    onChange={handlePaymentMethod}
-                                />
-                                <span className="text-[15px]"> UPI </span>
-                                <input
-                                    type="radio"
-                                    name="payment_method"
-                                    id="sme"
-                                    className=""
-                                    value="3"
-                                    onChange={handlePaymentMethod}
-                                />
-                                <span className="text-[15px]"> Cheque </span>
-                            </div>
-                        </div>
-                        {
-                            toggleCheque
-                                ?
-                                <div className="flex flex-col mx-6">
-                                    <div className="flex border-2 border-[#0d0d48] w-fit ">
-                                        <input
-                                            type="text"
-                                            placeholder="Enter Cheque Number"
-                                            className="placeholder-black p-1"
-                                            value={chequeNo}
-                                            onChange={handleChequeNo}
-                                        />
-                                    </div>
-                                    {errors.cheque != '' ? (<small className="text-red-700 mt-2">{errors.cheque}</small>) : null}
+                                    }
                                 </div>
-                                :
-                                null
-                        }
-                        {
-                            toggleUpi
-                                ?
-                                <div className="flex flex-col mx-6">
-                                    <div className="flex border-2 border-[#0d0d48] w-fit">
+                            </div>
+                            <div className="flex pt-3">
+                                <h1 className="font-bold">By</h1>
+                                <div className="flex space-x-4 ml-3 ">
+                                    <div
+                                        className="bg-white space-x-1 rounded-md py-[4px] cursor-pointer">
                                         <input
-                                            type="text"
-                                            placeholder="Enter Upi Number/id"
-                                            className=" placeholder-black p-1"
-                                            value={upiNo}
-                                            onChange={handleUpiNo}
+                                            type="radio"
+                                            name="payment_method"
+                                            id="sme"
+                                            className=""
+                                            value="1"
+                                            checked={toggleCash ? 'checked' : ''}
+                                            onChange={handlePaymentMethod}
                                         />
+                                        <span className="font-semibold text-sm"> Cash </span>
                                     </div>
-                                    {errors.upi != '' ? (<small className="text-red-700 mt-2">{errors.upi}</small>) : null}
+                                    <div className="bg-white space-x-1 rounded-md py-[4px] cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="payment_method"
+                                            id="sme"
+                                            className=""
+                                            value="2"
+                                            onChange={handlePaymentMethod}
+                                        />
+                                        <span className="font-semibold text-sm"> UPI </span>
+                                    </div>
+                                    <div className="bg-white space-x-1 rounded-md py-[4px] cursor-pointer">
+                                        <input
+                                            type="radio"
+                                            name="payment_method"
+                                            id="sme"
+                                            className=""
+                                            value="3"
+                                            onChange={handlePaymentMethod}
+                                        />
+                                        <span className="font-semibold text-sm"> Cheque </span>
+                                    </div>
                                 </div>
-                                :
-                                null
-                        }
+                            </div>
+                            {
+                                toggleCheque
+                                    ?
+                                    <div className="flex w-full space-x-5">
+                                        <div className="flex flex-col w-full ">
+                                            <div className="flex rounded-md w-full ">
+                                                <input
+                                                    type="text"
+                                                    autoFocus={true}
+                                                    placeholder="Enter Cheque Number"
+                                                    className="px-2 py-[5px] w-full rounded-md outline-none"
+                                                    value={chequeNo}
+                                                    onChange={handleChequeNo}
+                                                />
+                                            </div>
+                                            {errors.cheque != '' ? (<small className="text-red-700 mt-2">{errors.cheque}</small>) : null}
+                                        </div>
+                                        <div className="flex flex-col w-full">
+                                            <Tippy content="Select Cheque Date">
+                                                <span>
+                                                    <input
+                                                        type="date"
+                                                        className="placeholder-black p-1 w-full rounded-md outline-none"
+                                                        onChange={handleChequeDate}
+                                                    />
+                                                </span>
+                                            </Tippy>
+                                            {errors.chequeDate != '' ? (<small className="text-red-700 mt-2">{errors.chequeDate}</small>) : null}
+                                        </div>
+                                    </div>
+                                    :
+                                    null
+                            }
+                            {
+                                toggleUpi
+                                    ?
+                                    <div className="flex flex-col">
+                                        <div className="flex rounded-md w-full">
+                                            <input
+                                                type="text"
+                                                autoFocus={true}
+                                                placeholder="Enter Upi Number/id"
+                                                className="px-3 py-[5px] w-full rounded-md outline-none "
+                                                value={upiNo}
+                                                onChange={handleUpiNo}
+                                            />
+                                        </div>
+                                        {errors.upi != '' ? (<small className="text-red-700 mt-2">{errors.upi}</small>) : null}
+                                    </div>
+                                    :
+                                    null
+                            }
 
-                        <div></div>
-                        <div className="text-sm flex xs:justify-center md:justify-end xs:py-2 xl:py-0 xl:justify-end items-end uppercase font-bold font-mono ">
-                            <button
-                                onClick={onSubmit}
-                                type="button"
-                                className="bg-[#0d0d48] border-2  border-[#0d0d48] hover:text-[#0d0d48] font-semibold relative inline-flex items-center justify-center px-8 py-[6px] overflow-hidden text-white rounded-md cursor-pointer group mr-3"
-                            >
-                                <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-white  rounded-lg group-hover:w-full group-hover:h-56"></span>
-                                <span className="relative flex items-center gap-2 text-base">
+                            <div className="mt-5 w-full flex items-center justify-between">
+                            <span className="text-sm font-semibold">Admin : </span>
+                                <button
+                                    type="button"
+                                    onClick={onSubmit}
+                                    className='w-28 text-white bg-[#0d0d48] hover:shadow-md uppercase px-5 py-2 rounded-md text-sm text-center '
+                                >
                                     Generate
-                                </span>
-                            </button>
-                        </div>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

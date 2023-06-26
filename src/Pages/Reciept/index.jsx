@@ -11,7 +11,7 @@ function Index() {
             <Routes>
                 <Route>
                     <Route path="/Search" element={<SearchReciept />} />
-                    <Route path="/Generate" element={<GenerateReceipt />} />
+                    <Route path="/Generate/:id" element={<GenerateReceipt />} />
                     <Route path="/Receipt/:id" element={<Receipt />} />
                 </Route>
             </Routes>
