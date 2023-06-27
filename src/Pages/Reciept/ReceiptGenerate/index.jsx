@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 import moment from 'moment'
 import { BiRupee } from "react-icons/bi";
 import { MdDelete } from "react-icons/md"
-import { getSingleEmi , AddTransection } from '../../../utils/apiCalls';
+import { getSingleEmi, AddTransection } from '../../../utils/apiCalls';
 import { useMutation, useQuery } from 'react-query'
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -16,7 +16,6 @@ function GenerateReceipt() {
 
     const location = useLocation();
     const Emi_Details = useQuery(['emi', location?.state?.emi_id], () => getSingleEmi(location?.state.emi_id))
-    console.log(Emi_Details?.data?.data?.SingleEmi?.id)
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState();
     const [selectPayment, setSelectPayment] = useState("1");
@@ -31,7 +30,6 @@ function GenerateReceipt() {
     const [toggleUpi, setToggleUpi] = useState(false);
     const [toggleCash, setToggleCash] = useState(true);
     const [toggle, setToggle] = useState(false);
-    const [emi_amount, setemiamount] = useState(Emi_Details?.data?.data?.SingleEmi?.amount ? Emi_Details?.data?.data?.SingleEmi?.amount : "");
     const [model, setModel] = useState();
     const navigate = useNavigate();
     const today = new Date();
@@ -49,15 +47,6 @@ function GenerateReceipt() {
 
     const onSubmit = () => {
         let err = 0;
-        if (emi_amount == '') {
-            err++;
-            setErrors((prevData) => {
-                return {
-                    ...prevData,
-                    amount: '*Please enter amount'
-                }
-            })
-        }
 
         if (toggleUpi && upiNo == '') {
             err++;
@@ -126,17 +115,18 @@ function GenerateReceipt() {
                 cheque_no: chequeNo,
                 cheque_date: chequeDate,
                 upi_no: upiNo,
-                user_id: "3",
+                user_id: "1",
                 purchase_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.id,
                 Emi_id: Emi_Details?.data?.data?.SingleEmi?.id,
                 status: "compelete",
                 Charge_amount: Charge_amount,
-                amount: emi_amount + Charge_amount,
+                amount: Emi_Details?.data?.data?.SingleEmi?.amount,
                 security_pin: pin,
                 customer_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.id,
                 date: receiptDate
             };
 
+            console.log(EMIData)
             setIsSubmitting(true);
 
             const res = await AddTransection(EMIData)
@@ -325,7 +315,7 @@ function GenerateReceipt() {
         setCharge(false)
     };
 
-    function handlecharge() {
+    function handleAddCharge() {
         setCharge(true)
     }
 
@@ -338,9 +328,7 @@ function GenerateReceipt() {
         setchargeamount(event.target.value)
     };
 
-    let Total = (
-        // EMI_Details?.amount 
-        + Charge_amount)
+    let Total = (Number(Emi_Details?.data?.data?.SingleEmi?.amount) + Number(Charge_amount))
 
     return (
         <>
@@ -394,13 +382,13 @@ function GenerateReceipt() {
 
                                     <div className="flex xs:flex-col xs:space-x-0 xs:space-y-4 xs:py-1 sm:flex-row sm:space-y-0 sm:space-x-5 px-12 py-5  space-x-4">
                                         <span className="px-4 py-1 bg-green-200 text-green-900 font-bold text-sm rounded shadow-xl ">
-                                            Paid : {emi_amount}
+                                            Paid : {Emi_Details?.data?.data?.SingleEmi?.amount}
                                         </span>
                                         <span className="px-4 py-1 bg-red-200 text-red-900 font-bold text-sm rounded shadow-xl ">
                                             Charge : {Charge_amount ? Charge_amount : 0}
                                         </span>
                                         <span className="px-4 py-1 bg-blue-200 text-[#0d0d48] font-bold text-sm rounded shadow-xl ">
-                                            Total : {Number(emi_amount) + Number(Charge_amount)}
+                                            Total : {Number(Emi_Details?.data?.data?.SingleEmi?.amount) + Number(Charge_amount)}
                                         </span>
                                     </div>
                                     <div className="flex xs:flex-col md:flex-row md:items-center justify-between xs:px-5">
@@ -498,7 +486,7 @@ function GenerateReceipt() {
                                     </div>
                                     <input type="text"
                                         name="price"
-                                        value={emi_amount}
+                                        value={Total}
                                         disabled={true}
                                         className="bg-white w-28 ml-2 "
                                     />
@@ -508,7 +496,7 @@ function GenerateReceipt() {
                                     {
                                         Charge == false ?
                                             <div className="flex items-center justify-end"
-                                                onClick={handlecharge}
+                                                onClick={handleAddCharge}
                                             >
                                                 <h1 className="bg-red-600 py-[5px] px-2 text-sm rounded-md text-white  cursor-pointer">Charge</h1>
                                             </div>
@@ -524,14 +512,9 @@ function GenerateReceipt() {
                                                         <input type="text"
                                                             name="charge"
                                                             value={Charge_amount}
-                                                            handleCharge={handleCharge}
+                                                            onChange={handleCharge}
                                                             className="outline-none w-24  pl-1 "
                                                             placeholder="Charge " />
-                                                        {errors.charge && touched.charge
-                                                            ?
-                                                            <p className='form-error text-red-600 text-sm font-semibold'>{errors.charge}</p>
-                                                            :
-                                                            null}
                                                     </div>
                                                     <div className="flex items-center space-x-2 group cursor-pointer hover:bg-red-600 group py-[5px] px-[5px] rounded-full  "
                                                         onClick={handleremovecharge}

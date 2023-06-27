@@ -18,7 +18,7 @@ function EMIHistory() {
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
-    
+
     const handlePayEMI = (id) => {
         navigate(`/receipt/Generate/${id}`,
             {
@@ -26,8 +26,8 @@ function EMIHistory() {
                     emi_id: id,
                 }
             })
-
     };
+
 
     return (
         <>

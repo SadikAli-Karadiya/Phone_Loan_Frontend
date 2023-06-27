@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
-import {useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 
 
 const productSchema = Yup.object({
@@ -24,6 +24,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
   let Companies = Company?.data?.data?.all_companies
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleCreateCompany = (inputValue) => {
     setIsLoading(true);
@@ -55,12 +56,16 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
         Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
+            setIsSubmitting(true);
             const response = await UpdatePhone(data)
+            setIsSubmitting(false);
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleShowModal(false);
           } else {
+            setIsSubmitting(true);
             const response = await AddNewPhone(data)
+            setIsSubmitting(false);
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleShowModal(false);
@@ -186,19 +191,19 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      disabled={isLoading}
-                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                      disabled={isSubmitting}
+                      className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     >
-                      {isLoading ? 'Loading...' : 'Update'}
+                      {isSubmitting ? 'Loading...' : 'Update'}
                     </button>
                     :
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      disabled={isLoading}
-                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                      disabled={isSubmitting}
+                      className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     >
-                      {isLoading ? 'Loading...' : 'Submit'}
+                      {isSubmitting ? 'Loading...' : 'Submit'}
                     </button>
                 }
               </div>

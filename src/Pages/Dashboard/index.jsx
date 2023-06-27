@@ -14,12 +14,12 @@ import { useQuery } from 'react-query'
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import moment from 'moment'
 
 function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
   const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi({ pageNo: pageNo - 1, }))
-  console.log(PendingEMI?.data?.data)
   const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
   const Today_Collection = PendingEMI?.data?.data?.todaysCollection
   const Today_Model = PendingEMI?.data?.data?.totalModels
@@ -28,9 +28,12 @@ function Dashboard() {
   const [is_Edit, setIsEdit] = useState(false);
 
   const handlePayEMI = (id) => {
-    setChargeFormModal(true);
-    setIsEdit(true)
-    setEMIDetails(id);
+    navigate(`/receipt/Generate/${id}`,
+      {
+        state: {
+          emi_id: id,
+        }
+      })
   };
 
   const handleSearchStudents = (e) => {
@@ -200,6 +203,7 @@ function Dashboard() {
           {
             PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ? (
               PendingEMI?.data?.data?.pendingEmiCustomers?.map((item, index) => {
+                console.log(item)
                 return (
                   <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                     <tr className=" border-b">
@@ -207,19 +211,19 @@ function Dashboard() {
                         {index + 1}
                       </th>
                       <td className="px-6 py-5 capitalize">
-                        {item.customer.full_name}
+                        {item.purchase?.customer?.full_name}
                       </td>
                       <td className="px-6 py-5">
-                        {item.customer.mobile}
+                        {item.purchase?.customer?.mobile}
                       </td>
                       <td className="px-6 py-5">
-                        {item.phone.company.company_name} || {item.phone.model_name}
+                        {item?.purchase?.phone?.company?.company_name} || {item?.purchase?.phone?.model_name}
                       </td>
                       <td className="px-6 py-5">
-                        10 / 12
+                        {moment(item.due_date).format("DD / MM")}
                       </td>
                       <td className="px-6 py-5">
-                        {item.net_amount}
+                        {item?.amount}
                       </td>
                       <td className="px-6 py-5">
                         {item.pending_amount}
@@ -231,7 +235,7 @@ function Dashboard() {
                               <AiFillEye
                                 className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                 onClick={() =>
-                                  navigate(`/Customer/profile-detail/${item.id}`)}
+                                  navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
                               />
                             </div>
                           </Tippy>
@@ -240,8 +244,7 @@ function Dashboard() {
                       <td className="px-6 py-5 ">
                         <div className="flex justify-center space-x-3">
                           <button
-                            onClick={() =>
-                              navigate(`/receipt/Generate/${item.id}`)}
+                            onClick={() => handlePayEMI(item.id)}
                             className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
                             Pay
                           </button>
