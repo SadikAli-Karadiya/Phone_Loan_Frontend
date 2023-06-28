@@ -9,15 +9,19 @@ import { getReceiptbyReceiptId } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import moment from 'moment'
 import ReactToPrint from "react-to-print";
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+
 
 
 
 function Receipt() {
     const params = useParams();
+    const navigate = useNavigate();
     const printRef = useRef();
     const [print, setPrint] = useState(false);
     const data = useQuery(['transection', params.id], () => getReceiptbyReceiptId(params.id));
-
+    console.log(data?.data?.data?.SingleTransaction)
     function inWords(num) {
         let a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
         let b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -35,6 +39,7 @@ function Receipt() {
     }
 
     let amountInWords = inWords(data?.data?.data?.SingleTransaction?.amount)
+
     const handleDeleteReceipt = async () => {
         Swal.fire({
             title: "Are you sure to delete installment?",
@@ -61,8 +66,14 @@ function Receipt() {
     return (
         <>
             <div className=' sm:px-5 xl:px-10 h-full'>
-                <div className=' py-5 px-5'>
+                <div className=' py-5 px-5 flex justify-between'>
                     <h1 className='text-[#0d0d48] text-2xl font-bold'>Receipt</h1>
+                    <div className="group h-9 w-20 flex justify-center items-center gap-1 cursor-pointer" id="" onClick={() => {
+                        navigate(-1)
+                    }}>
+                        <IoIosArrowBack className="text-2xl font-bold group-hover:text-blue-700 text-darkblue-500 mt-[3px]" />
+                        <span className=" text-xl text-darkblue-500 font-semibold group-hover:text-blue-700">Back</span>
+                    </div>
                 </div>
                 <div className="flex justify-center items-center px-5">
                     <div className=" py-7 bg-white w-[790px] shadow-xl rounded-md h-full ">

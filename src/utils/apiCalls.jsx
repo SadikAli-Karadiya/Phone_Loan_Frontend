@@ -125,9 +125,6 @@ export const UpdateAdmin = (data) => {
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
-  //   for (var value of data) {
-  //     console.log(value); 
-  // }
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',
@@ -138,9 +135,16 @@ export const AddCustomer = (data) => {
   })
 }
 
-export const getAllCustomer = () => {
+export const searchCustomer = (CustomerName) => {
   return instance({
-    'url': '/customer/List',
+    'url': `/customer/search/${CustomerName}`,
+    'method': 'GET',
+  })
+}
+
+export const getAllCustomer = (pageNo) => {
+  return instance({
+    'url': `/customer/List/${pageNo?.pageNo}`,
     'method': 'GET',
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults

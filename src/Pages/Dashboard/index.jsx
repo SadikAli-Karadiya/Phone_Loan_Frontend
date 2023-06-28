@@ -19,6 +19,7 @@ import moment from 'moment'
 function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
+  const [TotalCollection, setTotalCollection] = useState();
   const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi({ pageNo: pageNo - 1, }))
   const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
   const Today_Collection = PendingEMI?.data?.data?.todaysCollection
@@ -35,6 +36,15 @@ function Dashboard() {
         }
       })
   };
+
+  function calcaulateTotal() {
+    let total = 0;
+    PendingEMI?.data?.data?.pendingEmiCustomers?.map((d) => {
+      total += d.amount;
+    });
+    setTotalCollection(total);
+    // return total;
+  }
 
   const handleSearchStudents = (e) => {
     let last_name = e.target.value
@@ -155,9 +165,15 @@ function Dashboard() {
             <div className='flex items-center space-x-3'>
               <div className='bg-green-200 rounded-md px-3 shadow-lg py-[10px] flex flex-col justify-center  items-center'>
                 <h1 className='font-semibold text-sm'>
-                  Total : 291840
+                  Total : {TotalCollection ? TotalCollection : "?"}
                 </h1>
               </div>
+              <button
+                onClick={calcaulateTotal}
+                className=" flex items-center border outline-none bg-white py-2 px-4 xl:p-4 xl:py-2 shadow-lg 
+                hover:bg-blue-100 rounded-md  space-x-1 text-sm font-semibold">
+                Calculate Total
+              </button>
             </div>
           </div>
         </div>
@@ -195,7 +211,6 @@ function Dashboard() {
           {
             PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ? (
               PendingEMI?.data?.data?.pendingEmiCustomers?.map((item, index) => {
-                console.log(item)
                 return (
                   <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                     <tr className=" border-b">
