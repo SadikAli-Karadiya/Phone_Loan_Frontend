@@ -125,9 +125,6 @@ export const UpdateAdmin = (data) => {
 // Customer -------------------------------------------------------
 
 export const AddCustomer = (data) => {
-  //   for (var value of data) {
-  //     console.log(value); 
-  // }
   return instance({
     'url': '/customer/addcustomer',
     'method': 'POST',
@@ -154,7 +151,7 @@ export const UpdateCustomer = (data) => {
     'method': 'PUT',
     'data': data,
     'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
+      'content-type': "multipart/form-data"
     },
   })
 }

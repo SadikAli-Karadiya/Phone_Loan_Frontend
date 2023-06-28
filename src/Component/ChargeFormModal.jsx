@@ -14,7 +14,6 @@ import { AxiosError } from "axios";
 import moment from 'moment'
 
 function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
-  console.log(EMI_Details.id , "sjdvc")
 
   if (!showModal) {
     return <></>;

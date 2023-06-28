@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import "../../Customer/CustomerRegister/Customerform.css"
@@ -22,6 +22,9 @@ import defaultbill from "../../../../public/images/bill.webp";
 import defaultImage from "../../../../public/images/user.png";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
+import LoaderBig from "../../../Component/LoaderBig";
+import LoaderSmall from "../../../Component/LoaderSmall";
+import { AxiosError } from "axios";
 
 
 const validFileExtensions = { image: ['jpg', 'png', 'jpeg'] };
@@ -31,26 +34,42 @@ function isValidFileType(fileName, fileType) {
 }
 
 const customerSchema = Yup.object({
-    first_name: Yup.string()
-        .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-            if (value) {
-                return value.trim() === value;
+    photo: Yup.mixed()
+      .test("is-valid-type", "Photo should be in jpg, jpeg or png format",
+        value => {
+          if (!value) {
+            return true; 
+          }
+          if (typeof value === "string" && value.startsWith("http")) {
+                return true;
             }
-            return true;
+          return isValidFileType(value && value.name?.toLowerCase(), "image")
         })
-        .min(2, "Minimum 2 characters are required")
-        .required("Please Enter Your First Name")
-        .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
+      .test("is-valid-size", "Max allowed size is 2MB", value => {
+        if (!value) {
+          return true; 
+        }
+        if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+        }
+        return value && value.size <= 2097152
+    }),
 
-    last_name: Yup.string()
+    full_name: Yup.string()
+        .test('no-numbers', 'Numbers are not allowed', (value) => {
+            if (value) {
+                return !/\d/.test(value); // Check if the value contains any numbers
+            }
+            return true;
+        })
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
             }
             return true;
         })
-        .min(2, "Minimum 2 characters are required")
-        .required("Please Enter Your Last Name")
+        .min(4, "Minimum 4 characters are required")
+        .required("Please Enter Your First Name")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
     mobile: Yup.string()
@@ -60,20 +79,35 @@ const customerSchema = Yup.object({
             }
             return true;
         })
-        .min(10, "Please enter valid mobile no")
-        .max(10, "Please enter valid mobile no")
+        .test('valid-number', 'Please enter a valid number', (value) => {
+            if (value) {
+                return value.length == 10;
+            }
+            return true;
+        })
         .required("Please Enter Your Mobile Number"),
 
-    alternate_mobile: Yup.string()
+    alternate_no: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
             }
             return true;
         })
-        .min(10, "Please enter valid mobile no").max(10, "Please Enter Valid Mobile No"),
+        .test('valid-number', 'Please enter a valid number', (value) => {
+            if (value) {
+                return value.length == 10;
+            }
+            return true;
+        }),
 
     reference_name: Yup.string()
+        .test('no-numbers', 'Numbers are not allowed', (value) => {
+            if (value) {
+                return !/\d/.test(value); // Check if the value contains any numbers
+            }
+            return true;
+        })
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -81,18 +115,109 @@ const customerSchema = Yup.object({
             return true;
         })
         .nullable()
-        .min(2, "Minimum 2 characters are required")
+        .min(4, "Minimum 4 characters are required")
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
-    refrence_mobile: Yup.string()
+    reference_mobile: Yup.string()
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
             }
             return true;
         })
-        .min(10, "Please enter valid mobile no")
-        .max(10, "Please enter valid mobile no"),
+        .test('valid-number', 'Please enter a valid number', (value) => {
+            if (value) {
+                return value.length == 10; 
+            }
+            return true;
+        }),
+
+    adhar_front: Yup.mixed()
+        .required('Please upload adhar front image')
+      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+        value => {
+          if (!value) {
+            return true;
+          }
+          if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+          }
+          return isValidFileType(value && value.name?.toLowerCase(), "image")
+        })
+      .test("is-valid-size", "Max allowed size is 2MB", value => {
+        if (!value) {
+          return true; 
+        }
+        if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+          }
+        return value && value.size <= 2097152
+    }),
+
+    adhar_back: Yup.mixed()
+        .required('Please upload adhar back image')
+        .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+            value => {
+            if (!value) {
+                return true;
+            }
+            if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+            return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+            return true; 
+            }
+            if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+            return value && value.size <= 2097152
+        }),
+
+    pancard: Yup.mixed()
+        .required('Please upload pancard')
+      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+        value => {
+          if (!value) {
+            return true;
+          }
+          if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+          return isValidFileType(value && value.name?.toLowerCase(), "image")
+        })
+      .test("is-valid-size", "Max allowed size is 2MB", value => {
+        if (!value) {
+          return true; 
+        }
+        if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+        return value && value.size <= 2097152
+    }),
+
+    light_bill: Yup.mixed()
+      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+        value => {
+          if (!value) {
+            return true;
+          }
+          if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+          return isValidFileType(value && value.name?.toLowerCase(), "image")
+        })
+      .test("is-valid-size", "Max allowed size is 2MB", value => {
+        if (!value) {
+          return true; 
+        }
+        if (typeof value === "string" && value.startsWith("http")) {
+            return true;
+            }
+        return value && value.size <= 2097152
+    }),
 });
 
 function CustomerProfile() {
@@ -101,7 +226,6 @@ function CustomerProfile() {
     const [img, setImg] = useState(defaultImage);
     const [photo, setPhoto] = useState("");
     const [is_Edit, setIsEdit] = useState(false);
-    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
     const [toggle, setToggle] = useState(false);
     const [isEnable, setIsEnable] = useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = useState(false);
@@ -114,13 +238,8 @@ function CustomerProfile() {
     const [Adhar_back, setadharback] = useState("");
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
-    const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
-    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
-    let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-    
-    console.log(SingleCustomerDetails)
-
-    const initialValues = {
+    const [SingleCustomerDetails, setSingleCustomerDetails] = useState({
+        photo: "",
         full_name: "",
         mobile: "",
         alternate_no: "",
@@ -128,39 +247,40 @@ function CustomerProfile() {
         reference_mobile: "",
         adhar_front: "",
         adhar_back: "",
-        pan: "",
+        pancard: "",
         light_bill: ""
-    }
+    });
 
-    const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
-        useFormik({
-            initialValues: SingleCustomerDetails ? SingleCustomerDetails : initialValues,
-            validationSchema: customerSchema,
-            async onSubmit(data) {
-                try {
-                    const fd = new FormData();
-                    fd.append("id", SingleCustomerDetails?.id)
-                    fd.append("document_id", SingleCustomerDetails?.document_id)
-                    fd.append("photo", photo);
-                    fd.append("adhar_front", Adhar_front);
-                    fd.append("adhar_back", Adhar_back);
-                    fd.append("pan", Pan);
-                    fd.append("bill", Bill);
-                    fd.append("first_name", data.first_name)
-                    fd.append("last_name", data.last_name)
-                    fd.append("mobile", data.mobile)
-                    fd.append("alternate_no", data.alternate_no)
-                    fd.append("reference_name", data.reference_name)
-                    fd.append("reference_mobile", data.reference_mobile)
-                    const response = await UpdateCustomer(fd)
-                    toast.success(response.data.message);
-                    setIsEnable(true);
-                    setToggle(false)
-                } catch (err) {
-                    toast.error(response.data.message);
-                }
-            },
-        });
+    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id), {staleTime: Infinity})
+    const purchaseDetails = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
+    const updateDetails = useMutation(UpdateCustomer)
+
+    const { values, setValues, touched, resetForm, setTouched, setFieldValue, errors, setErrors, handleChange, handleSubmit, handleBlur } =
+    useFormik({
+        validationSchema: customerSchema,
+        initialValues: SingleCustomerDetails,      
+        onSubmit: async (data) => {
+            const fd = new FormData();
+            fd.append("id", params.id)
+            fd.append("photo", data.photo);
+            fd.append("adhar_front", data.adhar_front);
+            fd.append("adhar_back", data.adhar_back);
+            fd.append("pancard", data.pancard);
+            fd.append("light_bill", data.light_bill);
+            fd.append("old_photo_url", CustomerDetail.data.data?.SingleCustomer.photo);
+            fd.append("old_adhar_front_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_front);
+            fd.append("old_adhar_back_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_back);
+            fd.append("old_pancard_url", CustomerDetail.data?.data?.SingleCustomer.document.pancard);
+            fd.append("old_light_bill_url", CustomerDetail.data?.data?.SingleCustomer.document.light_bill);
+            fd.append("full_name", data.full_name)
+            fd.append("mobile", data.mobile)
+            fd.append("alternate_no", data.alternate_no)
+            fd.append("reference_name", data.reference_name)
+            fd.append("reference_mobile", data.reference_mobile)
+            updateDetails.mutate(fd)
+
+        },
+    });
 
     function handleImageUpload(e) {
         setPhoto(() => e.target.files[0]);
@@ -189,16 +309,55 @@ function CustomerProfile() {
         resetForm({ e: "" })
         setIsEnable(false);
         setToggle(true);
+
+        const customerData = {
+            photo: CustomerDetail.data.data?.SingleCustomer.photo,
+            full_name: CustomerDetail.data?.data?.SingleCustomer.full_name,
+            mobile: CustomerDetail.data?.data?.SingleCustomer.mobile,
+            alternate_no: CustomerDetail.data?.data?.SingleCustomer.alternate_no,
+            reference_name: CustomerDetail.data?.data?.SingleCustomer.reference_name,
+            reference_mobile: CustomerDetail.data?.data?.SingleCustomer.reference_mobile,
+            adhar_front: CustomerDetail.data?.data?.SingleCustomer.document.adhar_front,
+            adhar_back: CustomerDetail.data?.data?.SingleCustomer.document.adhar_back,
+            pancard: CustomerDetail.data?.data?.SingleCustomer.document.pancard,
+            light_bill: CustomerDetail.data?.data?.SingleCustomer.document.light_bill,
+        }
+
+        setSingleCustomerDetails(customerData)
+
+        setValues(customerData)
     }
 
     function handleCancel(e) {
         e.preventDefault();
         setIsEnable(true);
         setToggle(false);
+        setErrors({});
+        setTouched({}, false)
+
+        const alternate_no = CustomerDetail.data.data?.SingleCustomer.alternate_no;
+        const reference_name = CustomerDetail.data.data?.SingleCustomer.reference_name;
+        const reference_mobile = CustomerDetail.data.data?.SingleCustomer.reference_mobile;
+
+        const customerData = {
+            photo: CustomerDetail.data.data?.SingleCustomer.photo,
+            full_name: CustomerDetail.data.data?.SingleCustomer.full_name,
+            mobile: CustomerDetail.data.data?.SingleCustomer.mobile,
+            alternate_no: alternate_no == '' ? '--' : alternate_no,
+            reference_name: reference_name == '' ? '--' : reference_name,
+            reference_mobile: reference_mobile == '' ? '--' : reference_mobile,
+            adhar_front: CustomerDetail.data.data?.SingleCustomer.document.adhar_front,
+            adhar_back: CustomerDetail.data.data?.SingleCustomer.document.adhar_back,
+            pancard: CustomerDetail.data.data?.SingleCustomer.document.pancard,
+            light_bill: CustomerDetail.data.data?.SingleCustomer.document.light_bill,
+        }
+        setSingleCustomerDetails(customerData)
+
+        setValues(customerData)
     }
 
     const handleEditPhone = (id) => {
-        let Phone = data.data.data.CustomerAllPurchase?.find((n) => {
+        let Phone = purchaseDetails.data.data.CustomerAllPurchase?.find((n) => {
             return n?.id == id;
         });
         setIsEdit(true)
@@ -206,12 +365,56 @@ function CustomerProfile() {
         setnewPhoneFormModal(true);
     };
 
+    React.useEffect(() => {
+        if(CustomerDetail.data){
+            const alternate_no = CustomerDetail.data.data?.SingleCustomer.alternate_no;
+            const reference_name = CustomerDetail.data.data?.SingleCustomer.reference_name;
+            const reference_mobile = CustomerDetail.data.data?.SingleCustomer.reference_mobile;
+
+            const customerData = {
+                photo: CustomerDetail.data.data?.SingleCustomer.photo,
+                full_name: CustomerDetail.data.data?.SingleCustomer.full_name,
+                mobile: CustomerDetail.data.data?.SingleCustomer.mobile,
+                alternate_no: alternate_no == '' ? '--' : alternate_no,
+                reference_name: reference_name == '' ? '--' : reference_name,
+                reference_mobile: reference_mobile == '' ? '--' : reference_mobile,
+                adhar_front: CustomerDetail.data.data?.SingleCustomer.document.adhar_front,
+                adhar_back: CustomerDetail.data.data?.SingleCustomer.document.adhar_back,
+                pancard: CustomerDetail.data.data?.SingleCustomer.document.pancard,
+                light_bill: CustomerDetail.data.data?.SingleCustomer.document.light_bill,
+            }
+            setSingleCustomerDetails(customerData)
+
+            setValues(customerData)
+        }
+    },[CustomerDetail.isSuccess, CustomerDetail.data])
+
+    React.useEffect(()=>{
+        if(updateDetails.isError){
+            console.log(1)
+            toast.error(updateDetails.error.response.data.message);
+        }
+        else if(updateDetails.isSuccess){
+            console.log(2)
+            toast.success(updateDetails.data?.data.message);
+            CustomerDetail.refetch();
+            setIsEnable(true);
+            setToggle(false)
+            setErrors({});
+            setTouched({}, false)
+        }
+    },[updateDetails.isSuccess, updateDetails.isError, updateDetails.data])
+
+    if(CustomerDetail.isLoading){
+        return <LoaderBig/>
+    }
+
     return (
         <>
             <div className="py-5">
                 <div className="px-10 flex justify-between w-full">
                     <h1 className=" font-bold text-[#0d0d48] text-2xl lg:text-3xl">
-                        Customer Details
+                        Customer Profile
                     </h1>
                     <Tippy content="Add New Phone">
                         <div
@@ -223,174 +426,175 @@ function CustomerProfile() {
                 </div>
                 <div className="xs:px-5 sm:px-10 py-5 ">
                     <div className="bg-white shadow-2xl rounded-md">
-                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" onSubmit={handleSubmit}>
+                        <form className="flex justify-center items-center pt-5 xl:pt-0 xs:px-5 xl:px-14" onSubmit={handleSubmit} encType="multipart/form-data">
                             <div className="w-full rounded-lg truncate py-9 xl:py-5 ">
                                 <div className="w-full flex xs:flex-col xs:gap-4 xs:px-5 md:px-7 xl:px-14 ">
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
-                                        <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
+                                        <div className="flex flex-col justify-center items-center ">
                                             <div className="profile_img_div flex justify-center rounded-full items-center border-2 border-gray-500 shadow-lg">
                                                 <img
-                                                    src={SingleCustomerDetails?.photo ? SingleCustomerDetails?.photo : img}
+                                                    // src={SingleCustomerDetails?.photo ? SingleCustomerDetails?.photo : img}
+                                                    src={
+                                                        values.photo != ''
+                                                        ?
+                                                            !values.photo?.size && values.photo?.split(':')[0] == 'https'
+                                                            ?
+                                                                values.photo
+                                                            :
+                                                                URL.createObjectURL(values.photo)
+                                                        :
+                                                            values.photo
+                                                    }
                                                     width="100%"
                                                     height="100%"
                                                     className="object-contain "
-                                                    alt="student profile"
+                                                    alt="profile photo"
                                                 />
                                                 {
                                                     !isEnable
-                                                        ?
+                                                    ?
                                                         <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                             <input
                                                                 type="file"
-                                                                id="logo"
+                                                                id="photo"
                                                                 className="rounded-md w-16"
                                                                 accept=".png, .jpg, .jpeg"
                                                                 name="photo"
-                                                                onChange={(e) => handleImageUpload(e)}
+                                                                onChange={
+                                                                    (e) => {
+                                                                        handleImageUpload(e);
+                                                                        setFieldValue('photo', e.target.files[0]);
+                                                                    }
+                                                                }
                                                                 onBlur={handleBlur}
                                                                 onInput={(e) => handleImageUpload(e)}
                                                             />
                                                         </div>
-                                                        :
+                                                    :
                                                         null
                                                 }
                                             </div>
+                                            <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
+                                                                                                                                                {errors.photo && touched.photo
+                                                                ? errors.photo
+                                                                : null}
+                                            </span>
                                         </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
-                                            <div className="firtname w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        First Name *
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="full_name"
-                                                        placeholder="Enter Your First Name"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.full_name}
-                                                        disabled={isEnable}
-                                                        className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.full_name && touched.full_name
-                                                            ? errors.full_name
-                                                            : null}
-                                                    </span>
-                                                </label>
+                                            <div className="flex flex-col justify-center">
+                                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
+                                                    <div className="firtname">
+                                                        <label className="block">
+                                                            <span className="block text-sm font-medium text-slate-700">
+                                                                Full Name *
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                name="full_name"
+                                                                placeholder="Enter Your Full Name"
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur}
+                                                                value={values.full_name}
+                                                                disabled={isEnable}
+                                                                className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                            />
+                                                            <span className="text-xs font-semibold text-red-600 px-1">
+                                                                {errors.full_name && touched.full_name
+                                                                    ? errors.full_name
+                                                                    : null}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div className="whatsappno">
+                                                        <label className="block">
+                                                            <span className="block text-sm font-medium text-slate-700">
+                                                                WhatsApp No *
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                name="mobile"
+                                                                placeholder="Enter Your WhatsApp No"
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur}
+                                                                value={values.mobile}
+                                                                disabled={isEnable}
+                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                            />
+                                                            <span className="text-xs font-semibold text-red-600 px-1">
+                                                                {errors.mobile && touched.mobile
+                                                                    ? errors.mobile
+                                                                    : null}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div className="mobileno">
+                                                        <label className="block">
+                                                            <span className="block text-sm font-medium text-slate-700">
+                                                                Alternate No
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                name="alternate_no"
+                                                                placeholder="Enter Your Mobile No"
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur}
+                                                                value={values.alternate_no}
+                                                                disabled={isEnable}
+                                                                className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none`}
+                                                            />
+                                                            <span className="text-xs font-semibold text-red-600 px-1">
+                                                                {errors.alternate_no && touched.alternate_no
+                                                                    ? errors.alternate_no
+                                                                    : null}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                                                    <div className="reference">
+                                                        <label className="block">
+                                                            <span className="block text-sm font-medium text-slate-700">
+                                                                Reference Name
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                name="reference_name"
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur}
+                                                                value={values.reference_name}
+                                                                disabled={isEnable}
+                                                                placeholder="Enter Refeence Name"
+                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
+                                                            <span className="text-xs font-semibold text-red-600 px-1">
+                                                                {errors.reference_name && touched.reference_name
+                                                                    ? errors.reference_name
+                                                                    : null}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                    <div className="referencemobileno">
+                                                        <label className="block">
+                                                            <span className="block text-sm font-medium text-slate-700">
+                                                                Reference Mobile No
+                                                            </span>
+                                                            <input
+                                                                type="text"
+                                                                name="reference_mobile"
+                                                                placeholder="Enter Refrence Mobile No"
+                                                                onChange={handleChange}
+                                                                onBlur={handleBlur}
+                                                                value={values.reference_mobile}
+                                                                disabled={isEnable}
+                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                            />
+                                                            <span className="text-xs font-semibold text-red-600 px-1">
+                                                                {errors.reference_mobile && touched.reference_mobile
+                                                                    ? errors.reference_mobile
+                                                                    : null}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            {/* <div className="lastname w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Last Name *
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="last_name"
-                                                        placeholder="Enter Your Last Name"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.last_name}
-                                                        disabled={isEnable}
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none '
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.last_name && touched.last_name
-                                                            ? errors.last_name
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div> */}
-                                            <div className="whatsappno w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        WhatsApp No *
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="mobile"
-                                                        placeholder="Enter Your WhatsApp No"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.mobile}
-                                                        disabled={isEnable}
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.mobile && touched.mobile
-                                                            ? errors.mobile
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                            <div className="mobileno w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Mobile No
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="alternate_no"
-                                                        placeholder="Enter Your Mobile No"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.alternate_no}
-                                                        disabled={isEnable}
-                                                        className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none ${errors.alternate_no && 'border-red-600'}`}
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.alternate_no && touched.alternate_no
-                                                            ? errors.alternate_no
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div className="reference w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Reference Name
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="reference_name"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.reference_name}
-                                                        disabled={isEnable}
-                                                        placeholder="Enter Refeence Name"
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.reference_name && touched.reference_name
-                                                            ? errors.reference_name
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                            <div className="mobileno w-full">
-                                                <label className="block">
-                                                    <span className="block text-sm font-medium text-slate-700">
-                                                        Reference Mobile No
-                                                    </span>
-                                                    <input
-                                                        type="text"
-                                                        name="reference_mobile"
-                                                        placeholder="Enter Refrence Mobile No"
-                                                        onChange={handleChange}
-                                                        onBlur={handleBlur}
-                                                        value={values.reference_mobile}
-                                                        disabled={isEnable}
-                                                        className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                    />
-                                                    <span className="text-xs font-semibold text-red-600 px-1">
-                                                        {errors.reference_mobile && touched.reference_mobile
-                                                            ? errors.reference_mobile
-                                                            : null}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                         <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
@@ -402,11 +606,21 @@ function CustomerProfile() {
                                                     <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                                         <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg ">
                                                             <img
-                                                                src={SingleCustomerDetails?.document?.adhar_front ? SingleCustomerDetails?.document?.adhar_front : DefaultadharFront}
+                                                                src={
+                                                                    values.adhar_front != ''
+                                                                    ?
+                                                                        !values.adhar_front?.size && values.adhar_front?.split(':')[0] == 'https'
+                                                                        ?
+                                                                            values.adhar_front
+                                                                        :
+                                                                            URL.createObjectURL(values.adhar_front)
+                                                                    :
+                                                                        values.adhar_front
+                                                                }
                                                                 width="100%"
                                                                 height="100%"
                                                                 className="object-contain "
-                                                                alt="student profile"
+                                                                alt="adhar front"
                                                             />
                                                             <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                                 <input
@@ -416,13 +630,22 @@ function CustomerProfile() {
                                                                     disabled={isEnable}
                                                                     accept=".png, .jpg, .jpeg"
                                                                     name="adhar_front"
-                                                                    onChange={(e) => handleAdharFUpload(e)}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            handleAdharFUpload(e);
+                                                                             setFieldValue('adhar_front', e.target.files[0]);
+                                                                        }
+                                                                    }
                                                                     onBlur={handleBlur}
-                                                                    onInput={(e) => handleAdharFUpload(e)}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
+                                                        {errors.adhar_front && touched.adhar_front
+                                                            ? errors.adhar_front
+                                                            : null}
+                                                    </span>
                                                 </label>
                                             </div>
                                             <div className="adhar_back w-full">
@@ -433,11 +656,21 @@ function CustomerProfile() {
                                                     <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                                         <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
                                                             <img
-                                                                src={SingleCustomerDetails?.document?.adhar_back ? SingleCustomerDetails?.document?.adhar_back : DefaultadharBack}
+                                                                src={
+                                                                    values.adhar_back != ''
+                                                                    ?
+                                                                        !values.adhar_back?.size && values.adhar_back?.split(':')[0] == 'https'
+                                                                        ?
+                                                                            values.adhar_back
+                                                                        :
+                                                                            URL.createObjectURL(values.adhar_back)
+                                                                    :
+                                                                        values.adhar_back
+                                                                }
                                                                 width="100%"
                                                                 height="100%"
                                                                 className="object-contain "
-                                                                alt="student profile"
+                                                                alt="adhar back"
                                                             />
                                                             <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                                 <input
@@ -447,13 +680,22 @@ function CustomerProfile() {
                                                                     accept=".png, .jpg, .jpeg"
                                                                     name="adhar_back"
                                                                     disabled={isEnable}
-                                                                    onChange={(e) => handleAdharBUpload(e)}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            handleAdharBUpload(e);
+                                                                             setFieldValue('adhar_back', e.target.files[0])
+                                                                        }
+                                                                    }
                                                                     onBlur={handleBlur}
-                                                                    onInput={(e) => handleAdharBUpload(e)}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
+                                                        {errors.adhar_back && touched.adhar_back
+                                                            ? errors.adhar_back
+                                                            : null}
+                                                    </span>
                                                 </label>
                                             </div>
                                             <div className="pan w-full">
@@ -464,27 +706,47 @@ function CustomerProfile() {
                                                     <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                                         <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
                                                             <img
-                                                                src={SingleCustomerDetails?.document?.pancard ? SingleCustomerDetails?.document?.pancard : DefaultPan}
+                                                                src={
+                                                                    values.pancard != ''
+                                                                    ?
+                                                                        !values.pancard?.size && values.pancard?.split(':')[0] == 'https'
+                                                                        ?
+                                                                            values.pancard
+                                                                        :
+                                                                            URL.createObjectURL(values.pancard)
+                                                                    :
+                                                                        values.pancard
+                                                                }
                                                                 width="100%"
                                                                 height="100%"
                                                                 className="object-contain "
-                                                                alt="student profile"
+                                                                alt="pan card"
                                                             />
                                                             <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                                 <input
                                                                     type="file"
-                                                                    id="pan"
+                                                                    id="pancard"
                                                                     className="rounded-md w-16"
                                                                     accept=".png, .jpg, .jpeg"
-                                                                    name="pan"
+                                                                    name="pancard"
                                                                     disabled={isEnable}
-                                                                    onChange={(e) => handleAdharPanUpload(e)}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            handleAdharPanUpload(e);
+                                                                             setFieldValue('pancard', e.target.files[0])
+                                                                        }
+                                                                    }
                                                                     onBlur={handleBlur}
                                                                     onInput={(e) => handleAdharPanUpload(e)}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
+                                                                                                                                                        {errors.pancard && touched.pancard
+                                                                        ? errors.pancard
+                                                                        : null}
+                                                    </span>
                                                 </label>
                                             </div>
                                             <div className="lightbill w-full">
@@ -495,11 +757,21 @@ function CustomerProfile() {
                                                     <div className="md:col-span-1 md:flex justify-center md:justify-center items-center ">
                                                         <div className="profile_img_div flex justify-center rounded-md items-center border-2 border-gray-500 shadow-lg">
                                                             <img
-                                                                src={SingleCustomerDetails?.document?.light_bill ? SingleCustomerDetails?.document?.light_bill : DefaultBill}
+                                                                src={
+                                                                    values.light_bill != ''
+                                                                    ?
+                                                                        !values.light_bill?.size && values.light_bill?.split(':')[0] == 'https'
+                                                                        ?
+                                                                            values.light_bill
+                                                                        :
+                                                                            URL.createObjectURL(values.light_bill)
+                                                                    :
+                                                                        values.light_bill
+                                                                }
                                                                 width="100%"
                                                                 height="100%"
                                                                 className="object-contain "
-                                                                alt="student profile"
+                                                                alt="light bill"
                                                             />
                                                             <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                                 <input
@@ -509,13 +781,23 @@ function CustomerProfile() {
                                                                     accept=".png, .jpg, .jpeg"
                                                                     name="light_bill"
                                                                     disabled={isEnable}
-                                                                    onChange={(e) => handleAdharBillUpload(e)}
+                                                                    onChange={
+                                                                        (e) => {
+                                                                            handleAdharBillUpload(e);
+                                                                            setFieldValue('light_bill', e.target.files[0])
+                                                                        }
+                                                                    }
                                                                     onBlur={handleBlur}
                                                                     onInput={(e) => handleAdharBillUpload(e)}
                                                                 />
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
+                                                        {errors.light_bill && touched.light_bill
+                                                            ? errors.light_bill
+                                                            : null}
+                                                    </span>
                                                 </label>
                                             </div>
                                         </div>
@@ -538,6 +820,7 @@ function CustomerProfile() {
                                                             <button
                                                                 type="button"
                                                                 onClick={handleCancel}
+                                                                disabled={updateDetails.isLoading}
                                                                 className="py-2 px-4 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white hover:text-[#0d0d48] font-medium rounded-md tracking-wider flex justify-center items-center"
                                                             >
                                                                 <FaUserEdit className="text-xl" />
@@ -546,13 +829,13 @@ function CustomerProfile() {
                                                             <button
                                                                 type="submit"
                                                                 onClick={handleSubmit}
-                                                                disabled={isLoadingOnSubmit}
+                                                                disabled={updateDetails.isLoading}
                                                                 className={`py-2 px-3 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white 
-                                                                ${isLoadingOnSubmit ? "opacity-40" : "opacity-100"
+                                                                ${updateDetails.isLoading ? "opacity-40" : "opacity-100"
                                                                     } hover:text-[#0d0d48] font-medium rounded-md tracking-wider flex justify-center items-center`}
                                                             >
                                                                 <FaUserEdit className="text-xl" />
-                                                                {isLoadingOnSubmit ? "Loading..." : "SUBMIT"}
+                                                                {updateDetails.isLoading ? "Loading..." : "SUBMIT"}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -581,7 +864,7 @@ function CustomerProfile() {
                                                 Model
                                             </th>
                                             <th scope="col" className="px-6 py-4">
-                                                Total EMI
+                                                EMI Type
                                             </th>
                                             <th scope="col" className="px-6 py-4">
                                                 Total Amount
@@ -598,69 +881,85 @@ function CustomerProfile() {
                                         </tr>
                                     </thead>
                                     {
-                                        data?.data?.data?.CustomerAllPurchase?.length > 0 ? (
-                                            data?.data?.data?.CustomerAllPurchase?.map((item, index) => {
-                                                return (
-                                                    <tbody key={index} className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                                        <tr className=" border-b">
+                                        
+                                        purchaseDetails.isLoading
+                                        ?
+                                            <tbody>
+                                                <tr>
+                                                    <td colSpan="8">
+                                                        <LoaderSmall />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        :
+                                            <tbody className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                            {
+                                                purchaseDetails?.data?.data?.CustomerAllPurchase?.length > 0 
+                                                ? 
+                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.map((item, index) => {
+                                                        return (
+                                                                <tr key={index} className=" border-b">
 
-                                                            <td className="px-6 py-5 ">
-                                                                {moment(item.createdAt).format("DD / MM / YYYY")}
-                                                            </td>
-                                                            <td className="px-6 py-5 ">
-                                                                {item?.phone?.company?.company_name}
-                                                            </td>
-                                                            <td className="px-6 py-5 capitalize">
-                                                                {item.phone.model_name}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.installment.month}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.net_amount}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                5000
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.pending_amount}
-                                                            </td>
-                                                            <td className="px-6 py-5 flex items-center justify-center space-x-3">
-                                                                <Tippy content="Phone Detail">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <AiFillEye
-                                                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                            onClick={() =>
-                                                                                navigate(`/Customer/EMI-History/${item.id}`)}
-                                                                        />
-                                                                    </div>
-                                                                </Tippy>
-                                                                <Tippy content="Edit Phone">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <FiEdit
-                                                                            className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
-                                                                            onClick={() => handleEditPhone(item.id)}
-                                                                        />
-                                                                    </div>
-                                                                </Tippy>
+                                                                    <td className="px-6 py-5 ">
+                                                                        {moment(item.createdAt).format("DD / MM / YYYY")}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 ">
+                                                                        {item?.phone?.company?.company_name}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 capitalize">
+                                                                        {item.phone.model_name}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.installment.month} Months
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.net_amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.emis[0].amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.pending_amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 flex items-center justify-center space-x-3">
+                                                                        <Tippy content="Phone Detail">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <AiFillEye
+                                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                                    onClick={() =>
+                                                                                        navigate(`/Customer/EMI-History/${item.id}`)}
+                                                                                />
+                                                                            </div>
+                                                                        </Tippy>
+                                                                        <Tippy content="Edit Phone">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <FiEdit
+                                                                                    className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
+                                                                                    onClick={() => handleEditPhone(item.id)}
+                                                                                />
+                                                                            </div>
+                                                                        </Tippy>
+                                                                    </td>
+                                                                </tr>
+                                                        )
+                                                    })
+                                                : 
+                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.length != 0 
+                                                    ?
+                                                        <tr>
+                                                            <td colSpan="8">
+                                                                <div className='flex justify-center items-center w-full py-5 space-x-4 text-gray-500'>
+                                                                    <BsPhone className='text-3xl' />
+                                                                    <h1 className='font-semibold'>No phone purchased yet</h1>
+                                                                </div>                                            
                                                             </td>
                                                         </tr>
-                                                    </tbody>
-                                                )
-                                            })
-                                        ) : (
-                                            null
-                                        )}
+                                                    :
+                                                        null
+                                            }
+                                            </tbody>
+                                        }
                                 </table>
-                                {
-                                    data?.data?.data?.CustomerAllPurchase?.length > 0 ?
-                                        null
-                                        :
-                                        <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                                            <BsPhone className='text-3xl' />
-                                            <h1 className='font-semibold'>Customer Not Found</h1>
-                                        </div>
-                                }
                             </div>
                         </div>
                     </div>

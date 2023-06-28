@@ -55,6 +55,9 @@ function EMIHistory() {
                                                         Paid Date
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
+                                                        Type
+                                                    </th>
+                                                    <th scope="col" className="px-6 py-4">
                                                         Amount
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
@@ -88,16 +91,20 @@ function EMIHistory() {
                                                                             "--"
                                                                     }
                                                                 </td>
-                                                                <td className="px-6 py-5 capitalize">
+                                                                {console.log(item)}
+                                                                <td className="px-6 py-5 uppercase" >
+                                                                    {item.type}
+                                                                </td>
+                                                                <td className="px-6 py-5">
                                                                     {item.amount}
                                                                 </td>
                                                                 <td className="px-6 py-5">
-                                                                    0
+                                                                    {item.receipt == null ? 0 : item.receipt.extra_charge}
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
                                                                         item.status == "pending" ?
-                                                                            <h1 className='bg-red-300 text-red-900 font-bold px-1 py-[2px] rounded-md'>
+                                                                            <h1 className=' text-red-900 font-bold px-1 py-[2px] rounded-md'>
                                                                                 Pending
                                                                             </h1>
                                                                             :
