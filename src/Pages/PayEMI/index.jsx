@@ -26,7 +26,7 @@ function PayEMI() {
     pageNo: pageNo - 1,
     search
   }))
-  console.log(EMI?.data?.data)
+  console.log(EMI?.data?.data?.data)
   const handlePayEMI = (id) => {
     setChargeFormModal(true);
     setIsEdit(true)
@@ -51,9 +51,9 @@ function PayEMI() {
             />
           </div>
         </div>
-{/* 
+
         {
-          purchase?.data?.data?.data?.length > 0 ?
+         EMI?.data?.data?.data?.length > 0 ?
             (
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 pt-5 mt-10">
                 <h1 className='font-bold text-lg pl-7'>Customer List</h1>
@@ -89,7 +89,7 @@ function PayEMI() {
                     </tr>
                   </thead>
                   {
-                    purchase?.data?.data?.data?.map((item, index) => {
+                    EMI?.data?.data?.data?.map((item, index) => {
                       let isPending = false;
                       const paidAmount = item.net_amount - item.pending_amount;
 
@@ -161,10 +161,10 @@ function PayEMI() {
                 :
                 null
             )
-        } */}
+        }
 
-        {/* {
-          purchase?.data?.data?.data?.length > 0 ?
+        {
+         EMI?.data?.data?.data?.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
@@ -175,7 +175,7 @@ function PayEMI() {
             </div>
             :
             null
-        } */}
+        }
 
         <ChargeFormModal
           showModal={chargeFormModal}

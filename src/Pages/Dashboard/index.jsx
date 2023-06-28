@@ -158,11 +158,6 @@ function Dashboard() {
                   Total : 291840
                 </h1>
               </div>
-              <div className='flex justify-end items-end'>
-                <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
-                  Calculate Total
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -188,9 +183,6 @@ function Dashboard() {
               </th>
               <th scope="col" className="px-6 py-3">
                 EMI Amount
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Pending
               </th>
               <th scope="col" className="px-6 py-3">
                 Profile
@@ -224,9 +216,6 @@ function Dashboard() {
                       </td>
                       <td className="px-6 py-5">
                         {item?.amount}
-                      </td>
-                      <td className="px-6 py-5">
-                        {item.pending_amount}
                       </td>
                       <td className="px-6 py-5">
                         <div className="flex justify-center items-center">
