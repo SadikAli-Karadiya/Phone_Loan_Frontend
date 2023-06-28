@@ -38,8 +38,6 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
   const today = new Date();
   const [receiptDate, setReceiptDate] = React.useState(today);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-
   const [errors, setErrors] = React.useState({
     amount: '',
     discount: '',
@@ -131,10 +129,10 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
         upi_no: upiNo,
         user_id: "3",
         purchase_id: EMI_Details?.purchase?.id,
+        Emi_id: EMI_Details?.id,
         status: "compelete",
         Charge_amount: Charge_amount,
         amount: emi_amount + Charge_amount,
-        // admin_id: admin?._id,
         security_pin: pin,
         customer_id: EMI_Details?.purchase?.customer?.id,
         date: receiptDate
@@ -147,7 +145,6 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
       setIsSubmitting(false);
 
       if (res.data.success == true) {
-        console.log(res.data)
         toast.success('Receipt generated successfully')
         navigate(`/receipt/receipt/${res?.data?.data?.receipt_id}`);
       } else {
@@ -392,7 +389,7 @@ function ChargeFormModal({ showModal, handleShowModal, EMI_Details, is_Edit }) {
                   <div className="flex flex-col space-y-2 w-full ">
                     <input type="date"
                       name="receiptDate"
-                      value={moment(receiptDate).format("DD / MM / YYYY")}
+                      defaultValue={moment(receiptDate).format("DD / MM / YYYY")}
                       className="rounded-md py-[6px] px-3 outline-none w-full"
                       placeholder="Enter Phone Price " />
 

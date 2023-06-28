@@ -24,6 +24,7 @@ function CustomerRegister() {
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
     const { values, touched, resetForm, errors, handleChange, handleSubmit, handleBlur } =
         useFormik({
@@ -41,7 +42,9 @@ function CustomerRegister() {
                     fd.append("adhar_back", Adhar_back);
                     fd.append("pan", Pan);
                     fd.append("bill", Bill);
+                    setIsSubmitting(true);
                     const response = await AddCustomer(fd)
+                    setIsSubmitting(false);
                     toast.success(response.data.message);
                     resetForm({ values: "" })
                     navigate(`/InstallmentList/profile-detail/${response?.data?.data?.id}`)
@@ -351,8 +354,10 @@ function CustomerRegister() {
                                 <button type="button" disabled={isLoadingOnSubmit} className="px-8 mr-4 h-10  border-[#0d0d48] border-2 hover:bg-[#0d0d48] text-[#0d0d48] hover:text-white font-medium rounded-md tracking-wider flex justify-center items-center" onClick={handleClick}>
                                     CLEAR
                                 </button>
-                                <button type="submit" className='bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center'>
-                                    SUBMIT
+                                <button type="submit"
+                                    disabled={isSubmitting}
+                                    className={`${isSubmitting ? 'opacity-60' : ''} bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
+                                    {isSubmitting ? 'Loading...' : 'Submit'}
                                 </button>
                             </div>
                         </div>

@@ -23,10 +23,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
   let PhoneId = useParams();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = React.useState();
-  const [RamList, setRamList] = React.useState([]);
-  const [ram, setRam] = React.useState();
-  const [StorageList, setStorageList] = React.useState([]);
-  const [Storage, setStorage] = React.useState();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const initialValues = {
     ram: "",
@@ -40,16 +37,20 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
       validationSchema: productSchema,
       async onSubmit(data) {
         Object.assign(data, { phone_id: PhoneId.id })
-        let UpdateData =  Object.assign(data , { id: SpecificationDetails?.id })
+        let UpdateData = Object.assign(data, { id: SpecificationDetails?.id })
         console.log(UpdateData)
         try {
           if (is_Edit == true) {
+            setIsSubmitting(true)
             const response = await UpdateSpecification(UpdateData)
+            setIsSubmitting(false)
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleModalClose(false);
           } else {
+            setIsSubmitting(true)
             const response = await AddSpecification(data, { phone_id: PhoneId.id })
+            setIsSubmitting(false)
             toast.success(response.data.message);
             resetForm({ values: "" })
             handleModalClose(false);
@@ -212,18 +213,18 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={isLoading}
-                    className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    disabled={isSubmitting}
+                    className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                   >
-                    {isLoading ? 'Loading...' : 'Update'}
+                    {isSubmitting ? 'Loading...' : 'Update'}
                   </button> :
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={isLoading}
-                    className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                    disabled={isSubmitting}
+                    className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                   >
-                    {isLoading ? 'Loading...' : 'Submit'}
+                    {isSubmitting ? 'Loading...' : 'Submit'}
                   </button>
                 }
               </div>

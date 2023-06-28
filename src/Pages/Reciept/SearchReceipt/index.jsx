@@ -20,6 +20,7 @@ function SearchReciept() {
     pageNo: pageNo - 1,
     search
   }))
+  console.log(data?.data?.data)
   // console.log(data?.data?.data?.data)
   return (
     <>
@@ -79,7 +80,6 @@ function SearchReciept() {
                   {
 
                     data?.data?.data?.data?.map((item, index) => {
-                      console.log(item)
                       return (
                         <tbody key={index} className="bg-white text-black items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden h-20">
                           <tr className=" border-b">
@@ -87,10 +87,10 @@ function SearchReciept() {
                               {moment(item.createdAt).format("DD / MM / YYYY")}
                             </td>
                             <td className="px-6 py-5 font-bold">
-                              {item.id}
+                              {item.receipt_id}
                             </td>
                             <td className="px-6 py-5">
-                              {item.emi.purchase.customer.first_name}
+                              {item.emi.purchase.customer.full_name}
                             </td>
                             <td className="px-3 text-start py-5">
                               <span>{item.emi.purchase.phone.company.company_name}</span> |  <span>{item.emi.purchase.phone.model_name}</span>
@@ -115,7 +115,7 @@ function SearchReciept() {
                                     <AiFillEye
                                       className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                       onClick={() =>
-                                        navigate(`/Receipt/Receipt`)}
+                                        navigate(`/receipt/receipt/${item.receipt_id}`)}
                                     />
                                   </div>
                                 </Tippy>

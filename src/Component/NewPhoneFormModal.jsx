@@ -340,9 +340,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.iemi && touched.iemi
-                          ? errors.iemi
-                          : null}
+                      {errors.iemi ? errors.iemi : null}
+                       
                       </span>
                     </label>
                   </div>

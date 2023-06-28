@@ -18,7 +18,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import ProductFormModel from "../../../Component/ProductFormModal";
 import { useQuery, useMutation } from 'react-query'
-import { getAllCompanies, getAllPhone, DeletePhone, searchPhone } from '../../../utils/apiCalls'
+import { getAllCompanies, getAllPhone, searchPhone } from '../../../utils/apiCalls'
 import LoaderSmall from '../../../Component/LoaderSmall';
 
 function ProductList() {
@@ -42,14 +42,16 @@ function ProductList() {
     setProductFormModal(true)
   };
 
-  const handlePhoneSearch = async (e) =>{
+  const handlePhoneSearch = async (e) => {
     setSearch(e.target.value)
-    if(e.target.value == ''){
+    if (e.target.value == '') {
       setSelectedCompany(phones?.data?.data?.AllModel)
       return;
     }
     searchPhoneWithName.mutate(e.target.value)
   }
+
+  console.log(searchPhoneWithName , "jsdhvb")
 
   const handlePendingPaidUpClick = (e) => {
     const filteredCompany = phones.data.data.AllModel?.filter((item) => {
@@ -66,7 +68,7 @@ function ProductList() {
 
   React.useEffect(() => {
     setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
-  },[searchPhoneWithName.isSuccess, searchPhoneWithName.data])
+  }, [searchPhoneWithName.isSuccess, searchPhoneWithName.data])
 
   return (
     <>
@@ -145,13 +147,13 @@ function ProductList() {
               </thead>
               {
                 companies.isLoading || searchPhoneWithName.isLoading
-                ?
+                  ?
                   <tr>
                     <td colSpan="4">
                       <LoaderSmall />
                     </td>
                   </tr>
-                :
+                  :
                   SelectedCompany?.length > 0 ? (
                     SelectedCompany?.map((item, index) => {
                       return (
@@ -200,17 +202,17 @@ function ProductList() {
         </div>
         {
           SelectedCompany?.length > 0
-          ?
+            ?
             <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
-              total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
-              current={pageNo}
-              onPageChange={(page) => setPageNo(page)}
-              previousLabel="Previous" nextLabel="Next"
+                total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
+                current={pageNo}
+                onPageChange={(page) => setPageNo(page)}
+                previousLabel="Previous" nextLabel="Next"
               />
             </div>
-          :
-           null
+            :
+            null
         }
 
       </div>

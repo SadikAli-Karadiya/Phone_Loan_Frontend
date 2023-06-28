@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
 import { BiFolderPlus } from "react-icons/bi";
@@ -9,7 +9,6 @@ import { MdDelete } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import ChargeFormModal from '../../Component/ChargeFormModal';
 import InstallmentFormModal from '../../Component/InstallFormModal';
 import { getAllInstallment, getCustomersByInstallment, getAllPurchase, DeleteInstallment } from '../../utils/apiCalls';
 import { useQuery, useMutation } from 'react-query'
@@ -24,8 +23,6 @@ function InstallmentList() {
     const [isHoverDelete, setIsHoverDelete] = useState(false);
     const [selectedEmiCustomer, setSelectedEmiCustomer] = useState([]);
     const [search, setSearch] = useState("");
-    const [EMI_Details, setEMIDetails] = useState("");
-    const [chargeFormModal, setChargeFormModal] = useState(false);
     const [installmentFormModal, setInstallmentFormModal] = useState(false);
     const [is_Edit, setIsEdit] = useState(false);
     const [InstallmentDetails, setInstallmentDetails] = useState();
@@ -109,6 +106,7 @@ function InstallmentList() {
     };
 
     const handleSelectEMI = (id) => {
+        console.log(id)
         // let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
         //     return n?.installment_id == id;
         // });
@@ -140,7 +138,7 @@ function InstallmentList() {
     const handleSearchCustomer = (e) => {
         const searchedValue = e.target.value.toLowerCase();
 
-        if(searchedValue == ''){
+        if (searchedValue == '') {
             setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers);
             return;
         }
@@ -154,7 +152,7 @@ function InstallmentList() {
             }
             return false
         })
-        if(model.length > 0){
+        if (model.length > 0) {
             setSelectedEmiCustomer(model)
             return
         }
@@ -184,7 +182,7 @@ function InstallmentList() {
     React.useEffect(() => {
         console.log('customers ', customersByInstallment.data?.data.allCustomers)
         setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers)
-    },[customersByInstallment.isSuccess, customersByInstallment.data])
+    }, [customersByInstallment.isSuccess, customersByInstallment.data])
 
     return (
         <>
@@ -279,7 +277,7 @@ function InstallmentList() {
                                                     headingBgColor[index % headingBgColor.length],
                                             }}
                                         >
-                                            <p className='text-white text-center text-sm font-roboto'>Total Customer : {item.purchases.length}</p>
+                                            <p className='text-white text-center text-sm font-roboto'>Total Customer : {item?.purchases?.length}</p>
                                         </div>
                                     </div>
                                 );
@@ -338,12 +336,6 @@ function InstallmentList() {
                                     Phone
                                 </th>
                                 <th scope="col" className="px-6 py-2">
-                                    Model
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Total EMI
-                                </th>
-                                <th scope="col" className="px-6 py-2">
                                     Total
                                 </th>
                                 <th scope="col" className="px-6 py-2">
@@ -351,9 +343,6 @@ function InstallmentList() {
                                 </th>
                                 <th scope="col" className="px-6 py-2">
                                     Profile
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Action
                                 </th>
                             </tr>
                         </thead>
@@ -375,12 +364,6 @@ function InstallmentList() {
                                                     {item?.customer?.mobile}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item?.phone?.company?.company_name} || {item?.phone?.model_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.installment?.month}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
                                                     {item?.net_amount}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
@@ -399,18 +382,6 @@ function InstallmentList() {
                                                             </div>
                                                         </Tippy>
                                                     </div>
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    {
-                                                        item.pending_amount.length > 0 ?
-                                                            <div
-                                                                onClick={() => handlePayEMI(item.id)}
-                                                                className="flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg cursor-pointer text-white font-semibold">
-                                                                Pay
-                                                            </div>
-                                                            :
-                                                            null
-                                                    }
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -449,12 +420,6 @@ function InstallmentList() {
                     showModal={installmentFormModal}
                     handleShowModal={setInstallmentFormModal}
                     InstallmentDetails={InstallmentDetails}
-                    is_Edit={is_Edit}
-                />
-                <ChargeFormModal
-                    showModal={chargeFormModal}
-                    handleShowModal={setChargeFormModal}
-                    EMI_Details={EMI_Details}
                     is_Edit={is_Edit}
                 />
             </div>

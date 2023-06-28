@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllCustomer, DeleteCustomer } from '../../utils/apiCalls';
-import { useQuery } from 'react-query'
+import { getAllCustomer, searchCustomer } from '../../utils/apiCalls';
+import { useQuery, useMutation } from 'react-query'
 import { FaUsers } from "react-icons/fa";
-import Swal from "sweetalert2";
-import { toast } from "react-toastify";
+import Pagination from 'react-responsive-pagination'
+import '../../Component/Pagination/pagination.css'
 
 
 function Search() {
@@ -20,7 +20,31 @@ function Search() {
     const [loading, setLoading] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
     const [showNotFound, setShowNotFound] = React.useState(-1)
-    const AllCustomer = useQuery('customer', getAllCustomer)
+    const [search, setSearch] = React.useState("");
+    const [pageNo, setPageNo] = React.useState(1);
+    const [Customers, setCustomers] = React.useState([]);
+    const searchCustomerWithName = useMutation(searchCustomer)
+    const AllCustomer = useQuery(['customer', pageNo], () => getAllCustomer({ pageNo: pageNo - 1, }))
+
+    const handleCustomerSearch = async (e) => {
+        setSearch(e.target.value)
+        if (e.target.value == '') {
+            setCustomers(AllCustomer?.data?.data?.AllCustomer)
+            return;
+        }
+        searchCustomerWithName.mutate(e.target.value)
+    }
+
+
+    React.useEffect(() => {
+        setCustomers(AllCustomer?.data?.data?.AllCustomer)
+    }, [AllCustomer?.data?.data?.AllCustomer])
+
+    React.useEffect(() => {
+        setCustomers(searchCustomerWithName?.data?.data?.modelDetails)
+    }, [searchCustomerWithName.isSuccess, searchCustomerWithName.data])
+
+    console.log(Customers)
 
     return (
         <>
@@ -30,7 +54,9 @@ function Search() {
                     <div className='flex justify-center items-center mt-10 '>
                         <input
                             type="search"
-                            placeholder='Search Receipt (BY : Customer ID , Name , Whatsapp Number)'
+                            onChange={handleCustomerSearch}
+                            value={search}
+                            placeholder='Search Customer (BY : Name , Whatsapp Number)'
                             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-lg w-2/3'
                         />
                     </div>
@@ -53,7 +79,7 @@ function Search() {
                                     Mobile
                                 </th>
                                 <th scope="col" className="px-6 py-4">
-                                alternate_no
+                                    alternate_no
                                 </th>
                                 <th scope="col" className="px-6 py-4">
                                     Profile
@@ -61,9 +87,8 @@ function Search() {
                             </tr>
                         </thead>
                         {
-                            AllCustomer?.data?.data?.AllCustomer?.length > 0 ? (
-                                AllCustomer?.data?.data?.AllCustomer?.map((item, index) => {
-                                    console.log(item)
+                            Customers?.length > 0 ? (
+                                Customers?.map((item, index) => {
                                     return (
                                         <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                             <tr className=" border-b">
@@ -103,7 +128,7 @@ function Search() {
 
                     </table>
                     {
-                        AllCustomer?.data?.data?.AllCustomer?.length > 0 ?
+                        Customers?.length > 0 ?
                             null
                             :
                             <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
@@ -112,7 +137,21 @@ function Search() {
                             </div>
                     }
                 </div>
-            </div >
+                {
+                    Customers?.length > 0
+                        ?
+                        <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
+                            <Pagination
+                                total={AllCustomer?.data?.data && AllCustomer?.data?.data?.pageCount ? AllCustomer?.data?.data?.pageCount : 0}
+                                current={pageNo}
+                                onPageChange={(page) => setPageNo(page)}
+                                previousLabel="Previous" nextLabel="Next"
+                            />
+                        </div>
+                        :
+                        null
+                }
+            </div>
         </>
     )
 }

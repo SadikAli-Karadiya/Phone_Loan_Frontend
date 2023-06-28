@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useRef, useState } from "react";
 import { BiRupee } from "react-icons/bi";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -8,12 +8,38 @@ import { useParams } from "react-router-dom";
 import { getReceiptbyReceiptId } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import moment from 'moment'
+import ReactToPrint from "react-to-print";
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 function Receipt() {
     const params = useParams();
+    const navigate = useNavigate();
+    const printRef = useRef();
+    const [print, setPrint] = useState(false);
     const data = useQuery(['transection', params.id], () => getReceiptbyReceiptId(params.id));
-    // console.log(data?.data?.data?.SingleTransaction)
+    console.log(data?.data?.data?.SingleTransaction)
+    function inWords(num) {
+        let a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+        let b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+        if ((num = num?.toString())?.length > 9) return 'overflow';
+        let n = ('000000000' + num)?.substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return;
+        let str = '';
+        str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+        str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+        str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+        str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+        str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+
+        return str.toUpperCase() + ' ONLY';
+    }
+
+    let amountInWords = inWords(data?.data?.data?.SingleTransaction?.amount)
+
     const handleDeleteReceipt = async () => {
         Swal.fire({
             title: "Are you sure to delete installment?",
@@ -40,8 +66,14 @@ function Receipt() {
     return (
         <>
             <div className=' sm:px-5 xl:px-10 h-full'>
-                <div className=' py-5 px-5'>
+                <div className=' py-5 px-5 flex justify-between'>
                     <h1 className='text-[#0d0d48] text-2xl font-bold'>Receipt</h1>
+                    <div className="group h-9 w-20 flex justify-center items-center gap-1 cursor-pointer" id="" onClick={() => {
+                        navigate(-1)
+                    }}>
+                        <IoIosArrowBack className="text-2xl font-bold group-hover:text-blue-700 text-darkblue-500 mt-[3px]" />
+                        <span className=" text-xl text-darkblue-500 font-semibold group-hover:text-blue-700">Back</span>
+                    </div>
                 </div>
                 <div className="flex justify-center items-center px-5">
                     <div className=" py-7 bg-white w-[790px] shadow-xl rounded-md h-full ">
@@ -59,7 +91,7 @@ function Receipt() {
                             <div className="flex items-center">
                                 <h1 className="text-2xl">Receipt No : </h1>
                                 <div className="bg-slate-200 py-[10px] px-9 rounded-full ml-4">
-                                    <span className="text-2xl text-gray-600 font-bold">000001</span>
+                                    <span className="text-2xl text-gray-600 font-bold">{data?.data?.data?.SingleTransaction?.receipt?.receipt_id}</span>
                                 </div>
                             </div>
                         </div>
@@ -68,8 +100,7 @@ function Receipt() {
                                 <h1 className=" font-semibold w-[230px]">Customer Name <span className="ml-5">:</span></h1>
                                 <div className="text-xl w-full border-dotted border-b-2 border-slate-300">
                                     <span className=" uppercase font-semibold text-[16px] space-x-2">
-                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.first_name}</span>
-                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.last_name}</span>
+                                        <span>{data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.customer?.full_name}</span>
                                     </span>
                                 </div>
                             </div>
@@ -84,9 +115,9 @@ function Receipt() {
                         </div>
                         <div className="flex justify-between w-full px-10 ">
                             <div className="flex items-center w-full">
-                                <h1 className=" font-semibold w-[200px]">Amount <span className="ml-[80px] ">: </span> </h1>
+                                <h1 className=" font-semibold w-[200px]">Amount <span className="ml-[80px] ">:  </span> </h1>
                                 <div className="text-xl w-full border-dotted border-b-2 border-slate-300">
-                                    <span className="uppercase font-semibold text-[16px]  ">Fifthy thousand only</span>
+                                    <span className="uppercase font-semibold text-[16px]  ">{amountInWords}</span>
                                 </div>
                             </div>
                         </div>
@@ -154,11 +185,11 @@ function Receipt() {
                                                     data?.data?.data?.SingleTransaction?.is_by_cheque == true
                                                         ?
                                                         <div>
-                                                        <span> Cheque </span>
-                                                        <div>
-                                                            <span> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
-                                                            <span>( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
-                                                        </div>
+                                                            <span> Cheque </span>
+                                                            <div>
+                                                                <span> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
+                                                                <span>( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
+                                                            </div>
                                                         </div>
                                                         :
                                                         null
@@ -186,9 +217,24 @@ function Receipt() {
                         <MdDelete className="text-blue-400" />
                         <h1 className="text-sm">Delete</h1>
                     </button>
-                    <button className="bg-[#0d0d48]  px-2 py-[5px] text-sm rounded-md hover:bg-slate-500 text-white">Download/Print</button>
+                    <ReactToPrint
+                        trigger={() => (
+                            <button className="bg-[#0d0d48]  py-1 px-3 rounded-md hover:opacity-60">
+                                <span className="text-white text-sm">Download/Print</span>
+                            </button>
+                        )}
+                        content={() => printRef.current}
+                        onBeforeGetContent={() => {
+                            return new Promise((resolve) => {
+                                setPrint(true);
+                                resolve();
+                            });
+                        }}
+                        onAfterPrint={() => setPrint(false)}
+                    />
+                    {/* <button className="bg-[#0d0d48]  px-2 py-[5px] text-sm rounded-md hover:bg-slate-500 text-white">Download/Print</button> */}
                 </div>
-            </div >
+            </div>
         </>
     )
 }

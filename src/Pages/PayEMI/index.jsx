@@ -8,7 +8,7 @@ import Tippy from '@tippyjs/react';
 import { IoMdInformationCircle } from 'react-icons/io';
 import 'tippy.js/dist/tippy.css';
 import { useQuery } from 'react-query'
-import { getPurchaseCustomerbyNumber } from '../../utils/apiCalls';
+import { getemibycustomername } from '../../utils/apiCalls';
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
@@ -22,11 +22,11 @@ function PayEMI() {
   const [showNotFound, setShowNotFound] = useState(-1)
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
-  const purchase = useQuery(['purchase', pageNo, search], () => getPurchaseCustomerbyNumber({
+  const EMI = useQuery(['emi', pageNo, search], () => getemibycustomername({
     pageNo: pageNo - 1,
     search
   }))
-
+  console.log(EMI?.data?.data?.data)
   const handlePayEMI = (id) => {
     setChargeFormModal(true);
     setIsEdit(true)
@@ -53,7 +53,7 @@ function PayEMI() {
         </div>
 
         {
-          purchase?.data?.data?.data?.length > 0 ?
+         EMI?.data?.data?.data?.length > 0 ?
             (
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 pt-5 mt-10">
                 <h1 className='font-bold text-lg pl-7'>Customer List</h1>
@@ -89,7 +89,7 @@ function PayEMI() {
                     </tr>
                   </thead>
                   {
-                    purchase?.data?.data?.data?.map((item, index) => {
+                    EMI?.data?.data?.data?.map((item, index) => {
                       let isPending = false;
                       const paidAmount = item.net_amount - item.pending_amount;
 
@@ -164,7 +164,7 @@ function PayEMI() {
         }
 
         {
-          purchase?.data?.data?.data?.length > 0 ?
+         EMI?.data?.data?.data?.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}

@@ -9,34 +9,48 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import { getAllPurchase , getPendingEmi } from '../../utils/apiCalls';
+import { getAllPurchase, getPendingEmi } from '../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import moment from 'moment'
 
 function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
-  const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
-  const PendingEMI = useQuery('purchase', getPendingEmi)
-  console.log(PendingEMI?.data?.data)
+  const [TotalCollection, setTotalCollection] = useState();
+  const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi({ pageNo: pageNo - 1, }))
+  const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
+  const Today_Collection = PendingEMI?.data?.data?.todaysCollection
+  const Today_Model = PendingEMI?.data?.data?.totalModels
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
 
   const handlePayEMI = (id) => {
-    setChargeFormModal(true);
-    setIsEdit(true)
-    setEMIDetails(id);
+    navigate(`/receipt/Generate/${id}`,
+      {
+        state: {
+          emi_id: id,
+        }
+      })
   };
+
+  function calcaulateTotal() {
+    let total = 0;
+    PendingEMI?.data?.data?.pendingEmiCustomers?.map((d) => {
+      total += d.amount;
+    });
+    setTotalCollection(total);
+    // return total;
+  }
 
   const handleSearchStudents = (e) => {
     let last_name = e.target.value
-    const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-      return n.customer.last_name == last_name
-    })
-    console.log(Customer)
+    // const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
+    //   return n.customer.last_name == last_name
+    // })
     return
     setClassStudents(() =>
       allClassStudents?.filter((data) => {
@@ -73,7 +87,9 @@ function Dashboard() {
                 <FaUsers />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                {purchase?.data?.data?.AllPurchase?.length}
+                {
+                  Pending_Customer
+                }
               </h1>
             </div>
           </div>
@@ -89,7 +105,7 @@ function Dashboard() {
                 <GiSmartphone />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
+                {Today_Model}
               </h1>
             </div>
           </div>
@@ -105,7 +121,6 @@ function Dashboard() {
                 <BiRupee />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
               </h1>
             </div>
           </div>
@@ -122,7 +137,7 @@ function Dashboard() {
                 <GiTakeMyMoney />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                5000
+                {Today_Collection}
               </h1>
             </div>
           </div>
@@ -150,14 +165,15 @@ function Dashboard() {
             <div className='flex items-center space-x-3'>
               <div className='bg-green-200 rounded-md px-3 shadow-lg py-[10px] flex flex-col justify-center  items-center'>
                 <h1 className='font-semibold text-sm'>
-                  Total : 291840
+                  Total : {TotalCollection ? TotalCollection : "?"}
                 </h1>
               </div>
-              <div className='flex justify-end items-end'>
-                <button className=' py-[10px] text-sm rounded-md px-4 border shadow-lg hover:bg-blue-100 font-semibold'>
-                  Calculate Total
-                </button>
-              </div>
+              <button
+                onClick={calcaulateTotal}
+                className=" flex items-center border outline-none bg-white py-2 px-4 xl:p-4 xl:py-2 shadow-lg 
+                hover:bg-blue-100 rounded-md  space-x-1 text-sm font-semibold">
+                Calculate Total
+              </button>
             </div>
           </div>
         </div>
@@ -185,9 +201,6 @@ function Dashboard() {
                 EMI Amount
               </th>
               <th scope="col" className="px-6 py-3">
-                Pending
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Profile
               </th>
               <th scope="col" className="px-6 py-3">
@@ -196,8 +209,8 @@ function Dashboard() {
             </tr>
           </thead>
           {
-            purchase?.data?.data?.AllPurchase?.length > 0 ? (
-              purchase?.data?.data?.AllPurchase?.map((item, index) => {
+            PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ? (
+              PendingEMI?.data?.data?.pendingEmiCustomers?.map((item, index) => {
                 return (
                   <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                     <tr className=" border-b">
@@ -205,22 +218,19 @@ function Dashboard() {
                         {index + 1}
                       </th>
                       <td className="px-6 py-5 capitalize">
-                        {item.customer.full_name}
+                        {item.purchase?.customer?.full_name}
                       </td>
                       <td className="px-6 py-5">
-                        {item.customer.mobile}
+                        {item.purchase?.customer?.mobile}
                       </td>
                       <td className="px-6 py-5">
-                        {item.phone.company.company_name} || {item.phone.model_name}
+                        {item?.purchase?.phone?.company?.company_name} || {item?.purchase?.phone?.model_name}
                       </td>
                       <td className="px-6 py-5">
-                        10 / 12
+                        {moment(item.due_date).format("DD / MM")}
                       </td>
                       <td className="px-6 py-5">
-                        {item.net_amount}
-                      </td>
-                      <td className="px-6 py-5">
-                        {item.pending_amount}
+                        {item?.amount}
                       </td>
                       <td className="px-6 py-5">
                         <div className="flex justify-center items-center">
@@ -229,7 +239,7 @@ function Dashboard() {
                               <AiFillEye
                                 className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
                                 onClick={() =>
-                                  navigate(`/Customer/profile-detail/${item.id}`)}
+                                  navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
                               />
                             </div>
                           </Tippy>
@@ -253,7 +263,7 @@ function Dashboard() {
             )}
         </table>
         {
-          purchase?.data?.data?.AllPurchase?.length > 0 ?
+          PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
             null
             :
             <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
@@ -264,10 +274,10 @@ function Dashboard() {
       </div>
 
       {
-        purchase?.data?.data.AllPurchase?.length > 0 ?
+        PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
-              total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
+              total={PendingEMI && PendingEMI?.data?.data?.pageCount ? PendingEMI?.data?.data?.pageCount : 0}
               current={pageNo}
               onPageChange={(page) => setPageNo(page)}
             // previousLabel="Previous" nextLabel="Next"
