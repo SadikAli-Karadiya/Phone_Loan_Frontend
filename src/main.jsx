@@ -11,6 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ToastContainer
       position="top-right"
+      className="z-[999]"
       autoClose={1000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -23,6 +24,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
-    <ToastContainer />
   </React.StrictMode>,
 )
