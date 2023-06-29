@@ -158,7 +158,7 @@ export const UpdateCustomer = (data) => {
     'method': 'PUT',
     'data': data,
     'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
+      'content-type': "multipart/form-data"
     },
   })
 }
