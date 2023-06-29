@@ -10,6 +10,8 @@ import moment from 'moment'
 import LoaderSmall from '../../../Component/LoaderSmall';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { IoIosArrowBack } from "react-icons/io";
+
 
 function EMIHistory() {
     const navigate = useNavigate();
@@ -32,8 +34,12 @@ function EMIHistory() {
     return (
         <>
             <div className='xs:px-5 sm:px-10 sm:py-5 h-full'>
-                <div className='sm:py-5'>
+                <div className='sm:py-5 flex justify-between items-center'>
                     <h1 className='text-[#0d0d48] text-2xl font-bold'>EMI Details</h1>
+                    <div className="group h-9 w-20 flex justify-center items-center gap-1 cursor-pointer" id="" onClick={() => navigate(-1)}>
+                        <IoIosArrowBack className="text-2xl font-bold group-hover:text-blue-700 text-[#0d0d48] mt-[3px]" />
+                        <span className=" text-xl text-[#0d0d48] font-semibold group-hover:text-blue-700">Back</span>
+                    </div>
                 </div>
                 {
                     data?.isLoading == true ?
@@ -72,7 +78,6 @@ function EMIHistory() {
 
                                             {
                                                 data?.data?.data?.AllEmi?.map((item, index) => {
-                                                    console.log(item)
                                                     return (
                                                         <tbody key={index} className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                             <tr className=" border-b">

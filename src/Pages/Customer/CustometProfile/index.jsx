@@ -117,7 +117,7 @@ function CustomerProfile() {
     const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
     let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
-    
+
     console.log(SingleCustomerDetails)
 
     const initialValues = {
@@ -605,7 +605,7 @@ function CustomerProfile() {
                                                         <tr className=" border-b">
 
                                                             <td className="px-6 py-5 ">
-                                                                {moment(item.createdAt).format("DD / MM / YYYY")}
+                                                                {moment(item.createdAt).format("DD / MM")}
                                                             </td>
                                                             <td className="px-6 py-5 ">
                                                                 {item?.phone?.company?.company_name}
@@ -620,7 +620,7 @@ function CustomerProfile() {
                                                                 {item.net_amount}
                                                             </td>
                                                             <td className="px-6 py-5">
-                                                                5000
+                                                                {item.net_amount - item.pending_amount}
                                                             </td>
                                                             <td className="px-6 py-5">
                                                                 {item.pending_amount}

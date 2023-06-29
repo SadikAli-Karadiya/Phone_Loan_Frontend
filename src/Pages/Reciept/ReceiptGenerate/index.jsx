@@ -16,6 +16,7 @@ function GenerateReceipt() {
 
     const location = useLocation();
     const Emi_Details = useQuery(['emi', location?.state?.emi_id], () => getSingleEmi(location?.state.emi_id))
+    console.log(Emi_Details?.data?.data?.Specifications)
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState();
     const [selectPayment, setSelectPayment] = useState("1");
@@ -32,8 +33,8 @@ function GenerateReceipt() {
     const [toggle, setToggle] = useState(false);
     const [model, setModel] = useState();
     const navigate = useNavigate();
-    const today = new Date();
-    const [receiptDate, setReceiptDate] = useState(today);
+    let todayDate = moment(Emi_Details?.data?.data?.SingleEmi?.due_date).format("DD / MM / YYYY")
+    const [receiptDate, setReceiptDate] = useState(todayDate);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({
         amount: '',
@@ -126,7 +127,6 @@ function GenerateReceipt() {
                 date: receiptDate
             };
 
-            console.log(EMIData)
             setIsSubmitting(true);
 
             const res = await AddTransection(EMIData)
@@ -310,11 +310,6 @@ function GenerateReceipt() {
         setReceiptDate(e.target.value);
     }
 
-    const handleModalClose = () => {
-        handleShowModal(false);
-        setCharge(false)
-    };
-
     function handleAddCharge() {
         setCharge(true)
     }
@@ -369,14 +364,15 @@ function GenerateReceipt() {
                                                 <div className="flex xs:flex-col xs:space-y-2 lg:flex-row lg:space-x-5 lg:space-y-0">
                                                     <h2 className="font-roboto">Company : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.company?.company_name}</h2>
                                                     <h2 className="font-roboto">Model : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.model_name}</h2>
-                                                    <h2 className="font-roboto">RAM : 4/64</h2>
+                                                    <h2 className="font-roboto">RAM : {Emi_Details?.data?.data?.Specifications?.ram} / {Emi_Details?.data?.data?.Specifications?.storage}
+                                                    </h2>
                                                 </div>
                                                 <h3 className="font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</h3>
                                                 <h3 className="font-roboto">Pending Amount : 10000</h3>
                                             </div>
                                         </div>
                                         <div className="px-7 font-mono xs:order-1 sm:order-2 py-2 flex justify-end">
-                                            <h3 className=""> Date : 05/02/2023</h3>
+                                            <h3 className=""> Date : {receiptDate}</h3>
                                         </div>
                                     </div>
 
@@ -464,7 +460,8 @@ function GenerateReceipt() {
                                         <span>Date : </span>
                                         <input type="date"
                                             name="receiptDate"
-                                            defaultValue={moment(Emi_Details?.data?.data?.SingleEmi?.due_date).format("yyyy-mm-dd")}
+                                            onChange={handleChangeDate}
+                                            value={receiptDate}
                                             className="ml-4"
                                         />
                                     </div>
@@ -474,7 +471,7 @@ function GenerateReceipt() {
                                 <div className="space-x-5">
                                     <span className="text-[14.5px] font-roboto">Company : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.company?.company_name} </span>
                                     <span className="text-[14.5px] font-roboto">Model : {Emi_Details?.data?.data?.SingleEmi?.purchase?.phone?.model_name}</span>
-                                    <span className="text-[14.5px] font-roboto">Storage : </span>
+                                    <span className="text-[14.5px] font-roboto">Storage : {Emi_Details?.data?.data?.Specifications?.ram} / {Emi_Details?.data?.data?.Specifications?.storage}</span>
                                 </div>
                                 <span className=" text-[14.5px] font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</span>
                                 <span className=" text-[14.5px] font-roboto">Pending  : </span>
