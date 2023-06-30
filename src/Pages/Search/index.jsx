@@ -148,7 +148,7 @@ function Search() {
                 
                 {
                     allCustomers?.data?.data?.AllCustomer?.length > 0
-                        ?
+                    ?
                         <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
                             <Pagination
                                 total={allCustomers?.data?.data && allCustomers?.data?.data?.totalPages ? allCustomers?.data?.data?.totalPages : 0}
@@ -156,7 +156,7 @@ function Search() {
                                 onPageChange={(page) => setPageNo(page)}
                             />
                         </div>
-                        :
+                    :
                         null
                 }
             </div>

@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import LoaderSmall from '../../Component/LoaderSmall';
 
 function InstallmentList() {
     const navigate = useNavigate();
@@ -106,10 +107,6 @@ function InstallmentList() {
     };
 
     const handleSelectEMI = (id) => {
-        console.log(id)
-        // let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-        //     return n?.installment_id == id;
-        // });
         customersByInstallment.mutate(id)
         setSelectemi(id)
     };
@@ -180,7 +177,6 @@ function InstallmentList() {
     };
 
     React.useEffect(() => {
-        console.log('customers ', customersByInstallment.data?.data.allCustomers)
         setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers)
     }, [customersByInstallment.isSuccess, customersByInstallment.data])
 
@@ -358,62 +354,68 @@ function InstallmentList() {
                                 </th>
                             </tr>
                         </thead>
-                        {
-                            selectedEmiCustomer?.length > 0 ? (
-                                selectedEmiCustomer?.map((item, index) => {
-                                    return (
-                                        <tbody key={index}
-                                            className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                            <tr className=" border-b">
-                                                <th className="py-5 px-6">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="px-6 py-5 ">
-                                                    {item.customer.full_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.customer?.mobile}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.phone.company.company_name} | {item?.phone.model_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.net_amount}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.pending_amount}
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="flex justify-center items-center">
-                                                        <Tippy content="Customer Profile">
-                                                            <div>
-                                                                <AiFillEye
-                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                    onClick={() =>
-                                                                        navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
-                                                                    }
-                                                                />
+                        <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                            {
+                                customersByInstallment.isLoading
+                                ?   
+                                    <tr>
+                                        <td colSpan="7">
+                                            <LoaderSmall />
+                                        </td>
+                                    </tr>
+                                :
+                                    selectedEmiCustomer?.length > 0 ? (
+                                        selectedEmiCustomer?.map((item, index) => {
+                                            return (
+                                                    <tr key={index} className=" border-b">
+                                                        <th className="py-5 px-6">
+                                                            {index + 1}
+                                                        </th>
+                                                        <td className="px-6 py-5 ">
+                                                            {item.customer.full_name}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.customer?.mobile}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.phone.company.company_name} | {item?.phone.model_name}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.net_amount}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.pending_amount}
+                                                        </td>
+                                                        <td className="px-6 py-5">
+                                                            <div className="flex justify-center items-center">
+                                                                <Tippy content="Customer Profile">
+                                                                    <div>
+                                                                        <AiFillEye
+                                                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                            onClick={() =>
+                                                                                navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                </Tippy>
                                                             </div>
-                                                        </Tippy>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                                        </td>
+                                                    </tr>
+                                            )
+                                        })
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="7">
+                                                <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                                                    <FaUsers className='text-2xl' />
+                                                    <h1 className='text-sm font-bold'>No customers </h1>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     )
-                                })
-                            ) : (
-                                null
-                            )}
+                            }
+                        </tbody>
                     </table>
-                    {
-                        selectedEmiCustomer?.length > 0 ?
-                            null
-                            :
-                            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-                                <FaUsers className='text-2xl' />
-                                <h1 className='text-sm font-bold'>No customers </h1>
-                            </div>
-                    }
                 </div>
 
                 {
