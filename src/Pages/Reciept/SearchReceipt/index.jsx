@@ -1,7 +1,7 @@
-import { React, useState } from 'react'
+import React, { useState } from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../../App.css"
-import { AiFillEye } from "react-icons/ai";
+import { AiFillEye, AiOutlineSearch } from "react-icons/ai";
 import { IoMdInformationCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import Tippy from '@tippyjs/react';
@@ -11,17 +11,36 @@ import { useQuery } from 'react-query'
 import moment from 'moment'
 import LoaderSmall from '../../../Component/LoaderSmall';
 
-
 function SearchReciept() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
-  const data = useQuery(['receipt', pageNo, search], () => onerecieptDetailsbyNumber({
-    pageNo: pageNo - 1,
-    search
-  }))
-  console.log(data?.data?.data)
-  // console.log(data?.data?.data?.data)
+  const receipt = useQuery(
+    ['receipt', pageNo, search], 
+    () => onerecieptDetailsbyNumber({
+      pageNo: pageNo - 1,
+      search
+    }),
+    {
+      enabled: false,
+    }
+  )
+  
+  React.useEffect(()=>{
+    const listener = async (event) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+        receipt.refetch()
+      }
+    };
+
+    document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  })
+
   return (
     <>
       <div className=' sm:px-5 xl:px-10 py-5 h-full'>
@@ -38,10 +57,20 @@ function SearchReciept() {
               placeholder='Search Receipt (BY : Receipt ID , Name , Whatsapp Number)'
               className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
             />
+            <button
+              onClick={()=> receipt.refetch()}
+              className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
+            >
+              <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
+          </button>
           </div>
         </div>
         {
-          data?.data?.data?.data?.length > 0 ?
+          receipt.isLoading
+          ?
+            <LoaderSmall />
+          :
+            receipt?.data?.data?.data?.length > 0 ?
             (
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden pt-5 mt-10 mx-10">
                 <h1 className='font-bold text-lg pl-10'>Customer List</h1>
@@ -79,12 +108,12 @@ function SearchReciept() {
 
                   {
 
-                    data?.data?.data?.data?.map((item, index) => {
+                    receipt?.data?.data?.data?.map((item, index) => {
                       return (
                         <tbody key={index} className="bg-white text-black items-center overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden h-20">
                           <tr className=" border-b">
                             <td className="px-6 py-5">
-                              {moment(item.createdAt).format("DD / MM / YYYY")}
+                              {moment(item.createdAt).format("D/MM/YYYY")}
                             </td>
                             <td className="px-6 py-5 font-bold">
                               {item.receipt_id}
@@ -131,7 +160,7 @@ function SearchReciept() {
             )
             :
             (
-              search?.length > 0 ?
+               receipt?.data?.data?.data?.length == 0 ?
                 <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
                   <IoMdInformationCircle className='text-xl text-red-600' />
                   <h1 className='text-sm font-bold text-red-800'>No Receipt Found </h1>

@@ -184,6 +184,15 @@ function InstallmentList() {
         setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers)
     }, [customersByInstallment.isSuccess, customersByInstallment.data])
 
+    React.useEffect(() => {
+        if(installment?.data?.data.AllInstallment.length > 0){
+            const installmentId = installment?.data?.data.AllInstallment[0].id
+             customersByInstallment.mutate(installmentId)
+            setSelectemi(installmentId)
+        }
+
+    },[installment?.data?.data])
+
     return (
         <>
             <div className='xl:px-5 h-full'>
@@ -205,7 +214,7 @@ function InstallmentList() {
                                         style={{
                                             backgroundColor: bgColors[index % bgColors.length],
                                         }}
-                                        className='px-5 py-3 my-3 group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3'
+                                        className={`${Selectemi != item.id ? "opacity-70" : ""} px-5 py-3 my-3 group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3`}
                                         key={index}
                                         onClick={() => handleSelectEMI(item.id)}>
                                         <div className='flex justify-between items-center '>
@@ -333,7 +342,10 @@ function InstallmentList() {
                                     name
                                 </th>
                                 <th scope="col" className="px-6 py-2">
-                                    Phone
+                                    Mobile
+                                </th>
+                                <th scope="col" className="px-6 py-2">
+                                    Model
                                 </th>
                                 <th scope="col" className="px-6 py-2">
                                     Total
@@ -349,7 +361,6 @@ function InstallmentList() {
                         {
                             selectedEmiCustomer?.length > 0 ? (
                                 selectedEmiCustomer?.map((item, index) => {
-                                    console.log(item)
                                     return (
                                         <tbody key={index}
                                             className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
@@ -362,6 +373,9 @@ function InstallmentList() {
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.customer?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.phone.company.company_name} | {item?.phone.model_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.net_amount}
@@ -409,7 +423,6 @@ function InstallmentList() {
                                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
                                 current={pageNo}
                                 onPageChange={(page) => setPageNo(page)}
-                            // previousLabel="Previous" nextLabel="Next"
                             />
                         </div>
                         :

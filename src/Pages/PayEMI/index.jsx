@@ -1,6 +1,7 @@
-import { React, useState } from 'react'
+import React, { useState } from 'react'
 import { BiSearch } from "react-icons/bi"
 import { AiFillEye } from "react-icons/ai";
+import moment from 'moment';
 import "../../App.css"
 import { useNavigate } from "react-router-dom";
 import LoaderSmall from '../../Component/LoaderSmall';
@@ -8,30 +9,59 @@ import Tippy from '@tippyjs/react';
 import { IoMdInformationCircle } from 'react-icons/io';
 import 'tippy.js/dist/tippy.css';
 import { useQuery } from 'react-query'
-import { getemibycustomername } from '../../utils/apiCalls';
+import { getEMICustomers } from '../../utils/apiCalls';
 import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import { AiOutlineSearch } from "react-icons/ai";
 
 function PayEMI() {
   const navigate = useNavigate();
-  // const { isLoading, isError, error, mutate } = useMutation((data) => { console.log(data) }, { retry: 3 })
   const [chargeFormModal, setChargeFormModal] = useState(false);
   const [search, setSearch] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [showNotFound, setShowNotFound] = useState(-1)
   const [EMI_Details, setEMIDetails] = useState("");
   const [is_Edit, setIsEdit] = useState(false);
-  const EMI = useQuery(['emi', pageNo, search], () => getemibycustomername({
-    pageNo: pageNo - 1,
-    search
-  }))
-  console.log(EMI?.data?.data?.data)
+  const EMI = useQuery(
+    ['emi', pageNo, search],
+    () => 
+      getEMICustomers({
+        pageNo: pageNo - 1,
+        search
+      }), 
+    {
+      enabled: false,
+    },
+
+  )
+
+  console.log(EMI?.data?.data)
+
+  const handleSearch = () => {
+    EMI.refetch()
+  }
+  
   const handlePayEMI = (id) => {
     setChargeFormModal(true);
     setIsEdit(true)
     setEMIDetails(id);
   };
+
+  React.useEffect(()=>{
+    const listener = async (event) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+        EMI.refetch()
+      }
+    };
+
+    document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  })
 
   return (
     <>
@@ -43,17 +73,25 @@ function PayEMI() {
               type="search"
               autoFocus={true}
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
+              onChange={(e)=>setSearch(e.target.value)}
               placeholder='Search Customer  (BY : Name , Whatsapp Number)'
-              className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-lg w-2/3'
+              className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
             />
+            <button
+              onClick={handleSearch}
+              className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
+            >
+              <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
+          </button>
           </div>
         </div>
 
         {
-         EMI?.data?.data?.data?.length > 0 ?
+          EMI.isLoading
+          ?
+            <LoaderSmall />
+          :
+            EMI?.data?.data?.emiDetails?.length > 0 ?
             (
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 pt-5 mt-10">
                 <h1 className='font-bold text-lg pl-7'>Customer List</h1>
@@ -75,7 +113,7 @@ function PayEMI() {
                         EMI Date
                       </th>
                       <th scope="col" className="px-6 py-4">
-                        Total
+                        EMI Amount
                       </th>
                       <th scope="col" className="px-6 py-4">
                         Pending
@@ -89,63 +127,59 @@ function PayEMI() {
                     </tr>
                   </thead>
                   {
-                    EMI?.data?.data?.data?.map((item, index) => {
-                      let isPending = false;
-                      const paidAmount = item.net_amount - item.pending_amount;
-
-                      if (item.net_amount > paidAmount) {
-                        isPending = true;
-                      }
-
-                      return (
-                        <tbody key={index} className={`${isPending ? "bg-red-100" : "bg-green-100"} text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden`}>
-                          <tr className=" border-b">
-                            <td className="px-6 py-5 capitalize space-x-2">
-                              <span>{item.customer.first_name}</span>
-                              <span>{item.customer.last_name}</span>
-                            </td>
-                            <td className="px-6 py-5">
-                              {item.customer.mobile}
-                            </td>
-                            <td className="px-6  py-5">
-                              <span>{item.phone.company.company_name}</span> || <span>{item.phone.model_name}</span>
-                            </td>
-                            <td className="px-6 py-5">
-                              10 / 12
-                            </td>
-                            <td className="px-6 py-5">
-                              {item.net_amount}
-                            </td>
-                            <td className="px-6 py-5">
-                              {item.pending_amount}
-                            </td>
-                            <td className="px-6 py-5">
-                              <div className="flex justify-center items-center">
-                                <Tippy content="Customer Profile">
-                                  <div>
-                                    <AiFillEye
-                                      className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                      onClick={() =>
-                                        navigate(`/InstallmentList/profile-detail/${item.customer.id}`)}
-                                    />
+                    EMI?.data?.data?.emiDetails?.map((item, index) => {
+                      return item.purchases.map((purchase, idx) =>{  
+                        return (
+                          <tbody key={index + idx} className={`bg-red-100 text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden`}>
+                            <tr className=" border-b">
+                              <td className="px-6 py-5 capitalize space-x-2">
+                                <span>{item.full_name}</span>
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.mobile}
+                              </td>
+                              <td className="px-6  py-5">
+                                <span className="capitalize">{purchase.phone.company.company_name}</span> | <span>{purchase.phone.model_name}</span>
+                              </td>
+                              <td className="px-6 py-5">
+                                {
+                                  moment(purchase.emis[0].due_date).format("D/MM/YYYY")
+                                }
+                              </td>
+                              <td className="px-6 py-5">
+                                {purchase.emis[0].amount}
+                              </td>
+                              <td className="px-6 py-5">
+                                {purchase.pending_amount}
+                              </td>
+                              <td className="px-6 py-5">
+                                <div className="flex justify-center items-center">
+                                  <Tippy content="Customer Profile">
+                                    <div>
+                                      <AiFillEye
+                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                        onClick={() =>
+                                          navigate(`/InstallmentList/profile-detail/${item.id}`)}
+                                      />
+                                    </div>
+                                  </Tippy>
+                                </div>
+                              </td>
+                              <td className="px-6 py-5 ">
+                                <Tippy content="Pay EMI">
+                                  <div className="flex justify-center space-x-3">
+                                    <button
+                                      onClick={() => handlePayEMI(purchase.emis[0].id)}
+                                      className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                      Pay
+                                    </button>
                                   </div>
                                 </Tippy>
-                              </div>
-                            </td>
-                            <td className="px-6 py-5 ">
-                              <Tippy content="Pay EMI">
-                                <div className="flex justify-center space-x-3">
-                                  <button
-                                    onClick={() => handlePayEMI(item.id)}
-                                    className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                    Pay
-                                  </button>
-                                </div>
-                              </Tippy>
-                            </td>
-                          </tr>
-                        </tbody>
-                      )
+                              </td>
+                            </tr>
+                          </tbody>
+                        )
+                      })                      
                     })
                   }
                 </table>
@@ -153,7 +187,7 @@ function PayEMI() {
             )
             :
             (
-              search.length > 0 ?
+              EMI?.data?.data?.emiDetails?.length == 0 ?
                 <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
                   <IoMdInformationCircle className='text-xl text-red-600' />
                   <h1 className='text-sm font-bold text-red-800'>No Customer Found</h1>
@@ -164,13 +198,12 @@ function PayEMI() {
         }
 
         {
-         EMI?.data?.data?.data?.length > 0 ?
+          EMI?.data?.data?.emiDetails?.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
-                total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
+                total={EMI?.data?.data?.emiDetails?.totalPages || 0}
                 current={pageNo}
                 onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
               />
             </div>
             :
