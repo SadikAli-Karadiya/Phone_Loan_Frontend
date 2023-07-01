@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import React, { useState } from 'react'
 import { AiFillEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi"
@@ -15,18 +15,18 @@ import ChargeFormModal from '../../Component/ChargeFormModal';
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
 import moment from 'moment'
+import LoaderSmall from '../../Component/LoaderSmall';
 
 function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
-  const [TotalCollection, setTotalCollection] = useState();
+  const [TotalCollection, setTotalCollection] = useState(0);
   const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi(pageNo - 1))
-  const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
-  const Today_Collection = PendingEMI?.data?.data?.todaysCollection
-  const Today_Model = PendingEMI?.data?.data?.totalModels
-  const [chargeFormModal, setChargeFormModal] = useState(false);
-  const [EMI_Details, setEMIDetails] = useState("");
-  const [is_Edit, setIsEdit] = useState(false);
+  const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers || 0
+  const Today_Collection = PendingEMI?.data?.data?.todaysCollection || 0
+  const Today_Model = PendingEMI?.data?.data?.totalModels || 0
+  const [pendingEMICustomers, setPendingEMICustomers] = useState([])
+  const [search, setSearch] = useState('')
 
   const handlePayEMI = (id) => {
     navigate(`/receipt/Generate/${id}`,
@@ -36,45 +36,46 @@ function Dashboard() {
         }
       })
   };
-  console.log(PendingEMI?.data?.data?.pendingEmiCustomers)
+
   function calcaulateTotal() {
     let total = 0;
     PendingEMI?.data?.data?.pendingEmiCustomers?.map((d) => {
-      total += d.amount;
+      total = total + d.amount;
     });
+    
     setTotalCollection(total);
-    // return total;
   }
 
-  const handleSearchStudents = (e) => {
-    let last_name = e.target.value
-    // const Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-    //   return n.customer.last_name == last_name
-    // })
-    return
-    setClassStudents(() =>
-      allClassStudents?.filter((data) => {
-        let searched_value = e.target.value;
-        const full_name =
-          data.student_id.basic_info_id.full_name?.toLowerCase();
-        let isNameFound = false;
+  const handleSearchCustomers = (e) => {
+    setSearch(e.target.value)
+     const searchedValue = e.target.value.toLowerCase();
 
-        if (isNaN(searched_value)) {
-          searched_value = searched_value.toLowerCase();
-        }
+    if (searchedValue == '') {
+        setPendingEMICustomers(PendingEMI?.data?.data?.pendingEmiCustomers);
+        return;
+    }
 
-        if (full_name.indexOf(searched_value) > -1) {
-          isNameFound = true;
-        }
+    setPendingEMICustomers(() =>
+        PendingEMI?.data?.data?.pendingEmiCustomers?.filter((data) => {
+            const full_name = data.purchase.customer.full_name.toLowerCase();
+            let isNameFound = false;
 
-        return (
-          data.student_id.student_id == searched_value ||
-          isNameFound ||
-          data.student_id.contact_info_id.whatsapp_no == searched_value
-        );
-      })
+            if (full_name.indexOf(searchedValue) > -1) {
+                isNameFound = true;
+            }
+
+            return (
+                isNameFound || data.purchase.customer.mobile == searchedValue
+            );
+        })
     );
   };
+
+  React.useEffect(() => {
+    if(PendingEMI.data?.data){
+      setPendingEMICustomers(PendingEMI.data.data?.pendingEmiCustomers)
+    }
+  },[PendingEMI.isSuccess, PendingEMI.data])
 
   return (
     <div className='px-5 py-5 xl:px-10 '>
@@ -121,7 +122,7 @@ function Dashboard() {
                 <BiRupee />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
-                {PendingEMI?.data?.data?.totalPendingPayment}
+                {PendingEMI?.data?.data?.totalPendingPayment || 0}
               </h1>
             </div>
           </div>
@@ -154,7 +155,8 @@ function Dashboard() {
             <input
               type="search"
               placeholder='Search Customer'
-              onChange={handleSearchStudents}
+              value={search}
+              onChange={handleSearchCustomers}
               className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
             />
             <div className='bg-[#3399ff]  px-3 py-[7px] group rounded-r-lg flex justify-center items-center
@@ -177,6 +179,9 @@ function Dashboard() {
               </button>
             </div>
           </div>
+        </div>
+        <div className='mb-3 mt-4'>
+          <h3 className='text-lg text-[#0d0d48] font-medium'>Current Month EMI</h3>
         </div>
         <table
           className="w-full text-sm text-center text-white bg-[#3399ff]"
@@ -209,73 +214,82 @@ function Dashboard() {
               </th>
             </tr>
           </thead>
-          {
-            PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ? (
-              PendingEMI?.data?.data?.pendingEmiCustomers?.map((item, index) => {
-                return (
-                  <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                    <tr className=" border-b">
-                      <th className="py-5 px-6">
-                        {index + 1}
-                      </th>
-                      <td className="px-6 py-5 capitalize">
-                        {item.purchase?.customer?.full_name}
-                      </td>
-                      <td className="px-6 py-5">
-                        {item.purchase?.customer?.mobile}
-                      </td>
-                      <td className="px-6 py-5 capitalize">
-                        {item?.purchase?.phone?.company?.company_name} | {item?.purchase?.phone?.model_name}
-                      </td>
-                      <td className="px-6 py-5">
-                        {moment(item.due_date).format("DD / MM")}
-                      </td>
-                      <td className="px-6 py-5">
-                        {item?.amount}
-                      </td>
-                      <td className="px-6 py-5">
-                        <div className="flex justify-center items-center">
-                          <Tippy content="Customer Profile">
-                            <div>
-                              <AiFillEye
-                                className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                onClick={() =>
-                                  navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
-                              />
+          <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+            {
+              PendingEMI.isLoading
+              ?
+                <tr>
+                  <td colSpan="8">
+                    <LoaderSmall />
+                  </td>
+                </tr>
+              :
+                pendingEMICustomers?.length > 0 
+                ? 
+                  (
+                  pendingEMICustomers?.map((item, index) => {
+                    return (
+                        <tr key={index} className=" border-b">
+                          <th className="py-5 px-6">
+                            {index + 1}
+                          </th>
+                          <td className="px-6 py-5 capitalize">
+                            {item.purchase?.customer?.full_name}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.purchase?.customer?.mobile}
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            {item?.purchase?.phone?.company?.company_name} | {item?.purchase?.phone?.model_name}
+                          </td>
+                          <td className="px-6 py-5">
+                            {moment(item.due_date).format("D/MM/YYYY")}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item?.amount}
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="flex justify-center items-center">
+                              <Tippy content="Customer Profile">
+                                <div>
+                                  <AiFillEye
+                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                    onClick={() =>
+                                      navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
+                                  />
+                                </div>
+                              </Tippy>
                             </div>
-                          </Tippy>
-                        </div>
-                      </td>
-                      <td className="px-6 py-5 ">
-                        <div className="flex justify-center space-x-3">
-                          <button
-                            onClick={() => handlePayEMI(item.id)}
-                            className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                            Pay
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                )
-              })
-            ) : (
-              null
-            )}
+                          </td>
+                          <td className="px-6 py-5 ">
+                            <div className="flex justify-center space-x-3">
+                              <button
+                                onClick={() => handlePayEMI(item.id)}
+                                className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                Pay
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                    )
+                  })
+                  ) 
+                : 
+                  <tr>
+                    <td colSpan="8">
+                      <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                        <FaUsers className='text-2xl' />
+                        <h1 className='text-sm font-bold'>No customers with pending fees</h1>
+                      </div>
+                    </td>
+                  </tr>
+            }
+          </tbody>
         </table>
-        {
-          PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
-            null
-            :
-            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-              <FaUsers className='text-2xl' />
-              <h1 className='text-sm font-bold'>No customers with pending fees</h1>
-            </div>
-        }
       </div>
 
       {
-        PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
+        search == '' && pendingEMICustomers.length > 0 ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
               total={PendingEMI?.data?.data?.totalPages || 0}
@@ -286,13 +300,6 @@ function Dashboard() {
           :
           null
       }
-
-      <ChargeFormModal
-        showModal={chargeFormModal}
-        handleShowModal={setChargeFormModal}
-        is_Edit={is_Edit}
-        EMI_Details={EMI_Details}
-      />
     </div>
   )
 }
