@@ -56,8 +56,8 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
   };
 
   const installmentSchema = Yup.object({
-    month: Yup.string().required("Please Enter Installment"),
-    charges: Yup.string().required("Please Enter Charges"),
+    month: Yup.string().required("Please Enter Installment Name"),
+    charges: Yup.string().required("Please Enter Charges").matches(/^[0-9]+$/, 'Please enter only numbers'),
   });
 
   const initialValues = {
@@ -138,7 +138,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
             <form method="POST" action="/installment/addinstallment" className="space-y-6" encType='multipart/form-date' onSubmit={handleSubmit}>
               <div className="flex xs:flex-col items-center xs:space-y-4">
                 <div className="flex flex-col space-y-2  w-full ">
-                  <label htmlFor="company" className="text-white">Installment *</label>
+                  <label htmlFor="company" className="text-white">Installment Name *</label>
                   <input
                     type='text'
                     onChange={handleChange}
@@ -146,7 +146,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                     name="month"
                     id="month"
                     value={values.month}
-                    placeholder='Enter Install'
+                    placeholder='Enter install name'
                     className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-none"
                   />
                   {errors.month && touched.month ? (
@@ -156,7 +156,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                   ) : null}
                 </div>
                 <div className="flex flex-col space-y-2 w-full ">
-                  <label htmlFor="model name " className="text-white">Charge * </label>
+                  <label htmlFor="model name " className="text-white">Charge *</label>
                   <input
                     type="text"
                     name="charges"
@@ -165,7 +165,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-none"
-                    placeholder="Enter Charge Amount "
+                    placeholder="Enter charge"
                   />
                   {errors.charges && touched.charges
                     ?
