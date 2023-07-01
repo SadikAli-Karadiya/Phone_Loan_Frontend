@@ -6,8 +6,6 @@ import { BsPhone } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
@@ -41,6 +39,11 @@ function ProductList() {
     setModelDetails(updateModel);
     setProductFormModal(true)
   };
+
+  const handleAddModel = () =>{
+    setProductFormModal(true)
+    setIsEdit(false);
+  }
 
   const handlePhoneSearch = async (e) => {
     setSearch(e.target.value)
@@ -82,7 +85,7 @@ function ProductList() {
           <div className='flex items-center justify-end pb-5'>
             <Tippy content="Add New Model">
               <div
-                onClick={() => setProductFormModal(true)}
+                onClick={handleAddModel}
                 className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
                 <BiFolderPlus className='xs:text-base sm:text-xl' />
               </div>
@@ -213,7 +216,6 @@ function ProductList() {
                 total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
                 current={pageNo}
                 onPageChange={(page) => setPageNo(page)}
-                previousLabel="Previous" nextLabel="Next"
               />
             </div>
             :
@@ -224,11 +226,9 @@ function ProductList() {
       <ProductFormModel
         showModal={productFormModal}
         handleShowModal={setProductFormModal}
-        ModelDetails={ModelDetails}
+        ModelDetails={is_Edit ? ModelDetails : {}}
         is_Edit={is_Edit}
       />
-      {/* </div>
-      </div> */}
     </>
   )
 }
