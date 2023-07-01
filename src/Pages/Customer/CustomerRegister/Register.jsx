@@ -84,7 +84,7 @@ function CustomerRegister() {
         <>
             <div className="py-5">
                 <div className="px-10">
-                    <h1 className=" font-bold text-[#0d0d48] text-2xl lg:text-3xl">
+                    <h1 className=" font-bold text-[#0d0d48] text-2xl">
                         Customer Registration
                     </h1>
                 </div>

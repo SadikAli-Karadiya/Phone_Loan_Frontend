@@ -307,8 +307,8 @@ function InstallmentList() {
                                 onChange={handleSearchCustomer}
                                 className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                             />
-                            <div className='bg-[#3399ff] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
-                shadow-xl cursor-pointer text-white text-2xl '>
+                            <div className='bg-[#3399ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
+                drop-shadow-lg cursor-pointer text-white text-2xl '>
                                 <BiSearch className='search group-hover:scale-125 duration-300' />
                             </div>
                         </div>

@@ -20,7 +20,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [pageNo, setPageNo] = useState(1);
   const [TotalCollection, setTotalCollection] = useState();
-  const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi({ pageNo: pageNo - 1, }))
+  const PendingEMI = useQuery(['emi', pageNo], () => getPendingEmi(pageNo - 1))
   const Pending_Customer = PendingEMI?.data?.data?.totalPendingCustomers
   const Today_Collection = PendingEMI?.data?.data?.todaysCollection
   const Today_Model = PendingEMI?.data?.data?.totalModels
@@ -36,7 +36,7 @@ function Dashboard() {
         }
       })
   };
-
+  console.log(PendingEMI?.data?.data?.pendingEmiCustomers)
   function calcaulateTotal() {
     let total = 0;
     PendingEMI?.data?.data?.pendingEmiCustomers?.map((d) => {
@@ -121,6 +121,7 @@ function Dashboard() {
                 <BiRupee />
               </div>
               <h1 className="text-white font-roboto font-bold text-3xl">
+                {PendingEMI?.data?.data?.totalPendingPayment}
               </h1>
             </div>
           </div>
@@ -223,8 +224,8 @@ function Dashboard() {
                       <td className="px-6 py-5">
                         {item.purchase?.customer?.mobile}
                       </td>
-                      <td className="px-6 py-5">
-                        {item?.purchase?.phone?.company?.company_name} || {item?.purchase?.phone?.model_name}
+                      <td className="px-6 py-5 capitalize">
+                        {item?.purchase?.phone?.company?.company_name} | {item?.purchase?.phone?.model_name}
                       </td>
                       <td className="px-6 py-5">
                         {moment(item.due_date).format("DD / MM")}
@@ -277,10 +278,9 @@ function Dashboard() {
         PendingEMI?.data?.data?.pendingEmiCustomers?.length > 0 ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
-              total={PendingEMI && PendingEMI?.data?.data?.pageCount ? PendingEMI?.data?.data?.pageCount : 0}
+              total={PendingEMI?.data?.data?.totalPages || 0}
               current={pageNo}
               onPageChange={(page) => setPageNo(page)}
-            // previousLabel="Previous" nextLabel="Next"
             />
           </div>
           :

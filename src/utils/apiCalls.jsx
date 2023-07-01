@@ -293,7 +293,7 @@ export const getEmiPurchasebyId = (id) => {
 export const getPendingEmi = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': `/emi/pending/${pageNo?.pageNo}`,
+    'url': `/emi/pending/${pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
