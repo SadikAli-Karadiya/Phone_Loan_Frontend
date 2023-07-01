@@ -2,14 +2,13 @@ import React from "react";
 import { NavLink, Outlet } from 'react-router-dom'
 import { FaUserPlus, FaMobileAlt, FaRupeeSign, FaSearch } from "react-icons/fa"
 import { FaReceipt } from "react-icons/fa"
-import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 import "../../App.css"
 import { RiDashboardFill } from "react-icons/ri";
 import { FaWallet } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
 
-const Sidebar = () => {
+const Sidebar = () => {  
   const [isLoading, setIsloading] = React.useState(false)
 
   return isLoading == true ?
@@ -19,7 +18,7 @@ const Sidebar = () => {
         <div className="bg-[#0d0d48] rounded-full w-7 h-7 animate-bounce">
           .
         </div>
-        <h1 className="loading uppercase ml-11 font-bold text-lg mt-1 font-roboto text-[#0d0d48]">Loading....</h1>
+        <h1 className="loading uppercase ml-11 font-bold text-lg mt-1 font-roboto text-[#0d0d48]">Loading...</h1>
       </div>
 
     )
@@ -28,14 +27,13 @@ const Sidebar = () => {
       <div className="relative bg-[#f5f7ff] min-h-screen flex ">
         <div className="h-full bg-white sticky left-0 top-0">
           <div className="sidebar h-screen xs:w-20 w-20 xl:w-56 bg-white drop-shadow-md">
-            <div className="sidebar-top flex justify-center py-8 ">
-              {/* <img
+            <div className="sidebar-top flex justify-center mt-3 mb-9 ">
+              <img
                 src="/images/logo.png"
                 alt=""
                 className="w-2/3 cursor-pointer hidden xl:block"
                 id="logo"
-              /> */}
-              <h1 className="font-semibold text-2xl hidden lg:block">EMI Manager</h1>
+              />
             </div>
             <div className="">
               <ul className="text-center">

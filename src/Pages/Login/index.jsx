@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import { toast } from 'react-toastify';
 import { useQuery } from 'react-query'
 import { SignIn } from '../../utils/apiCalls';
+import {PhoneContext} from '../../PhoneContext'
 
 const signUpSchema = Yup.object({
     username: Yup.string().required("Please Enter Your Username"),
@@ -19,6 +20,7 @@ const initialValues = {
 
 function Login() {
     const navigate = useNavigate();
+    const {login} = React.useContext(PhoneContext)
 
     const { values, errors, handleBlur, touched, resetForm, handleChange, handleSubmit } = useFormik({
         initialValues: initialValues,
@@ -28,7 +30,7 @@ function Login() {
                 const response = await SignIn(data)
                 toast.success(response.data.message);
                 localStorage.setItem('token', response?.data?.token);
-                navigate("/")
+                login()
                 resetForm({ values: "" })
             } catch (error) {
                 toast.error(error.response.data.message);
