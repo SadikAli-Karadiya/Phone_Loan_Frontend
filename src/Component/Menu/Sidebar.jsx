@@ -8,7 +8,7 @@ import { RiDashboardFill } from "react-icons/ri";
 import { FaWallet } from "react-icons/fa";
 import { FaWpforms } from "react-icons/fa";
 
-const Sidebar = () => {
+const Sidebar = () => {  
   const [isLoading, setIsloading] = React.useState(false)
 
   return isLoading == true ?

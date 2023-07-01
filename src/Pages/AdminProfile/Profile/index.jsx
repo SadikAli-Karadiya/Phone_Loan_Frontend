@@ -40,15 +40,6 @@ let adminSchema = Yup.object({
     })
     .required("Please Enter Email"),
 
-  username: Yup.string().email()
-    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-      if (value) {
-        return value.trim() === value;
-      }
-      return true;
-    })
-    .required("Please Enter Email"),
-
   password: Yup.string()
     .required("Please Enter Password")
     .test('trim', 'Must not contain leading or trailing spaces', (value) => {
@@ -76,6 +67,7 @@ let adminSchema = Yup.object({
       }
       return true;
     })
+    .matches(/^[0-9]+$/, 'Please enter a valid number')
     .min(10, "Please enter valid mobile no")
     .max(10, "Please enter valid mobile no")
     .required("Please Enter Mobile Number"),
@@ -146,7 +138,7 @@ const Updateprofile = () => {
               </h1>
             </div>
             <div className=" flex flex-col items-center ">
-              <div div className="flex lg:flex-row md:flex-col gap-4 mt-7">
+              <div className="flex lg:flex-row md:flex-col gap-4 mt-7">
                 <div className="fullname">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
@@ -194,7 +186,7 @@ const Updateprofile = () => {
                   </span>
                 </div>
               </div>
-              <div div className="flex lg:flex-row md:flex-col gap-4 ">
+              <div className="flex lg:flex-row md:flex-col gap-4 ">
                 <div className="fullname">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
@@ -256,8 +248,7 @@ const Updateprofile = () => {
                       onBlur={handleBlur}
                       value={values.mobile}
                       name="mobile"
-                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm 
-                        shadow-sm placeholder-slate-400 outline-none' />
+                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
                   </label>
                   <span className="text-xs font-semibold text-red-600 px-1">
                     {errors.mobile && touched.mobile

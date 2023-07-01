@@ -1,10 +1,5 @@
 import React, { createContext } from "react";
 
-
-function setToken(key, value) {
-  localStorage.setItem(key, value);
-}
-
 export const PhoneContext = createContext();
 
 //--------------------- CONSTANTS ----------------
@@ -40,6 +35,7 @@ export function PhoneProvider({ children }) {
   // const [admin, dispatchUser] = React.useReducer(userReducer, null);
 
   const logout = React.useCallback(() => {
+    localStorage.removeItem('token');
     dispatchToken({ type: LOGOUT, payload: false });
   }, []);
 

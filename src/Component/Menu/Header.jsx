@@ -8,10 +8,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { BiUserPlus } from "react-icons/bi";
 import { VscKey } from "react-icons/vsc";
 import { FiChevronRight } from "react-icons/fi"
-import "../../App.css"
+import "../../App.css";
+import { PhoneContext } from "../../PhoneContext";
 
 function Header() {
-
+    const {logout} = React.useContext(PhoneContext)
     const [isMenu, setismenu] = React.useState(false)
 
     function handleToggle() {
@@ -59,9 +60,9 @@ function Header() {
                             </li>
                         </Link>
 
-                        <Link to={"/"}>
+                        <Link>
                             <li
-                                onClick={handleToggle}
+                                onClick={()=> logout()}
                                 className="flex items-center justify-between my-2 cursor-pointer hover:bg-gray-200 duration-150 px-2  py-1 rounded-md">
                                 <div className="flex items-center space-x-3 text-blue-500">
                                     <div className="rounded-full h-8 w-8 text-lg bg-blue-200 text-blue-500 flex justify-center items-center">
