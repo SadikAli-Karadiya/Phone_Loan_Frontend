@@ -133,6 +133,7 @@ function InstallmentList() {
     };
 
     const handleSearchCustomer = (e) => {
+        setSearch(e.target.value)
         const searchedValue = e.target.value.toLowerCase();
 
         if (searchedValue == '') {
@@ -170,6 +171,11 @@ function InstallmentList() {
         );
     };
 
+    const handleAddInstallment = ()=>{
+        setInstallmentFormModal(true); 
+        setIsEdit(false)
+    }
+
     const handlePayEMI = (id) => {
         setChargeFormModal(true);
         setIsEdit(true)
@@ -196,7 +202,7 @@ function InstallmentList() {
                     <div className='flex items-center justify-end pb-5'>
                         <Tippy content="Add New EMI">
                             <div
-                                onClick={() => setInstallmentFormModal(true)}
+                                onClick={handleAddInstallment}
                                 className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
                                 <BiFolderPlus className='xs:text-base sm:text-xl' />
                             </div>
@@ -304,6 +310,7 @@ function InstallmentList() {
                             <input
                                 type="search"
                                 placeholder='Search Customer'
+                                value={search}
                                 onChange={handleSearchCustomer}
                                 className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                             />
@@ -419,7 +426,7 @@ function InstallmentList() {
                 </div>
 
                 {
-                    selectedEmiCustomer?.length > 0 ?
+                    search == '' && selectedEmiCustomer?.length > 0 ?
                         <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
                             <Pagination
                                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
@@ -434,7 +441,7 @@ function InstallmentList() {
                 <InstallmentFormModal
                     showModal={installmentFormModal}
                     handleShowModal={setInstallmentFormModal}
-                    InstallmentDetails={InstallmentDetails}
+                    InstallmentDetails={is_Edit ? InstallmentDetails : {}}
                     is_Edit={is_Edit}
                 />
             </div>

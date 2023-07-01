@@ -289,7 +289,8 @@ function Dashboard() {
       </div>
 
       {
-        search == '' && pendingEMICustomers.length > 0 ?
+        search == '' && pendingEMICustomers.length > 0 
+        ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
               total={PendingEMI?.data?.data?.totalPages || 0}
@@ -297,7 +298,7 @@ function Dashboard() {
               onPageChange={(page) => setPageNo(page)}
             />
           </div>
-          :
+        :
           null
       }
     </div>
