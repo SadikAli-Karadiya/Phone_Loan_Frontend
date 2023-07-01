@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink, Outlet } from 'react-router-dom'
 import { FaUserPlus, FaMobileAlt, FaRupeeSign, FaSearch } from "react-icons/fa"
 import { FaReceipt } from "react-icons/fa"
-import { BiSearch } from "react-icons/bi"
 import Header from "./Header";
 import "../../App.css"
 import { RiDashboardFill } from "react-icons/ri";
@@ -29,13 +28,12 @@ const Sidebar = () => {
         <div className="h-full bg-white sticky left-0 top-0">
           <div className="sidebar h-screen xs:w-20 w-20 xl:w-56 bg-white drop-shadow-md">
             <div className="sidebar-top flex justify-center py-8 ">
-              {/* <img
+              <img
                 src="/images/logo.png"
                 alt=""
                 className="w-2/3 cursor-pointer hidden xl:block"
                 id="logo"
-              /> */}
-              <h1 className="font-semibold text-2xl hidden lg:block">EMI Manager</h1>
+              />
             </div>
             <div className="">
               <ul className="text-center">
