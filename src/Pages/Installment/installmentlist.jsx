@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
+import LoaderSmall from '../../Component/LoaderSmall';
 
 function InstallmentList() {
     const navigate = useNavigate();
@@ -106,10 +107,6 @@ function InstallmentList() {
     };
 
     const handleSelectEMI = (id) => {
-        console.log(id)
-        // let Customer = purchase?.data?.data?.AllPurchase?.filter((n) => {
-        //     return n?.installment_id == id;
-        // });
         customersByInstallment.mutate(id)
         setSelectemi(id)
     };
@@ -136,6 +133,7 @@ function InstallmentList() {
     };
 
     const handleSearchCustomer = (e) => {
+        setSearch(e.target.value)
         const searchedValue = e.target.value.toLowerCase();
 
         if (searchedValue == '') {
@@ -173,6 +171,11 @@ function InstallmentList() {
         );
     };
 
+    const handleAddInstallment = ()=>{
+        setInstallmentFormModal(true); 
+        setIsEdit(false)
+    }
+
     const handlePayEMI = (id) => {
         setChargeFormModal(true);
         setIsEdit(true)
@@ -180,9 +183,17 @@ function InstallmentList() {
     };
 
     React.useEffect(() => {
-        console.log('customers ', customersByInstallment.data?.data.allCustomers)
         setSelectedEmiCustomer(customersByInstallment.data?.data.allCustomers)
     }, [customersByInstallment.isSuccess, customersByInstallment.data])
+
+    React.useEffect(() => {
+        if(installment?.data?.data.AllInstallment.length > 0){
+            const installmentId = installment?.data?.data.AllInstallment[0].id
+             customersByInstallment.mutate(installmentId)
+            setSelectemi(installmentId)
+        }
+
+    },[installment?.data?.data])
 
     return (
         <>
@@ -191,7 +202,7 @@ function InstallmentList() {
                     <div className='flex items-center justify-end pb-5'>
                         <Tippy content="Add New EMI">
                             <div
-                                onClick={() => setInstallmentFormModal(true)}
+                                onClick={handleAddInstallment}
                                 className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
                                 <BiFolderPlus className='xs:text-base sm:text-xl' />
                             </div>
@@ -205,7 +216,7 @@ function InstallmentList() {
                                         style={{
                                             backgroundColor: bgColors[index % bgColors.length],
                                         }}
-                                        className='px-5 py-3 my-3 group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3'
+                                        className={`${Selectemi != item.id ? "opacity-70" : ""} px-5 py-3 my-3 group hover:cursor-pointer rounded-md drop-shadow-lg space-y-3`}
                                         key={index}
                                         onClick={() => handleSelectEMI(item.id)}>
                                         <div className='flex justify-between items-center '>
@@ -299,11 +310,12 @@ function InstallmentList() {
                             <input
                                 type="search"
                                 placeholder='Search Customer'
+                                value={search}
                                 onChange={handleSearchCustomer}
                                 className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
                             />
-                            <div className='bg-[#3399ff] px-3 py-[6.4px] group rounded-r-lg flex justify-center items-center
-                shadow-xl cursor-pointer text-white text-2xl '>
+                            <div className='bg-[#3399ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
+                drop-shadow-lg cursor-pointer text-white text-2xl '>
                                 <BiSearch className='search group-hover:scale-125 duration-300' />
                             </div>
                         </div>
@@ -333,7 +345,10 @@ function InstallmentList() {
                                     name
                                 </th>
                                 <th scope="col" className="px-6 py-2">
-                                    Phone
+                                    Mobile
+                                </th>
+                                <th scope="col" className="px-6 py-2">
+                                    Model
                                 </th>
                                 <th scope="col" className="px-6 py-2">
                                     Total
@@ -346,70 +361,77 @@ function InstallmentList() {
                                 </th>
                             </tr>
                         </thead>
-                        {
-                            selectedEmiCustomer?.length > 0 ? (
-                                selectedEmiCustomer?.map((item, index) => {
-                                    console.log(item)
-                                    return (
-                                        <tbody key={index}
-                                            className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                            <tr className=" border-b">
-                                                <th className="py-5 px-6">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="px-6 py-5 ">
-                                                    {item.customer.full_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.customer?.mobile}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.net_amount}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.pending_amount}
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="flex justify-center items-center">
-                                                        <Tippy content="Customer Profile">
-                                                            <div>
-                                                                <AiFillEye
-                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                    onClick={() =>
-                                                                        navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
-                                                                    }
-                                                                />
+                        <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                            {
+                                customersByInstallment.isLoading
+                                ?   
+                                    <tr>
+                                        <td colSpan="7">
+                                            <LoaderSmall />
+                                        </td>
+                                    </tr>
+                                :
+                                    selectedEmiCustomer?.length > 0 ? (
+                                        selectedEmiCustomer?.map((item, index) => {
+                                            return (
+                                                    <tr key={index} className=" border-b">
+                                                        <th className="py-5 px-6">
+                                                            {index + 1}
+                                                        </th>
+                                                        <td className="px-6 py-5 ">
+                                                            {item.customer.full_name}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.customer?.mobile}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.phone.company.company_name} | {item?.phone.model_name}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.net_amount}
+                                                        </td>
+                                                        <td className="px-6 py-5 capitalize">
+                                                            {item?.pending_amount}
+                                                        </td>
+                                                        <td className="px-6 py-5">
+                                                            <div className="flex justify-center items-center">
+                                                                <Tippy content="Customer Profile">
+                                                                    <div>
+                                                                        <AiFillEye
+                                                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                            onClick={() =>
+                                                                                navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                </Tippy>
                                                             </div>
-                                                        </Tippy>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
+                                                        </td>
+                                                    </tr>
+                                            )
+                                        })
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="7">
+                                                <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                                                    <FaUsers className='text-2xl' />
+                                                    <h1 className='text-sm font-bold'>No customers </h1>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     )
-                                })
-                            ) : (
-                                null
-                            )}
+                            }
+                        </tbody>
                     </table>
-                    {
-                        selectedEmiCustomer?.length > 0 ?
-                            null
-                            :
-                            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-                                <FaUsers className='text-2xl' />
-                                <h1 className='text-sm font-bold'>No customers </h1>
-                            </div>
-                    }
                 </div>
 
                 {
-                    selectedEmiCustomer?.length > 0 ?
+                    search == '' && selectedEmiCustomer?.length > 0 ?
                         <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
                             <Pagination
                                 total={purchase && purchase?.data?.data?.pageCount ? purchase?.data?.data?.pageCount : 0}
                                 current={pageNo}
                                 onPageChange={(page) => setPageNo(page)}
-                            // previousLabel="Previous" nextLabel="Next"
                             />
                         </div>
                         :
@@ -419,7 +441,7 @@ function InstallmentList() {
                 <InstallmentFormModal
                     showModal={installmentFormModal}
                     handleShowModal={setInstallmentFormModal}
-                    InstallmentDetails={InstallmentDetails}
+                    InstallmentDetails={is_Edit ? InstallmentDetails : {}}
                     is_Edit={is_Edit}
                 />
             </div>

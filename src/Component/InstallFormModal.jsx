@@ -4,20 +4,21 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useQuery } from 'react-query'
+import { useMutation } from 'react-query'
 import { AddInstallment, UpdateInstallment } from '../utils/apiCalls';
 
 
 function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
   
-  let id = InstallmentDetails?.id
-
   if (!showModal) {
     return <></>;
   }
 
-  const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
+  let id = InstallmentDetails?.id;
+
+  const addInstallment = useMutation(AddInstallment);
+  const updateInstallment = useMutation(UpdateInstallment);
+
 
   const customStyles = {
     control: (provided, state) => ({
@@ -55,8 +56,8 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
   };
 
   const installmentSchema = Yup.object({
-    month: Yup.string().required("Please Enter Installment"),
-    charges: Yup.string().required("Please Enter Charges"),
+    month: Yup.string().required("Please Enter Installment Name"),
+    charges: Yup.string().required("Please Enter Charges").matches(/^[0-9]+$/, 'Please enter only numbers'),
   });
 
   const initialValues = {
@@ -64,7 +65,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
     charges: "",
   }
 
-  const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
+  const { values, errors, resetForm, handleBlur, touched, setValues, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
         JSON.stringify(InstallmentDetails) != {} ? { month : InstallmentDetails?.month , charges : InstallmentDetails?.charges } :
@@ -74,15 +75,9 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
         Object.assign(data, { id: id })
         try {
           if (is_Edit == true) {
-            const response = await UpdateInstallment(data)
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleModalClose(false);
+            updateInstallment.mutate(data)
           } else {
-            const response = await AddInstallment(data)
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleModalClose(false);
+            addInstallment.mutate(data)
           }
         } catch (err) {
           toast.error(err.response.data.message);
@@ -91,9 +86,20 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
     });
 
   const handleModalClose = () => {
-    resetForm({ values: "" })
+    resetForm();
     handleShowModal(false);
   };
+
+  React.useEffect(() => {
+    if(is_Edit && updateInstallment.data?.data){
+      toast.success(updateInstallment.data?.data?.message);
+      handleModalClose()
+    }
+    else if(addInstallment.data?.data){
+      toast.success(addInstallment.data?.data?.message);
+      handleModalClose()
+    }
+  },[addInstallment.isSuccess, updateInstallment.isSuccess]);
 
   return (
     <Modal open={showModal}
@@ -103,7 +109,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Add Installment
+          {is_Edit ? "Edit" : "Add"} Installment
         </Modal.Title>
         <button
           type="button"
@@ -132,7 +138,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
             <form method="POST" action="/installment/addinstallment" className="space-y-6" encType='multipart/form-date' onSubmit={handleSubmit}>
               <div className="flex xs:flex-col items-center xs:space-y-4">
                 <div className="flex flex-col space-y-2  w-full ">
-                  <label htmlFor="company" className="text-white">Installment *</label>
+                  <label htmlFor="company" className="text-white">Installment Name *</label>
                   <input
                     type='text'
                     onChange={handleChange}
@@ -140,7 +146,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                     name="month"
                     id="month"
                     value={values.month}
-                    placeholder='Enter Install'
+                    placeholder='Enter install name'
                     className="rounded-md w-full py-1 md:py-[5px] xl:py-[6px] px-2 outline-none"
                   />
                   {errors.month && touched.month ? (
@@ -150,7 +156,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                   ) : null}
                 </div>
                 <div className="flex flex-col space-y-2 w-full ">
-                  <label htmlFor="model name " className="text-white">Charge * </label>
+                  <label htmlFor="model name " className="text-white">Charge *</label>
                   <input
                     type="text"
                     name="charges"
@@ -159,7 +165,7 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-1 w-full md:py-[5px] xl:py-[6px] px-3 outline-none"
-                    placeholder="Enter Charge Amount "
+                    placeholder="Enter charge"
                   />
                   {errors.charges && touched.charges
                     ?
@@ -171,26 +177,25 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
 
               <div className="mt-5 text-right">
                 {
-                  is_Edit == true ?
-                    <button
-                      type="button"
-                      onClick={handleSubmit}
-                      disabled={isLoading}
-                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                    >
-                      {isLoading ? 'Loading...' : 'Update'}
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={addInstallment.isLoading || updateInstallment.isLoading}
+                    className={`${addInstallment.isLoading || updateInstallment.isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                  >
+                    {
+                      addInstallment.isLoading || updateInstallment.isLoading 
+                      ? 
+                        'Loading...' 
+                      : 
+                        is_Edit
+                        ?
+                          'Update'
+                        :
+                          'Submit'
+                    }
 
-                    </button>
-                    :
-                    <button
-                      type="button"
-                      onClick={handleSubmit}
-                      disabled={isLoading}
-                      className={`${isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                    >
-                      {isLoading ? 'Loading...' : 'Submit'}
-
-                    </button>
+                  </button>
 
                 }
               </div>

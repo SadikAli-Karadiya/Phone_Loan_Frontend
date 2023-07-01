@@ -135,16 +135,9 @@ export const AddCustomer = (data) => {
   })
 }
 
-export const searchCustomer = (CustomerName) => {
+export const getAllCustomer = (pageNo, searchedValue) => {
   return instance({
-    'url': `/customer/search/${CustomerName}`,
-    'method': 'GET',
-  })
-}
-
-export const getAllCustomer = (pageNo) => {
-  return instance({
-    'url': `/customer/List/${pageNo?.pageNo}`,
+    'url': `/customer/List/${pageNo}/${searchedValue}`,
     'method': 'GET',
     'headers': {
       'content-type': "multipart/form-data" // override instance defaults
@@ -300,17 +293,17 @@ export const getEmiPurchasebyId = (id) => {
 export const getPendingEmi = (pageNo) => {
   return instance({
     'method': 'GET',
-    'url': `/emi/pending/${pageNo?.pageNo}`,
+    'url': `/emi/pending/${pageNo}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
   })
 }
 
-export const getemibycustomername = (search) => {
+export const getEMICustomers = (searchedValue) => {
   return instance({
     'method': 'GET',
-    'url': `/emi/search/${search.pageNo}/${search.search}`,
+    'url': `/emi/search/${searchedValue.pageNo}/${searchedValue.search}`,
     'headers': {
       'content-type': 'application/json' // override instance defaults
     },
