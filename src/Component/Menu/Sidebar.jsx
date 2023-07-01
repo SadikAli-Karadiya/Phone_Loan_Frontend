@@ -27,7 +27,7 @@ const Sidebar = () => {
       <div className="relative bg-[#f5f7ff] min-h-screen flex ">
         <div className="h-full bg-white sticky left-0 top-0">
           <div className="sidebar h-screen xs:w-20 w-20 xl:w-56 bg-white drop-shadow-md">
-            <div className="sidebar-top flex justify-center py-8 ">
+            <div className="sidebar-top flex justify-center mt-3 mb-9 ">
               <img
                 src="/images/logo.png"
                 alt=""

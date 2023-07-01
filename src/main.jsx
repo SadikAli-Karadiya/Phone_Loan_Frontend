@@ -4,6 +4,7 @@ import App from './App'
 import './index.css'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {PhoneProvider} from './PhoneContext';
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();
@@ -22,7 +23,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       pauseOnHover
     />
       <QueryClientProvider client={queryClient}>
-        <App />
+        <PhoneProvider>
+          <App />
+        </PhoneProvider>
       </QueryClientProvider>
   </React.StrictMode>,
 )
