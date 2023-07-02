@@ -394,11 +394,9 @@ function CustomerProfile() {
 
     React.useEffect(()=>{
         if(updateDetails.isError){
-            console.log(1)
             toast.error(updateDetails.error.response.data.message);
         }
         else if(updateDetails.isSuccess){
-            console.log(2)
             toast.success(updateDetails.data?.data.message);
             CustomerDetail.refetch();
             setIsEnable(true);

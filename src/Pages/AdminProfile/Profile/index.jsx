@@ -5,7 +5,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Admindetails, UpdateAdmin } from "../../../utils/apiCalls"
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'react-query'
 
 let adminSchema = Yup.object({
 
@@ -81,8 +81,10 @@ const Updateprofile = () => {
   const navigate = useNavigate();
   const [isEnable, setIsEnable] = useState(true);
   const id = 1
-  const data = useQuery(['admin', id], () => Admindetails(id));
-  const AdminDetails = data?.data?.data?.SingleAdmin
+  const adminData = useQuery(['admin', id], () => Admindetails(id));
+  const updateAdminData = useMutation(UpdateAdmin);
+
+  const AdminDetails = adminData?.data?.data?.SingleAdmin
 
   const initialValues = {
     first_name: "",
@@ -98,15 +100,7 @@ const Updateprofile = () => {
       initialValues: AdminDetails ? AdminDetails : initialValues,
       validationSchema: adminSchema,
       async onSubmit (data) {
-        try {
-          const response = await UpdateAdmin(data)
-          console.log(response)
-          toast.success(response.data.message);
-          setIsEnable(true);
-          setToggle(false)
-        } catch (err) {
-          toast.error(err.response.data.message);
-        }
+        updateAdminData.mutate(data)
       },
     });
 
@@ -118,11 +112,22 @@ const Updateprofile = () => {
 
   function handleCancel(e) {
     e.preventDefault();
-    resetForm({ e: "" })
+    resetForm()
     setIsEnable(true);
     setToggle(false);
   }
 
+  React.useEffect(() => {
+    if(updateAdminData.isSuccess){
+      toast.success(updateAdminData.data.data?.message);
+      setIsEnable(true);
+      setToggle(false)
+    }
+    else if(updateAdminData.isError){
+      toast.error(updateAdminData.error.response.data.message);
+    }
+  },[updateAdminData.isSuccess, updateAdminData.data])
+  
   return (
     <>
       {/* {admin ? ( */}
@@ -134,7 +139,7 @@ const Updateprofile = () => {
           <div className=" grid grid-cols-1 rounded-lg drop-shadow-md truncate bg-white p-10 mt-10">
             <div className="title mb-5">
               <h1 className="text-3xl text-center font-medium text-[#020D46]">
-                Update Profile
+                Admin Profile
               </h1>
             </div>
             <div className=" flex flex-col items-center ">
