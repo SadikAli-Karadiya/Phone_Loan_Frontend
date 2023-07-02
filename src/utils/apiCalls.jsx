@@ -176,11 +176,26 @@ export const DeleteCustomer = (id) => {
 // Company -------------------------------------------------------------------
 
 export const AddCompany = (data) => {
-  console.log(data, "ksdhvb")
   return instance({
     'url': '/company/addcompany',
     'method': 'POST',
     'data': data,
+  })
+}
+
+export const EditCompany = (id) => {
+  return instance({
+    'url': `/company/details/${id}`,
+    'method': 'PUT',
+    'data': id,
+  })
+}
+
+export const DeleteCompany = (id) => {
+  return instance({
+    'url': `/company/delete/${id}`,
+    'method': 'DELETE',
+    'data': id,
   })
 }
 

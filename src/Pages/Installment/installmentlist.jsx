@@ -171,8 +171,8 @@ function InstallmentList() {
         );
     };
 
-    const handleAddInstallment = ()=>{
-        setInstallmentFormModal(true); 
+    const handleAddInstallment = () => {
+        setInstallmentFormModal(true);
         setIsEdit(false)
     }
 
@@ -187,13 +187,13 @@ function InstallmentList() {
     }, [customersByInstallment.isSuccess, customersByInstallment.data])
 
     React.useEffect(() => {
-        if(installment?.data?.data.AllInstallment.length > 0){
+        if (installment?.data?.data.AllInstallment.length > 0) {
             const installmentId = installment?.data?.data.AllInstallment[0].id
-             customersByInstallment.mutate(installmentId)
+            customersByInstallment.mutate(installmentId)
             setSelectemi(installmentId)
         }
 
-    },[installment?.data?.data])
+    }, [installment?.data?.data])
 
     return (
         <>
@@ -351,9 +351,6 @@ function InstallmentList() {
                                     Model
                                 </th>
                                 <th scope="col" className="px-6 py-2">
-                                    Model
-                                </th>
-                                <th scope="col" className="px-6 py-2">
                                     Total
                                 </th>
                                 <th scope="col" className="px-6 py-2">
@@ -380,6 +377,9 @@ function InstallmentList() {
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.customer?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.phone?.company?.company_name} | {item?.phone?.model_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.net_amount}

@@ -16,7 +16,6 @@ function GenerateReceipt() {
 
     const location = useLocation();
     const Emi_Details = useQuery(['emi', location?.state?.emi_id], () => getSingleEmi(location?.state.emi_id))
-    console.log(Emi_Details?.data?.data?.Specifications)
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState();
     const [selectPayment, setSelectPayment] = useState("1");
@@ -368,7 +367,7 @@ function GenerateReceipt() {
                                                     </h2>
                                                 </div>
                                                 <h3 className="font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</h3>
-                                                <h3 className="font-roboto">Pending Amount : 10000</h3>
+                                                <h3 className="font-roboto">Pending Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.pending_amount}</h3>
                                             </div>
                                         </div>
                                         <div className="px-7 font-mono xs:order-1 sm:order-2 py-2 flex justify-end">
@@ -474,7 +473,7 @@ function GenerateReceipt() {
                                     <span className="text-[14.5px] font-roboto">Storage : {Emi_Details?.data?.data?.Specifications?.ram} / {Emi_Details?.data?.data?.Specifications?.storage}</span>
                                 </div>
                                 <span className=" text-[14.5px] font-roboto">Net Amount : {Emi_Details?.data?.data?.SingleEmi?.purchase?.net_amount}</span>
-                                <span className=" text-[14.5px] font-roboto">Pending  : </span>
+                                <span className=" text-[14.5px] font-roboto">Pending  : {Emi_Details?.data?.data?.SingleEmi?.purchase?.pending_amount}</span>
                             </div>
                             <div className="flex items-center w-full justify-between pt-5 ">
                                 <div className="flex items-center w-1/4 border-2 border-[#0d0d48] rounded-full ">

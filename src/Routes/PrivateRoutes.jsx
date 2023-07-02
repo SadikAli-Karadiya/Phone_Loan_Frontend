@@ -16,6 +16,7 @@ import CustomerProfile from '../Pages/Customer/CustometProfile'
 import { userDetail } from '../utils/apiCalls';
 import { useQuery } from 'react-query'
 import Loader from "../Component/Loader";
+import Company from '../Pages/Company'
 
 function PrivateRoutes() {
   const token = localStorage.getItem('token');
@@ -36,6 +37,7 @@ function PrivateRoutes() {
           <Route path='/Receipt/*' element={<Index />} />
           <Route path='/Report' element={<Report />} />
           <Route path='/Product/*' element={<Product />} />
+          <Route path='/Company/*' element={<Company />} />
           <Route path='/Search' element={<Search />} />
           <Route path='/Customer/*' element={<Customer />} />
           <Route path='/InstallmentList' element={<InstallmentList />} />
