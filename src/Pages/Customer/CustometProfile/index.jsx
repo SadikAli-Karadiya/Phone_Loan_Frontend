@@ -73,6 +73,7 @@ const customerSchema = Yup.object({
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
     mobile: Yup.string()
+        .matches(/^[0-9]+$/, 'Please enter a valid number')
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -88,6 +89,7 @@ const customerSchema = Yup.object({
         .required("Please Enter Your Mobile Number"),
 
     alternate_no: Yup.string()
+        .matches(/^[0-9]+$/, 'Please enter a valid number')
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;
@@ -119,6 +121,7 @@ const customerSchema = Yup.object({
         .matches(/[^\s*].*[^\s*]/g, "* This field cannot contain only blankspaces"),
 
     reference_mobile: Yup.string()
+        .matches(/^[0-9]+$/, 'Please enter a valid number')
         .test('trim', 'Must not contain leading or trailing spaces', (value) => {
             if (value) {
                 return value.trim() === value;

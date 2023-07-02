@@ -5,78 +5,9 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'react-query'
 
-
-const productSchema = Yup.object({
-  model_name: Yup.string().required("Please Enter Model Name"),
-});
-
-function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
-
-  if (!showModal) {
-    return <></>;
-  }
-
-  const [error, setError] = useState("");
-  const [company, setCompany] = React.useState();
-  const [isLoading, setIsLoading] = React.useState();
-  let Company = useQuery('company', getAllCompanies)
-  const [CompanyList, setComapnyList] = React.useState([]);
-  let Companies = Company?.data?.data?.all_companies
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const handleCreateCompany = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      // const newComapny = createCompany(inputValue);
-      const respons = AddCompany({ inputValue })
-      setIsLoading(false);
-      setComapnyList();
-      // setCompany(newComapny);
-    }, 1000);
-  };
-
-  const initialValues = {
-    company_name: "",
-    model_name: "",
-  }
-
-  const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
-    useFormik({
-      initialValues:
-        JSON.stringify(ModelDetails) != {} ? { company_name: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name }
-          :
-          initialValues,
-      validationSchema: productSchema,
-      async onSubmit(data) {
-        if (company == null) {
-          toast("Please Select Company")
-        }
-        Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
-        try {
-          if (is_Edit == true) {
-            setIsSubmitting(true);
-            const response = await UpdatePhone(data)
-            setIsSubmitting(false);
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleShowModal(false);
-          } else {
-            setIsSubmitting(true);
-            const response = await AddNewPhone(data)
-            setIsSubmitting(false);
-            toast.success(response.data.message);
-            resetForm({ values: "" })
-            handleShowModal(false);
-          }
-        } catch (error) {
-          toast.error(error.response.data.message);
-        }
-      },
-    });
-
-  const customStyles = {
+const customStyles = {
     control: (provided, state) => ({
       ...provided,
       backgroundColor: "rgb(75 85 99)",
@@ -109,12 +40,82 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
       ...provided,
       height: "44px",
     }),
+};
+
+const productSchema = Yup.object({
+  model_name: Yup.string().required("Please Enter Model Name"),
+});
+
+function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
+
+  if (!showModal) {
+    return <></>;
+  }
+
+  const [company, setCompany] = React.useState();
+  const [isLoading, setIsLoading] = React.useState();
+  let Company = useQuery('company', getAllCompanies)
+  const [CompanyList, setComapnyList] = React.useState([]);
+  let Companies = Company?.data?.data?.all_companies
+  
+  const addPhone = useMutation(AddNewPhone);
+  const updatePhone = useMutation(UpdatePhone);
+
+  const handleCreateCompany = (inputValue) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      // const newComapny = createCompany(inputValue);
+    const respons = AddCompany({ inputValue })
+      setIsLoading(false);
+      setComapnyList();
+      // setCompany(newComapny);
+    }, 1000);
   };
+
+  const initialValues = {
+    company_name: "",
+    model_name: "",
+  }
+
+  const { values, errors, resetForm, handleBlur, touched, setFieldValue, handleChange, handleSubmit } =
+    useFormik({
+      initialValues:
+        JSON.stringify(ModelDetails) != {} ? { company_name: ModelDetails?.company?.company_name, model_name: ModelDetails?.model_name }
+          :
+          initialValues,
+      validationSchema: productSchema,
+      async onSubmit(data) {
+        if (company == null) {
+          toast("Please Select Company")
+        }
+        Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
+        try {
+          if (is_Edit == true) {
+            addPhone.mutate(data)
+          } else {
+            updatePhone.mutate(data)
+          }
+        } catch (error) {
+          toast.error(error.response.data.message);
+        }
+      },
+    });
 
   const handleModalClose = () => {
     resetForm({ values: "" })
     handleShowModal(false);
   };
+
+  React.useEffect(() => {
+    if(is_Edit && updatePhone.data?.data){
+      toast.success(updatePhone.data?.data?.message);
+      handleModalClose()
+    }
+    else if(addPhone.data?.data){
+      toast.success(addPhone.data?.data?.message);
+      handleModalClose()
+    }
+  },[addPhone.isSuccess, updatePhone.isSuccess]);
 
   return (
     <Modal open={showModal}
@@ -124,7 +125,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Add Model
+          {is_Edit ? 'Edit' : 'Add'} Model
         </Modal.Title>
         <button
           type="button"
@@ -187,23 +188,24 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
               </div>
               <div className="mt-5 text-right">
                 {
-                  is_Edit == true ?
+                  
                     <button
                       type="button"
                       onClick={handleSubmit}
-                      disabled={isSubmitting}
-                      className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                      disabled={addPhone.isLoading || updatePhone.isLoading}
+                      className={`${addPhone.isLoading || updatePhone.isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
                     >
-                      {isSubmitting ? 'Loading...' : 'Update'}
-                    </button>
-                    :
-                    <button
-                      type="button"
-                      onClick={handleSubmit}
-                      disabled={isSubmitting}
-                      className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                    >
-                      {isSubmitting ? 'Loading...' : 'Submit'}
+                      {
+                        addPhone.isLoading || updatePhone.isLoading 
+                        ? 
+                          'Loading...' 
+                        : 
+                          is_Edit
+                          ?
+                            'Update'
+                          :
+                            'Submit'
+                      }
                     </button>
                 }
               </div>

@@ -6,8 +6,6 @@ import { BsPhone } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { AiFillEye } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Pagination from 'react-responsive-pagination'
@@ -27,7 +25,7 @@ function ProductList() {
   const [search, setSearch] = React.useState("");
   const [productFormModal, setProductFormModal] = React.useState(false);
   const [ModelDetails, setModelDetails] = React.useState();
-  const [SelectedCompany, setSelectedCompany] = React.useState();
+  const [SelectedCompany, setSelectedCompany] = React.useState([]);
   const [is_Edit, setIsEdit] = React.useState(false);
   const companies = useQuery('companies', getAllCompanies)
   const searchPhoneWithName = useMutation(searchPhone)
@@ -42,6 +40,11 @@ function ProductList() {
     setProductFormModal(true)
   };
 
+  const handleAddModel = () =>{
+    setProductFormModal(true)
+    setIsEdit(false);
+  }
+
   const handlePhoneSearch = async (e) => {
     setSearch(e.target.value)
     if (e.target.value == '') {
@@ -51,20 +54,24 @@ function ProductList() {
     searchPhoneWithName.mutate(e.target.value)
   }
 
-  console.log(searchPhoneWithName , "jsdhvb")
-
-  const handlePendingPaidUpClick = (e) => {
-    const filteredCompany = phones.data.data.AllModel?.filter((item) => {
-      if (e.target.value == item.company.company_name) {
-        return item
-      }
-    });
+  const handlePendingPaidUpDropDown = (e) => {
+    let filteredCompany = null
+    if(e.target.value == 'all'){
+      filteredCompany = phones.data.data.AllModel
+    }
+    else{
+      filteredCompany = phones.data.data.AllModel?.filter((item) => {
+        if (e.target.value == item.company.company_name) {
+          return item
+        }
+      });
+    }
     setSelectedCompany(filteredCompany)
   };
 
   React.useEffect(() => {
     setSelectedCompany(phones?.data?.data?.AllModel)
-  }, [phones?.data?.data?.AllModel])
+  }, [phones.isSuccess, phones.data])
 
   React.useEffect(() => {
     setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
@@ -78,7 +85,7 @@ function ProductList() {
           <div className='flex items-center justify-end pb-5'>
             <Tippy content="Add New Model">
               <div
-                onClick={() => setProductFormModal(true)}
+                onClick={handleAddModel}
                 className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
                 <BiFolderPlus className='xs:text-base sm:text-xl' />
               </div>
@@ -112,10 +119,10 @@ function ProductList() {
               <div>
                 <select
                   name="" id=""
-                  onChange={handlePendingPaidUpClick}
+                  onChange={handlePendingPaidUpDropDown}
                   className='xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg outline-none' >
                   {/* <option value="">Select Company</option> */}
-                  <option value={0}>All</option>
+                  <option value='all'>All</option>
                   {
                     companies?.data?.data?.all_companies?.map((company, index) => {
                       return (
@@ -145,58 +152,59 @@ function ProductList() {
                   </th>
                 </tr>
               </thead>
-              {
-                companies.isLoading || searchPhoneWithName.isLoading
+              <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                {
+                  companies.isLoading || searchPhoneWithName.isLoading
                   ?
-                  <tr>
-                    <td colSpan="4">
-                      <LoaderSmall />
-                    </td>
-                  </tr>
-                  :
-                  SelectedCompany?.length > 0 ? (
-                    SelectedCompany?.map((item, index) => {
-                      return (
-                        <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                          <tr className=" border-b">
-                            <td className="px-6 py-5 font-bold">
-                              {index + 1}
-                            </td>
-                            <td className="px-6 py-5 capitalize">
-                              {item.company.company_name}
-                            </td>
-                            <td className="px-6 py-5">
-                              {item.model_name}
-                            </td>
-                            <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                              <div className='flex justify-center items-center space-x-3 ' >
-                                <Tippy content="Show Specifiaction">
-                                  <div onClick={() =>
-                                    navigate(`/Product/product-details/${item.id}`)}>
-                                    <AiFillEye className='text-[18px] cursor-pointer' />
-                                  </div>
-                                </Tippy>
-                                <Tippy content="Update Model">
-                                  <div onClick={() => handleUpdatemodel(item.id)}>
-                                    <FiEdit className='text-[17px] cursor-pointer' />
-                                  </div>
-                                </Tippy>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      )
-                    })
-                  ) : (
                     <tr>
                       <td colSpan="4">
-                        <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
-                          <BsPhone className='text-2xl' />
-                          <h1 className='text-sm font-bold'>Model Not Found</h1>
-                        </div>
+                        <LoaderSmall />
                       </td>
                     </tr>
-                  )}
+                  :
+                    SelectedCompany?.length > 0 ? (
+                      SelectedCompany?.map((item, index) => {
+                        return (
+                            <tr key={index} className=" border-b">
+                              <td className="px-6 py-5 font-bold">
+                                {index + 1}
+                              </td>
+                              <td className="px-6 py-5 capitalize">
+                                {item.company.company_name}
+                              </td>
+                              <td className="px-6 py-5">
+                                {item.model_name}
+                              </td>
+                              <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                                <div className='flex justify-center items-center space-x-3 ' >
+                                  <Tippy content="Show Specifiaction">
+                                    <div onClick={() =>
+                                      navigate(`/Product/product-details/${item.id}`)}>
+                                      <AiFillEye className='text-[18px] cursor-pointer' />
+                                    </div>
+                                  </Tippy>
+                                  <Tippy content="Update Model">
+                                    <div onClick={() => handleUpdatemodel(item.id)}>
+                                      <FiEdit className='text-[17px] cursor-pointer' />
+                                    </div>
+                                  </Tippy>
+                                </div>
+                              </td>
+                            </tr>
+                        )
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="4">
+                          <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
+                            <BsPhone className='text-2xl' />
+                            <h1 className='text-sm font-bold'>Model Not Found</h1>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  }
+              </tbody>
             </table>
           </div>
         </div>
@@ -208,7 +216,6 @@ function ProductList() {
                 total={phones?.data?.data && phones?.data?.data?.pageCount ? phones?.data?.data?.pageCount : 0}
                 current={pageNo}
                 onPageChange={(page) => setPageNo(page)}
-                previousLabel="Previous" nextLabel="Next"
               />
             </div>
             :
@@ -219,11 +226,9 @@ function ProductList() {
       <ProductFormModel
         showModal={productFormModal}
         handleShowModal={setProductFormModal}
-        ModelDetails={ModelDetails}
+        ModelDetails={is_Edit ? ModelDetails : {}}
         is_Edit={is_Edit}
       />
-      {/* </div>
-      </div> */}
     </>
   )
 }
