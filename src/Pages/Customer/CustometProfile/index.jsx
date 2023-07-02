@@ -238,13 +238,9 @@ function CustomerProfile() {
     const [Adhar_back, setadharback] = useState("");
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
-    const data = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
-    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id))
-    let SingleCustomerDetails = CustomerDetail?.data?.data?.SingleCustomer
     
-    console.log(SingleCustomerDetails)
-
-    const initialValues = {
+    const [SingleCustomerDetails, setSingleCustomerDetails] = useState({
+        photo: "",
         full_name: "",
         mobile: "",
         alternate_no: "",
@@ -905,63 +901,66 @@ function CustomerProfile() {
                                                         return (
                                                                 <tr key={index} className=" border-b">
 
-                                                            <td className="px-6 py-5 ">
-                                                                {moment(item.createdAt).format("DD / MM / YYYY")}
-                                                            </td>
-                                                            <td className="px-6 py-5 ">
-                                                                {item?.phone?.company?.company_name}
-                                                            </td>
-                                                            <td className="px-6 py-5 capitalize">
-                                                                {item.phone.model_name}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.installment.month}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.net_amount}
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                5000
-                                                            </td>
-                                                            <td className="px-6 py-5">
-                                                                {item.pending_amount}
-                                                            </td>
-                                                            <td className="px-6 py-5 flex items-center justify-center space-x-3">
-                                                                <Tippy content="Phone Detail">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <AiFillEye
-                                                                            className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                            onClick={() =>
-                                                                                navigate(`/Customer/EMI-History/${item.id}`)}
-                                                                        />
-                                                                    </div>
-                                                                </Tippy>
-                                                                <Tippy content="Edit Phone">
-                                                                    <div className="flex justify-center items-center">
-                                                                        <FiEdit
-                                                                            className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
-                                                                            onClick={() => handleEditPhone(item.id)}
-                                                                        />
-                                                                    </div>
-                                                                </Tippy>
+                                                                    <td className="px-6 py-5 ">
+                                                                        {moment(item.createdAt).format("DD / MM / YYYY")}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 ">
+                                                                        {item?.phone?.company?.company_name}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 capitalize">
+                                                                        {item.phone.model_name}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.installment.month} Months
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.net_amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.emis[0].amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5">
+                                                                        {item.pending_amount}
+                                                                    </td>
+                                                                    <td className="px-6 py-5 flex items-center justify-center space-x-3">
+                                                                        <Tippy content="Phone Detail">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <AiFillEye
+                                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                                    onClick={() =>
+                                                                                        navigate(`/Customer/EMI-History/${item.id}`)}
+                                                                                />
+                                                                            </div>
+                                                                        </Tippy>
+                                                                        <Tippy content="Edit Phone">
+                                                                            <div className="flex justify-center items-center">
+                                                                                <FiEdit
+                                                                                    className="xs:text-base md:text-sm lg:text-[16px] hover:cursor-pointer "
+                                                                                    onClick={() => handleEditPhone(item.id)}
+                                                                                />
+                                                                            </div>
+                                                                        </Tippy>
+                                                                    </td>
+                                                                </tr>
+                                                        )
+                                                    })
+                                                : 
+                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.length != 0 
+                                                    ?
+                                                        <tr>
+                                                            <td colSpan="8">
+                                                                <div className='flex justify-center items-center w-full py-5 space-x-4 text-gray-500'>
+                                                                    <BsPhone className='text-3xl' />
+                                                                    <h1 className='font-semibold'>No phone purchased yet</h1>
+                                                                </div>                                            
                                                             </td>
                                                         </tr>
-                                                    </tbody>
-                                                )
-                                            })
-                                        ) : (
-                                            null
-                                        )}
+                                                    :
+                                                        null
+                                            }
+                                            </tbody>
+                                        }
                                 </table>
-                                {
-                                    data?.data?.data?.CustomerAllPurchase?.length > 0 ?
-                                        null
-                                        :
-                                        <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                                            <BsPhone className='text-3xl' />
-                                            <h1 className='font-semibold'>Customer Not Found</h1>
-                                        </div>
-                                }
                             </div>
                         </div>
                     </div>

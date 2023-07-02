@@ -336,6 +336,9 @@ function InstallmentList() {
                                     Phone
                                 </th>
                                 <th scope="col" className="px-6 py-2">
+                                    Model
+                                </th>
+                                <th scope="col" className="px-6 py-2">
                                     Total
                                 </th>
                                 <th scope="col" className="px-6 py-2">
@@ -362,6 +365,9 @@ function InstallmentList() {
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.customer?.mobile}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.phone?.company?.company_name} || {item?.phone?.model_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.net_amount}
