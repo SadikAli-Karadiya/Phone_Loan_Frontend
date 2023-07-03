@@ -183,11 +183,11 @@ export const AddCompany = (data) => {
   })
 }
 
-export const EditCompany = (id) => {
+export const EditCompany = (data) => {
   return instance({
-    'url': `/company/details/${id}`,
+    'url': `/company/update/${data.id}`,
     'method': 'PUT',
-    'data': id,
+    'data': data,
   })
 }
 

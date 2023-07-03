@@ -1,11 +1,15 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { BiFolderPlus } from "react-icons/bi";
+import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import CompanyFormModal from '../../../Pages/Company/CompanyDetails/CompanyAddEditModel';
-import { DeleteCompany } from '../../../utils/apiCalls';
+import { DeleteCompany, getAllCompanies } from '../../../utils/apiCalls';
+import { useQuery } from 'react-query'
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 
 function CompanyList() {
@@ -13,14 +17,41 @@ function CompanyList() {
     const [is_Edit, setIsEdit] = useState(false);
     const [CompanyDetails, setCompanyDetails] = useState();
     const [CompanyModal, setCompanyModal] = useState(false);
+    const [isHoverEdit, setIsHoverEdit] = useState(false);
+    const [isHoverDelete, setIsHoverDelete] = useState(false);
+    const companies = useQuery('companies', getAllCompanies)
+    console.log(companies.data.data.all_companies)
+    const headingBgColor = [
+        "#0072b8",
+        "#16a34a",
+        "#000000",
+        "#eb0029",
+        "#FF6600",
+        "#ffc916",
+    ];
 
+    const handleMouseEnterEdit = () => {
+        setIsHoverEdit(true);
+    };
 
-    function handleEditEMI() {
-        // let Installment = installment?.data?.data?.AllInstallment?.find((n) => {
-        //     return n.id == id;
-        // });
+    const handleMouseLeaveEdit = () => {
+        setIsHoverEdit(false);
+    };
+
+    const handleMouseEnterDelete = () => {
+        setIsHoverDelete(true);
+    };
+
+    const handleMouseLeaveDelete = () => {
+        setIsHoverDelete(false);
+    };
+
+    function handleEditCompany(id) {
+        let Companydetails = companies?.data?.data?.all_companies?.find((n) => {
+            return n.id == id;
+        });
         setIsEdit(true)
-        // setCompanyDetails(Installment);
+        setCompanyDetails(Companydetails);
         setCompanyModal(true);
     };
 
@@ -28,6 +59,28 @@ function CompanyList() {
         setCompanyModal(true);
         setIsEdit(false)
     }
+
+
+    const handleDeleteCompany = async (id) => {
+        Swal.fire({
+            title: "Are you sure to delete company?",
+            text: "",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                let response = await DeleteCompany(id);
+                console.log(response?.data.message)
+                if (response.data?.success == true) {
+                    toast.success(response.data?.message);
+                }
+            }
+        });
+    };
+
 
     return (
         <>
@@ -42,41 +95,93 @@ function CompanyList() {
                     </Tippy>
                 </div>
                 <div className='flex flex-wrap justify-center items-center gap-10 px-12 '>
-                    <div className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
-                        <div className='bg-[#0072b8] px-3 py-1 rounded-md flex items-center space-x-2'>
-                            <h1 className='font-semibold text-white'>Total Model : </h1>
-                            <span className='font-semibold text-white'>15</span>
-                        </div>
-                        <div className='flex items-center justify-between mt-14'>
-                            <div className='py-2 rounded-md '>
-                                <img src="/images/vivo.png" alt="" className='w-24' />
-                            </div>
-                            <div className='hidden group-hover:block'>
-                                <div className='flex items-center space-x-1 mt-2'>
-                                    <Tippy content="Edit Company">
-                                        <div
-                                            onClick={handleEditEMI}
-                                            className='hover:bg-[#0072b8] bg-white text-[#0072b8] border-2 border-[#0072b8] hover:text-white rounded-md px-[3px] py-[3px] cursor-pointer '>
-                                            <MdModeEdit className='' />
+                    {companies?.data?.data?.all_companies?.length > 0 ? (
+                        companies?.data?.data?.all_companies?.map((item, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
+                                    <div
+                                        style={{
+                                            background:
+                                                headingBgColor[
+                                                index % headingBgColor.length
+                                                ],
+                                        }}
+                                        className='px-3 py-1 rounded-md flex items-center space-x-2'>
+                                        <h1
+                                            className='font-semibold text-white'>Total Model : </h1>
+                                        <span className='font-semibold text-white'>15</span>
+                                    </div>
+                                    <div className='flex items-center justify-between mt-14'>
+                                        <div className='py-2 rounded-md '>
+                                            <h1
+                                                style={{
+                                                    color:
+                                                        headingBgColor[
+                                                        index % headingBgColor.length
+                                                        ],
+                                                }}
+                                                className='uppercase font-semibold  font-roboto text-2xl'>{item.company_name}</h1>
                                         </div>
-                                    </Tippy>
-                                    <Tippy content="Delete Company">
-                                        <div className='hover:bg-[#0072b8] bg-white text-[#0072b8] border-2 border-[#0072b8] hover:text-white rounded-md px-[3px] py-[3px] cursor-pointer '>
-                                            <MdDelete className='' />
+                                        <div className='hidden group-hover:block'>
+                                            <div className='flex items-center space-x-1 mt-2'>
+                                                <Tippy content="Edit Company">
+                                                    <div
+                                                        style={{
+                                                            color: "#fff",
+
+                                                            backgroundColor:
+                                                                headingBgColor[
+                                                                index % headingBgColor.length
+                                                                ]
+                                                        }}
+                                                        onMouseEnter={handleMouseEnterEdit}
+                                                        onMouseLeave={handleMouseLeaveEdit}
+                                                        onClick={() => handleEditCompany(item.id)}
+                                                        className='rounded-md px-[3px] py-[3px] cursor-pointer '>
+                                                        <MdModeEdit className='' />
+                                                    </div>
+                                                </Tippy>
+                                                <Tippy content="Delete Company">
+                                                    <div
+                                                        style={{
+                                                            color: "#fff",
+
+                                                            backgroundColor:
+                                                                headingBgColor[
+                                                                index % headingBgColor.length
+                                                                ]
+                                                        }}
+                                                        onMouseEnter={handleMouseEnterDelete}
+                                                        onMouseLeave={handleMouseLeaveDelete}
+                                                        onClick={() => handleDeleteCompany(item.id)}
+                                                        className='rounded-md px-[3px] py-[3px] cursor-pointer '>
+                                                        <MdDelete className='' />
+                                                    </div>
+                                                </Tippy>
+                                            </div>
                                         </div>
-                                    </Tippy>
+                                    </div>
                                 </div>
+                            );
+                        })
+                    ) : (
+                        <div className='flex justify-center items-center w-full'>
+                            <div className="bg-red-200 font-bold flex justify-center items-center p-2 rounded mx-3 space-x-2">
+                                <IoMdInformationCircle className="text-xl text-red-600" />
+                                <h1 className="text-red-800 text-sm">EMI not found </h1>
                             </div>
                         </div>
-                    </div>
-                    <div className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
-                        <div className='bg-green-600 px-3 py-1 rounded-md flex items-center space-x-2'>
+                    )}
+                    {/* <div className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
+                        <div className='bg-[#16a34a] px-3 py-1 rounded-md flex items-center space-x-2'>
                             <h1 className='font-semibold text-white'>Total Model : </h1>
                             <span className='font-semibold text-white'>15</span>
                         </div>
                         <div className='flex items-center justify-between mt-14'>
                             <div className=' py-2 rounded-md '>
-                                <img src="/images/oppo.png" alt="" className='w-24' />
+                                <h1 className='uppercase font-semibold text-green-600 font-roboto text-2xl'>oppo</h1>
                             </div>
                             <div className='hidden group-hover:block'>
                                 <div className='flex items-center space-x-1 mt-2'>
@@ -97,7 +202,7 @@ function CompanyList() {
                         </div>
                         <div className='flex items-center justify-between mt-14 '>
                             <div className='py-2 rounded-md '>
-                                <img src="/images/samsung.png" alt="" className='w-32' />
+                                <h1 className='uppercase font-semibold text-black font-roboto text-2xl'>Samsung</h1>
                             </div>
                             <div className='hidden group-hover:block'>
                                 <div className='flex items-center space-x-1 mt-2'>
@@ -118,7 +223,7 @@ function CompanyList() {
                         </div>
                         <div className='flex items-center justify-between mt-14 '>
                             <div className='py-2 rounded-md '>
-                                <img src="/images/onepluse.png" alt="" className='w-32' />
+                                <h1 className='uppercase font-semibold text-[#eb0029] font-roboto text-2xl'>onepluse</h1>
                             </div>
                             <div className='hidden group-hover:block'>
                                 <div className='flex items-center space-x-1 '>
@@ -133,13 +238,13 @@ function CompanyList() {
                         </div>
                     </div>
                     <div className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
-                        <div className='bg-orange-600 px-3 py-1 rounded-md flex items-center space-x-2'>
+                        <div className='bg-[#FF6600] px-3 py-1 rounded-md flex items-center space-x-2'>
                             <h1 className='font-semibold text-white'>Total Model : </h1>
                             <span className='font-semibold text-white'>15</span>
                         </div>
                         <div className='flex items-center justify-between mt-12 '>
                             <div className='py-2 rounded-md '>
-                                <img src="/images/mi.png" alt="" className='w-14 rounded-lg' />
+                                <h1 className='uppercase font-semibold text-orange-600 font-roboto text-2xl'>MI</h1>
                             </div>
                             <div className='hidden group-hover:block'>
                                 <div className='flex items-center space-x-1 mt-2'>
@@ -160,7 +265,7 @@ function CompanyList() {
                         </div>
                         <div className='flex items-center justify-between mt-12 '>
                             <div className='py-2 rounded-md '>
-                                <img src="/images/Realme.png" alt="" className='w-28 rounded-lg' />
+                                <h1 className='uppercase font-semibold text-[#ffc916] font-roboto text-2xl'>onepluse</h1>
                             </div>
                             <div className='hidden group-hover:block'>
                                 <div className='flex items-center space-x-1 mt-2'>
@@ -173,13 +278,13 @@ function CompanyList() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <CompanyFormModal
                 showModal={CompanyModal}
                 handleShowModal={setCompanyModal}
-                // InstallmentDetails={is_Edit ? InstallmentDetails : {}}
+                CompanyDetails={is_Edit ? CompanyDetails : {}}
                 is_Edit={is_Edit}
             />
         </>

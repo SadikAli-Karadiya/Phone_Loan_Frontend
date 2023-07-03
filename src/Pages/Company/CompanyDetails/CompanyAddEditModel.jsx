@@ -8,7 +8,7 @@ import { useMutation } from 'react-query'
 import { AddCompany, EditCompany } from '../../../utils/apiCalls';
 
 
-function CompanyFormModal({ showModal, handleShowModal, is_Edit }) {
+function CompanyFormModal({ showModal, handleShowModal, is_Edit, CompanyDetails }) {
 
   if (!showModal) {
     return <></>;
@@ -66,11 +66,16 @@ function CompanyFormModal({ showModal, handleShowModal, is_Edit }) {
   const { values, errors, resetForm, handleBlur, touched, setValues, setFieldValue, handleChange, handleSubmit } =
     useFormik({
       initialValues:
-        // JSON.stringify(InstallmentDetails) != {} ? { month : InstallmentDetails?.month , charges : InstallmentDetails?.charges } :
-        initialValues,
+        JSON.stringify(CompanyDetails) != {} ? { company_name: CompanyDetails?.company_name } :
+          initialValues,
       validationSchema: companySchema,
       async onSubmit(data) {
-        // Object.assign(data, { id: id })
+        {
+          is_Edit ?
+            Object.assign(data, { id: CompanyDetails.id })
+            :
+            null
+        }
         try {
           if (is_Edit == true) {
             updateCompany.mutate(data)
