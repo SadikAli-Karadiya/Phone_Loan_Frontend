@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Formik, useFormik } from 'formik'
 import * as Yup from "yup"
 import { toast } from 'react-toastify';
-import { useQuery } from 'react-query'
 import { SignUp } from '../../utils/apiCalls';
 
 
@@ -23,7 +22,7 @@ function Registration() {
 
   const navigate = useNavigate();
 
-  const { values, errors, handleBlur, touched, resetForm ,  handleChange, handleSubmit } = useFormik({
+  const { values, errors, handleBlur, touched, resetForm, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
     validationSchema: signUpSchema,
     async onSubmit(data) {
@@ -47,27 +46,35 @@ function Registration() {
       <section className="h-full w-full flex justify-center items-center ">
         <div className="flex w-full h-screen overflow-hidden">
           <div className="hidden lg:flex flex-1 justify-center items-center sm:hidden ">
-            <img src="/6368592.jpg" alt="" className="ml-28" />
+            <img src="/images/login.jpg" alt="" />
           </div>
-          <div className="flex flex-1 flex-col justify-center items-center">
-            <section className="h-full w-full flex justify-center items-center">
-              <div className="login">
+          <div className="flex flex-1 flex-col justify-start mt-5  ">
+            <div className="flex justify-end  items-end pr-10">
+              <div className='space-x-5'>
+                <span className='font-semibold text-slate-600 text-[15px]'>Already have an account?</span>
+                <button
+                  onClick={handleClick}
+                  className='bg-[#0F0673] text-white text-sm rounded-full font-semibold px-5 py-2'>Log In</button>
+              </div>
+            </div>
+            <section className="py-20 px-14 mt-16 ml-20 flex justify-center items-center w-2/3">
+              <div className="login ">
                 <div className="mb-10">
-                  <h2 className="text-[27px] text-[#0F0673] font-bold text-center tracking-wider">
-                    SignUp
+                  <h2 className="text-[24px] text-slate-600 font-bold text-center tracking-wider">
+                    Let's get you started
                   </h2>
                 </div>
                 <form
                   action=""
                   onSubmit={handleSubmit}
-                  className="flex flex-col justify-center items-center"
+                  className="flex flex-col justify-center items-center "
                 >
-                  <div className='flex flex-col space-y-5'>
+                  <div className='flex flex-col space-y-6 w-full'>
                     <div className="flex flex-col">
+                      <label htmlFor="" className='text-slate-600 text-[15px]'>Username</label>
                       <input
                         type="text"
-                        className='border-2 outline-none bg-white focus:bg-white rounded-md h-[38px] w-64 px-2'
-                        placeholder="Username"
+                        className='bg-blue-50 outline-none rounded-md h-[38px] w-full px-2'
                         name="username"
                         id="lastname"
                         value={values.username}
@@ -81,10 +88,10 @@ function Registration() {
                         null}
                     </div>
                     <div className="flex flex-col">
+                      <label htmlFor="" className='text-slate-600 text-[15px]'>Password</label>
                       <input
                         type="password"
-                        className='border-2 bg-white outline-none rounded-md h-[38px] w-64 px-2'
-                        placeholder="Password"
+                        className='bg-blue-50 outline-none rounded-md h-[38px] w-full px-2'
                         name="password"
                         id="password"
                         value={values.password}
@@ -98,29 +105,17 @@ function Registration() {
                         null}
                     </div>
                   </div>
-                  <div className="mt-5">
+                  <div className="mt-6">
                     <button
                       type="submit"
-                      className="border-2 bg-[#300aca] w-64 py-2 rounded-md hover:bg-[#7D97F4]"
+                      className=" bg-[#0F0673] w-64 py-2 rounded-md "
                     >
-                      <span className="text-white">
-                       Submit
+                      <span className="text-white text-[15px] uppercase font-semibold">
+                        Sign up
                       </span>
                     </button>
                   </div>
                 </form>
-                {/* <div className="mt-5 flex justify-center">
-                                    <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
-                                        Forgot Password?
-                                    </span>
-                                </div> */}
-                <div className="mt-5 flex justify-center">
-                  <span
-                    onClick={handleClick}
-                    className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
-                    Login !
-                  </span>
-                </div>
               </div>
             </section>
           </div>

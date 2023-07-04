@@ -357,7 +357,7 @@ function CustomerRegister() {
                                 <button type="submit"
                                     disabled={isSubmitting}
                                     className={`${isSubmitting ? 'opacity-60' : ''} bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
-                                    {isSubmitting ? 'Loading...' : 'Submit'}
+                                    
                                 </button>
                             </div>
                         </div>

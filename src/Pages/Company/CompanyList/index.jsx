@@ -20,7 +20,7 @@ function CompanyList() {
     const [isHoverEdit, setIsHoverEdit] = useState(false);
     const [isHoverDelete, setIsHoverDelete] = useState(false);
     const companies = useQuery('companies', getAllCompanies)
-    console.log(companies.data.data.all_companies)
+
     const headingBgColor = [
         "#0072b8",
         "#16a34a",
