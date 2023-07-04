@@ -51,7 +51,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
         } : NewPhoneValues,
       validationSchema: PhoneSchema,
       async onSubmit(data) {
-        console.log(data)
         if (Company == "") {
           toast.error("Please Select Cuompany")
         }
@@ -69,7 +68,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
         )
         try {
           const response = await AddNewPurchase(data)
-          console.log(response)
           toast.success(response.data.message);
           resetForm({ values: "" })
           handleModalClose(false);
@@ -161,7 +159,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   };
 
   let Net_playable = (SelectInstallment + Phone_Price)
-
+  console.log(Net_playable)
   const handleModalClose = () => {
     resetForm({ values: "" })
     handleShowModal(false);
@@ -340,8 +338,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">
-                      {errors.iemi ? errors.iemi : null}
-                       
+                        {errors.iemi ? errors.iemi : null}
+
                       </span>
                     </label>
                   </div>

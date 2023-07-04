@@ -70,6 +70,16 @@ const Sidebar = () => {
                 <li className="xs:px-3 xl:px-5 my-3">
                   <NavLink
                     activeclassname="active"
+                    to="/Company">
+                    <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                      <FaMobileAlt className="text-lg" />
+                      <h1 className="text-sm hidden xl:block">Companies</h1>
+                    </div>
+                  </NavLink>
+                </li>
+                <li className="xs:px-3 xl:px-5 my-3">
+                  <NavLink
+                    activeclassname="active"
                     to="/EMI">
                     <div className="flex justify-start items-start py-2 xs:px-3 xl:pl-8  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                       <FaRupeeSign className="text-lg" />

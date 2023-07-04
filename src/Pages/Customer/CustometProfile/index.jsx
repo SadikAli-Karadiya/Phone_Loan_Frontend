@@ -241,6 +241,7 @@ function CustomerProfile() {
     const [Adhar_back, setadharback] = useState("");
     const [Pan, setpan] = useState("");
     const [Bill, setbill] = useState("");
+    
     const [SingleCustomerDetails, setSingleCustomerDetails] = useState({
         photo: "",
         full_name: "",
