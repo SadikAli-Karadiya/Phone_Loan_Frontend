@@ -12,14 +12,11 @@ import "../../App.css";
 import { PhoneContext } from "../../PhoneContext";
 
 function Header() {
-    const {logout} = React.useContext(PhoneContext)
+    const {logout, user} = React.useContext(PhoneContext)
     const [isMenu, setismenu] = React.useState(false)
 
     function handleToggle() {
         setismenu(!isMenu);
-    }
-
-    function handleLogoutButton() {
     }
 
     return (
@@ -32,8 +29,7 @@ function Header() {
                         <img src={image} alt="" className="rounded-full border-2" />
                     </div>
                     <div className='hidden xl:block'>
-                        <h1 className="text-sm">Nasir</h1>
-                        <p className="text-xs text-slate-500">shadrajput6@gmail.com</p>
+                        <h1 className="text-sm">{user?.username ? user.username : "Loading..."}</h1>
                     </div>
                     <div className="text-lg text-slate-600 hidden xl:block">
                         <BiDotsVerticalRounded />

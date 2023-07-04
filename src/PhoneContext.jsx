@@ -5,7 +5,8 @@ export const PhoneContext = createContext();
 //--------------------- CONSTANTS ----------------
 const LOGOUT = "LOGOUT";
 const LOGIN = "LOGIN";
-const GET_ADMIN = "GET_ADMIN";
+const SET_USER = "SET_USER";
+const REMOVE_USER = "REMOVE_USER";
 
 //--------------------- REDUCERS ----------------
 
@@ -23,7 +24,10 @@ function tokenReducer(state, action) {
 
 // user reducer for handling user data
 function userReducer(state, action) {
-  if (action.type === GET_ADMIN) {
+  if (action.type === SET_USER) {
+    return (state = action.payload);
+  }
+  else if (action.type === REMOVE_USER) {
     return (state = action.payload);
   }
 }
@@ -32,28 +36,30 @@ function userReducer(state, action) {
 
 export function PhoneProvider({ children }) {
   const [token, dispatchToken] = React.useReducer(tokenReducer, localStorage.getItem('token'));
-  // const [admin, dispatchUser] = React.useReducer(userReducer, null);
+  const [user, dispatchUser] = React.useReducer(userReducer, null);
 
   const logout = React.useCallback(() => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     dispatchToken({ type: LOGOUT, payload: false });
+    dispatchUser({ type: REMOVE_USER, payload: null });
   }, []);
 
-  const login = React.useCallback(() => {
-    dispatchToken({ type: LOGIN, payload: localStorage.getItem('token') });
+  const login = React.useCallback((token) => {
+    dispatchToken({ type: LOGIN, payload: token });
   }, []);
 
-  // const setAdmin = React.useCallback((admin) => {
-  //   dispatchAdmin({ type: GET_ADMIN, payload: admin });
-  // }, []);
+  const setUser = React.useCallback((user) => {
+    dispatchUser({ type: SET_USER, payload: user });
+  }, []);
 
 
   const value = {
     token,
+    user,
     logout,
     login,
-    // admin,
-    // setAdmin,
+    setUser
   };
 
   return (

@@ -2,11 +2,10 @@ import React, {useContext} from 'react'
 import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom'
 import PrivateRoutes from './PrivateRoutes'
 import PublicRoutes from './PublicRoutes'
-import {PhoneContext} from '../PhoneContext'
+import { PhoneContext } from '../PhoneContext'
 
-const token = localStorage.getItem('token');
 function AppRoutes() {
-    const {token} = React.useContext(PhoneContext)
+    const {token} = useContext(PhoneContext)
 
     return (
         <BrowserRouter>

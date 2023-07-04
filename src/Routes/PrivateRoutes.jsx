@@ -17,15 +17,21 @@ import { userDetail } from '../utils/apiCalls';
 import { useQuery } from 'react-query'
 import Loader from "../Component/Loader";
 import Company from '../Pages/Company'
+import {PhoneContext} from '../PhoneContext'
 
 function PrivateRoutes() {
-  const token = localStorage.getItem('token');
-  // const { User, isLoading } = useQuery('purchase', userDetail)
+  const {logout, setUser} = React.useContext(PhoneContext)
+    const userData = useQuery('userData', userDetail)
 
-
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
+    React.useEffect(() => {
+        console.log(userData)
+        if (userData.isSuccess) {
+          setUser(userData?.data?.data.User);
+        }
+        if (userData.isError) {
+          logout();
+        }
+    }, [userData]);
 
   return (
     <div>

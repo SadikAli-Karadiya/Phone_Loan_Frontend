@@ -36,8 +36,6 @@ function PayEMI() {
 
   )
 
-  console.log(EMI?.data?.data)
-
   const handleSearch = () => {
     EMI.refetch()
   }

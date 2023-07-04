@@ -30,7 +30,7 @@ function Login() {
                 const response = await SignIn(data)
                 toast.success(response.data.message);
                 localStorage.setItem('token', response?.data?.token);
-                login()
+                login(response?.data?.token)
                 resetForm({ values: "" })
             } catch (error) {
                 toast.error(error.response.data.message);
