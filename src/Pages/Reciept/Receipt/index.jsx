@@ -21,7 +21,7 @@ function Receipt() {
     const printRef = useRef();
     const [print, setPrint] = useState(false);
     const data = useQuery(['transection', params.id], () => getReceiptbyReceiptId(params.id));
-    console.log(data?.data?.data?.SingleTransaction)
+    console.log(data?.data?.data)
     function inWords(num) {
         let a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
         let b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -61,6 +61,15 @@ function Receipt() {
                 // }
             }
         });
+    };
+
+    const handlePayEMI = (id) => {
+        navigate(`/receipt/Generate/${id}`, {
+            state: {
+                isEdit: true,
+                emi_id: id,
+            }
+        })
     };
 
     return (
@@ -207,7 +216,9 @@ function Receipt() {
                     </div>
                 </div>
                 <div className="flex items-center justify-center py-8 space-x-5">
-                    <button className="bg-[#0d0d48] flex items-center space-x-1 px-2 py-[5px] hover:bg-slate-600 rounded-md text-white">
+                    <button
+                        onClick={() => handlePayEMI(data?.data?.data?.SingleTransaction?.receipt?.emi?.id)}
+                        className="bg-[#0d0d48] flex items-center space-x-1 px-2 py-[5px] hover:bg-slate-600 rounded-md text-white">
                         <MdModeEdit className="text-blue-400" />
                         <h1 className="text-sm">Edit</h1>
                     </button>
