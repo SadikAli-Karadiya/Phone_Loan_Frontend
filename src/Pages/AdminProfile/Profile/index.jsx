@@ -130,7 +130,6 @@ const Updateprofile = () => {
   
   return (
     <>
-      {/* {admin ? ( */}
       <section className="">
         <form
           className="flex justify-center items-center"
