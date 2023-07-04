@@ -5,7 +5,7 @@ import qs from "qs";
 const instance = axios.create({
   baseURL: 'http://localhost:4000/',
   headers: {
-    //  Authorization: `<Your Auth Token>`,
+    Authorization: `${localStorage.getItem('token')}`,
     ContentType: "application/json",
     timeout: 1000,
   },
