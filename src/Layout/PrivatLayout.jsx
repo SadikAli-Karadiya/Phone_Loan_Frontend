@@ -8,7 +8,7 @@ function PrivatLayout() {
 
   return (
     <>
-      <div className='fixed'>
+      <div className=''>
         <Sidebar />
       </div>
     </>

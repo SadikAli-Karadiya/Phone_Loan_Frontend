@@ -364,7 +364,6 @@ function InstallmentList() {
                         {
                             selectedEmiCustomer?.length > 0 ? (
                                 selectedEmiCustomer?.map((item, index) => {
-                                    console.log(item)
                                     return (
                                         <tbody key={index}
                                             className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
