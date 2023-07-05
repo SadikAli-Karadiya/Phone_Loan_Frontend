@@ -45,19 +45,25 @@ function Registration() {
     <>
       <section className="h-full w-full flex justify-center items-center ">
         <div className="flex w-full h-screen overflow-hidden">
-          <div className="hidden lg:flex flex-1 justify-center items-center sm:hidden ">
+          <div className="xl:flex flex-1 justify-center items-center hidden ">
             <img src="/images/login.jpg" alt="" />
           </div>
-          <div className="flex flex-1 flex-col justify-start mt-5  ">
-            <div className="flex justify-end  items-end pr-10">
-              <div className='space-x-5'>
-                <span className='font-semibold text-slate-600 text-[15px]'>Already have an account?</span>
+          <div className="flex flex-1 flex-col justify-start mt-5">
+            <div className="flex  justify-between xl:justify-end items-end px-3 sm:pr-10">
+              <img
+                src="/images/logo.png"
+                alt=""
+                className=" w-28 lg:w-36 xl:hidden"
+                id="logo"
+              />
+              <div className='space-x-5 flex items-center'>
+                <span className='font-semibold text-slate-600 text-[15px] hidden sm:block'>Already have an account?</span>
                 <button
                   onClick={handleClick}
                   className='bg-[#0F0673] text-white text-sm rounded-full font-semibold px-5 py-2'>Log In</button>
               </div>
             </div>
-            <section className="py-20 px-14 mt-16 ml-20 flex justify-center items-center w-2/3">
+            <section className="py-20 px-14 mt-16 xl::ml-20 flex justify-center items-center xl::w-2/3">
               <div className="login ">
                 <div className="mb-10">
                   <h2 className="text-[24px] text-slate-600 font-bold text-center tracking-wider">

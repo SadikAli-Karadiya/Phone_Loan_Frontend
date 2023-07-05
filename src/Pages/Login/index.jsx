@@ -19,6 +19,7 @@ const initialValues = {
 };
 
 function Login() {
+
     const navigate = useNavigate();
     const { login } = React.useContext(PhoneContext)
 
@@ -47,20 +48,22 @@ function Login() {
         <>
             <section className="h-full w-full flex justify-center items-center ">
                 <div className="flex flex-col w-full h-screen overflow-hidden">
-                    <div className='flex items-center justify-between px-60 py-3  '>
+                    <div className='flex items-center justify-between px-4 lg:px-14 xl:px-60 py-3'>
                         <img
                             src="/images/logo.png"
                             alt=""
-                            className="w-36 "
+                            className=" w-28 lg:w-36"
                             id="logo"
                         />
-                        <div className='space-x-5'>
-                            <span className='font-semibold text-slate-600 text-[15px]'>Don't have an account?</span>
-                            <button className='bg-[#0F0673] text-white text-sm rounded-full font-semibold px-5 py-2'>Sign Up</button>
+                        <div className='space-x-5 flex flex-col sm:flex-row justify-end items-center'>
+                            <span className='font-semibold text-slate-600 text-[15px] sm:text-sm hidden sm:block'>Don't have an account?</span>
+                            <button
+                                onClick={handleClick}
+                                className='bg-[#0F0673] text-white text-xs lg:text-sm rounded-full font-semibold px-5 py-2'>Sign Up</button>
                         </div>
                     </div>
                     <div className="flex flex-1 flex-col justify-center items-center">
-                        <section className=" px-14 py-14 flex justify-center items-center shadow-xl rounded-xl shadow-blue-100">
+                        <section className=" px-14 py-14 flex justify-center items-center sm:shadow-xl rounded-xl sm:shadow-blue-100">
                             <div className="login w-72">
                                 <div className="mb-10">
                                     <h2 className="text-[24px] text-slate-500 font-bold text-left tracking-wider">
