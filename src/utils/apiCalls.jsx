@@ -2,10 +2,12 @@ import { useQuery } from 'react-query';
 import axios from 'axios'
 import qs from "qs";
 
+console.log(localStorage.getItem('token'))
+
 const instance = axios.create({
   baseURL: 'http://localhost:4000/',
   headers: {
-    Authorization: `${localStorage.getItem('token')}`,
+    // Authorization: `${localStorage.getItem('token')}`,
     ContentType: "application/json",
     timeout: 1000,
   },
@@ -43,7 +45,6 @@ export const SignUp = (data) => {
 }
 
 export const SignIn = (data) => {
-  console.log(data)
   return instance({
     'url': '/user/login',
     'method': 'POST',

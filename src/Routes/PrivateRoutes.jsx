@@ -21,17 +21,17 @@ import {PhoneContext} from '../PhoneContext'
 
 function PrivateRoutes() {
   const {logout, setUser} = React.useContext(PhoneContext)
-    const userData = useQuery('userData', userDetail)
+    // const userData = useQuery('userData', userDetail)
 
-    React.useEffect(() => {
-        console.log(userData)
-        if (userData.isSuccess) {
-          setUser(userData?.data?.data.User);
-        }
-        if (userData.isError) {
-          logout();
-        }
-    }, [userData]);
+    // React.useEffect(() => {
+    //     console.log(userData)
+    //     if (userData.isSuccess) {
+    //       setUser(userData?.data?.data.User);
+    //     }
+    //     if (userData.isError) {
+    //       logout();
+    //     }
+    // }, [userData]);
 
   return (
     <div>

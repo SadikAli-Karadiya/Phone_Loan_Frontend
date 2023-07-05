@@ -122,6 +122,14 @@ function Registration() {
                     </button>
                   </div>
                 </form>
+                <div className="mt-8 flex justify-center space-x-1">
+                  <span className='text-sm text-slate-700'>Already have an account? </span>
+                  <span
+                    onClick={handleClick}
+                    className="text-sm font-semibold text-[#0F0673] cursor-pointer ">
+                    Log In
+                  </span>
+                </div>
               </div>
             </section>
           </div>
