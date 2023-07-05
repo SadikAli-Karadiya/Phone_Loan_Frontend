@@ -115,10 +115,13 @@ function Registration() {
                                     </span>
                                 </div> */}
                 <div className="mt-5 flex justify-center">
+                  <span className="text-sm text-gray-500 cursor-pointer mr-1">
+                    Already have an account? 
+                  </span>
                   <span
                     onClick={handleClick}
                     className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
-                    Login !
+                    Login
                   </span>
                 </div>
               </div>
