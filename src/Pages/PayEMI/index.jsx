@@ -37,6 +37,7 @@ function PayEMI() {
   )
 
   const handleSearch = () => {
+    if(search == '') return;
     EMI.refetch()
   }
   
@@ -49,6 +50,7 @@ function PayEMI() {
   React.useEffect(()=>{
     const listener = async (event) => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
+        if(search == '') return;
         event.preventDefault();
         EMI.refetch()
       }

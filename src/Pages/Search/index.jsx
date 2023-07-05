@@ -29,6 +29,7 @@ function Search() {
     React.useEffect(()=>{
         const listener = async (event) => {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
+            if(search == '') return;
             event.preventDefault();
             allCustomers.refetch()
         }
@@ -55,7 +56,10 @@ function Search() {
                             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
                         />
                         <button
-                            onClick={()=> allCustomers.refetch()}
+                            onClick={()=> {
+                                if(search == '') return;
+                                allCustomers.refetch()
+                            }}
                             className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
                         >
                             <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
@@ -132,22 +136,20 @@ function Search() {
                                     }
 
                                 </table>
-                                {
-                                    allCustomers?.data?.data?.AllCustomer?.length > 0 ?
-                                        null
-                                        :
-                                        <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                                            <FaUsers className='text-3xl' />
-                                            <h1 className='font-semibold'>Customer Not Found</h1>
-                                        </div>
-                                }
                             </div>
                         :
-                        null  
+                            allCustomers?.data?.data?.AllCustomer?.length == 0
+                            ?
+                                <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
+                                    <FaUsers className='text-3xl' />
+                                    <h1 className='font-semibold'>Customer Not Found</h1>
+                                </div>
+                            :
+                                null
                 }
                 
                 {
-                    allCustomers?.data?.data?.AllCustomer?.length > 0
+                    allCustomers?.data?.data?.AllCustomer?.length == 0
                     ?
                         <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
                             <Pagination

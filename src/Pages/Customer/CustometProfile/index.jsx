@@ -906,10 +906,10 @@ function CustomerProfile() {
                                                                         {moment(item.createdAt).format("DD / MM / YYYY")}
                                                                     </td>
                                                                     <td className="px-6 py-5 ">
-                                                                        {item?.phone?.company?.company_name}
+                                                                        {item?.specification.phone?.company?.company_name}
                                                                     </td>
                                                                     <td className="px-6 py-5 capitalize">
-                                                                        {item.phone.model_name}
+                                                                        {item.specification.phone.model_name}
                                                                     </td>
                                                                     <td className="px-6 py-5">
                                                                         {item.installment.month} Months
