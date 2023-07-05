@@ -447,6 +447,7 @@ function InstallmentList() {
 
                 <InstallmentFormModal
                     showModal={installmentFormModal}
+                    refetchInstallments ={installment.refetch}
                     handleShowModal={setInstallmentFormModal}
                     InstallmentDetails={is_Edit ? InstallmentDetails : {}}
                     is_Edit={is_Edit}
