@@ -5,6 +5,7 @@ import PublicRoutes from './PublicRoutes'
 import { PhoneContext } from '../PhoneContext'
 
 function AppRoutes() {
+    
     const {token} = useContext(PhoneContext)
 
     return (

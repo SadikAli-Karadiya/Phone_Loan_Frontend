@@ -48,6 +48,7 @@ export const SignUp = (data) => {
 }
 
 export const SignIn = (data) => {
+  console.log(data)
   return instance({
     'url': '/user/login',
     'method': 'POST',
@@ -61,10 +62,6 @@ export const userDetail = () => {
     'method': 'GET',
   })
 }
-
-
-
-
 
 
 // Installment --------------------------------------------
