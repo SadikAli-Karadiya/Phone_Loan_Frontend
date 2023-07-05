@@ -201,6 +201,9 @@ function Dashboard() {
                 Model
               </th>
               <th scope="col" className="px-6 py-3">
+                Specs
+              </th>
+              <th scope="col" className="px-6 py-3">
                 EMI Date
               </th>
               <th scope="col" className="px-6 py-3">
@@ -219,7 +222,7 @@ function Dashboard() {
               PendingEMI.isLoading
               ?
                 <tr>
-                  <td colSpan="8">
+                  <td colSpan="9">
                     <LoaderSmall />
                   </td>
                 </tr>
@@ -240,7 +243,10 @@ function Dashboard() {
                             {item.purchase?.customer?.mobile}
                           </td>
                           <td className="px-6 py-5 capitalize">
-                            {item?.purchase?.phone?.company?.company_name} | {item?.purchase?.phone?.model_name}
+                            {item?.purchase?.specification.phone?.company?.company_name} | {item?.purchase?.specification.phone.model_name}
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            {item?.purchase?.specification.ram} | {item?.purchase?.specification.storage}
                           </td>
                           <td className="px-6 py-5">
                             {moment(item.due_date).format("D/MM/YYYY")}
@@ -276,10 +282,10 @@ function Dashboard() {
                   ) 
                 : 
                   <tr>
-                    <td colSpan="8">
+                    <td colSpan="9">
                       <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
                         <FaUsers className='text-2xl' />
-                        <h1 className='text-sm font-bold'>No customers with pending fees</h1>
+                        <h1 className='text-sm font-bold'>No customers with pending EMI</h1>
                       </div>
                     </td>
                   </tr>

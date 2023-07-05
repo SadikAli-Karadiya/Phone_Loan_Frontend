@@ -6,12 +6,10 @@ import * as Yup from "yup"
 import { toast } from 'react-toastify';
 import { SignUp } from '../../utils/apiCalls';
 
-
 const signUpSchema = Yup.object({
   username: Yup.string().required("Please Enter Your Username"),
   password: Yup.string().required("Please Enter Password")
 });
-
 
 const initialValues = {
   username: "",

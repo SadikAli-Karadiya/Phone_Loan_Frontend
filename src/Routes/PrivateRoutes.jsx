@@ -24,7 +24,6 @@ function PrivateRoutes() {
     const userData = useQuery('userData', userDetail)
 
     React.useEffect(() => {
-        console.log(userData)
         if (userData.isSuccess) {
           setUser(userData?.data?.data.User);
         }
