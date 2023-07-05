@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query';
 import axios from 'axios'
-import qs from "qs";
 
 const instance = axios.create({
   baseURL: 'http://localhost:4000/',
@@ -48,7 +47,6 @@ export const SignUp = (data) => {
 }
 
 export const SignIn = (data) => {
-  console.log(data)
   return instance({
     'url': '/user/login',
     'method': 'POST',
