@@ -123,6 +123,7 @@ function InstallmentList() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 const deleteClassResponse = await DeleteInstallment(id);
+                installment.refetch()
                 if (deleteClassResponse.data.success) {
                     toast.success(deleteClassResponse.data.message);
                 } else if (deleteClassResponse.data.success == false) {

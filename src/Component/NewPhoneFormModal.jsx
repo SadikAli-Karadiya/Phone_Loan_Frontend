@@ -161,7 +161,6 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   };
 
   let Net_playable = (SelectInstallment + Phone_Price)
-  console.log(Net_playable)
   const handleModalClose = () => {
     resetForm({ values: "" })
     handleShowModal(false);

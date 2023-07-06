@@ -27,14 +27,10 @@ function Newpassword() {
         initialValues: initialValues,
         validationSchema: signUpSchema,
         onSubmit(res) {
-            console.log(res, "Res")
             notify()
             navigate("/")
         }
     })
-
-    console.log(errors, "formik")
-
     
   return (
    <>

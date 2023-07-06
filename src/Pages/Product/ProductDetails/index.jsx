@@ -5,13 +5,10 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { IoIosArrowBack } from "react-icons/io";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import Pagination from 'react-responsive-pagination'
 import '../../../Component/Pagination/pagination.css'
-import CreatableSelect from 'react-select/creatable';
 import { MdSdStorage } from "react-icons/md";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
@@ -69,19 +66,26 @@ function ProductDetails() {
     return (
         <>
             <div className=" xl:px-10 h-full">
-                <div className='w-full justify-between items-center flex py-8 px-5'>
-                    <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>
-                        {Spacification?.data?.data?.specificationDetails.phoneDetails.company.company_name} {Spacification?.data?.data?.specificationDetails.phoneDetails.model_name}
-                    </h1>
-                    <div className='flex items-center justify-end pb-5'>
-                        <Tippy content="Add Storage">
-                            <div
-                                onClick={() => setspecificationFormModal(true)}
-                                className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
-                                <MdSdStorage className='xs:text-base sm:text-xl' />
-                            </div>
-                        </Tippy>
-
+                <div className='w-full justify-between items-center flex py-8'>
+                    <div className='sm:py-5 flex justify-between items-center'>
+                        <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>
+                            {Spacification?.data?.data?.specificationDetails.phoneDetails.company.company_name} {Spacification?.data?.data?.specificationDetails.phoneDetails.model_name}
+                        </h1>
+                    </div>
+                    <div className="flex items-center gap-6">
+                        <div className="group h-9 w-20 flex justify-center items-center gap-1 cursor-pointer" id="" onClick={() => navigate(-1)}>
+                            <IoIosArrowBack className="text-2xl font-bold group-hover:text-blue-700 text-[#0d0d48] mt-[3px]" />
+                            <span className=" text-xl text-[#0d0d48] font-semibold group-hover:text-blue-700">Back</span>
+                        </div>
+                        <div className='flex items-center justify-end'>
+                            <Tippy content="Add Storage">
+                                <div
+                                    onClick={() => setspecificationFormModal(true)}
+                                    className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                                    <MdSdStorage className='xs:text-base sm:text-xl' />
+                                </div>
+                            </Tippy>
+                        </div>
                     </div>
                 </div>
                 <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">

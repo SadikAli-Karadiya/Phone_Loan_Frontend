@@ -73,7 +73,6 @@ function CompanyList() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 let response = await DeleteCompany(id);
-                console.log(response?.data.message)
                 if (response.data?.success == true) {
                     toast.success(response.data?.message);
                 }
