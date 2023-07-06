@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
 import { useQuery, useMutation } from 'react-query'
 
@@ -52,24 +52,12 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
     return <></>;
   }
 
-  const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
   let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
   
   const addPhone = useMutation(AddNewPhone);
   const updatePhone = useMutation(UpdatePhone);
-
-  const handleCreateCompany = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      // const newComapny = createCompany(inputValue);
-    const respons = AddCompany({ inputValue })
-      setIsLoading(false);
-      setComapnyList();
-      // setCompany(newComapny);
-    }, 1000);
-  };
 
   const initialValues = {
     company_name: "",
@@ -158,15 +146,13 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col items-center w-full space-y-5'>
                 <div className='w-full'>
-                  <CreatableSelect
+                  <Select
                     className='w-full'
-                    isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
                     defaultValue={is_Edit == true ? { value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name } : null}
-                    onChange={(e) => { setFieldValue('company_name', e.value); setCompany(e) }}
+                    onChange={(e) => { setFieldValue('company_name', e.value)}}
                     onBlur={handleBlur}
-                    onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
                     options={Company?.data?.data?.all_companies?.map(item => {
                       return { value: item?.company_name, label: item?.company_name };
