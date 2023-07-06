@@ -168,7 +168,7 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                    placeholder="Enter Model Name " />
+                    placeholder="Enter Model Name" />
                   {errors.model_name && touched.model_name
                     ?
                     <p className='form-error text-red-600 text-sm font-semibold'>{errors.model_name}</p>

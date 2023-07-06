@@ -110,7 +110,7 @@ function CompanyList() {
                                         className='px-3 py-1 rounded-md flex items-center space-x-2'>
                                         <h1
                                             className='font-semibold text-white'>Total Model : </h1>
-                                        <span className='font-semibold text-white'>15</span>
+                                        <span className='font-semibold text-white'>{item.phones.length}</span>
                                     </div>
                                     <div className='flex items-center justify-between mt-14'>
                                         <div className='py-2 rounded-md '>
