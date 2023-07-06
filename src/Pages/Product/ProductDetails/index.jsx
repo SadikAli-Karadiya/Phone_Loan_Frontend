@@ -30,18 +30,15 @@ function ProductDetails() {
     const [specification, setspecification] = React.useState(Spacification);
 
     const handleUpdatespecification = (id) => {
-        console.log(id)
-        let UodateSpecification = Spacification?.data?.data?.AllSpecification.find((n) => {
+        let UpdateSpecification = Spacification?.data?.data?.specificationDetails.AllSpecification.find((n) => {
             return n?.id == id;
         });
-        console.log(UodateSpecification)
         setspecificationFormModal(true)
-        setSpecificationDetails(UodateSpecification);
+        setSpecificationDetails(UpdateSpecification);
         setIsEdit(true)
     };
 
     const handleDelete = async (id) => {
-        console.log(id)
         Swal.fire({
             title: 'Are you sure to delete this Specification?',
             text: "The specification will be deleted",
@@ -54,6 +51,7 @@ function ProductDetails() {
             allowOutsideClick: false,
             preConfirm: async () => {
                 const response = await deleteSpecification(id)
+                Spacification.refetch()
                 if (response.error) {
                     toast.error(response.error.data.message)
                 }
@@ -65,14 +63,16 @@ function ProductDetails() {
     };
 
     React.useEffect(() => {
-        setspecification(specification?.data?.data?.AllSpecification)
+        setspecification(specification?.data?.data?.specificationDetails.AllSpecification)
     }, [specification])
 
     return (
         <>
             <div className=" xl:px-10 h-full">
                 <div className='w-full justify-between items-center flex py-8 px-5'>
-                    <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>Vivo {Spacification?.data?.data?.AllSpecification[0]?.phone?.model_name}</h1>
+                    <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>
+                        {Spacification?.data?.data?.specificationDetails.phoneDetails.company.company_name} {Spacification?.data?.data?.specificationDetails.phoneDetails.model_name}
+                    </h1>
                     <div className='flex items-center justify-end pb-5'>
                         <Tippy content="Add Storage">
                             <div
@@ -108,8 +108,8 @@ function ProductDetails() {
                             </tr>
                         </thead>
                         {
-                            Spacification?.data?.data?.AllSpecification.length > 0 ? (
-                                Spacification?.data?.data?.AllSpecification.map((item, index) => {
+                            Spacification?.data?.data?.specificationDetails.AllSpecification.length > 0 ? (
+                                Spacification?.data?.data?.specificationDetails.AllSpecification.map((item, index) => {
                                     return (
                                         <tbody key={index} className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                             <tr className=" border-b">
@@ -151,33 +151,24 @@ function ProductDetails() {
 
                     </table>
                     {
-                        Spacification?.data?.data?.AllSpecification.length > 0 ?
+                        Spacification?.data?.data?.specificationDetails.AllSpecification.length > 0 ?
                             null
                             :
                             <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                                <h1 className=' font-semibold'>Spacification Not Found</h1>
+                                <h1 className=' font-semibold'>Specifications Not Found</h1>
                             </div>
                     }
                 </div>
 
-                {/* <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-10'>
-              <Pagination
-              // total={data && data.pageCount ? data.pageCount : 0}
-              // current={pageNo}
-              // onPageChange={(page) => setPageNo(page)}
-              // previousLabel="Previous" nextLabel="Next"
-              />
-            </div> */}
-
             </div>
             <SpecificationFormModal
                 showModal={specificationFormModal}
+                refetchSpecification={Spacification.refetch}
                 handleShowModal={setspecificationFormModal}
                 is_Edit={is_Edit}
-                SpecificationDetails={SpecificationDetails}
+                setIsEdit={setIsEdit}
+                SpecificationDetails={is_Edit ? SpecificationDetails : {}}
             />
-            {/* </div>
-            </div> */}
         </>
     )
 }

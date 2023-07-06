@@ -46,7 +46,7 @@ const productSchema = Yup.object({
   model_name: Yup.string().required("Please Enter Model Name"),
 });
 
-function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
+function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDetails, is_Edit }) {
 
   if (!showModal) {
     return <></>;
@@ -56,7 +56,6 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   const [isLoading, setIsLoading] = React.useState();
   let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
-  let Companies = Company?.data?.data?.all_companies
   
   const addPhone = useMutation(AddNewPhone);
   const updatePhone = useMutation(UpdatePhone);
@@ -85,15 +84,12 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
           initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
-        if (company == null) {
-          toast("Please Select Company")
-        }
-        Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
+        Object.assign(data, { company_name: data.company_name, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
-            addPhone.mutate(data)
-          } else {
             updatePhone.mutate(data)
+          } else {
+            addPhone.mutate(data)
           }
         } catch (error) {
           toast.error(error.response.data.message);
@@ -107,15 +103,23 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   };
 
   React.useEffect(() => {
-    if(is_Edit && updatePhone.data?.data){
-      toast.success(updatePhone.data?.data?.message);
-      handleModalClose()
+    if(addPhone.isSuccess || updatePhone.isSuccess){
+      if(is_Edit && updatePhone.data?.data){
+        toast.success(updatePhone.data?.data?.message);
+        refetchPhones();
+        handleModalClose()
+      }
+      else if(addPhone.data?.data){
+        toast.success(addPhone.data?.data?.message);
+        refetchPhones();
+        handleModalClose()
+      }
     }
-    else if(addPhone.data?.data){
-      toast.success(addPhone.data?.data?.message);
-      handleModalClose()
+    
+    if(addPhone.isError){
+      toast.error(addPhone.error.response.data.message);
     }
-  },[addPhone.isSuccess, updatePhone.isSuccess]);
+  },[addPhone.isSuccess, addPhone.isError, updatePhone.isSuccess, updatePhone.isError]);
 
   return (
     <Modal open={showModal}
@@ -164,7 +168,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     onBlur={handleBlur}
                     onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
-                    options={Companies?.map(item => {
+                    options={Company?.data?.data?.all_companies?.map(item => {
                       return { value: item?.company_name, label: item?.company_name };
                     })
                     }

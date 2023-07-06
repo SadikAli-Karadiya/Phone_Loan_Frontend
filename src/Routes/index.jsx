@@ -11,7 +11,7 @@ function AppRoutes() {
     return (
         <BrowserRouter>
             <Routes>
-                {true ? (
+                {token ? (
                     <>
                         <Route path='/*' element={<PrivateRoutes />} />
                     </>
@@ -21,7 +21,6 @@ function AppRoutes() {
                         <Route path='*' element={<Navigate to='/' />} />
                     </>
                 )}
-
             </Routes>
         </BrowserRouter>
     )
