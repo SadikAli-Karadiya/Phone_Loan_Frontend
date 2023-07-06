@@ -620,7 +620,7 @@ function GenerateReceipt() {
                             }
 
                             <div className="mt-5 w-full flex items-center justify-between">
-                                <span className="text-sm font-semibold">Admin : </span>
+                                <span className="text-sm font-semibold">Admin : {user.username}</span>
                                 <button
                                     type="button"
                                     onClick={onSubmit}

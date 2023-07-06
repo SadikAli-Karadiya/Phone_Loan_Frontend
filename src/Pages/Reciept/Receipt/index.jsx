@@ -72,6 +72,10 @@ function Receipt() {
         })
     };
 
+    {
+        console.log(data?.data?.data?.SingleTransaction)
+    }
+
     return (
         <>
             <div className=' sm:px-5 xl:px-10 h-full'>
@@ -136,7 +140,16 @@ function Receipt() {
                                 {data?.data?.data?.SingleTransaction?.amount}
                                 /-</h1>
                         </div>
-                        <div className="flex justify-start w-full px-10">
+                        <div className="px-10 pt-5">
+                            <div className="flex items-center">
+                                <h1 className=" font-semibold">Extra Charge </h1>
+                                <span className="pl-1 text-lg">:</span>
+                                <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                    <h1>{data?.data?.data?.SingleTransaction?.receipt?.extra_charge}</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-start w-full px-10 pt-5">
                             <h1 className=" font-semibold w-40">Payment For <span className="ml-5">:</span></h1>
                             <div className="ml-10 flex items-center text-xl w-full space-x-2 border-dotted border-b-2 border-slate-300">
                                 <span className=" uppercase font-semibold text-[16px] ">
@@ -145,72 +158,112 @@ function Receipt() {
                                 <div className="uppercase font-semibold text-[16px] space-x-2 ">
                                     (
                                     <span className="">
-                                        {data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.phone?.company?.company_name}
-                                    </span>
-                                    <span>
-                                        {data?.data?.data?.SingleTransaction?.receipt?.emi?.purchase?.phone?.model_name}
+                                        {data?.data?.data?.emiCount}
                                     </span>
 
                                     )
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-end justify-between px-10 pt-5">
-                            <div className="space-y-1">
+                        <div className="px-10 pt-5">
+                            <div className="flex">
+                                <div className="w-64 flex items-center">
+                                    <h1 className=" font-semibold">Model </h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                        <h1>
+                                            {`${data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.specification.phone.company.company_name} 
+                                            ${data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.specification.phone.model_name}`}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <div className="w-64 flex items-center">
+                                    <h1 className=" font-semibold">RAM </h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                        <h1>
+                                            {data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.specification.ram}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <div className="w-64 flex items-center">
+                                    <h1 className=" font-semibold">Storage </h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                        <h1>
+                                            {data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.specification.storage}
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-10 pt-5">
+                            <div className="flex items-center">
+                                <h1 className=" font-semibold">Installment Type </h1>
+                                <span className="pl-1 text-lg">:</span>
+                                <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                    <h1>{data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.installment.month} Months</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-10 pt-5">
+                            <div className="flex justify-between space-y-1">
                                 <div className="flex items-center w-64">
-                                    <h1 className=" font-semibold text-sm">Total Amount </h1>
-                                    <span className="pl-[26px] text-lg">:</span>
-                                    <div className="px-4 ml-3 font-semibold rounded-md text-slate-600">
-                                        <h1>150000</h1>
+                                    <h1 className=" font-semibold">Total Amount </h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold rounded-md text-slate-600">
+                                        <h1>{data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.net_amount}</h1>
                                     </div>
                                 </div>
                                 <div className="flex items-center w-64">
                                     <h1 className=" font-semibold">Paid Amount </h1>
-                                    <span className="pl-[19px] text-lg">:</span>
-                                    <div className="px-4 ml-3 font-semibold  rounded-md text-slate-600 ">
-                                        <h1>5000</h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold  rounded-md text-slate-600 ">
+                                        <h1>{data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.net_amount - data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.pending_amount}</h1>
                                     </div>
                                 </div>
                                 <div className="flex items-center w-64">
-                                    <h1 className=" font-semibold">Due Amount </h1>
-                                    <span className="pl-5 text-lg">:</span>
-                                    <div className="px-4 ml-3 font-semibold rounded-md text-slate-600 ">
-                                        <h1>10000</h1>
+                                    <h1 className=" font-semibold">Pending Amount </h1>
+                                    <span className="pl-1 text-lg">:</span>
+                                    <div className="ml-2 font-semibold rounded-md text-slate-600 ">
+                                        <h1>{data?.data?.data?.SingleTransaction?.receipt?.emi.purchase.pending_amount}</h1>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-start">
-                                <h1 className="font-semibold">By : </h1>
-                                <div className="flex flex-col items-start ml-3">
-                                    <p className="font-semibold">
-                                        {
-                                            data?.data?.data?.SingleTransaction?.is_by_cash == true
-                                                ?
-                                                (<span>Cash</span>)
-                                                :
-                                                data?.data?.data?.SingleTransaction?.is_by_upi == true ?
-                                                    <span>UPI ( {data?.data?.data?.SingleTransaction?.upi_no} ) </span>
+                            <div className="flex mt-10 justify-between">
+                                <div className="flex items-start text-slate-600">
+                                    <h1 className="font-semibold">Payment By</h1>
+                                    <div className="flex flex-col items-start ml-1">
+                                        <div className="font-semibold">
+                                            {
+                                                data?.data?.data?.SingleTransaction?.is_by_cash == true
+                                                    ?
+                                                    (<span>Cash</span>)
                                                     :
-                                                    data?.data?.data?.SingleTransaction?.is_by_cheque == true
-                                                        ?
-                                                        <div>
-                                                            <span> Cheque </span>
-                                                            <div>
-                                                                <span> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
-                                                                <span>( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
-                                                            </div>
-                                                        </div>
+                                                    data?.data?.data?.SingleTransaction?.is_by_upi == true ?
+                                                        <span>UPI ( {data?.data?.data?.SingleTransaction?.upi_no} ) </span>
                                                         :
-                                                        null
-                                        }
-                                    </p>
+                                                        data?.data?.data?.SingleTransaction?.is_by_cheque == true
+                                                            ?
+                                                            <div className="flex">
+                                                                <span> Cheque </span>
+                                                                <div>
+                                                                    <span className="ml-2">( {data?.data?.data?.SingleTransaction?.cheque_no} )</span>
+                                                                    <span className="ml-2"> {moment(data?.data?.data?.SingleTransaction?.cheque_date).format("DD / MM / YYYY")}</span>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            null
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="w-[20%]">
-                                <div className="border-b-2">
+                                <div className="w-[20%]">
+                                    <div className="border-b-2">
 
+                                    </div>
+                                    <h1 className="font-semibold mt-2 text-end text-sm text-slate-500">Authorized Signature</h1>
                                 </div>
-                                <h1 className="font-semibold mt-2 text-end text-sm text-slate-500">Authorized Signature</h1>
                             </div>
                         </div>
                     </div>
@@ -218,13 +271,13 @@ function Receipt() {
                 <div className="flex items-center justify-center py-8 space-x-5">
                     <button
                         onClick={() => handlePayEMI(data?.data?.data?.SingleTransaction?.receipt?.emi?.id)}
-                        className="bg-[#0d0d48] flex items-center space-x-1 px-2 py-[5px] hover:bg-slate-600 rounded-md text-white">
+                        className="bg-[#0d0d48] flex items-center space-x-1 px-4 py-1.5 hover:bg-slate-600 rounded-md text-white">
                         <MdModeEdit className="text-blue-400" />
                         <h1 className="text-sm">Edit</h1>
                     </button>
                     <button
                         onClick={handleDeleteReceipt}
-                        className="bg-[#0d0d48] flex items-center space-x-1 px-2 py-[5px] hover:bg-slate-500 rounded-md text-white">
+                        className="bg-[#0d0d48] flex items-center space-x-1 px-3 py-1.5 hover:bg-slate-500 rounded-md text-white">
                         <MdDelete className="text-blue-400" />
                         <h1 className="text-sm">Delete</h1>
                     </button>
