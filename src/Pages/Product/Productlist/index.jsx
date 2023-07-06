@@ -148,6 +148,9 @@ function ProductList() {
                     Model
                   </th>
                   <th scope="col" className="px-6 py-4">
+                    Specs
+                  </th>
+                  <th scope="col" className="px-6 py-4">
                     Action
                   </th>
                 </tr>
@@ -157,13 +160,14 @@ function ProductList() {
                   companies.isLoading || searchPhoneWithName.isLoading
                   ?
                     <tr>
-                      <td colSpan="4">
+                      <td colSpan="5">
                         <LoaderSmall />
                       </td>
                     </tr>
                   :
                     SelectedCompany?.length > 0 ? (
                       SelectedCompany?.map((item, index) => {
+                        console.log(item)
                         return (
                             <tr key={index} className=" border-b">
                               <td className="px-6 py-5 font-bold">
@@ -174,6 +178,25 @@ function ProductList() {
                               </td>
                               <td className="px-6 py-5">
                                 {item.model_name}
+                              </td>
+                              <td className="px-6 py-5">
+                                {
+                                  item.specifications.map((specs, i)=>{
+                                    return(
+                                      <span>
+                                        {`${specs.ram}/${specs.storage}`}
+                                        {
+                                          i < item.specifications.length - 1
+                                          ?
+                                            ', '
+                                          :
+                                            null
+
+                                        }
+                                      </span>
+                                    )
+                                  })
+                                }
                               </td>
                               <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
                                 <div className='flex justify-center items-center space-x-3 ' >
@@ -195,7 +218,7 @@ function ProductList() {
                       })
                     ) : (
                       <tr>
-                        <td colSpan="4">
+                        <td colSpan="5">
                           <div className='flex justify-center items-center w-full rounded-b-lg py-2 text-red-900 space-x-4 bg-red-200'>
                             <BsPhone className='text-2xl' />
                             <h1 className='text-sm font-bold'>Model Not Found</h1>

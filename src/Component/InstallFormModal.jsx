@@ -8,7 +8,7 @@ import { useMutation } from 'react-query'
 import { AddInstallment, UpdateInstallment } from '../utils/apiCalls';
 
 
-function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, is_Edit }) {
+function InstallmentFormModal({ showModal, handleShowModal, refetchInstallments, InstallmentDetails, is_Edit }) {
   
   if (!showModal) {
     return <></>;
@@ -91,12 +91,15 @@ function InstallmentFormModal({ showModal, handleShowModal, InstallmentDetails, 
   };
 
   React.useEffect(() => {
+     console.log(addInstallment)
     if(is_Edit && updateInstallment.data?.data){
       toast.success(updateInstallment.data?.data?.message);
+      refetchInstallments()
       handleModalClose()
     }
     else if(addInstallment.data?.data){
       toast.success(addInstallment.data?.data?.message);
+      refetchInstallments()
       handleModalClose()
     }
   },[addInstallment.isSuccess, updateInstallment.isSuccess]);

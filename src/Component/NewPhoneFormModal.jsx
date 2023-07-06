@@ -7,15 +7,16 @@ import { useFormik } from "formik";
 import { NewPhoneValues, PhoneSchema } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
+import { PhoneContext } from "../PhoneContext";
 import CreatableSelect from 'react-select/creatable';
-
-
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
 
   if (!showModal) {
     return <></>;
   }
+
+  const {user} = React.useContext(PhoneContext)
 
   const params = useParams();
   let customer_id = params?.id
@@ -65,6 +66,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
           { month: installment },
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
+          { admin_id: user.admin_id }
         )
         try {
           const response = await AddNewPurchase(data)
@@ -326,7 +328,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                   <div className="selectinst w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-white">
-                        IEMI Number *
+                        IMEI Number *
                       </span>
                       <input
                         type="text"
@@ -334,7 +336,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         onChange={handleChange}
                         onBlur={handleBlur}
                         value={values.iemi}
-                        placeholder="IEMI Number"
+                        placeholder="IMEI Number"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">

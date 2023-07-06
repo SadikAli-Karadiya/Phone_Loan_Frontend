@@ -351,6 +351,9 @@ function InstallmentList() {
                                     Model
                                 </th>
                                 <th scope="col" className="px-6 py-2">
+                                    Specs
+                                </th>
+                                <th scope="col" className="px-6 py-2">
                                     Total
                                 </th>
                                 <th scope="col" className="px-6 py-2">
@@ -361,13 +364,21 @@ function InstallmentList() {
                                 </th>
                             </tr>
                         </thead>
+                        <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                         {
-                            selectedEmiCustomer?.length > 0 ? (
+                            customersByInstallment.isLoading
+                            ?
+                                <tr>
+                                    <td colSpan="8">
+                                        <LoaderSmall />
+                                    </td>
+                                </tr>
+                            :
+                                selectedEmiCustomer?.length > 0 
+                                ? (
                                 selectedEmiCustomer?.map((item, index) => {
                                     return (
-                                        <tbody key={index}
-                                            className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                            <tr className=" border-b">
+                                            <tr key={index} className=" border-b">
                                                 <th className="py-5 px-6">
                                                     {index + 1}
                                                 </th>
@@ -378,7 +389,10 @@ function InstallmentList() {
                                                     {item?.customer?.mobile}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
-                                                    {item?.phone?.company?.company_name} | {item?.phone?.model_name}
+                                                    {item?.specification.phone?.company?.company_name} | {item?.specification.phone?.model_name}
+                                                </td>
+                                                <td className="px-6 py-5 capitalize">
+                                                    {item?.specification.ram} | {item?.specification.storage}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">
                                                     {item?.net_amount}
@@ -401,22 +415,21 @@ function InstallmentList() {
                                                     </div>
                                                 </td>
                                             </tr>
-                                        </tbody>
                                     )
                                 })
-                            ) : (
-                                null
-                            )}
+                                ) 
+                                : (
+                                    <tr>
+                                        <td colSpan="8">
+                                            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                                                <FaUsers className='text-2xl' />
+                                                <h1 className='text-sm font-bold'>No customers </h1>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                        </tbody>
                     </table>
-                    {
-                        selectedEmiCustomer?.length > 0 ?
-                            null
-                            :
-                            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-                                <FaUsers className='text-2xl' />
-                                <h1 className='text-sm font-bold'>No customers </h1>
-                            </div>
-                    }
                 </div>
 
                 {
@@ -434,6 +447,7 @@ function InstallmentList() {
 
                 <InstallmentFormModal
                     showModal={installmentFormModal}
+                    refetchInstallments ={installment.refetch}
                     handleShowModal={setInstallmentFormModal}
                     InstallmentDetails={is_Edit ? InstallmentDetails : {}}
                     is_Edit={is_Edit}
