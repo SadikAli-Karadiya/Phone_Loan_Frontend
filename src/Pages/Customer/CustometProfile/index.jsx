@@ -15,11 +15,6 @@ import { useMutation, useQuery } from 'react-query'
 import moment from 'moment'
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import defaultadharfront from "../../../../public/images/adhar.webp";
-import defaultadharback from "../../../../public/images/adhar_back.jpg";
-import defaultpan from "../../../../public/images/pan.webp";
-import defaultbill from "../../../../public/images/bill.webp";
-import defaultImage from "../../../../public/images/user.png";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 import LoaderBig from "../../../Component/LoaderBig";
@@ -226,21 +221,11 @@ const customerSchema = Yup.object({
 function CustomerProfile() {
     const navigate = useNavigate();
     const params = useParams();
-    const [img, setImg] = useState(defaultImage);
-    const [photo, setPhoto] = useState("");
     const [is_Edit, setIsEdit] = useState(false);
     const [toggle, setToggle] = useState(false);
     const [isEnable, setIsEnable] = useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = useState(false);
     const [PhoneDetails, setPhoneDetails] = useState();
-    const [DefaultadharFront, setdefaultadharfront] = useState(defaultadharfront);
-    const [DefaultadharBack, setdefaultadharback] = useState(defaultadharback);
-    const [DefaultPan, setdefaultpan] = useState(defaultpan);
-    const [DefaultBill, setdefaultbill] = useState(defaultbill);
-    const [Adhar_front, setadharfront] = useState("");
-    const [Adhar_back, setadharback] = useState("");
-    const [Pan, setpan] = useState("");
-    const [Bill, setbill] = useState("");
     
     const [SingleCustomerDetails, setSingleCustomerDetails] = useState({
         photo: "",
@@ -906,10 +891,10 @@ function CustomerProfile() {
                                                                         {moment(item.createdAt).format("DD / MM / YYYY")}
                                                                     </td>
                                                                     <td className="px-6 py-5 ">
-                                                                        {item?.phone?.company?.company_name}
+                                                                        {item?.specification.phone?.company?.company_name}
                                                                     </td>
                                                                     <td className="px-6 py-5 capitalize">
-                                                                        {item.phone.model_name}
+                                                                        {item.specification.phone.model_name}
                                                                     </td>
                                                                     <td className="px-6 py-5">
                                                                         {item.installment.month} Months

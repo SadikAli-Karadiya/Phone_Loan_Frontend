@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { toast } from 'react-toastify';
 import { AiFillCloseCircle } from "react-icons/ai";
 import { IoIosArrowBack } from "react-icons/io";
@@ -10,11 +10,14 @@ import { MdDelete } from "react-icons/md"
 import { getSingleEmi, AddTransection } from '../../../utils/apiCalls';
 import { useMutation, useQuery } from 'react-query'
 import Tippy from '@tippyjs/react';
+import { PhoneContext } from "../../../PhoneContext";
 import 'tippy.js/dist/tippy.css';
 
 function GenerateReceipt() {
 
     const location = useLocation();
+    const {user} = React.useContext(PhoneContext);
+
     const Emi_Details = useQuery(['emi', location?.state?.emi_id], () => getSingleEmi(location?.state.emi_id))
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState();
@@ -115,10 +118,9 @@ function GenerateReceipt() {
                 cheque_no: chequeNo,
                 cheque_date: chequeDate,
                 upi_no: upiNo,
-                user_id: "1",
+                user_id: user.id,
                 purchase_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.id,
                 Emi_id: Emi_Details?.data?.data?.SingleEmi?.id,
-                status: "compelete",
                 Charge_amount: Charge_amount,
                 amount: Emi_Details?.data?.data?.SingleEmi?.amount,
                 security_pin: pin,

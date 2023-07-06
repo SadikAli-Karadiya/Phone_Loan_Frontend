@@ -181,45 +181,110 @@ function Dashboard() {
         <div className='mb-3 lg:mt-4'>
           <h3 className='text-lg text-[#0d0d48] font-medium'>Current Month EMI</h3>
         </div>
-        <div className='overflow-hidden overflow-x-scroll xl:overflow-hidden py-5'>
-          <table
-            className="w-full text-sm text-center text-white bg-[#3399ff] overflow-hidden"
-            id="table-to-xls">
-            <thead className="text-xs uppercase">
-              <tr className=" text-sm">
-                <th scope="col" className="pl-3 py-3">
-                  Serial No
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Mobile
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Model
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  EMI Date
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  EMI Amount
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Profile
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-              {
-                PendingEMI.isLoading
-                  ?
+        <table
+          className="w-full text-sm text-center text-white bg-[#3399ff]"
+          id="table-to-xls">
+          <thead className="text-xs uppercase">
+            <tr className=" text-sm">
+              <th scope="col" className="pl-3 py-3">
+                Serial No
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Mobile
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Model
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Specs
+              </th>
+              <th scope="col" className="px-6 py-3">
+                EMI Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                EMI Amount
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Profile
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+            {
+              PendingEMI.isLoading
+              ?
+                <tr>
+                  <td colSpan="9">
+                    <LoaderSmall />
+                  </td>
+                </tr>
+              :
+                pendingEMICustomers?.length > 0 
+                ? 
+                  (
+                  pendingEMICustomers?.map((item, index) => {
+                    return (
+                        <tr key={index} className=" border-b">
+                          <th className="py-5 px-6">
+                            {index + 1}
+                          </th>
+                          <td className="px-6 py-5 capitalize">
+                            {item.purchase?.customer?.full_name}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item.purchase?.customer?.mobile}
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            {item?.purchase?.specification.phone?.company?.company_name} | {item?.purchase?.specification.phone.model_name}
+                          </td>
+                          <td className="px-6 py-5 capitalize">
+                            {item?.purchase?.specification.ram} | {item?.purchase?.specification.storage}
+                          </td>
+                          <td className="px-6 py-5">
+                            {moment(item.due_date).format("D/MM/YYYY")}
+                          </td>
+                          <td className="px-6 py-5">
+                            {item?.amount}
+                          </td>
+                          <td className="px-6 py-5">
+                            <div className="flex justify-center items-center">
+                              <Tippy content="Customer Profile">
+                                <div>
+                                  <AiFillEye
+                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                    onClick={() =>
+                                      navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
+                                  />
+                                </div>
+                              </Tippy>
+                            </div>
+                          </td>
+                          <td className="px-6 py-5 ">
+                            <div className="flex justify-center space-x-3">
+                              <button
+                                onClick={() => handlePayEMI(item.id)}
+                                className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
+                                Pay
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                    )
+                  })
+                  ) 
+                : 
                   <tr>
-                    <td colSpan="8">
-                      <LoaderSmall />
+                    <td colSpan="9">
+                      <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                        <FaUsers className='text-2xl' />
+                        <h1 className='text-sm font-bold'>No customers with pending EMI</h1>
+                      </div>
                     </td>
                   </tr>
                   :

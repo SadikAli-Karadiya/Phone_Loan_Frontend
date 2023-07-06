@@ -1,17 +1,19 @@
 import { useQuery } from 'react-query';
 import axios from 'axios'
-import qs from "qs";
-
-console.log(localStorage.getItem('token'))
 
 const instance = axios.create({
   baseURL: 'http://localhost:4000/',
-  headers: {
-    // Authorization: `${localStorage.getItem('token')}`,
-    ContentType: "application/json",
+});
+
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  config.headers = {
+    ...config.headers,
+    Authorization: token ? `${token}` : '',
+    ContentType: 'application/json',
     timeout: 1000,
-  },
-  // .. other options
+  };
+  return config;
 });
 
 

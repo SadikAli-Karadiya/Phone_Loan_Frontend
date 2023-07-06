@@ -6,12 +6,10 @@ import * as Yup from "yup"
 import { toast } from 'react-toastify';
 import { SignUp } from '../../utils/apiCalls';
 
-
 const signUpSchema = Yup.object({
   username: Yup.string().required("Please Enter Your Username"),
   password: Yup.string().required("Please Enter Password")
 });
-
 
 const initialValues = {
   username: "",
@@ -122,12 +120,19 @@ function Registration() {
                     </button>
                   </div>
                 </form>
-                <div className="mt-8 flex justify-center space-x-1">
-                  <span className='text-sm text-slate-700'>Already have an account? </span>
+                {/* <div className="mt-5 flex justify-center">
+                                    <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                                        Forgot Password?
+                                    </span>
+                                </div> */}
+                <div className="mt-5 flex justify-center">
+                  <span className="text-sm text-gray-500 cursor-pointer mr-1">
+                    Already have an account? 
+                  </span>
                   <span
                     onClick={handleClick}
-                    className="text-sm font-semibold text-[#0F0673] cursor-pointer ">
-                    Log In
+                    className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                    Login
                   </span>
                 </div>
               </div>

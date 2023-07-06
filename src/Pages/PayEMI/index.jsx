@@ -37,6 +37,7 @@ function PayEMI() {
   )
 
   const handleSearch = () => {
+    if(search == '') return;
     EMI.refetch()
   }
   
@@ -49,6 +50,7 @@ function PayEMI() {
   React.useEffect(()=>{
     const listener = async (event) => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
+        if(search == '') return;
         event.preventDefault();
         EMI.refetch()
       }
@@ -108,6 +110,9 @@ function PayEMI() {
                         Model
                       </th>
                       <th scope="col" className="px-6 py-4">
+                        Specs
+                      </th>
+                      <th scope="col" className="px-6 py-4">
                         EMI Date
                       </th>
                       <th scope="col" className="px-6 py-4">
@@ -137,7 +142,10 @@ function PayEMI() {
                                 {item.mobile}
                               </td>
                               <td className="px-6  py-5">
-                                <span className="capitalize">{purchase.phone.company.company_name}</span> | <span>{purchase.phone.model_name}</span>
+                                <span className="capitalize">{purchase.specification.phone.company.company_name}</span> | <span>{purchase.specification.phone.model_name}</span>
+                              </td>
+                              <td className="px-6  py-5">
+                                <span className="capitalize">{purchase.specification.ram}</span> | <span>{purchase.specification.storage}</span>
                               </td>
                               <td className="px-6 py-5">
                                 {

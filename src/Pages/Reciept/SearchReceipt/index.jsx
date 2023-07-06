@@ -29,6 +29,7 @@ function SearchReciept() {
   React.useEffect(()=>{
     const listener = async (event) => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
+        if(search == '') return;
         event.preventDefault();
         receipt.refetch()
       }
@@ -58,7 +59,10 @@ function SearchReciept() {
               className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
             />
             <button
-              onClick={()=> receipt.refetch()}
+              onClick={()=> {
+                if(search == '') return;
+                receipt.refetch()
+              }}
               className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
             >
               <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
@@ -91,6 +95,9 @@ function SearchReciept() {
                       <th scope="col" className="px-3 py-4 text-start font-normal">
                         Model
                       </th>
+                      <th scope="col" className="px-3 py-4 text-start font-normal">
+                        Specs
+                      </th>
                       <th scope="col" className="px-6 py-4 font-normal">
                         Paid
                       </th>
@@ -122,7 +129,10 @@ function SearchReciept() {
                               {item.emi.purchase.customer.full_name}
                             </td>
                             <td className="px-3 text-start py-5">
-                              <span>{item.emi.purchase.phone.company.company_name}</span> |  <span>{item.emi.purchase.phone.model_name}</span>
+                              <span>{item.emi.purchase.specification.phone.company.company_name}</span> |  <span>{item.emi.purchase.specification.phone.model_name}</span>
+                            </td>
+                            <td className="px-3 text-start py-5">
+                              <span>{item.emi.purchase.specification.ram}</span> |  <span>{item.emi.purchase.specification.storage}</span>
                             </td>
                             <td className="px-6 py-5">
                               <h1 className='bg-green-300 text-green-900 font-bold rounded-md'>
@@ -160,6 +170,7 @@ function SearchReciept() {
             )
             :
             (
+              
                receipt?.data?.data?.data?.length == 0 ?
                 <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
                   <IoMdInformationCircle className='text-xl text-red-600' />

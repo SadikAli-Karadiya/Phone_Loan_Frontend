@@ -68,7 +68,7 @@ function EMIHistory() {
                                                         Amount
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
-                                                        charge
+                                                        Extra charge
                                                     </th>
                                                     <th scope="col" className="px-6 py-4">
                                                         status
@@ -85,20 +85,25 @@ function EMIHistory() {
                                                         <tbody key={index} className="bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                             <tr className=" border-b">
                                                                 <th className="py-5 px-6">
-                                                                    01
+                                                                    {
+                                                                        item.status == "pending"
+                                                                        ?
+                                                                            '--'
+                                                                        :
+                                                                            item.receipt.receipt_id
+                                                                    }
                                                                 </th>
                                                                 <td className="px-6 py-5 ">
-                                                                    {moment(item.due_date).format("DD / MM")}
+                                                                    {moment(item.due_date).format("DD/MM/YYYY")}
                                                                 </td>
                                                                 <td className="px-6 py-5 ">
                                                                     {
                                                                         item.paid_date ?
-                                                                            moment(item.paid_date).format("DD / MM")
+                                                                            moment(item.paid_date).format("DD/MM/YYYY")
                                                                             :
                                                                             "--"
                                                                     }
                                                                 </td>
-                                                                {console.log(item)}
                                                                 <td className="px-6 py-5 uppercase" >
                                                                     {item.type}
                                                                 </td>
@@ -106,7 +111,9 @@ function EMIHistory() {
                                                                     {item.amount}
                                                                 </td>
                                                                 <td className="px-6 py-5">
-                                                                    {item?.receipt?.extra_charge == "" ? "--" : item?.receipt?.extra_charge}
+                                                                    {item.status == "pending"
+                                                                    ? '--'
+                                                                    : item?.receipt?.extra_charge}
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
