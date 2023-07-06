@@ -32,7 +32,7 @@ function InstallmentList() {
     const customersByInstallment = useMutation(getCustomersByInstallment)
     const [pageNo, setPageNo] = useState(1);
     const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
-
+    console.log(installment, "installment")
     const bgColors = [
         "#ffd6d6",
         "#bfdbfe",
@@ -305,14 +305,14 @@ function InstallmentList() {
                 </div>
                 <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-7 mx-5 my-5 py-5">
                     <h1 className='font-bold text-lg'>Customer List</h1>
-                    <div className='flex justify-between items-center py-5'>
-                        <div className='flex justify-start items-center w-1/3 '>
+                    <div className='flex xs:flex-col sm:flex-row  sm:justify-between items-center py-5'>
+                        <div className='flex justify-start items-center lg:w-1/3 '>
                             <input
                                 type="search"
                                 placeholder='Search Customer'
                                 value={search}
                                 onChange={handleSearchCustomer}
-                                className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+                                className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full '
                             />
                             <div className='bg-[#3399ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
                 drop-shadow-lg cursor-pointer text-white text-2xl '>
@@ -321,7 +321,7 @@ function InstallmentList() {
                         </div>
                         <div
                             id="year-btn"
-                            className=" flex items-center border bg-white px-1 shadow-md xl:py-1 rounded-lg  space-x-1 outline-none">
+                            className=" flex items-center border bg-white px-1 shadow-md xl:py-2 rounded-lg  space-x-1 outline-none xs:mt-8 sm:mt-0">
                             <select
                                 onChange={handlePendingPaidUpClick}
                                 name=""
@@ -333,90 +333,93 @@ function InstallmentList() {
                             </select>
                         </div>
                     </div>
-                    <table
-                        className="w-full text-sm text-center rounded-xl  text-white "
-                        id="table-to-xls" >
-                        <thead className="text-xs uppercase bg-[#3399ff] ">
-                            <tr className=" text-sm ">
-                                <th scope="col" className="pl-3 py-2">
-                                    Sr no
-                                </th>
-                                <th scope="col" className="pl-3 py-2">
-                                    name
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Mobile
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Model
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Total
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Pending
-                                </th>
-                                <th scope="col" className="px-6 py-2">
-                                    Profile
-                                </th>
-                            </tr>
-                        </thead>
+                    <div className='overflow-hidden overflow-x-scroll xl:overflow-hidden py-5 '>
+                        <table
+                            className="w-full text-sm text-center rounded-xl  text-white"
+                            id="table-to-xls" >
+                            <thead className="text-xs uppercase bg-[#3399ff] ">
+                                <tr className=" text-sm ">
+                                    <th scope="col" className="pl-3 py-2">
+                                        Sr no
+                                    </th>
+                                    <th scope="col" className="pl-3 py-2">
+                                        name
+                                    </th>
+                                    <th scope="col" className="px-6 py-2">
+                                        Mobile
+                                    </th>
+                                    <th scope="col" className="px-6 py-2">
+                                        Model
+                                    </th>
+                                    <th scope="col" className="px-6 py-2">
+                                        Total
+                                    </th>
+                                    <th scope="col" className="px-6 py-2">
+                                        Pending
+                                    </th>
+                                    <th scope="col" className="px-6 py-2">
+                                        Profile
+                                    </th>
+                                </tr>
+                            </thead>
+                            {
+                                selectedEmiCustomer?.length > 0 ? (
+                                    selectedEmiCustomer?.map((item, index) => {
+                                        return (
+                                            <tbody key={index}
+                                                className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
+                                                <tr className=" border-b">
+                                                    <th className="py-5 px-6">
+                                                        {index + 1}
+                                                    </th>
+                                                    <td className="px-6 py-5 ">
+                                                        {item.customer.full_name}
+                                                    </td>
+                                                    <td className="px-6 py-5 capitalize">
+                                                        {item?.customer?.mobile}
+                                                    </td>
+                                                    <td className="px-6 py-5 capitalize">
+                                                        {item?.phone?.company?.company_name} | {item?.phone?.model_name}
+                                                    </td>
+                                                    <td className="px-6 py-5 capitalize">
+                                                        {item?.net_amount}
+                                                    </td>
+                                                    <td className="px-6 py-5 capitalize">
+                                                        {item?.pending_amount}
+                                                    </td>
+                                                    <td className="px-6 py-5">
+                                                        <div className="flex justify-center items-center">
+                                                            <Tippy content="Customer Profile">
+                                                                <div>
+                                                                    <AiFillEye
+                                                                        className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
+                                                                        onClick={() =>
+                                                                            navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            </Tippy>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        )
+                                    })
+                                ) : (
+                                    null
+                                )}
+                        </table>
+
                         {
-                            selectedEmiCustomer?.length > 0 ? (
-                                selectedEmiCustomer?.map((item, index) => {
-                                    return (
-                                        <tbody key={index}
-                                            className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                            <tr className=" border-b">
-                                                <th className="py-5 px-6">
-                                                    {index + 1}
-                                                </th>
-                                                <td className="px-6 py-5 ">
-                                                    {item.customer.full_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.customer?.mobile}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.phone?.company?.company_name} | {item?.phone?.model_name}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.net_amount}
-                                                </td>
-                                                <td className="px-6 py-5 capitalize">
-                                                    {item?.pending_amount}
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="flex justify-center items-center">
-                                                        <Tippy content="Customer Profile">
-                                                            <div>
-                                                                <AiFillEye
-                                                                    className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                                                    onClick={() =>
-                                                                        navigate(`/InstallmentList/profile-detail/${item.customer.id}`)
-                                                                    }
-                                                                />
-                                                            </div>
-                                                        </Tippy>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    )
-                                })
-                            ) : (
+                            selectedEmiCustomer?.length > 0 ?
                                 null
-                            )}
-                    </table>
-                    {
-                        selectedEmiCustomer?.length > 0 ?
-                            null
-                            :
-                            <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-                                <FaUsers className='text-2xl' />
-                                <h1 className='text-sm font-bold'>No customers </h1>
-                            </div>
-                    }
+                                :
+                                <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                                    <FaUsers className='text-2xl' />
+                                    <h1 className='text-sm font-bold'>No customers </h1>
+                                </div>
+                        }
+                    </div>
                 </div>
 
                 {
