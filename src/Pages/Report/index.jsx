@@ -17,7 +17,7 @@ function Report() {
   const [transaction, setTransaction] = useState("?");
   const [nextDate, setNextDate] = useState("");
   const reportData = useQuery(['transection'], () => getallTransection(pageNo - 1))
-
+  console.log(reportData?.data?.data?.AllTransaction)
   const noOfTransaction = [
     {
       id: 1,

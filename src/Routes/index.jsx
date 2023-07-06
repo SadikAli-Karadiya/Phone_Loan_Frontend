@@ -7,7 +7,7 @@ import { PhoneContext } from '../PhoneContext'
 function AppRoutes() {
     
     const {token} = useContext(PhoneContext)
-
+    console.log(token)
     return (
         <BrowserRouter>
             <Routes>
