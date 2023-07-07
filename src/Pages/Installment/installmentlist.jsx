@@ -32,7 +32,7 @@ function InstallmentList() {
     const customersByInstallment = useMutation(getCustomersByInstallment)
     const [pageNo, setPageNo] = useState(1);
     const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
-
+    console.log(installment, "installment")
     const bgColors = [
         "#ffd6d6",
         "#bfdbfe",
@@ -306,14 +306,14 @@ function InstallmentList() {
                 </div>
                 <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-7 mx-5 my-5 py-5">
                     <h1 className='font-bold text-lg'>Customer List</h1>
-                    <div className='flex justify-between items-center py-5'>
-                        <div className='flex justify-start items-center w-1/3 '>
+                    <div className='flex xs:flex-col sm:flex-row  sm:justify-between items-center py-5'>
+                        <div className='flex justify-start items-center lg:w-1/3 '>
                             <input
                                 type="search"
                                 placeholder='Search Customer'
                                 value={search}
                                 onChange={handleSearchCustomer}
-                                className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+                                className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full '
                             />
                             <div className='bg-[#3399ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
                 drop-shadow-lg cursor-pointer text-white text-2xl '>
@@ -322,7 +322,7 @@ function InstallmentList() {
                         </div>
                         <div
                             id="year-btn"
-                            className=" flex items-center border bg-white px-1 shadow-md xl:py-1 rounded-lg  space-x-1 outline-none">
+                            className=" flex items-center border bg-white px-1 shadow-md xl:py-2 rounded-lg  space-x-1 outline-none xs:mt-8 sm:mt-0">
                             <select
                                 onChange={handlePendingPaidUpClick}
                                 name=""
