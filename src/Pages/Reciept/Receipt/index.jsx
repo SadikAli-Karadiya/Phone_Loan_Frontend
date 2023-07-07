@@ -42,7 +42,7 @@ function Receipt() {
 
     const handleDeleteReceipt = async () => {
         Swal.fire({
-            title: "Are you sure to delete installment?",
+            title: "Are you sure to delete receipt?",
             text: "",
             icon: "warning",
             showCancelButton: true,

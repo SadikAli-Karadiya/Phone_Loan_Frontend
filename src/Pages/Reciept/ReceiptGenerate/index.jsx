@@ -462,7 +462,7 @@ function GenerateReceipt() {
                                         <input type="date"
                                             name="receiptDate"
                                             onChange={handleChangeDate}
-                                            value={receiptDate}
+                                            value={moment(receiptDate).format("YYYY-MM-DD")}
                                             className="ml-4"
                                         />
                                     </div>
