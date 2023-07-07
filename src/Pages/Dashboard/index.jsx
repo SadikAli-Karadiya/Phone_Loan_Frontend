@@ -218,18 +218,18 @@ function Dashboard() {
           <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
             {
               PendingEMI.isLoading
-              ?
+                ?
                 <tr>
                   <td colSpan="9">
                     <LoaderSmall />
                   </td>
                 </tr>
-              :
-                pendingEMICustomers?.length > 0 
-                ? 
+                :
+                pendingEMICustomers?.length > 0
+                  ?
                   (
-                  pendingEMICustomers?.map((item, index) => {
-                    return (
+                    pendingEMICustomers?.map((item, index) => {
+                      return (
                         <tr key={index} className=" border-b">
                           <th className="py-5 px-6">
                             {index + 1}
@@ -275,10 +275,10 @@ function Dashboard() {
                             </div>
                           </td>
                         </tr>
-                    )
-                  })
-                  ) 
-                : 
+                      )
+                    })
+                  )
+                  :
                   <tr>
                     <td colSpan="9">
                       <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
@@ -287,72 +287,10 @@ function Dashboard() {
                       </div>
                     </td>
                   </tr>
-                  :
-                  pendingEMICustomers?.length > 0
-                    ?
-                    (
-                      pendingEMICustomers?.map((item, index) => {
-                        return (
-                          <tr key={index} className=" border-b">
-                            <th className="py-5 px-6">
-                              {index + 1}
-                            </th>
-                            <td className="px-6 py-5 capitalize">
-                              {item.purchase?.customer?.full_name}
-                            </td>
-                            <td className="px-6 py-5">
-                              {item.purchase?.customer?.mobile}
-                            </td>
-                            <td className="px-6 py-5 capitalize">
-                              {item?.purchase?.phone?.company?.company_name} | {item?.purchase?.phone?.model_name}
-                            </td>
-                            <td className="px-6 py-5">
-                              {moment(item.due_date).format("D/MM/YYYY")}
-                            </td>
-                            <td className="px-6 py-5">
-                              {item?.amount}
-                            </td>
-                            <td className="px-6 py-5">
-                              <div className="flex justify-center items-center">
-                                <Tippy content="Customer Profile">
-                                  <div>
-                                    <AiFillEye
-                                      className="xs:text-base md:text-sm lg:text-[19px] hover:cursor-pointer "
-                                      onClick={() =>
-                                        navigate(`/InstallmentList/profile-detail/${item?.purchase?.customer?.id}`)}
-                                    />
-                                  </div>
-                                </Tippy>
-                              </div>
-                            </td>
-                            <td className="px-6 py-5 ">
-                              <div className="flex justify-center space-x-3">
-                                <button
-                                  onClick={() => handlePayEMI(item.id)}
-                                  className='bg-green-800 hover:bg-green-700 px-4 text-white py-[3px] text-sm font-semibold rounded-md'>
-                                  Pay
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        )
-                      })
-                    )
-                    :
-                    <tr>
-                      <td colSpan="8">
-                        <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
-                          <FaUsers className='text-2xl' />
-                          <h1 className='text-sm font-bold'>No customers with pending fees</h1>
-                        </div>
-                      </td>
-                    </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+            }
+          </tbody>
+        </table>
       </div>
-
       {
         search == '' && pendingEMICustomers.length > 0
           ?

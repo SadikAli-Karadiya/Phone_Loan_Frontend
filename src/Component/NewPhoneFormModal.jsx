@@ -16,7 +16,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     return <></>;
   }
 
-  const {user} = React.useContext(PhoneContext)
+  const { user } = React.useContext(PhoneContext)
 
   const params = useParams();
   let customer_id = params?.id
