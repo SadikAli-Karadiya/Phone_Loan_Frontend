@@ -92,7 +92,6 @@ console.log(addInstallment , "addInstallment")
   };
 
   React.useEffect(() => {
-     console.log(addInstallment)
     if(is_Edit && updateInstallment.data?.data){
       toast.success(updateInstallment.data?.data?.message);
       refetchInstallments()

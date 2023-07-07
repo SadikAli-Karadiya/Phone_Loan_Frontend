@@ -15,7 +15,7 @@ export const Modal = ({ open, onClose, size, children }) => {
       <Dialog
         as="div"
         id="modal"
-        className="fixed inset-0 z-[9999] overflow-y-auto"
+        className="fixed inset-0 z-[999] overflow-y-auto"
         style={{backgroundColor: "rgba(1, 1, 1, 0.6)"}}
         static
         open={modalOpen}

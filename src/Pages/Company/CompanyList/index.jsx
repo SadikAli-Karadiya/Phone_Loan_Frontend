@@ -73,7 +73,6 @@ function CompanyList() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 let response = await DeleteCompany(id);
-                console.log(response?.data.message)
                 if (response.data?.success == true) {
                     toast.success(response.data?.message);
                 }
@@ -100,20 +99,8 @@ function CompanyList() {
                             return (
                                 <div
                                     key={index}
-                                    className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-40 group'>
-                                    <div
-                                        style={{
-                                            background:
-                                                headingBgColor[
-                                                index % headingBgColor.length
-                                                ],
-                                        }}
-                                        className='px-3 py-1 rounded-md flex items-center space-x-2'>
-                                        <h1
-                                            className='font-semibold text-white'>Total Model : </h1>
-                                        <span className='font-semibold text-white'>15</span>
-                                    </div>
-                                    <div className='flex items-center justify-between mt-14'>
+                                    className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-30 group'>
+                                    <div className='flex items-center justify-between mb-5'>
                                         <div className='py-2 rounded-md '>
                                             <h1
                                                 style={{
@@ -124,8 +111,23 @@ function CompanyList() {
                                                 }}
                                                 className='uppercase font-semibold  font-roboto text-2xl'>{item.company_name}</h1>
                                         </div>
-                                        <div className='hidden group-hover:block'>
-                                            <div className='flex items-center space-x-1 mt-2'>
+                                    </div>
+                                    <div className='flex items-center justify-between'>
+                                        <div
+                                            style={{
+                                                background:
+                                                    headingBgColor[
+                                                    index % headingBgColor.length
+                                                    ],
+                                            }}
+                                            className='w-full mr-2 px-3 py-0.5 rounded-md flex items-center space-x-2 text-sm'>
+                                            <h1
+                                                className='font-semibold text-white'>Total Models : </h1>
+                                            <span className='font-semibold text-white'>{item.phones.length}</span>
+
+                                        </div>
+                                        <div className=''>
+                                            <div className='flex items-center space-x-1 h-full'>
                                                 <Tippy content="Edit Company">
                                                     <div
                                                         style={{
@@ -162,7 +164,7 @@ function CompanyList() {
                                                 </Tippy>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                    
                                 </div>
                             );
                         })

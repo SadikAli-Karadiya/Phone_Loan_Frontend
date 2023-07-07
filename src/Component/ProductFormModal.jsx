@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { Modal } from "../Component/Modal";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/apiCalls"
 import { useQuery, useMutation } from 'react-query'
 
@@ -46,31 +46,18 @@ const productSchema = Yup.object({
   model_name: Yup.string().required("Please Enter Model Name"),
 });
 
-function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit }) {
+function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDetails, is_Edit }) {
 
   if (!showModal) {
     return <></>;
   }
 
-  const [company, setCompany] = React.useState();
   const [isLoading, setIsLoading] = React.useState();
   let Company = useQuery('company', getAllCompanies)
   const [CompanyList, setComapnyList] = React.useState([]);
-  let Companies = Company?.data?.data?.all_companies
   
   const addPhone = useMutation(AddNewPhone);
   const updatePhone = useMutation(UpdatePhone);
-
-  const handleCreateCompany = (inputValue) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      // const newComapny = createCompany(inputValue);
-    const respons = AddCompany({ inputValue })
-      setIsLoading(false);
-      setComapnyList();
-      // setCompany(newComapny);
-    }, 1000);
-  };
 
   const initialValues = {
     company_name: "",
@@ -85,15 +72,12 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
           initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
-        if (company == null) {
-          toast("Please Select Company")
-        }
-        Object.assign(data, { company_name: company.value, id: ModelDetails?.id })
+        Object.assign(data, { company_name: data.company_name, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
-            addPhone.mutate(data)
-          } else {
             updatePhone.mutate(data)
+          } else {
+            addPhone.mutate(data)
           }
         } catch (error) {
           toast.error(error.response.data.message);
@@ -107,15 +91,23 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
   };
 
   React.useEffect(() => {
-    if(is_Edit && updatePhone.data?.data){
-      toast.success(updatePhone.data?.data?.message);
-      handleModalClose()
+    if(addPhone.isSuccess || updatePhone.isSuccess){
+      if(is_Edit && updatePhone.data?.data){
+        toast.success(updatePhone.data?.data?.message);
+        refetchPhones();
+        handleModalClose()
+      }
+      else if(addPhone.data?.data){
+        toast.success(addPhone.data?.data?.message);
+        refetchPhones();
+        handleModalClose()
+      }
     }
-    else if(addPhone.data?.data){
-      toast.success(addPhone.data?.data?.message);
-      handleModalClose()
+    
+    if(addPhone.isError){
+      toast.error(addPhone.error.response.data.message);
     }
-  },[addPhone.isSuccess, updatePhone.isSuccess]);
+  },[addPhone.isSuccess, addPhone.isError, updatePhone.isSuccess, updatePhone.isError]);
 
   return (
     <Modal open={showModal}
@@ -154,17 +146,15 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col items-center w-full space-y-5'>
                 <div className='w-full'>
-                  <CreatableSelect
+                  <Select
                     className='w-full'
-                    isClearable
                     isDisabled={isLoading}
                     isLoading={isLoading}
                     defaultValue={is_Edit == true ? { value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name } : null}
-                    onChange={(e) => { setFieldValue('company_name', e.value); setCompany(e) }}
+                    onChange={(e) => { setFieldValue('company_name', e.value)}}
                     onBlur={handleBlur}
-                    onCreateOption={handleCreateCompany}
                     placeholder="Select Company"
-                    options={Companies?.map(item => {
+                    options={Company?.data?.data?.all_companies?.map(item => {
                       return { value: item?.company_name, label: item?.company_name };
                     })
                     }
@@ -178,7 +168,7 @@ function ProductFormModal({ showModal, handleShowModal, ModelDetails, is_Edit })
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                    placeholder="Enter Model Name " />
+                    placeholder="Enter Model Name" />
                   {errors.model_name && touched.model_name
                     ?
                     <p className='form-error text-red-600 text-sm font-semibold'>{errors.model_name}</p>

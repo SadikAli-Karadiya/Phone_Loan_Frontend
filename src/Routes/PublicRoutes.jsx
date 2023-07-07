@@ -16,7 +16,6 @@ function PublicRoutes() {
           <Route path='/NewPassword' element={<NewPassword />} />
           <Route path='/SignUp' element={<Registration />} />
           <Route index element={<Login />} />
-
         </Route>
       </Routes>
     </div>

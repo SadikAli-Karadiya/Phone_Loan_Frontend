@@ -42,44 +42,44 @@ function Dashboard() {
     PendingEMI?.data?.data?.pendingEmiCustomers?.map((d) => {
       total = total + d.amount;
     });
-
+    
     setTotalCollection(total);
   }
 
   const handleSearchCustomers = (e) => {
     setSearch(e.target.value)
-    const searchedValue = e.target.value.toLowerCase();
+     const searchedValue = e.target.value.toLowerCase();
 
     if (searchedValue == '') {
-      setPendingEMICustomers(PendingEMI?.data?.data?.pendingEmiCustomers);
-      return;
+        setPendingEMICustomers(PendingEMI?.data?.data?.pendingEmiCustomers);
+        return;
     }
 
     setPendingEMICustomers(() =>
-      PendingEMI?.data?.data?.pendingEmiCustomers?.filter((data) => {
-        const full_name = data.purchase.customer.full_name.toLowerCase();
-        let isNameFound = false;
+        PendingEMI?.data?.data?.pendingEmiCustomers?.filter((data) => {
+            const full_name = data.purchase.customer.full_name.toLowerCase();
+            let isNameFound = false;
 
-        if (full_name.indexOf(searchedValue) > -1) {
-          isNameFound = true;
-        }
+            if (full_name.indexOf(searchedValue) > -1) {
+                isNameFound = true;
+            }
 
-        return (
-          isNameFound || data.purchase.customer.mobile == searchedValue
-        );
-      })
+            return (
+                isNameFound || data.purchase.customer.mobile == searchedValue
+            );
+        })
     );
   };
 
   React.useEffect(() => {
-    if (PendingEMI.data?.data) {
+    if(PendingEMI.data?.data){
       setPendingEMICustomers(PendingEMI.data.data?.pendingEmiCustomers)
     }
-  }, [PendingEMI.isSuccess, PendingEMI.data])
+  },[PendingEMI.isSuccess, PendingEMI.data])
 
   return (
     <div className='px-5 py-5 xl:px-10 '>
-      <div className=' grid xxs::grid-rows-4 sm:grid-cols-2 lg:grid-cols-4  sm:pb-10 lg:my-5 gap-5 '>
+      <div className='grid grid-cols-4 my-10 gap-5 '>
         <div className='bg-[#f9b115] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4'>
             <p className="text-white text-lg font-semibold ">Total Customer</p>
@@ -98,7 +98,7 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
-        <div className='bg-[#321fdb] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#321fdb] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4 '>
             <p className="text-white text-lg font-semibold ">Total Model</p>
             <div className='flex items-center space-x-5'>
@@ -114,7 +114,7 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
-        <div className='bg-[#3399ff] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#3399ff] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4 '>
             <p className="text-white text-lg font-semibold ">Total Pending Payment</p>
             <div className='flex items-center space-x-5'>
@@ -130,7 +130,8 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
-        <div className='bg-[#de4141] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
+
+        <div className='bg-[#de4141] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
           <div className='flex flex-col space-y-4 '>
             <p className="text-white text-lg font-semibold ">Today's Collection</p>
             <div className='flex items-center space-x-5'>
@@ -146,8 +147,9 @@ function Dashboard() {
             <BiDotsVerticalRounded className='text-white' />
           </div>
         </div>
+
       </div>
-      <div className="bg-white shadow-md rounded-md  px-10 lg:py-5">
+      <div className="bg-white shadow-md rounded-md  xs:overflow-x-scroll xl:overflow-x-hidden px-10 py-5">
         <div className='flex justify-between items-center py-5'>
           <div className='flex justify-start items-center w-1/3 '>
             <input
@@ -178,7 +180,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        <div className='mb-3 lg:mt-4'>
+        <div className='mb-3 mt-4'>
           <h3 className='text-lg text-[#0d0d48] font-medium'>Current Month EMI</h3>
         </div>
         <table
@@ -292,8 +294,8 @@ function Dashboard() {
         </table>
       </div>
       {
-        search == '' && pendingEMICustomers.length > 0
-          ?
+        search == '' && pendingEMICustomers.length > 0 
+        ?
           <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
             <Pagination
               total={PendingEMI?.data?.data?.totalPages || 0}
@@ -301,7 +303,7 @@ function Dashboard() {
               onPageChange={(page) => setPageNo(page)}
             />
           </div>
-          :
+        :
           null
       }
     </div>

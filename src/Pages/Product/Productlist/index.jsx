@@ -167,7 +167,6 @@ function ProductList() {
                   :
                     SelectedCompany?.length > 0 ? (
                       SelectedCompany?.map((item, index) => {
-                        console.log(item)
                         return (
                             <tr key={index} className=" border-b">
                               <td className="px-6 py-5 font-bold">
@@ -183,7 +182,7 @@ function ProductList() {
                                 {
                                   item.specifications.map((specs, i)=>{
                                     return(
-                                      <span>
+                                      <span key={i}>
                                         {`${specs.ram}/${specs.storage}`}
                                         {
                                           i < item.specifications.length - 1
@@ -248,6 +247,7 @@ function ProductList() {
       </div>
       <ProductFormModel
         showModal={productFormModal}
+        refetchPhones = {phones.refetch}
         handleShowModal={setProductFormModal}
         ModelDetails={is_Edit ? ModelDetails : {}}
         is_Edit={is_Edit}

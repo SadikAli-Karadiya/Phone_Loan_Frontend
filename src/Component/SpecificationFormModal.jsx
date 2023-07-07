@@ -7,22 +7,21 @@ import { useFormik } from "formik";
 import CreatableSelect from 'react-select/creatable';
 import { useQuery } from 'react-query'
 import { AddSpecification, UpdateSpecification } from '../utils/apiCalls';
+import { AxiosError } from "axios";
 
 const productSchema = Yup.object({
-  ram: Yup.string().required("Please Enter RAM"),
-  storage: Yup.string().required("Please Enter Storage"),
-  price: Yup.string().required("Please Enter Price"),
+  ram: Yup.string().required("Please Select RAM"),
+  storage: Yup.string().required("Please Select Storage"),
+  price: Yup.string().required("Please Enter Price").matches(/^[0-9]+$/, 'Please enter only numbers'),
 });
 
-function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetails, is_Edit }) {
+function SpecificationFormModal({ showModal, handleShowModal, refetchSpecification, SpecificationDetails, is_Edit, setIsEdit }) {
 
   if (!showModal) {
     return <></>;
   }
 
   let PhoneId = useParams();
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = React.useState();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const initialValues = {
@@ -38,7 +37,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
       async onSubmit(data) {
         Object.assign(data, { phone_id: PhoneId.id })
         let UpdateData = Object.assign(data, { id: SpecificationDetails?.id })
-        console.log(UpdateData)
+
         try {
           if (is_Edit == true) {
             setIsSubmitting(true)
@@ -46,6 +45,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
             setIsSubmitting(false)
             toast.success(response.data.message);
             resetForm({ values: "" })
+            refetchSpecification();
             handleModalClose(false);
           } else {
             setIsSubmitting(true)
@@ -53,10 +53,16 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
             setIsSubmitting(false)
             toast.success(response.data.message);
             resetForm({ values: "" })
+            refetchSpecification();
             handleModalClose(false);
           }
         } catch (err) {
-          toast.error(err.response.data.message);
+          if(err instanceof AxiosError){
+            toast.error(err.response.data.message);
+          }
+          else{
+            toast.error(err.message);
+          }
         }
       },
     });
@@ -98,6 +104,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
 
   const handleModalClose = () => {
     resetForm("")
+    setIsEdit(false)
     handleShowModal(false);
   };
 
@@ -108,7 +115,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
         <Modal.Title
           as="h3"
           className="mb-4 text-xl font-medium text-white">
-          Add Model
+          {is_Edit ? "Update" : "Add"} Specifications
         </Modal.Title>
         <button
           type="button"
@@ -139,7 +146,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                 <div className='w-full'>
                   <label className="block">
                     <span className="block text-sm font-medium text-white">
-                      Ram *
+                      RAM *
                     </span>
                     <select
                       name="ram"
@@ -155,6 +162,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                       <option value="6">6 GB</option>
                       <option value="8">8 GB</option>
                       <option value="12">12 GB</option>
+                      <option value="16">16 GB</option>
                     </select>
                   </label>
                   {errors.ram &&
@@ -177,11 +185,14 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                       onBlur={handleBlur}
                       className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                       <option value="">Select Storage</option>
+                      <option value="8">8 GB</option>
                       <option value="16">16 GB</option>
                       <option value="32">32 GB</option>
                       <option value="64">64 GB</option>
                       <option value="128">128 GB</option>
                       <option value="256">256 GB</option>
+                      <option value="512">512 GB</option>
+                      <option value="1024">1 TB</option>
                     </select>
                   </label>
                   {errors.storage && touched.storage
@@ -192,7 +203,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                 </div>
                 <div className="flex flex-col space-y-2 w-full ">
                   <span className="block text-sm font-medium text-white">
-                    price *
+                    Price *
                   </span>
                   <input type="text"
                     name="price"
@@ -200,7 +211,7 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
-                    placeholder="Enter Phone Price " />
+                    placeholder="Enter Phone Price" />
                   {errors.price && touched.price
                     ?
                     <p className='form-error text-red-600 text-sm font-semibold'>{errors.price}</p>
@@ -209,24 +220,15 @@ function SpecificationFormModal({ showModal, handleShowModal, SpecificationDetai
                 </div>
               </div>
               <div className="mt-5 text-right">
-                {is_Edit == true ?
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                  >
-                    {isSubmitting ? 'Loading...' : 'Update'}
-                  </button> :
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                  >
-                    {isSubmitting ? 'Loading...' : 'Submit'}
-                  </button>
-                }
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className={`${isSubmitting ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                >
+                  {isSubmitting ? 'Loading...' : is_Edit ? 'Update' : 'Submit'}
+                </button> 
+                
               </div>
             </form>
           </div>

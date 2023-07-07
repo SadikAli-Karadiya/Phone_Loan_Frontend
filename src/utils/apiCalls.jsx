@@ -220,7 +220,6 @@ export const AddNewPhone = (data) => {
 }
 
 export const DeletePhone = (id) => {
-  console.log(id)
   return instance({
     'url': `/phone/delete/${id}`,
     'method': 'DELETE',
