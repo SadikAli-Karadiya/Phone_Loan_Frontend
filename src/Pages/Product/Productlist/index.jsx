@@ -54,7 +54,7 @@ function ProductList() {
     searchPhoneWithName.mutate(e.target.value)
   }
 
-  const handlePendingPaidUpDropDown = (e) => {
+  const handleCompaniesFilter = (e) => {
     let filteredCompany = null
     if(e.target.value == 'all'){
       filteredCompany = phones.data.data.AllModel
@@ -74,6 +74,7 @@ function ProductList() {
   }, [phones.isSuccess, phones.data])
 
   React.useEffect(() => {
+    console.log(searchPhoneWithName?.data?.data?.modelDetails)
     setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
   }, [searchPhoneWithName.isSuccess, searchPhoneWithName.data])
 
@@ -119,7 +120,7 @@ function ProductList() {
               <div>
                 <select
                   name="" id=""
-                  onChange={handlePendingPaidUpDropDown}
+                  onChange={handleCompaniesFilter}
                   className='xs:text-sm xl:text-base bg-white shadow-md px-3 py-[6px] rounded-lg outline-none' >
                   {/* <option value="">Select Company</option> */}
                   <option value='all'>All</option>
@@ -180,21 +181,25 @@ function ProductList() {
                               </td>
                               <td className="px-6 py-5">
                                 {
-                                  item.specifications.map((specs, i)=>{
-                                    return(
-                                      <span key={i}>
-                                        {`${specs.ram}/${specs.storage}`}
-                                        {
-                                          i < item.specifications.length - 1
-                                          ?
-                                            ', '
-                                          :
-                                            null
+                                  item.specifications.length > 0
+                                  ?
+                                    item.specifications.map((specs, i)=>{
+                                      return(
+                                        <span key={i}>
+                                          {`${specs.ram}/${specs.storage}`}
+                                          {
+                                            i < item.specifications.length - 1
+                                            ?
+                                              ', '
+                                            :
+                                              null
 
-                                        }
-                                      </span>
-                                    )
-                                  })
+                                          }
+                                        </span>
+                                      )
+                                    })
+                                  :
+                                    '--'
                                 }
                               </td>
                               <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
