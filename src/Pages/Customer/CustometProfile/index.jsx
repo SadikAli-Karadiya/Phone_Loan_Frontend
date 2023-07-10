@@ -931,18 +931,14 @@ function CustomerProfile() {
                                                         )
                                                     })
                                                 : 
-                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.length != 0 
-                                                    ?
-                                                        <tr>
-                                                            <td colSpan="8">
-                                                                <div className='flex justify-center items-center w-full py-5 space-x-4 text-gray-500'>
-                                                                    <BsPhone className='text-3xl' />
-                                                                    <h1 className='font-semibold'>No phone purchased yet</h1>
-                                                                </div>                                            
-                                                            </td>
-                                                        </tr>
-                                                    :
-                                                        null
+                                                    <tr>
+                                                        <td colSpan="8">
+                                                            <div className='flex justify-center items-center w-full py-5 space-x-4 text-gray-500'>
+                                                                <BsPhone className='text-3xl' />
+                                                                <h1 className='font-semibold'>No phone purchased yet</h1>
+                                                            </div>                                            
+                                                        </td>
+                                                    </tr>
                                             }
                                             </tbody>
                                         }
