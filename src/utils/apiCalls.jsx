@@ -27,7 +27,7 @@ instance.interceptors.request.use((config) => {
 //         'item1': 'data1',
 //       },
 //       'headers': {
-//         'content-type': 'application/json' // override instance defaults
+//         'content-type': 'application/json' 
 //       },
 //     })
 //   },
@@ -84,7 +84,7 @@ export const getAllInstallment = () => {
     'method': 'GET',
     'url': '/installment',
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -130,7 +130,7 @@ export const AddCustomer = (data) => {
     'method': 'POST',
     'data': data,
     'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
+      'content-type': "multipart/form-data" 
     },
   })
 }
@@ -140,7 +140,7 @@ export const getAllCustomer = (pageNo, searchedValue) => {
     'url': `/customer/List/${pageNo}/${searchedValue}`,
     'method': 'GET',
     'headers': {
-      'content-type': "multipart/form-data" // override instance defaults
+      'content-type': "multipart/form-data" 
     },
   })
 }
@@ -204,7 +204,7 @@ export const getAllCompanies = () => {
     'method': 'GET',
     'url': '/company',
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -247,7 +247,7 @@ export const getAllPhone = (pageNo) => {
     'method': 'GET',
     'url': `/phone/List/${pageNo.pageNo}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -268,7 +268,7 @@ export const getAllPurchase = (pageNo) => {
     'method': 'GET',
     'url': `/purchase/List/${pageNo.pageNo}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -278,7 +278,7 @@ export const getPurchaseCustomerbyId = (id) => {
     'method': 'GET',
     'url': `/purchase/Customer_details/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -299,7 +299,7 @@ export const getEmiPurchasebyId = (id) => {
     'method': 'GET',
     'url': `/emi/Emi_details/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -309,7 +309,7 @@ export const getPendingEmi = (pageNo) => {
     'method': 'GET',
     'url': `/emi/pending/${pageNo}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -319,7 +319,7 @@ export const getEMICustomers = (searchedValue) => {
     'method': 'GET',
     'url': `/emi/search/${searchedValue.pageNo}/${searchedValue.search}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -329,7 +329,7 @@ export const getSingleEmi = (id) => {
     'method': 'GET',
     'url': `/emi/details/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -358,7 +358,7 @@ export const getReceiptbyReceiptId = (id) => {
     'method': 'GET',
     'url': `/transaction/ReceiptId/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -376,7 +376,17 @@ export const getReceiptbyPurchaseId = (id) => {
     'method': 'GET',
     'url': `/receipt/search/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
+    },
+  })
+}
+
+export const deleteReceiptById = (id) =>{
+  return instance({
+    'method': 'DELETE',
+    'url': `/receipt/delete/${id}`,
+    'headers': {
+      'content-type': 'application/json' 
     },
   })
 }
@@ -386,7 +396,7 @@ export const getReceiptbyEmiId = (id) => {
     'method': 'GET',
     'url': `/receipt/searchbyEmi/${id}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }
@@ -396,7 +406,7 @@ export const onerecieptDetailsbyNumber = (search) => {
     'method': 'GET',
     'url': `/receipt/search/${search.pageNo}/${search.search}`,
     'headers': {
-      'content-type': 'application/json' // override instance defaults
+      'content-type': 'application/json' 
     },
   })
 }

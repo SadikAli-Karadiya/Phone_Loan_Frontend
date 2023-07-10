@@ -158,41 +158,6 @@ function GenerateReceipt() {
         }
     }
 
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            backgroundColor: "rgb(75 85 99)",
-            borderColor: "rgb(107 114 128)",
-            borderRadius: "8px",
-            minHeight: "44px",
-            height: "44px",
-            boxShadow: state.isFocused ? null : null,
-        }),
-
-        valueContainer: (provided, state) => ({
-            ...provided,
-            height: "44px",
-            padding: "0 6px",
-        }),
-
-        singleValue: (provided) => ({
-            ...provided,
-            color: "white",
-        }),
-
-        input: (provided, state) => ({
-            ...provided,
-            margin: "0px",
-        }),
-        indicatorSeparator: (state) => ({
-            display: "none",
-        }),
-        indicatorsContainer: (provided, state) => ({
-            ...provided,
-            height: "44px",
-        }),
-    };
-
     function handlePaymentMethod(e) {
         setUpiNo('')
         setChequeNo('')
