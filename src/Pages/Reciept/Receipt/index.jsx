@@ -72,10 +72,6 @@ function Receipt() {
         })
     };
 
-    {
-        console.log(data?.data?.data?.SingleTransaction)
-    }
-
     return (
         <>
             <div className=' sm:px-5 xl:px-10 h-full'>

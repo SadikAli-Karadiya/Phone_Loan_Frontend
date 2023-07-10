@@ -19,8 +19,6 @@ function InstallmentFormModal({ showModal, handleShowModal, refetchInstallments,
   const addInstallment = useMutation(AddInstallment);
   const updateInstallment = useMutation(UpdateInstallment);
 
-console.log(addInstallment , "addInstallment")
-
   const customStyles = {
     control: (provided, state) => ({
       ...provided,

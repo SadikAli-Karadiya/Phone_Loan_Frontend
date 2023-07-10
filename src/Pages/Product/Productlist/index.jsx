@@ -74,7 +74,6 @@ function ProductList() {
   }, [phones.isSuccess, phones.data])
 
   React.useEffect(() => {
-    console.log(searchPhoneWithName?.data?.data?.modelDetails)
     setSelectedCompany(searchPhoneWithName?.data?.data?.modelDetails)
   }, [searchPhoneWithName.isSuccess, searchPhoneWithName.data])
 

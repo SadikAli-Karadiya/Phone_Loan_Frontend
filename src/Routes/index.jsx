@@ -8,7 +8,7 @@ import ErrorBoundry from '../Component/ErrorBoundry'
 function AppRoutes() {
     
     const {token} = useContext(PhoneContext)
-    console.log(token)
+
     return (
         <BrowserRouter>
             <ErrorBoundry>

@@ -8,15 +8,20 @@ export const PhoneSchema = Yup.object({
             }
             return true;
         })
-        .min(15, "Please enter valid IEMI no")
-        .max(15, "Please enter valid IEMI no")
-        .required("Please Enter IEMI Number"),
+        .min(15, "Please enter valid IMEI no.")
+        .max(15, "Please enter valid IMEI no.")
+        .required("Please Enter IMEI no."),
+    date: Yup.date().required('Please select date'),
+    company_name: Yup.string().required('Please select company'),
+    model: Yup.string().required('Please select model'),
+    storage: Yup.string().required('Please select storage'),
+    installment: Yup.string().required('Please select installment'),
+    dp: Yup.number().typeError('DP must be a number').positive('DP must be positive')
 });
 
 export const NewPhoneValues = {
     date: "",
     company_name: "",
-    ram: "",
     storage: "",
     model: "",
     iemi : "",

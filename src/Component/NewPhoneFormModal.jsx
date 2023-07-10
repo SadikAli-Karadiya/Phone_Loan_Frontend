@@ -8,7 +8,6 @@ import { NewPhoneValues, PhoneSchema } from "../Component/AddNewsPhoneSchema";
 import { getAllPhone, getAllCompanies, getallSpecification, getAllInstallment, AddNewPurchase } from "../utils/apiCalls";
 import { useQuery } from 'react-query'
 import { PhoneContext } from "../PhoneContext";
-import CreatableSelect from 'react-select/creatable';
 
 function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }) {
 
@@ -17,7 +16,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   }
 
   const {user} = React.useContext(PhoneContext)
-
+  
   const params = useParams();
   let customer_id = params?.id
   const DATE = new Date();
@@ -45,25 +44,30 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   const { values, touched, resetForm, errors, setFieldValue, handleChange, handleSubmit, handleBlur } =
     useFormik({
       initialValues:
-        JSON.stringify(PhoneDetails) != {} ? {
+        is_Edit ? {
           date: PhoneDetails?.createdAt,
           Company: PhoneDetails?.phone?.company?.company_name,
-          Model: PhoneDetails?.phone?.model_name
+          Model: PhoneDetails?.phone?.model_name,
+
+          date: PhoneDetails?.createdAt,
+          company_name: PhoneDetails?.phone?.company?.company_name,
+          ram: "",
+          storage: "",
+          model: PhoneDetails?.phone?.model_name,
+          iemi : "",
+          price: "",
+          installment: "",
+          dp: "",
+          net_payable: "",
         } : NewPhoneValues,
       validationSchema: PhoneSchema,
       async onSubmit(data) {
-        if (Company == "") {
-          toast.error("Please Select Cuompany")
-        }
         Object.assign(data,
-          { date: date },
           { customer_id: customer_id },
-          { company_name: Company },
-          { model_name: Model },
           { ram: ram },
           { storage: Storage },
           { price: Phone_Price },
-          { month: installment },
+          { month: data.installment },
           { Down_Payment: Down_Payment },
           { net_payable: Net_playable },
           { admin_id: user.admin_id }
@@ -122,6 +126,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       return n?.company?.company_name == company_name;
     });
     setSelectedCompany(Model)
+    setFieldValue('company_name', company_name)
   };
 
   function handleSelectModel(event) {
@@ -131,6 +136,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       return n?.phone?.model_name == Model_name;
     });
     setSelectedModel(storage)
+    setFieldValue('model', Model_name)
   };
 
   function handleSelectStorage(event) {
@@ -145,6 +151,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
     setram(Price.ram)
     setstorage(Price.storage)
     setPhonePrice(Price.price)
+    setFieldValue('storage', storage)
+    setFieldValue('price', Price.price)
   };
   function handleSelectInstallment(event) {
     let month = event.target.value
@@ -153,11 +161,12 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
       return n?.month == month;
     });
     setSelectInstallment(Charge.charges)
+    setFieldValue('installment', month)
   };
 
   function handleChangeDate(event) {
     setDate(event.target.value)
-
+    setFieldValue('date', event.target.value)
   };
 
   let Net_playable = (SelectInstallment + Phone_Price)
@@ -217,7 +226,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         type="date"
                         name="date"
                         onChange={handleChangeDate}
-                        value={date}
+                        onBlur={handleBlur}
+                        value={values.date}
                         className='w-full hover:cursor-pointer mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">
@@ -233,8 +243,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                       <select
                         name="company_name"
                         id="company_name"
-                        value={Company}
+                        value={values.company_name}
                         onChange={handleSelectCompany}
+                        onBlur={handleBlur}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                         <option value="">Select Company</option>
                         {
@@ -246,6 +257,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           })
                         }
                       </select>
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.company_name && touched.company_name ? errors.company_name : null}
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -272,9 +286,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         />
                       </div> */}
                       <select
-                        name="model_name"
-                        id="model_name"
-                        value={Model}
+                        name="model"
+                        id="model"
+                        value={values.model}
                         onChange={handleSelectModel}
                         onBlur={handleBlur}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
@@ -291,6 +305,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           })
                         }
                       </select>
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.model && touched.model ? errors.model : null}
+                      </span>
                     </label>
                   </div>
                   <div className="selectinst w-full">
@@ -299,8 +316,8 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         Storage *
                       </span>
                       <select
-                        name="model_name"
-                        id="model_name"
+                        name="storage"
+                        id="storage"
                         value={Ram}
                         onChange={handleSelectStorage}
                         onBlur={handleBlur}
@@ -320,6 +337,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           })
                         }
                       </select>
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.storage && touched.storage ? errors.storage : null}
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -339,7 +359,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
                       <span className="text-xs font-semibold text-red-600 px-1">
-                        {errors.iemi ? errors.iemi : null}
+                        {errors.iemi && touched.iemi ? errors.iemi : null}
 
                       </span>
                     </label>
@@ -360,6 +380,10 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         placeholder="Enter Price"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.price && touched.price ? errors.price : null}
+
+                      </span>
                     </label>
                   </div>
                   <div className="installment w-full">
@@ -368,10 +392,11 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                         Installment *
                       </span>
                       <select
-                        name="month"
-                        id="month"
+                        name="installment"
+                        id="installment"
                         onChange={handleSelectInstallment}
-                        value={installment}
+                        onBlur={handleBlur}
+                        value={values.installment}
                         className='w-full mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
                         <option value="">Select Installment</option>
                         {
@@ -383,6 +408,9 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                           })
                         }
                       </select>
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.installment && touched.installment ? errors.installment : null}
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -390,16 +418,20 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
                   <div className="dp w-full">
                     <label className="block">
                       <span className="block text-sm font-medium text-white">
-                        Down Payment *
+                        Down Payment
                       </span>
                       <input
                         type="text"
                         name="dp"
-                        onChange={e => setDownPayment(e.target.value)}
+                        onChange={e => {setDownPayment(e.target.value); setFieldValue('dp', e.target.value)}}
+                        onBlur={handleBlur}
                         value={Down_Payment}
                         placeholder="Enter Down Payment"
                         className='w-full  mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
                       />
+                      <span className="text-xs font-semibold text-red-600 px-1">
+                        {errors.dp && touched.dp ? errors.dp : null}
+                      </span>
                     </label>
                   </div>
                   <div className="totalfee w-full">
