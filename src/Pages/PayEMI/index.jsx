@@ -85,13 +85,12 @@ function PayEMI() {
           </button>
           </div>
         </div>
-
         {
           EMI.isLoading
           ?
             <LoaderSmall />
           :
-            EMI?.data?.data?.emiDetails?.length > 0 ?
+            EMI?.data?.data?.emiDetails?.length > 0 && EMI?.data?.data?.emiDetails[0].purchases.length > 0 ?
             (
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 pt-5 mt-10">
                 <h1 className='font-bold text-lg pl-7'>Customer List</h1>
@@ -193,7 +192,7 @@ function PayEMI() {
             )
             :
             (
-              EMI?.data?.data?.emiDetails?.length == 0 ?
+              EMI?.data?.data?.emiDetails?.length == 0 || EMI?.data?.data?.emiDetails[0].purchases?.length == 0 ?
                 <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
                   <IoMdInformationCircle className='text-xl text-red-600' />
                   <h1 className='text-sm font-bold text-red-800'>No Customer Found</h1>
@@ -204,7 +203,7 @@ function PayEMI() {
         }
 
         {
-          EMI?.data?.data?.emiDetails?.length > 0 ?
+          EMI?.data?.data?.emiDetails?.length > 0 && EMI?.data?.data?.emiDetails[0].purchases.length > 0 ?
             <div className='mx-auto px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
               <Pagination
                 total={EMI?.data?.data?.emiDetails?.totalPages || 0}
