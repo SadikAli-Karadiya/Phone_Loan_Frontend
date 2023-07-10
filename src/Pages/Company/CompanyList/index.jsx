@@ -285,6 +285,7 @@ function CompanyList() {
             </div>
             <CompanyFormModal
                 showModal={CompanyModal}
+                refetchCompanies={companies.refetch}
                 handleShowModal={setCompanyModal}
                 CompanyDetails={is_Edit ? CompanyDetails : {}}
                 is_Edit={is_Edit}
