@@ -116,7 +116,7 @@ function GenerateReceipt() {
                 is_by_cheque: toggleCheque ? 1 : 0,
                 is_by_upi: toggleUpi ? 1 : 0,
                 cheque_no: chequeNo,
-                cheque_date: chequeDate,
+                cheque_date: chequeDate == '' ? null : new Date(chequeDate),
                 upi_no: upiNo,
                 user_id: user.id,
                 purchase_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.id,
@@ -125,7 +125,7 @@ function GenerateReceipt() {
                 amount: Emi_Details?.data?.data?.SingleEmi?.amount,
                 security_pin: pin,
                 customer_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.id,
-                date: receiptDate
+                date: new Date(receiptDate)
             };
 
             setIsSubmitting(true);
@@ -427,7 +427,7 @@ function GenerateReceipt() {
                                         <input type="date"
                                             name="receiptDate"
                                             onChange={handleChangeDate}
-                                            value={moment(receiptDate).format("YYYY-MM-DD")}
+                                            value={moment(receiptDate).format("DD-MM-YYYY")}
                                             className="ml-4"
                                         />
                                     </div>
