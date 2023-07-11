@@ -115,6 +115,7 @@ export const Admindetails = (id) => {
 }
 
 export const UpdateAdmin = (data) => {
+  console.log(data , "apicalls")
   return instance({
     'url': `/admin/update`,
     'method': 'PUT',

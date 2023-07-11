@@ -8,7 +8,7 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { getAllCustomer } from '../../utils/apiCalls';
 import { useQuery, useMutation } from 'react-query'
-import { FaUsers } from "react-icons/fa";
+import { IoMdInformationCircle } from "react-icons/io";
 import Pagination from 'react-responsive-pagination'
 import '../../Component/Pagination/pagination.css'
 
@@ -19,26 +19,26 @@ function Search() {
     const [pageNo, setPageNo] = React.useState(1);
 
     const allCustomers = useQuery(
-        ['customer', pageNo, search], 
+        ['customer', pageNo, search],
         () => getAllCustomer(pageNo - 1, search),
         {
             enabled: false
         }
     )
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         const listener = async (event) => {
-        if (event.code === "Enter" || event.code === "NumpadEnter") {
-            if(search == '') return;
-            event.preventDefault();
-            allCustomers.refetch()
-        }
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                if (search == '') return;
+                event.preventDefault();
+                allCustomers.refetch()
+            }
         };
 
         document.addEventListener("keydown", listener);
 
         return () => {
-        document.removeEventListener("keydown", listener);
+            document.removeEventListener("keydown", listener);
         };
     })
 
@@ -50,14 +50,14 @@ function Search() {
                     <div className='flex justify-center items-center mt-10 '>
                         <input
                             type="search"
-                            onChange={(e)=> setSearch(e.target.value)}
+                            onChange={(e) => setSearch(e.target.value)}
                             value={search}
                             placeholder='Search Customer (BY : Name , Whatsapp Number)'
                             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
                         />
                         <button
-                            onClick={()=> {
-                                if(search == '') return;
+                            onClick={() => {
+                                if (search == '') return;
                                 allCustomers.refetch()
                             }}
                             className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
@@ -68,11 +68,11 @@ function Search() {
                 </div>
                 {
                     allCustomers.isLoading
-                    ?
-                        <LoaderSmall />
-                    :
-                        allCustomers?.data?.data?.AllCustomer?.length > 0
                         ?
+                        <LoaderSmall />
+                        :
+                        allCustomers?.data?.data?.AllCustomer?.length > 0
+                            ?
                             <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 px-10 py-5 mt-5">
                                 <h1 className='font-bold text-lg pl-5'>Customers List</h1>
                                 <table
@@ -137,20 +137,20 @@ function Search() {
 
                                 </table>
                             </div>
-                        :
-                            allCustomers?.data?.data?.AllCustomer?.length == 0
-                            ?
-                                <div className='flex justify-center items-center w-full pt-5 space-x-4 text-gray-500'>
-                                    <FaUsers className='text-3xl' />
-                                    <h1 className='font-semibold'>Customer Not Found</h1>
-                                </div>
                             :
+                            allCustomers?.data?.data?.AllCustomer?.length == 0
+                                ?
+                                <div className='flex mx-20 justify-center items-center py-[7px]  rounded-md space-x-4 bg-red-200'>
+                                    <IoMdInformationCircle className='text-xl text-red-600' />
+                                    <h1 className='text-sm font-bold text-red-800'>No Customer Found</h1>
+                                </div>
+                                :
                                 null
                 }
-                
+
                 {
                     allCustomers?.data?.data?.AllCustomer?.length == 0
-                    ?
+                        ?
                         <div className='mx-auto BGYE px-20 py-12 sm:px-24 sm:py-12 md:px-28 md:py-5'>
                             <Pagination
                                 total={allCustomers?.data?.data && allCustomers?.data?.data?.totalPages ? allCustomers?.data?.data?.totalPages : 0}
@@ -158,7 +158,7 @@ function Search() {
                                 onPageChange={(page) => setPageNo(page)}
                             />
                         </div>
-                    :
+                        :
                         null
                 }
             </div>

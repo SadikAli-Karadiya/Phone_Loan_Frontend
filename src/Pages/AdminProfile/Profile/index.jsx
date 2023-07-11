@@ -6,6 +6,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Admindetails, UpdateAdmin } from "../../../utils/apiCalls"
 import { useQuery, useMutation } from 'react-query'
+import { PhoneContext } from "../../../PhoneContext";
+
 
 let adminSchema = Yup.object({
 
@@ -59,18 +61,6 @@ let adminSchema = Yup.object({
     .min(4, "Please enter valid pin")
     .max(4, "Please enter valid pin")
     .required("Please Enter PIN"),
-
-  mobile: Yup.string()
-    .test('trim', 'Must not contain leading or trailing spaces', (value) => {
-      if (value) {
-        return value.trim() === value;
-      }
-      return true;
-    })
-    .matches(/^[0-9]+$/, 'Please enter a valid number')
-    .min(10, "Please enter valid mobile no")
-    .max(10, "Please enter valid mobile no")
-    .required("Please Enter Mobile Number"),
 });
 
 
@@ -80,9 +70,11 @@ const Updateprofile = () => {
   const [toggle, setToggle] = React.useState(false);
   const navigate = useNavigate();
   const [isEnable, setIsEnable] = useState(true);
-  const id = 1
-  const adminData = useQuery(['admin', id], () => Admindetails(id));
+  const { user } = React.useContext(PhoneContext)
+  const adminData = useQuery(['admin', user?.admin_id], () => Admindetails(user?.admin_id));
   const updateAdminData = useMutation(UpdateAdmin);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const AdminDetails = adminData?.data?.data?.SingleAdmin
 
@@ -91,7 +83,6 @@ const Updateprofile = () => {
     last_name: "",
     username: "",
     password: "",
-    mobile: "",
     pin: "",
   };
 
@@ -99,8 +90,13 @@ const Updateprofile = () => {
     useFormik({
       initialValues: AdminDetails ? AdminDetails : initialValues,
       validationSchema: adminSchema,
-      async onSubmit (data) {
-        updateAdminData.mutate(data)
+      async onSubmit(data) {
+        console.log(data)
+        return
+        isLoadingOnSubmit(true)
+        // updateAdminData.mutate(data)
+        isLoadingOnSubmit(false)
+        toggle(false)
       },
     });
 
@@ -118,16 +114,16 @@ const Updateprofile = () => {
   }
 
   React.useEffect(() => {
-    if(updateAdminData.isSuccess){
+    if (updateAdminData.isSuccess) {
       toast.success(updateAdminData.data.data?.message);
       setIsEnable(true);
       setToggle(false)
     }
-    else if(updateAdminData.isError){
+    else if (updateAdminData.isError) {
       toast.error(updateAdminData.error.response.data.message);
     }
-  },[updateAdminData.isSuccess, updateAdminData.data])
-  
+  }, [updateAdminData.isSuccess, updateAdminData.data])
+
   return (
     <>
       <section className="">
@@ -202,7 +198,7 @@ const Updateprofile = () => {
                       disabled={isEnable}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.username}
+                      value={values.user?.username}
                       placeholder="First Name, Middle Name, Last Name"
                       className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
                         rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
@@ -225,7 +221,7 @@ const Updateprofile = () => {
                       disabled={isEnable}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.password}
+                      value={values.user?.password}
                       placeholder="First Name, Middle Name, Last Name"
                       className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 
                         rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
@@ -239,27 +235,6 @@ const Updateprofile = () => {
                 </div>
               </div>
               <div className="flex lg:flex-row md:flex-col gap-4">
-                <div className="whatsappno">
-                  <label className="block">
-                    <span className="block text-sm font-medium text-slate-700">
-                      WhatsApp No
-                    </span>
-                    <input
-                      type="text"
-                      disabled={isEnable}
-                      placeholder="Enter Your WhatsApp No"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.mobile}
-                      name="mobile"
-                      className='w-72 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
-                  </label>
-                  <span className="text-xs font-semibold text-red-600 px-1">
-                    {errors.mobile && touched.mobile
-                      ? errors.mobile
-                      : null}
-                  </span>
-                </div>
                 <div className="security_pin">
                   <label className="block">
                     <span className="block text-sm font-medium text-slate-700">
@@ -309,6 +284,7 @@ const Updateprofile = () => {
                         <button
                           type="submit"
                           disabled={isLoadingOnSubmit}
+                          onSubmit={handleSubmit}
                           className={`py-2 px-3 gap-2 bg-[#0d0d48]  hover:bg-white border-2 hover:border-[#0d0d48] text-white 
                           ${isLoadingOnSubmit ? "opacity-40" : "opacity-100"
                             } hover:text-[#0d0d48] font-medium rounded-md tracking-wider flex justify-center items-center`}

@@ -220,18 +220,18 @@ function Dashboard() {
           <tbody className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
             {
               PendingEMI.isLoading
-              ?
+                ?
                 <tr>
                   <td colSpan="9">
                     <LoaderSmall />
                   </td>
                 </tr>
-              :
-                pendingEMICustomers?.length > 0 
-                ? 
+                :
+                pendingEMICustomers?.length > 0
+                  ?
                   (
-                  pendingEMICustomers?.map((item, index) => {
-                    return (
+                    pendingEMICustomers?.map((item, index) => {
+                      return (
                         <tr key={index} className=" border-b">
                           <th className="py-5 px-6">
                             {index + 1}
@@ -277,10 +277,10 @@ function Dashboard() {
                             </div>
                           </td>
                         </tr>
-                    )
-                  })
-                  ) 
-                : 
+                      )
+                    })
+                  )
+                  :
                   <tr>
                     <td colSpan="9">
                       <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
@@ -293,7 +293,6 @@ function Dashboard() {
           </tbody>
         </table>
       </div>
-
       {
         search == '' && pendingEMICustomers.length > 0 
         ?

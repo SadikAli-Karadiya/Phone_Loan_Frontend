@@ -40,7 +40,7 @@ function ProductList() {
     setProductFormModal(true)
   };
 
-  const handleAddModel = () =>{
+  const handleAddModel = () => {
     setProductFormModal(true)
     setIsEdit(false);
   }
@@ -56,10 +56,10 @@ function ProductList() {
 
   const handleCompaniesFilter = (e) => {
     let filteredCompany = null
-    if(e.target.value == 'all'){
+    if (e.target.value == 'all') {
       filteredCompany = phones.data.data.AllModel
     }
-    else{
+    else {
       filteredCompany = phones.data.data.AllModel?.filter((item) => {
         if (e.target.value == item.company.company_name) {
           return item
@@ -158,13 +158,13 @@ function ProductList() {
               <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                 {
                   companies.isLoading || searchPhoneWithName.isLoading
-                  ?
+                    ?
                     <tr>
                       <td colSpan="5">
                         <LoaderSmall />
                       </td>
                     </tr>
-                  :
+                    :
                     SelectedCompany?.length > 0 ? (
                       SelectedCompany?.map((item, index) => {
                         return (
@@ -229,7 +229,7 @@ function ProductList() {
                         </td>
                       </tr>
                     )
-                  }
+                }
               </tbody>
             </table>
           </div>
@@ -251,7 +251,7 @@ function ProductList() {
       </div>
       <ProductFormModel
         showModal={productFormModal}
-        refetchPhones = {phones.refetch}
+        refetchPhones={phones.refetch}
         handleShowModal={setProductFormModal}
         ModelDetails={is_Edit ? ModelDetails : {}}
         is_Edit={is_Edit}

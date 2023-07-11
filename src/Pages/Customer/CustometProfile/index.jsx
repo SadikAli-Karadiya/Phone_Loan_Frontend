@@ -30,25 +30,25 @@ function isValidFileType(fileName, fileType) {
 
 const customerSchema = Yup.object({
     photo: Yup.mixed()
-      .test("is-valid-type", "Photo should be in jpg, jpeg or png format",
-        value => {
-          if (!value) {
-            return true; 
-          }
-          if (typeof value === "string" && value.startsWith("http")) {
+        .test("is-valid-type", "Photo should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true;
+                }
+                if (typeof value === "string" && value.startsWith("http")) {
+                    return true;
+                }
+                return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
                 return true;
             }
-          return isValidFileType(value && value.name?.toLowerCase(), "image")
-        })
-      .test("is-valid-size", "Max allowed size is 2MB", value => {
-        if (!value) {
-          return true; 
-        }
-        if (typeof value === "string" && value.startsWith("http")) {
-            return true;
-        }
-        return value && value.size <= 2097152
-    }),
+            if (typeof value === "string" && value.startsWith("http")) {
+                return true;
+            }
+            return value && value.size <= 2097152
+        }),
 
     full_name: Yup.string()
         .test('no-numbers', 'Numbers are not allowed', (value) => {
@@ -125,97 +125,97 @@ const customerSchema = Yup.object({
         })
         .test('valid-number', 'Please enter a valid number', (value) => {
             if (value) {
-                return value.length == 10; 
+                return value.length == 10;
             }
             return true;
         }),
 
     adhar_front: Yup.mixed()
         .required('Please upload adhar front image')
-      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
-        value => {
-          if (!value) {
-            return true;
-          }
-          if (typeof value === "string" && value.startsWith("http")) {
-            return true;
-          }
-          return isValidFileType(value && value.name?.toLowerCase(), "image")
-        })
-      .test("is-valid-size", "Max allowed size is 2MB", value => {
-        if (!value) {
-          return true; 
-        }
-        if (typeof value === "string" && value.startsWith("http")) {
-            return true;
-          }
-        return value && value.size <= 2097152
-    }),
+        .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true;
+                }
+                if (typeof value === "string" && value.startsWith("http")) {
+                    return true;
+                }
+                return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
+            }
+            if (typeof value === "string" && value.startsWith("http")) {
+                return true;
+            }
+            return value && value.size <= 2097152
+        }),
 
     adhar_back: Yup.mixed()
         .required('Please upload adhar back image')
         .test("is-valid-type", "Image should be in jpg, jpeg or png format",
             value => {
+                if (!value) {
+                    return true;
+                }
+                if (typeof value === "string" && value.startsWith("http")) {
+                    return true;
+                }
+                return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
             if (!value) {
                 return true;
             }
             if (typeof value === "string" && value.startsWith("http")) {
-            return true;
-            }
-            return isValidFileType(value && value.name?.toLowerCase(), "image")
-            })
-        .test("is-valid-size", "Max allowed size is 2MB", value => {
-            if (!value) {
-            return true; 
-            }
-            if (typeof value === "string" && value.startsWith("http")) {
-            return true;
+                return true;
             }
             return value && value.size <= 2097152
         }),
 
     pancard: Yup.mixed()
         .required('Please upload pancard')
-      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
-        value => {
-          if (!value) {
-            return true;
-          }
-          if (typeof value === "string" && value.startsWith("http")) {
-            return true;
+        .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true;
+                }
+                if (typeof value === "string" && value.startsWith("http")) {
+                    return true;
+                }
+                return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
             }
-          return isValidFileType(value && value.name?.toLowerCase(), "image")
-        })
-      .test("is-valid-size", "Max allowed size is 2MB", value => {
-        if (!value) {
-          return true; 
-        }
-        if (typeof value === "string" && value.startsWith("http")) {
-            return true;
+            if (typeof value === "string" && value.startsWith("http")) {
+                return true;
             }
-        return value && value.size <= 2097152
-    }),
+            return value && value.size <= 2097152
+        }),
 
     light_bill: Yup.mixed()
-      .test("is-valid-type", "Image should be in jpg, jpeg or png format",
-        value => {
-          if (!value) {
-            return true;
-          }
-          if (typeof value === "string" && value.startsWith("http")) {
-            return true;
+        .test("is-valid-type", "Image should be in jpg, jpeg or png format",
+            value => {
+                if (!value) {
+                    return true;
+                }
+                if (typeof value === "string" && value.startsWith("http")) {
+                    return true;
+                }
+                return isValidFileType(value && value.name?.toLowerCase(), "image")
+            })
+        .test("is-valid-size", "Max allowed size is 2MB", value => {
+            if (!value) {
+                return true;
             }
-          return isValidFileType(value && value.name?.toLowerCase(), "image")
-        })
-      .test("is-valid-size", "Max allowed size is 2MB", value => {
-        if (!value) {
-          return true; 
-        }
-        if (typeof value === "string" && value.startsWith("http")) {
-            return true;
+            if (typeof value === "string" && value.startsWith("http")) {
+                return true;
             }
-        return value && value.size <= 2097152
-    }),
+            return value && value.size <= 2097152
+        }),
 });
 
 function CustomerProfile() {
@@ -226,7 +226,7 @@ function CustomerProfile() {
     const [isEnable, setIsEnable] = useState(true);
     const [newPhoneFormModal, setnewPhoneFormModal] = useState(false);
     const [PhoneDetails, setPhoneDetails] = useState();
-    
+
     const [SingleCustomerDetails, setSingleCustomerDetails] = useState({
         photo: "",
         full_name: "",
@@ -240,57 +240,58 @@ function CustomerProfile() {
         light_bill: ""
     });
 
-    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id), {staleTime: Infinity})
+    const CustomerDetail = useQuery(['customer', params.id], () => getCustomerByid(params.id), { staleTime: Infinity })
     const purchaseDetails = useQuery(['purchase', params.id], () => getPurchaseCustomerbyId(params.id))
     const updateDetails = useMutation(UpdateCustomer)
 
     const { values, setValues, touched, resetForm, setTouched, setFieldValue, errors, setErrors, handleChange, handleSubmit, handleBlur } =
-    useFormik({
-        validationSchema: customerSchema,
-        initialValues: SingleCustomerDetails,      
-        onSubmit: async (data) => {
-            const fd = new FormData();
-            fd.append("id", params.id)
-            fd.append("photo", data.photo);
-            fd.append("adhar_front", data.adhar_front);
-            fd.append("adhar_back", data.adhar_back);
-            fd.append("pancard", data.pancard);
-            fd.append("light_bill", data.light_bill);
-            fd.append("old_photo_url", CustomerDetail.data.data?.SingleCustomer.photo);
-            fd.append("old_adhar_front_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_front);
-            fd.append("old_adhar_back_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_back);
-            fd.append("old_pancard_url", CustomerDetail.data?.data?.SingleCustomer.document.pancard);
-            fd.append("old_light_bill_url", CustomerDetail.data?.data?.SingleCustomer.document.light_bill);
-            fd.append("full_name", data.full_name)
-            fd.append("mobile", data.mobile)
-            fd.append("alternate_no", data.alternate_no)
-            fd.append("reference_name", data.reference_name)
-            fd.append("reference_mobile", data.reference_mobile)
-            updateDetails.mutate(fd)
+        useFormik({
+            validationSchema: customerSchema,
+            initialValues: SingleCustomerDetails,
+            onSubmit: async (data) => {
+                const fd = new FormData();
+                fd.append("id", params.id)
+                fd.append("photo", data.photo);
+                fd.append("adhar_front", data.adhar_front);
+                fd.append("adhar_back", data.adhar_back);
+                fd.append("pancard", data.pancard);
+                fd.append("light_bill", data.light_bill);
+                fd.append("old_photo_url", CustomerDetail.data.data?.SingleCustomer.photo);
+                fd.append("old_adhar_front_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_front);
+                fd.append("old_adhar_back_url", CustomerDetail.data?.data?.SingleCustomer.document.adhar_back);
+                fd.append("old_pancard_url", CustomerDetail.data?.data?.SingleCustomer.document.pancard);
+                fd.append("old_light_bill_url", CustomerDetail.data?.data?.SingleCustomer.document.light_bill);
+                fd.append("full_name", data.full_name)
+                fd.append("mobile", data.mobile)
+                fd.append("alternate_no", data.alternate_no)
+                fd.append("reference_name", data.reference_name)
+                fd.append("reference_mobile", data.reference_mobile)
+                updateDetails.mutate(fd)
 
-        },
-    });
+            },
+        });
 
     function handleImageUpload(e) {
+        console.log(e.target.value)
         setPhoto(() => e.target.files[0]);
-        setImg(URL.createObjectURL(e.target.files[0]));
+        // setImg(URL.createObjectURL(e.target.files[0]));
     }
 
     function handleAdharFUpload(e) {
         setadharfront(() => e.target.files[0]);
-        setdefaultadharfront(URL.createObjectURL(e.target.files[0]));
+        // setdefaultadharfront(URL.createObjectURL(e.target.files[0]));
     }
     function handleAdharBUpload(e) {
         setadharback(() => e.target.files[0]);
-        setdefaultadharback(URL.createObjectURL(e.target.files[0]));
+        // setdefaultadharback(URL.createObjectURL(e.target.files[0]));
     }
     function handleAdharPanUpload(e) {
         setpan(() => e.target.files[0]);
-        setdefaultpan(URL.createObjectURL(e.target.files[0]));
+        // setdefaultpan(URL.createObjectURL(e.target.files[0]));
     }
     function handleAdharBillUpload(e) {
         setbill(() => e.target.files[0]);
-        setdefaultbill(URL.createObjectURL(e.target.files[0]));
+        // setdefaultbill(URL.createObjectURL(e.target.files[0]));
     }
 
     function handleedit(e) {
@@ -355,7 +356,7 @@ function CustomerProfile() {
     };
 
     React.useEffect(() => {
-        if(CustomerDetail.data){
+        if (CustomerDetail.data) {
             const alternate_no = CustomerDetail.data.data?.SingleCustomer.alternate_no;
             const reference_name = CustomerDetail.data.data?.SingleCustomer.reference_name;
             const reference_mobile = CustomerDetail.data.data?.SingleCustomer.reference_mobile;
@@ -376,13 +377,13 @@ function CustomerProfile() {
 
             setValues(customerData)
         }
-    },[CustomerDetail.isSuccess, CustomerDetail.data])
+    }, [CustomerDetail.isSuccess, CustomerDetail.data])
 
-    React.useEffect(()=>{
-        if(updateDetails.isError){
+    React.useEffect(() => {
+        if (updateDetails.isError) {
             toast.error(updateDetails.error.response.data.message);
         }
-        else if(updateDetails.isSuccess){
+        else if (updateDetails.isSuccess) {
             toast.success(updateDetails.data?.data.message);
             CustomerDetail.refetch();
             setIsEnable(true);
@@ -390,10 +391,10 @@ function CustomerProfile() {
             setErrors({});
             setTouched({}, false)
         }
-    },[updateDetails.isSuccess, updateDetails.isError, updateDetails.data])
+    }, [updateDetails.isSuccess, updateDetails.isError, updateDetails.data])
 
-    if(CustomerDetail.isLoading){
-        return <LoaderBig/>
+    if (CustomerDetail.isLoading) {
+        return <LoaderBig />
     }
 
     return (
@@ -423,13 +424,14 @@ function CustomerProfile() {
                                                     // src={SingleCustomerDetails?.photo ? SingleCustomerDetails?.photo : img}
                                                     src={
                                                         values.photo != ''
-                                                        ?
-                                                            !values.photo?.size && values.photo?.split(':')[0] == 'https'
                                                             ?
+                                                            !values.photo?.size && values.photo?.split(':')[0] == 'https'
+                                                                ?
                                                                 values.photo
+                                                                :
+                                                                ""
+                                                                // URL.createObjectURL(values.photo)
                                                             :
-                                                                URL.createObjectURL(values.photo)
-                                                        :
                                                             values.photo
                                                     }
                                                     width="100%"
@@ -439,7 +441,7 @@ function CustomerProfile() {
                                                 />
                                                 {
                                                     !isEnable
-                                                    ?
+                                                        ?
                                                         <div className="profile_img_overlay absolute flex flex-col justify-center items-center">
                                                             <input
                                                                 type="file"
@@ -457,131 +459,131 @@ function CustomerProfile() {
                                                                 onInput={(e) => handleImageUpload(e)}
                                                             />
                                                         </div>
-                                                    :
+                                                        :
                                                         null
                                                 }
                                             </div>
                                             <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
-                                                                                                                                                {errors.photo && touched.photo
-                                                                ? errors.photo
-                                                                : null}
+                                                {errors.photo && touched.photo
+                                                    ? errors.photo
+                                                    : null}
                                             </span>
                                         </div>
-                                            <div className="flex flex-col justify-center">
-                                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
-                                                    <div className="firtname">
-                                                        <label className="block">
-                                                            <span className="block text-sm font-medium text-slate-700">
-                                                                Full Name *
-                                                            </span>
-                                                            <input
-                                                                type="text"
-                                                                name="full_name"
-                                                                placeholder="Enter Your Full Name"
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                                value={values.full_name}
-                                                                disabled={isEnable}
-                                                                className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                            />
-                                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                                {errors.full_name && touched.full_name
-                                                                    ? errors.full_name
-                                                                    : null}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div className="whatsappno">
-                                                        <label className="block">
-                                                            <span className="block text-sm font-medium text-slate-700">
-                                                                WhatsApp No *
-                                                            </span>
-                                                            <input
-                                                                type="text"
-                                                                name="mobile"
-                                                                placeholder="Enter Your WhatsApp No"
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                                value={values.mobile}
-                                                                disabled={isEnable}
-                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                            />
-                                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                                {errors.mobile && touched.mobile
-                                                                    ? errors.mobile
-                                                                    : null}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div className="mobileno">
-                                                        <label className="block">
-                                                            <span className="block text-sm font-medium text-slate-700">
-                                                                Alternate No
-                                                            </span>
-                                                            <input
-                                                                type="text"
-                                                                name="alternate_no"
-                                                                placeholder="Enter Your Mobile No"
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                                value={values.alternate_no}
-                                                                disabled={isEnable}
-                                                                className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none`}
-                                                            />
-                                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                                {errors.alternate_no && touched.alternate_no
-                                                                    ? errors.alternate_no
-                                                                    : null}
-                                                            </span>
-                                                        </label>
-                                                    </div>
+                                        <div className="flex flex-col justify-center">
+                                            <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 mt-8 w-full ">
+                                                <div className="firtname">
+                                                    <label className="block">
+                                                        <span className="block text-sm font-medium text-slate-700">
+                                                            Full Name *
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            name="full_name"
+                                                            placeholder="Enter Your Full Name"
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.full_name}
+                                                            disabled={isEnable}
+                                                            className='w-full 2xl:w-60 mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                        />
+                                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                                            {errors.full_name && touched.full_name
+                                                                ? errors.full_name
+                                                                : null}
+                                                        </span>
+                                                    </label>
                                                 </div>
-                                                <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
-                                                    <div className="reference">
-                                                        <label className="block">
-                                                            <span className="block text-sm font-medium text-slate-700">
-                                                                Reference Name
-                                                            </span>
-                                                            <input
-                                                                type="text"
-                                                                name="reference_name"
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                                value={values.reference_name}
-                                                                disabled={isEnable}
-                                                                placeholder="Enter Refeence Name"
-                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
-                                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                                {errors.reference_name && touched.reference_name
-                                                                    ? errors.reference_name
-                                                                    : null}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div className="referencemobileno">
-                                                        <label className="block">
-                                                            <span className="block text-sm font-medium text-slate-700">
-                                                                Reference Mobile No
-                                                            </span>
-                                                            <input
-                                                                type="text"
-                                                                name="reference_mobile"
-                                                                placeholder="Enter Refrence Mobile No"
-                                                                onChange={handleChange}
-                                                                onBlur={handleBlur}
-                                                                value={values.reference_mobile}
-                                                                disabled={isEnable}
-                                                                className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
-                                                            />
-                                                            <span className="text-xs font-semibold text-red-600 px-1">
-                                                                {errors.reference_mobile && touched.reference_mobile
-                                                                    ? errors.reference_mobile
-                                                                    : null}
-                                                            </span>
-                                                        </label>
-                                                    </div>
+                                                <div className="whatsappno">
+                                                    <label className="block">
+                                                        <span className="block text-sm font-medium text-slate-700">
+                                                            WhatsApp No *
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            name="mobile"
+                                                            placeholder="Enter Your WhatsApp No"
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.mobile}
+                                                            disabled={isEnable}
+                                                            className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                        />
+                                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                                            {errors.mobile && touched.mobile
+                                                                ? errors.mobile
+                                                                : null}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div className="mobileno">
+                                                    <label className="block">
+                                                        <span className="block text-sm font-medium text-slate-700">
+                                                            Alternate No
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            name="alternate_no"
+                                                            placeholder="Enter Your Mobile No"
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.alternate_no}
+                                                            disabled={isEnable}
+                                                            className={`w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none`}
+                                                        />
+                                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                                            {errors.alternate_no && touched.alternate_no
+                                                                ? errors.alternate_no
+                                                                : null}
+                                                        </span>
+                                                    </label>
                                                 </div>
                                             </div>
+                                            <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
+                                                <div className="reference">
+                                                    <label className="block">
+                                                        <span className="block text-sm font-medium text-slate-700">
+                                                            Reference Name
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            name="reference_name"
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.reference_name}
+                                                            disabled={isEnable}
+                                                            placeholder="Enter Refeence Name"
+                                                            className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none' />
+                                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                                            {errors.reference_name && touched.reference_name
+                                                                ? errors.reference_name
+                                                                : null}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div className="referencemobileno">
+                                                    <label className="block">
+                                                        <span className="block text-sm font-medium text-slate-700">
+                                                            Reference Mobile No
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            name="reference_mobile"
+                                                            placeholder="Enter Refrence Mobile No"
+                                                            onChange={handleChange}
+                                                            onBlur={handleBlur}
+                                                            value={values.reference_mobile}
+                                                            disabled={isEnable}
+                                                            className='w-full 2xl:w-60 mt-1 block  px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'
+                                                        />
+                                                        <span className="text-xs font-semibold text-red-600 px-1">
+                                                            {errors.reference_mobile && touched.reference_mobile
+                                                                ? errors.reference_mobile
+                                                                : null}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center w-full xl:gap-1">
                                         <div className="flex xs:flex-col xs:gap-0 md:flex-row md:gap-4 xl:gap-4 w-full">
@@ -595,13 +597,14 @@ function CustomerProfile() {
                                                             <img
                                                                 src={
                                                                     values.adhar_front != ''
-                                                                    ?
-                                                                        !values.adhar_front?.size && values.adhar_front?.split(':')[0] == 'https'
                                                                         ?
+                                                                        !values.adhar_front?.size && values.adhar_front?.split(':')[0] == 'https'
+                                                                            ?
                                                                             values.adhar_front
+                                                                            :
+                                                                            ""
+                                                                            // URL.createObjectURL(values.adhar_front)
                                                                         :
-                                                                            URL.createObjectURL(values.adhar_front)
-                                                                    :
                                                                         values.adhar_front
                                                                 }
                                                                 width="100%"
@@ -620,7 +623,7 @@ function CustomerProfile() {
                                                                     onChange={
                                                                         (e) => {
                                                                             handleAdharFUpload(e);
-                                                                             setFieldValue('adhar_front', e.target.files[0]);
+                                                                            setFieldValue('adhar_front', e.target.files[0]);
                                                                         }
                                                                     }
                                                                     onBlur={handleBlur}
@@ -645,13 +648,14 @@ function CustomerProfile() {
                                                             <img
                                                                 src={
                                                                     values.adhar_back != ''
-                                                                    ?
-                                                                        !values.adhar_back?.size && values.adhar_back?.split(':')[0] == 'https'
                                                                         ?
+                                                                        !values.adhar_back?.size && values.adhar_back?.split(':')[0] == 'https'
+                                                                            ?
                                                                             values.adhar_back
+                                                                            :
+                                                                            ""
+                                                                            // URL.createObjectURL(values.adhar_back)
                                                                         :
-                                                                            URL.createObjectURL(values.adhar_back)
-                                                                    :
                                                                         values.adhar_back
                                                                 }
                                                                 width="100%"
@@ -670,7 +674,7 @@ function CustomerProfile() {
                                                                     onChange={
                                                                         (e) => {
                                                                             handleAdharBUpload(e);
-                                                                             setFieldValue('adhar_back', e.target.files[0])
+                                                                            setFieldValue('adhar_back', e.target.files[0])
                                                                         }
                                                                     }
                                                                     onBlur={handleBlur}
@@ -695,13 +699,14 @@ function CustomerProfile() {
                                                             <img
                                                                 src={
                                                                     values.pancard != ''
-                                                                    ?
-                                                                        !values.pancard?.size && values.pancard?.split(':')[0] == 'https'
                                                                         ?
+                                                                        !values.pancard?.size && values.pancard?.split(':')[0] == 'https'
+                                                                            ?
                                                                             values.pancard
+                                                                            :
+                                                                            ""
+                                                                            // URL.createObjectURL(values.pancard)
                                                                         :
-                                                                            URL.createObjectURL(values.pancard)
-                                                                    :
                                                                         values.pancard
                                                                 }
                                                                 width="100%"
@@ -720,7 +725,7 @@ function CustomerProfile() {
                                                                     onChange={
                                                                         (e) => {
                                                                             handleAdharPanUpload(e);
-                                                                             setFieldValue('pancard', e.target.files[0])
+                                                                            setFieldValue('pancard', e.target.files[0])
                                                                         }
                                                                     }
                                                                     onBlur={handleBlur}
@@ -730,9 +735,9 @@ function CustomerProfile() {
                                                         </div>
                                                     </div>
                                                     <span className="text-xs font-semibold text-red-600 text-center block px-1 mt-4">
-                                                                                                                                                        {errors.pancard && touched.pancard
-                                                                        ? errors.pancard
-                                                                        : null}
+                                                        {errors.pancard && touched.pancard
+                                                            ? errors.pancard
+                                                            : null}
                                                     </span>
                                                 </label>
                                             </div>
@@ -746,13 +751,14 @@ function CustomerProfile() {
                                                             <img
                                                                 src={
                                                                     values.light_bill != ''
-                                                                    ?
-                                                                        !values.light_bill?.size && values.light_bill?.split(':')[0] == 'https'
                                                                         ?
+                                                                        !values.light_bill?.size && values.light_bill?.split(':')[0] == 'https'
+                                                                            ?
                                                                             values.light_bill
+                                                                            :
+                                                                            ""
+                                                                            // URL.createObjectURL(values.light_bill)
                                                                         :
-                                                                            URL.createObjectURL(values.light_bill)
-                                                                    :
                                                                         values.light_bill
                                                                 }
                                                                 width="100%"
@@ -868,9 +874,9 @@ function CustomerProfile() {
                                         </tr>
                                     </thead>
                                     {
-                                        
+
                                         purchaseDetails.isLoading
-                                        ?
+                                            ?
                                             <tbody>
                                                 <tr>
                                                     <td colSpan="8">
@@ -878,13 +884,13 @@ function CustomerProfile() {
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        :
+                                            :
                                             <tbody className=" bg-white items-center bg  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
-                                            {
-                                                purchaseDetails?.data?.data?.CustomerAllPurchase?.length > 0 
-                                                ? 
-                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.map((item, index) => {
-                                                        return (
+                                                {
+                                                    purchaseDetails?.data?.data?.CustomerAllPurchase?.length > 0
+                                                        ?
+                                                        purchaseDetails?.data?.data?.CustomerAllPurchase?.map((item, index) => {
+                                                            return (
                                                                 <tr key={index} className=" border-b">
 
                                                                     <td className="px-6 py-5 ">
@@ -941,7 +947,7 @@ function CustomerProfile() {
                                                     </tr>
                                             }
                                             </tbody>
-                                        }
+                                    }
                                 </table>
                             </div>
                         </div>
