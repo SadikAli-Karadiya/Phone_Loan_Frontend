@@ -32,7 +32,7 @@ function InstallmentList() {
     const customersByInstallment = useMutation(getCustomersByInstallment)
     const [pageNo, setPageNo] = useState(1);
     const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
-    console.log(installment, "installment")
+
     const bgColors = [
         "#ffd6d6",
         "#bfdbfe",
@@ -298,7 +298,7 @@ function InstallmentList() {
                             <div className='flex justify-center items-center w-full'>
                                 <div className="bg-red-200 font-bold flex justify-center items-center p-2 rounded mx-3 space-x-2">
                                     <IoMdInformationCircle className="text-xl text-red-600" />
-                                    <h1 className="text-red-800 text-sm">EMI not found </h1>
+                                    <h1 className="text-red-800 text-sm">Installment not found </h1>
                                 </div>
                             </div>
                         )}

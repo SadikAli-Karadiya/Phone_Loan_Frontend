@@ -24,10 +24,10 @@ const Sidebar = () => {
     )
     :
     (
-      <div className="relative bg-[#f5f7ff] min-h-screen flex w-screen">
+      <div className="relative bg-[#f5f7ff] min-h-screen flex w-full">
         <div className="h-full bg-white sticky left-0 top-0">
           <div className="sidebar h-screen xs:w-20 w-20 xl:w-52 bg-white drop-shadow-md">
-            <div className="sidebar-top flex justify-center mt-3 mb-9 ">
+            <div className="sidebar-top flex justify-center pt-3 ">
               <img
                 src="/images/logo.png"
                 alt=""
@@ -35,7 +35,7 @@ const Sidebar = () => {
                 id="logo"
               />
             </div>
-            <div className="">
+            <div className="mt-9">
               <ul className="text-center">
                 <li className="xs:px-5 xl:px-5 my-3 xl:my-0">
                   <NavLink
@@ -71,7 +71,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Company">
-                    <div className="flex justify-start items-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
                       <FaThList className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Companies</h1>
                     </div>

@@ -116,7 +116,7 @@ function GenerateReceipt() {
                 is_by_cheque: toggleCheque ? 1 : 0,
                 is_by_upi: toggleUpi ? 1 : 0,
                 cheque_no: chequeNo,
-                cheque_date: chequeDate,
+                cheque_date: chequeDate == '' ? null : new Date(chequeDate),
                 upi_no: upiNo,
                 user_id: user.id,
                 purchase_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.id,
@@ -125,7 +125,7 @@ function GenerateReceipt() {
                 amount: Emi_Details?.data?.data?.SingleEmi?.amount,
                 security_pin: pin,
                 customer_id: Emi_Details?.data?.data?.SingleEmi?.purchase?.customer?.id,
-                date: receiptDate
+                date: new Date(receiptDate)
             };
 
             setIsSubmitting(true);
@@ -157,41 +157,6 @@ function GenerateReceipt() {
             }
         }
     }
-
-    const customStyles = {
-        control: (provided, state) => ({
-            ...provided,
-            backgroundColor: "rgb(75 85 99)",
-            borderColor: "rgb(107 114 128)",
-            borderRadius: "8px",
-            minHeight: "44px",
-            height: "44px",
-            boxShadow: state.isFocused ? null : null,
-        }),
-
-        valueContainer: (provided, state) => ({
-            ...provided,
-            height: "44px",
-            padding: "0 6px",
-        }),
-
-        singleValue: (provided) => ({
-            ...provided,
-            color: "white",
-        }),
-
-        input: (provided, state) => ({
-            ...provided,
-            margin: "0px",
-        }),
-        indicatorSeparator: (state) => ({
-            display: "none",
-        }),
-        indicatorsContainer: (provided, state) => ({
-            ...provided,
-            height: "44px",
-        }),
-    };
 
     function handlePaymentMethod(e) {
         setUpiNo('')
@@ -462,7 +427,7 @@ function GenerateReceipt() {
                                         <input type="date"
                                             name="receiptDate"
                                             onChange={handleChangeDate}
-                                            value={moment(receiptDate).format("YYYY-MM-DD")}
+                                            value={moment(receiptDate).format("DD-MM-YYYY")}
                                             className="ml-4"
                                         />
                                     </div>

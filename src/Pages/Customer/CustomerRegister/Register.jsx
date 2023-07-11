@@ -40,8 +40,8 @@ function CustomerRegister() {
                     fd.append("photo", photo);
                     fd.append("adhar_front", Adhar_front);
                     fd.append("adhar_back", Adhar_back);
-                    fd.append("pan", Pan);
-                    fd.append("bill", Bill);
+                    fd.append("pancard", Pan);
+                    fd.append("light_bill", Bill);
                     setIsSubmitting(true);
                     const response = await AddCustomer(fd)
                     setIsSubmitting(false);
@@ -49,6 +49,7 @@ function CustomerRegister() {
                     resetForm({ values: "" })
                     navigate(`/InstallmentList/profile-detail/${response?.data?.data?.id}`)
                 } catch (err) {
+                    setIsSubmitting(false);
                     toast.error(err.response.data.message);
                 }
             },
@@ -357,7 +358,7 @@ function CustomerRegister() {
                                 <button type="submit"
                                     disabled={isSubmitting}
                                     className={`${isSubmitting ? 'opacity-60' : ''} bg-[#0d0d48] px-8 h-10 border-2 border-[#0d0d48] text-white font-medium rounded-md tracking-wider flex justify-center items-center`}>
-                                    {isSubmitting ? "Loading..." : "Submit"}
+                                    {isSubmitting ? 'Loading...' : 'Submit'}
                                 </button>
                             </div>
                         </div>

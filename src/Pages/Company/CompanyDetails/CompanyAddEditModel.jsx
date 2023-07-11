@@ -8,7 +8,7 @@ import { useMutation } from 'react-query'
 import { AddCompany, EditCompany } from '../../../utils/apiCalls';
 
 
-function CompanyFormModal({ showModal, handleShowModal, is_Edit, CompanyDetails }) {
+function CompanyFormModal({ showModal, handleShowModal, refetchCompanies, is_Edit, CompanyDetails }) {
 
   if (!showModal) {
     return <></>;
@@ -102,6 +102,7 @@ function CompanyFormModal({ showModal, handleShowModal, is_Edit, CompanyDetails 
       toast.success(addCompany.data?.data?.message);
       handleModalClose()
     }
+    refetchCompanies()
   }, [addCompany.isSuccess, updateCompany.isSuccess]);
 
   return (

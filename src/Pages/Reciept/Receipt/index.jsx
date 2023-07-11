@@ -1,18 +1,16 @@
-import { React, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiRupee } from "react-icons/bi";
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { getReceiptbyReceiptId } from '../../../utils/apiCalls';
-import { useQuery } from 'react-query'
+import { getReceiptbyReceiptId, deleteReceiptById } from '../../../utils/apiCalls';
+import { useQuery, useMutation } from 'react-query'
 import moment from 'moment'
 import ReactToPrint from "react-to-print";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-
-
 
 
 function Receipt() {
@@ -21,7 +19,8 @@ function Receipt() {
     const printRef = useRef();
     const [print, setPrint] = useState(false);
     const data = useQuery(['transection', params.id], () => getReceiptbyReceiptId(params.id));
-    
+    const deleteReceipt = useMutation(deleteReceiptById);
+
     function inWords(num) {
         let a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
         let b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -42,7 +41,7 @@ function Receipt() {
 
     const handleDeleteReceipt = async () => {
         Swal.fire({
-            title: "Are you sure to delete receipt?",
+            title: "Are you sure to delete the receipt?",
             text: "",
             icon: "warning",
             showCancelButton: true,
@@ -51,14 +50,7 @@ function Receipt() {
             confirmButtonText: "Delete",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                // const deleteClassResponse = await DeleteInstallment(id);
-                let success
-                if (success) {
-                    toast.success("Receipt Delete Successfull");
-                }
-                // else if (deleteClassResponse.data.success == false) {
-                //     toast.error(deleteClassResponse.data.message);
-                // }
+                deleteReceipt.mutate(params.id)
             }
         });
     };
@@ -72,9 +64,15 @@ function Receipt() {
         })
     };
 
-    {
-        console.log(data?.data?.data?.SingleTransaction)
-    }
+    useEffect(()=>{
+        if(deleteReceipt.isError){
+            toast.error(deleteReceipt.error.response.data.message)
+        }
+        else if(deleteReceipt.isSuccess){
+            toast.success(deleteReceipt.data?.data.message)
+            navigate(-1)
+        }
+    },[deleteReceipt.isSuccess, deleteReceipt.isError])
 
     return (
         <>
@@ -89,7 +87,7 @@ function Receipt() {
                     </div>
                 </div>
                 <div className="flex justify-center items-center px-5">
-                    <div className=" py-7 bg-white w-[790px] shadow-xl rounded-md h-full ">
+                    <div ref={printRef} className="m-5 py-7 bg-white w-[790px] shadow-xl rounded-md h-full ">
                         <div className="px-10 flex items-center justify-between">
                             <div className="flex items-center ">
                                 <div className="logo">
@@ -271,15 +269,17 @@ function Receipt() {
                 <div className="flex items-center justify-center py-8 space-x-5">
                     <button
                         onClick={() => handlePayEMI(data?.data?.data?.SingleTransaction?.receipt?.emi?.id)}
-                        className="bg-[#0d0d48] flex items-center space-x-1 px-4 py-1.5 hover:bg-slate-600 rounded-md text-white">
+                        disabled={deleteReceipt.isLoading}
+                        className={`${deleteReceipt.isLoading ? 'opacity-60' : ''} bg-[#0d0d48] flex items-center space-x-1 px-4 py-1.5 hover:bg-slate-600 rounded-md text-white`}>
                         <MdModeEdit className="text-blue-400" />
                         <h1 className="text-sm">Edit</h1>
                     </button>
                     <button
                         onClick={handleDeleteReceipt}
-                        className="bg-[#0d0d48] flex items-center space-x-1 px-3 py-1.5 hover:bg-slate-500 rounded-md text-white">
+                        disabled={deleteReceipt.isLoading}
+                        className={`${deleteReceipt.isLoading ? 'opacity-60' : ''} bg-[#0d0d48] flex items-center space-x-1 px-3 py-1.5 hover:bg-slate-500 rounded-md text-white`}>
                         <MdDelete className="text-blue-400" />
-                        <h1 className="text-sm">Delete</h1>
+                        <h1 className="text-sm">{deleteReceipt.isLoading ? 'Deleting...' : 'Delete'}</h1>
                     </button>
                     <ReactToPrint
                         trigger={() => (
@@ -296,7 +296,6 @@ function Receipt() {
                         }}
                         onAfterPrint={() => setPrint(false)}
                     />
-                    {/* <button className="bg-[#0d0d48]  px-2 py-[5px] text-sm rounded-md hover:bg-slate-500 text-white">Download/Print</button> */}
                 </div>
             </div>
         </>

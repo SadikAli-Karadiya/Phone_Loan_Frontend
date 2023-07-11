@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoMdInformationCircle } from "react-icons/io"
 import { AiFillEye } from "react-icons/ai";
 import "../../../App.css"
@@ -19,6 +19,7 @@ function EMIHistory() {
     const [chargeFormModal, setChargeFormModal] = useState(false);
     const [is_Edit, setIsEdit] = useState(false);
     const [EMI_Details, setEMIDetails] = useState();
+    const [emiId, setEmiId] = useState(null)
     const data = useQuery(['emi', params.id], () => getEmiPurchasebyId(params.id));
 
     const handlePayEMI = (id) => {
@@ -29,6 +30,17 @@ function EMIHistory() {
                 }
             })
     };
+
+    useEffect(()=>{
+        if(data.data){
+            for(let i=0; i<data.data.data.AllEmi.length; i++){
+                if(data.data.data.AllEmi[i].status == 'pending'){
+                    setEmiId(data.data.data.AllEmi[i].id)
+                    break;
+                }
+            }
+        }
+    },[data.isSuccess, data.data])
 
 
     return (
@@ -129,13 +141,17 @@ function EMIHistory() {
                                                                 </td>
                                                                 <td className="px-6 py-5">
                                                                     {
+                                                                        console.log(emiId)
+                                                                    }
+                                                                    {
                                                                         item.status == "pending" ?
                                                                             <Tippy content="Pay EMI">
-                                                                                <div
+                                                                                <button
+                                                                                    disabled={item.id != emiId}
                                                                                     onClick={() => handlePayEMI(item.id)}
-                                                                                    className="flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg cursor-pointer text-white font-semibold">
+                                                                                    className={`${item.id != emiId ? 'opacity-60' : null} w-full flex justify-center items-center bg-green-600 hover:bg-green-500 py-[5px] rounded-lg text-white font-semibold`}>
                                                                                     Pay
-                                                                                </div>
+                                                                                </button>
                                                                             </Tippy>
 
                                                                             :

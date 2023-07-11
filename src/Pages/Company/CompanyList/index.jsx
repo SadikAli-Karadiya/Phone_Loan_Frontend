@@ -172,7 +172,7 @@ function CompanyList() {
                         <div className='flex justify-center items-center w-full'>
                             <div className="bg-red-200 font-bold flex justify-center items-center p-2 rounded mx-3 space-x-2">
                                 <IoMdInformationCircle className="text-xl text-red-600" />
-                                <h1 className="text-red-800 text-sm">EMI not found </h1>
+                                <h1 className="text-red-800 text-sm"> No Company Found </h1>
                             </div>
                         </div>
                     )}
@@ -285,6 +285,7 @@ function CompanyList() {
             </div>
             <CompanyFormModal
                 showModal={CompanyModal}
+                refetchCompanies={companies.refetch}
                 handleShowModal={setCompanyModal}
                 CompanyDetails={is_Edit ? CompanyDetails : {}}
                 is_Edit={is_Edit}
