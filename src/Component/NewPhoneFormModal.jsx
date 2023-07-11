@@ -17,7 +17,7 @@ function NewPhoneFormModal({ showModal, handleShowModal, PhoneDetails, is_Edit }
   }
 
   const { user } = React.useContext(PhoneContext)
-
+  console.log(user)
   const params = useParams();
   let customer_id = params?.id
   const DATE = new Date();

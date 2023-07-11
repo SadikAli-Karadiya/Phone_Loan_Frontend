@@ -40,7 +40,7 @@ function ProductList() {
     setProductFormModal(true)
   };
 
-  const handleAddModel = () =>{
+  const handleAddModel = () => {
     setProductFormModal(true)
     setIsEdit(false);
   }
@@ -56,10 +56,10 @@ function ProductList() {
 
   const handlePendingPaidUpDropDown = (e) => {
     let filteredCompany = null
-    if(e.target.value == 'all'){
+    if (e.target.value == 'all') {
       filteredCompany = phones.data.data.AllModel
     }
-    else{
+    else {
       filteredCompany = phones.data.data.AllModel?.filter((item) => {
         if (e.target.value == item.company.company_name) {
           return item
@@ -158,61 +158,61 @@ function ProductList() {
               <tbody className="text-black bg-white items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                 {
                   companies.isLoading || searchPhoneWithName.isLoading
-                  ?
+                    ?
                     <tr>
                       <td colSpan="5">
                         <LoaderSmall />
                       </td>
                     </tr>
-                  :
+                    :
                     SelectedCompany?.length > 0 ? (
                       SelectedCompany?.map((item, index) => {
                         return (
-                            <tr key={index} className=" border-b">
-                              <td className="px-6 py-5 font-bold">
-                                {index + 1}
-                              </td>
-                              <td className="px-6 py-5 capitalize">
-                                {item.company.company_name}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.model_name}
-                              </td>
-                              <td className="px-6 py-5">
-                                {
-                                  item.specifications.map((specs, i)=>{
-                                    return(
-                                      <span key={i}>
-                                        {`${specs.ram}/${specs.storage}`}
-                                        {
-                                          i < item.specifications.length - 1
+                          <tr key={index} className=" border-b">
+                            <td className="px-6 py-5 font-bold">
+                              {index + 1}
+                            </td>
+                            <td className="px-6 py-5 capitalize">
+                              {item.company.company_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.model_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {
+                                item.specifications.map((specs, i) => {
+                                  return (
+                                    <span key={i}>
+                                      {`${specs.ram}/${specs.storage}`}
+                                      {
+                                        i < item.specifications.length - 1
                                           ?
-                                            ', '
+                                          ', '
                                           :
-                                            null
+                                          null
 
-                                        }
-                                      </span>
-                                    )
-                                  })
-                                }
-                              </td>
-                              <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                                <div className='flex justify-center items-center space-x-3 ' >
-                                  <Tippy content="Show Specifiaction">
-                                    <div onClick={() =>
-                                      navigate(`/Product/product-details/${item.id}`)}>
-                                      <AiFillEye className='text-[18px] cursor-pointer' />
-                                    </div>
-                                  </Tippy>
-                                  <Tippy content="Update Model">
-                                    <div onClick={() => handleUpdatemodel(item.id)}>
-                                      <FiEdit className='text-[17px] cursor-pointer' />
-                                    </div>
-                                  </Tippy>
-                                </div>
-                              </td>
-                            </tr>
+                                      }
+                                    </span>
+                                  )
+                                })
+                              }
+                            </td>
+                            <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                              <div className='flex justify-center items-center space-x-3 ' >
+                                <Tippy content="Show Specifiaction">
+                                  <div onClick={() =>
+                                    navigate(`/Product/product-details/${item.id}`)}>
+                                    <AiFillEye className='text-[18px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                                <Tippy content="Update Model">
+                                  <div onClick={() => handleUpdatemodel(item.id)}>
+                                    <FiEdit className='text-[17px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                              </div>
+                            </td>
+                          </tr>
                         )
                       })
                     ) : (
@@ -225,7 +225,7 @@ function ProductList() {
                         </td>
                       </tr>
                     )
-                  }
+                }
               </tbody>
             </table>
           </div>
@@ -247,7 +247,7 @@ function ProductList() {
       </div>
       <ProductFormModel
         showModal={productFormModal}
-        refetchPhones = {phones.refetch}
+        refetchPhones={phones.refetch}
         handleShowModal={setProductFormModal}
         ModelDetails={is_Edit ? ModelDetails : {}}
         is_Edit={is_Edit}

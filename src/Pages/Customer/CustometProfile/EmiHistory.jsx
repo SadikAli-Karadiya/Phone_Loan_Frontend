@@ -90,7 +90,7 @@ function EMIHistory() {
                                                                         ?
                                                                             '--'
                                                                         :
-                                                                            item.receipt.receipt_id
+                                                                            item?.receipt?.receipt_id
                                                                     }
                                                                 </th>
                                                                 <td className="px-6 py-5 ">
@@ -175,7 +175,7 @@ function EMIHistory() {
                     EMI_Details={EMI_Details}
                     is_Edit={is_Edit}
                 />
-            </div >
+            </div>
         </>
     )
 }

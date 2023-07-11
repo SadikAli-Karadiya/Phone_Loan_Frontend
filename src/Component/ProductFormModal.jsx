@@ -8,38 +8,38 @@ import { AddCompany, AddNewPhone, UpdatePhone, getAllCompanies } from "../utils/
 import { useQuery, useMutation } from 'react-query'
 
 const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      backgroundColor: "rgb(75 85 99)",
-      borderColor: "rgb(107 114 128)",
-      borderRadius: "8px",
-      minHeight: "44px",
-      height: "44px",
-      boxShadow: state.isFocused ? null : null,
-    }),
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: "rgb(75 85 99)",
+    borderColor: "rgb(107 114 128)",
+    borderRadius: "8px",
+    minHeight: "44px",
+    height: "44px",
+    boxShadow: state.isFocused ? null : null,
+  }),
 
-    valueContainer: (provided, state) => ({
-      ...provided,
-      height: "44px",
-      padding: "0 6px",
-    }),
+  valueContainer: (provided, state) => ({
+    ...provided,
+    height: "44px",
+    padding: "0 6px",
+  }),
 
-    singleValue: (provided) => ({
-      ...provided,
-      color: "white",
-    }),
+  singleValue: (provided) => ({
+    ...provided,
+    color: "white",
+  }),
 
-    input: (provided, state) => ({
-      ...provided,
-      margin: "0px",
-    }),
-    indicatorSeparator: (state) => ({
-      display: "none",
-    }),
-    indicatorsContainer: (provided, state) => ({
-      ...provided,
-      height: "44px",
-    }),
+  input: (provided, state) => ({
+    ...provided,
+    margin: "0px",
+  }),
+  indicatorSeparator: (state) => ({
+    display: "none",
+  }),
+  indicatorsContainer: (provided, state) => ({
+    ...provided,
+    height: "44px",
+  }),
 };
 
 const productSchema = Yup.object({
@@ -47,15 +47,14 @@ const productSchema = Yup.object({
 });
 
 function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDetails, is_Edit }) {
-
+  console.log(ModelDetails)
   if (!showModal) {
     return <></>;
   }
 
-  const [isLoading, setIsLoading] = React.useState();
   let Company = useQuery('company', getAllCompanies)
-  const [CompanyList, setComapnyList] = React.useState([]);
-  
+  const [company, setCompany] = useState(is_Edit == true ? ModelDetails?.company?.company_name : "");
+
   const addPhone = useMutation(AddNewPhone);
   const updatePhone = useMutation(UpdatePhone);
 
@@ -72,7 +71,7 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
           initialValues,
       validationSchema: productSchema,
       async onSubmit(data) {
-        Object.assign(data, { company_name: data.company_name, id: ModelDetails?.id })
+        Object.assign(data, { company_name: company, id: ModelDetails?.id })
         try {
           if (is_Edit == true) {
             updatePhone.mutate(data)
@@ -90,24 +89,28 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
     handleShowModal(false);
   };
 
+  function handleSelectCompany(event) {
+    setCompany(event.target.value)
+  };
+
   React.useEffect(() => {
-    if(addPhone.isSuccess || updatePhone.isSuccess){
-      if(is_Edit && updatePhone.data?.data){
+    if (addPhone.isSuccess || updatePhone.isSuccess) {
+      if (is_Edit && updatePhone.data?.data) {
         toast.success(updatePhone.data?.data?.message);
         refetchPhones();
         handleModalClose()
       }
-      else if(addPhone.data?.data){
+      else if (addPhone.data?.data) {
         toast.success(addPhone.data?.data?.message);
         refetchPhones();
         handleModalClose()
       }
     }
-    
-    if(addPhone.isError){
+
+    if (addPhone.isError) {
       toast.error(addPhone.error.response.data.message);
     }
-  },[addPhone.isSuccess, addPhone.isError, updatePhone.isSuccess, updatePhone.isError]);
+  }, [addPhone.isSuccess, addPhone.isError, updatePhone.isSuccess, updatePhone.isError]);
 
   return (
     <Modal open={showModal}
@@ -146,20 +149,22 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className='flex flex-col items-center w-full space-y-5'>
                 <div className='w-full'>
-                  <Select
-                    className='w-full'
-                    isDisabled={isLoading}
-                    isLoading={isLoading}
-                    defaultValue={is_Edit == true ? { value: ModelDetails?.company.company_name, label: ModelDetails?.company.company_name } : null}
-                    onChange={(e) => { setFieldValue('company_name', e.value)}}
-                    onBlur={handleBlur}
-                    placeholder="Select Company"
-                    options={Company?.data?.data?.all_companies?.map(item => {
-                      return { value: item?.company_name, label: item?.company_name };
-                    })
+                  <select
+                    name="company_name"
+                    id="company_name"
+                    value={company}
+                    onChange={handleSelectCompany}
+                    className='w-full mt-1 block px-1 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none'>
+                    <option value="">Select Company</option>
+                    {
+                      Company?.data?.data?.all_companies?.map((company, index) => {
+                        return (
+                          <option
+                            key={index} value={company.company_name}>{company.company_name}</option>
+                        )
+                      })
                     }
-                    name='company_name'
-                  />
+                  </select>
                 </div>
                 <div className="firstname flex flex-col space-y-2 w-full ">
                   <input type="text"
@@ -167,7 +172,7 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
                     value={values.model_name}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className="rounded-md py-2 px-3 outline-non border border-slate-300 focus:outline-blue-500"
+                    className="w-full mt-1 block px-3 py-2 bg-white border  border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 outline-none"
                     placeholder="Enter Model Name" />
                   {errors.model_name && touched.model_name
                     ?
@@ -178,25 +183,25 @@ function ProductFormModal({ showModal, refetchPhones, handleShowModal, ModelDeta
               </div>
               <div className="mt-5 text-right">
                 {
-                  
-                    <button
-                      type="button"
-                      onClick={handleSubmit}
-                      disabled={addPhone.isLoading || updatePhone.isLoading}
-                      className={`${addPhone.isLoading || updatePhone.isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
-                    >
-                      {
-                        addPhone.isLoading || updatePhone.isLoading 
-                        ? 
-                          'Loading...' 
-                        : 
-                          is_Edit
+
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={addPhone.isLoading || updatePhone.isLoading}
+                    className={`${addPhone.isLoading || updatePhone.isLoading ? 'opacity-60' : ''} w-28 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                  >
+                    {
+                      addPhone.isLoading || updatePhone.isLoading
+                        ?
+                        'Loading...'
+                        :
+                        is_Edit
                           ?
-                            'Update'
+                          'Update'
                           :
-                            'Submit'
-                      }
-                    </button>
+                          'Submit'
+                    }
+                  </button>
                 }
               </div>
             </form>
