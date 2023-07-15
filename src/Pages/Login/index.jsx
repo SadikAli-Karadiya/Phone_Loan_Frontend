@@ -47,33 +47,31 @@ function Login() {
     return (
         <>
             <section className="h-full w-full flex justify-center items-center ">
-                <div className="flex flex-col w-full h-screen overflow-hidden">
-                    <div className='flex items-center justify-between px-4 lg:px-14 xl:px-60 py-3'>
-                        <img
-                            src="/images/logo.png"
-                            alt=""
-                            className=" w-28 lg:w-36"
-                            id="logo"
-                        />
-                        <div className='space-x-5 flex flex-col sm:flex-row justify-end items-center'>
-                            <span className='font-semibold text-slate-600 text-[15px] sm:text-sm hidden sm:block'>Don't have an account?</span>
-                            <button
-                                onClick={handleClick}
-                                className='bg-[#0F0673] text-white text-xs lg:text-sm rounded-full font-semibold px-5 py-2'>Sign Up</button>
-                        </div>
+                <div className="flex w-full h-screen overflow-hidden">
+                    <div className="xl:flex flex-1 justify-center items-center hidden ">
+                        <img src="/images/login.jpg" alt="" />
                     </div>
-                    <div className="flex flex-1 flex-col justify-center items-center">
-                        <section className=" px-14 py-14 flex justify-center items-center sm:shadow-xl rounded-xl sm:shadow-blue-100">
-                            <div className="login w-72">
+                    <div className="flex flex-1 flex-col justify-start mt-5">
+                        <div className="flex  justify-end xl:justify-end items-end px-3 sm:pr-10">
+                            <img
+                                src="/images/logo.png"
+                                alt=""
+                                className=" w-28 lg:w-36"
+                                id="logo"
+                            />
+                        </div>
+                        <section className="py-20 px-14 mt-16 xl::ml-20 flex justify-center items-center xl::w-2/3">
+                            <div className="login ">
                                 <div className="mb-10">
-                                    <h2 className="text-[24px] text-slate-500 font-bold text-left tracking-wider">
-                                        Login
+                                    <h2 className="text-[24px] text-slate-600 font-bold text-center tracking-wider">
+                                        Let's get you started
                                     </h2>
                                 </div>
                                 <form
                                     action=""
                                     onSubmit={handleSubmit}
-                                    className="flex flex-col justify-center items-center w-full ">
+                                    className="flex flex-col justify-center items-center "
+                                >
                                     <div className='flex flex-col space-y-6 w-full'>
                                         <div className="flex flex-col">
                                             <label htmlFor="" className='text-slate-600 text-[15px]'>Username</label>
@@ -113,20 +111,27 @@ function Login() {
                                     <div className="mt-6">
                                         <button
                                             type="submit"
-                                            onSubmit={handleSubmit}
-                                            className="border-2 bg-[#0F0673] w-64 py-2 rounded-md ">
-                                            <span className="text-white font-semibold">
-                                                Submit
+                                            className=" bg-[#0F0673] w-64 py-2 rounded-md "
+                                        >
+                                            <span className="text-white text-[15px] uppercase font-semibold">
+                                                Log In
                                             </span>
                                         </button>
                                     </div>
                                 </form>
-                                <div className="mt-8 flex justify-center space-x-1">
-                                    <span className='text-sm text-slate-700'>Don't have an account? </span>
+                                {/* <div className="mt-5 flex justify-center">
+                                    <span className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                                        Forgot Password?
+                                    </span>
+                                </div> */}
+                                <div className="mt-5 flex justify-center">
+                                    <span className="text-sm text-gray-500 cursor-pointer mr-1">
+                                        Already have an account?
+                                    </span>
                                     <span
                                         onClick={handleClick}
-                                        className="text-sm font-semibold text-[#0F0673] cursor-pointer ">
-                                        Sign Up
+                                        className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
+                                        Login
                                     </span>
                                 </div>
                             </div>
@@ -134,7 +139,6 @@ function Login() {
                     </div>
                 </div>
             </section>
-
         </>
     )
 }
