@@ -80,14 +80,14 @@ function Dashboard() {
   return (
     <div className='px-5 py-5 xl:px-10 '>
       <div className='grid grid-cols-4 my-10 gap-5 '>
-        <div className='bg-[#f9b115] flex justify-between items-start py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#5d88ff24] flex justify-between items-start py-5 px-3 rounded-md shadow-md '>
           <div className='flex flex-col space-y-4'>
-            <p className="text-white text-lg font-semibold ">Total Customer</p>
+            <p className="text-[#5d87ff] text-lg font-semibold ">Total Customer</p>
             <div className='flex items-center space-x-5'>
-              <div className='bg-white text-[#f9b115] px-2 py-2 text-3xl rounded-md'>
+              <div className='bg-[#5d87ff] text-white px-2 py-2 text-3xl rounded-md'>
                 <FaUsers />
               </div>
-              <h1 className="text-white font-roboto font-bold text-3xl">
+              <h1 className="text-[#5d87ff] font-roboto font-bold text-3xl">
                 {
                   Pending_Customer
                 }
@@ -95,56 +95,56 @@ function Dashboard() {
             </div>
           </div>
           <div className='flex justify-end items-end'>
-            <BiDotsVerticalRounded className='text-white' />
+            <BiDotsVerticalRounded className='text-[#5d87ff]' />
           </div>
         </div>
-        <div className='bg-[#321fdb] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#49bfff2c] flex justify-between items-start  py-5 px-3 rounded-md shadow-sm'>
           <div className='flex flex-col space-y-4 '>
-            <p className="text-white text-lg font-semibold ">Total Model</p>
+            <p className="text-[#49beff] text-lg font-semibold ">Total Model</p>
             <div className='flex items-center space-x-5'>
-              <div className='bg-white text-[#321fdb] px-2 py-2 text-3xl rounded-md'>
+              <div className='bg-[#49beff] text-white px-2 py-2 text-3xl rounded-md'>
                 <GiSmartphone />
               </div>
-              <h1 className="text-white font-roboto font-bold text-3xl">
+              <h1 className="text-[#49beff] font-roboto font-bold text-3xl">
                 {Today_Model}
               </h1>
             </div>
           </div>
           <div className='flex justify-end items-end'>
-            <BiDotsVerticalRounded className='text-white' />
+            <BiDotsVerticalRounded className='text-[#49beff]' />
           </div>
         </div>
-        <div className='bg-[#3399ff] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#fa8a6b30] flex justify-between items-start  py-5 px-3 rounded-md shadow-sm'>
           <div className='flex flex-col space-y-4 '>
-            <p className="text-white text-lg font-semibold ">Total Pending Payment</p>
+            <p className="text-[#fa896b] text-lg font-semibold ">Total Pending Payment</p>
             <div className='flex items-center space-x-5'>
-              <div className='bg-white text-[#3399ff] px-2 py-2 text-3xl rounded-md'>
+              <div className='bg-[#fa896b] text-white px-2 py-2 text-3xl rounded-md'>
                 <BiRupee />
               </div>
-              <h1 className="text-white font-roboto font-bold text-3xl">
+              <h1 className="text-[#fa896b] font-roboto font-bold text-3xl">
                 {PendingEMI?.data?.data?.totalPendingPayment || 0}
               </h1>
             </div>
           </div>
           <div className='flex justify-end items-end'>
-            <BiDotsVerticalRounded className='text-white' />
+            <BiDotsVerticalRounded className='text-[#fa896b]' />
           </div>
         </div>
 
-        <div className='bg-[#de4141] flex justify-between items-start  py-5 px-3 rounded-md drop-shadow-lg '>
+        <div className='bg-[#13deb930] flex justify-between items-start  py-5 px-3 rounded-md shadow-sm '>
           <div className='flex flex-col space-y-4 '>
-            <p className="text-white text-lg font-semibold ">Today's Collection</p>
+            <p className="text-[#13deb9] text-lg font-semibold ">Today's Collection</p>
             <div className='flex items-center space-x-5'>
-              <div className='bg-white text-[#de4141] px-2 py-2 text-3xl rounded-md'>
+              <div className='bg-[#13deb9] text-white px-2 py-2 text-3xl rounded-md'>
                 <GiTakeMyMoney />
               </div>
-              <h1 className="text-white font-roboto font-bold text-3xl">
+              <h1 className="text-[#13deb9] font-roboto font-bold text-3xl">
                 {Today_Collection}
               </h1>
             </div>
           </div>
           <div className='flex justify-end items-end'>
-            <BiDotsVerticalRounded className='text-white' />
+            <BiDotsVerticalRounded className='text-[#13deb9]' />
           </div>
         </div>
 
@@ -159,7 +159,7 @@ function Dashboard() {
               onChange={handleSearchCustomers}
               className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
             />
-            <div className='bg-[#3399ff]  px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+            <div className='bg-[#5d87ff]  px-3 py-[7px] group rounded-r-lg flex justify-center items-center
                          shadow-xl cursor-pointer text-white text-2xl '>
               <BiSearch className='search group-hover:scale-125 duration-300' />
             </div>
@@ -181,12 +181,12 @@ function Dashboard() {
           </div>
         </div>
         <div className='mb-3 mt-4'>
-          <h3 className='text-lg text-[#0d0d48] font-medium'>Current Month EMI</h3>
+          <h3 className='text-lg font-medium'>Current Month EMI</h3>
         </div>
         <table
-          className="w-full text-sm text-center text-white bg-[#3399ff]"
+          className="w-full text-sm text-center text-white "
           id="table-to-xls">
-          <thead className="text-xs uppercase">
+          <thead className="text-black border-b h-12">
             <tr className=" text-sm">
               <th scope="col" className="pl-3 py-3">
                 Serial No
@@ -283,7 +283,7 @@ function Dashboard() {
                   :
                   <tr>
                     <td colSpan="9">
-                      <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-200'>
+                      <div className='flex justify-center items-center w-full rounded-b-lg py-[5px] text-red-900 space-x-4 bg-red-50'>
                         <FaUsers className='text-2xl' />
                         <h1 className='text-sm font-bold'>No customers with pending EMI</h1>
                       </div>

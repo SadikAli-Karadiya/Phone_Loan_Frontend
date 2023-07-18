@@ -34,8 +34,8 @@ function InstallmentList() {
     const purchase = useQuery(['purchase', pageNo], () => getAllPurchase({ pageNo: pageNo - 1, }))
 
     const bgColors = [
-        "#ffd6d6",
-        "#bfdbfe",
+        "#fa8a6b30",
+        "#5d88ff24",
         "#c1d1d8",
         "#ffedd5",
         "#f4d5ff",
@@ -315,7 +315,7 @@ function InstallmentList() {
                                 onChange={handleSearchCustomer}
                                 className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full '
                             />
-                            <div className='bg-[#3399ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
+                            <div className='bg-[#5d87ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
                 drop-shadow-lg cursor-pointer text-white text-2xl '>
                                 <BiSearch className='search group-hover:scale-125 duration-300' />
                             </div>
@@ -335,15 +335,15 @@ function InstallmentList() {
                         </div>
                     </div>
                     <table
-                        className="w-full text-sm text-center rounded-xl  text-white "
+                        className="w-full text-sm text-center rounded-xl text-white "
                         id="table-to-xls" >
-                        <thead className="text-xs uppercase bg-[#3399ff] ">
-                            <tr className=" text-sm ">
+                        <thead className="text-black border-b py-5 h-12">
+                            <tr className="">
                                 <th scope="col" className="pl-3 py-2">
                                     Sr no
                                 </th>
                                 <th scope="col" className="pl-3 py-2">
-                                    name
+                                    Name
                                 </th>
                                 <th scope="col" className="px-6 py-2">
                                     Mobile
@@ -379,11 +379,11 @@ function InstallmentList() {
                                 ? (
                                 selectedEmiCustomer?.map((item, index) => {
                                     return (
-                                            <tr key={index} className=" border-b">
-                                                <th className="py-5 px-6">
+                                            <tr key={index} className="border-b">
+                                                <th className="py-5 px-6 font-normal">
                                                     {index + 1}
                                                 </th>
-                                                <td className="px-6 py-5 ">
+                                                <td className="px-6 py-5 font-semibold font-roboto text-slate-700 ">
                                                     {item.customer.full_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">

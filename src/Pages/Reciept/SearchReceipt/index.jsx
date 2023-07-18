@@ -63,7 +63,7 @@ function SearchReciept() {
                 if (search == '') return;
                 receipt.refetch()
               }}
-              className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
+              className="bg-[#5d88ff] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
             >
               <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
             </button>
@@ -79,7 +79,7 @@ function SearchReciept() {
                 <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden pt-5 mt-10 mx-10">
                   <h1 className='font-bold text-lg pl-10'>Customer List</h1>
                   <table
-                    className="w-full text-sm text-center rounded-xl mt-5"
+                    className="w-full text-sm text-center rounded-xl"
                     id="table-to-xls">
                     <thead className="bg-gray-100">
                       <tr className="font-light">

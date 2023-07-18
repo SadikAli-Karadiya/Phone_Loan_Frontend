@@ -41,7 +41,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/">
-                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <RiDashboardFill className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Dashboard</h1>
                     </div>
@@ -51,7 +51,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/InstallmentList">
-                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3  rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500">
+                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3  rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white">
                       <FaWallet className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Installments</h1>
                     </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Product">
-                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaMobileAlt className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Phones</h1>
                     </div>
@@ -71,7 +71,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Company">
-                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaThList className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Companies</h1>
                     </div>
@@ -81,7 +81,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/EMI">
-                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaRupeeSign className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Pay EMI</h1>
                     </div>
@@ -91,7 +91,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Customer/add-edit">
-                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaUserPlus className="text-lg" />
                       <h1 className="text-sm hidden xl:block">New Customer</h1>
                     </div>
@@ -101,7 +101,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Receipt/Search">
-                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start  py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaReceipt className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Search Receipt</h1>
                     </div>
@@ -111,7 +111,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Search">
-                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaSearch className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Search Customer</h1>
                     </div>
@@ -121,7 +121,7 @@ const Sidebar = () => {
                   <NavLink
                     activeclassname="active"
                     to="/Report">
-                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-blue-200 hover:text-blue-500 ">
+                    <div className="flex justify-center items-center xl:justify-start py-2 xs:px-3 rounded-md space-x-2 font-roboto hover:bg-[#5d88ff] hover:text-white ">
                       <FaWpforms className="text-lg" />
                       <h1 className="text-sm hidden xl:block">Report</h1>
                     </div>

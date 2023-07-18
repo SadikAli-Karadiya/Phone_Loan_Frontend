@@ -60,7 +60,7 @@ function Search() {
                                 if (search == '') return;
                                 allCustomers.refetch()
                             }}
-                            className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
+                            className="bg-[#5d88ff] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
                         >
                             <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
                         </button>
@@ -79,7 +79,7 @@ function Search() {
                                     className="w-full text-sm text-center rounded-xl  text-white  mt-5"
                                     id="table-to-xls"
                                 >
-                                    <thead className="text-xs uppercase bg-[#0d0d48]">
+                                    <thead className="text-black border-b">
                                         <tr className="text-sm">
                                             <th scope="col" className="pl-3 py-4">
                                                 Sr No.
@@ -103,10 +103,10 @@ function Search() {
                                             return (
                                                 <tbody key={index} className="bg-white text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden">
                                                     <tr className=" border-b">
-                                                        <td className="px-6 py-5 font-bold">
+                                                        <td className="px-6 py-5 ">
                                                             {index + 1}
                                                         </td>
-                                                        <td className="px-6 py-5 capitalize">
+                                                        <td className="px-6 py-5 font-semibold">
                                                             {item?.full_name}
                                                         </td>
                                                         <td className="px-6 py-5">

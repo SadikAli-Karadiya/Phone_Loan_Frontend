@@ -9,24 +9,18 @@
   position: relative;
   display: block;
   margin: 0 2px;
-  border: 1px solid #cccccc;
   padding: 5px 13px;
   border-radius: 5px;
-  color: #0d0d48;
+  color: #5d87ff;
   text-decoration: none;
-}
-
-.page-item a.page-link:hover {
-  background-color: #cccccc;
 }
 
 .page-item.active .page-link {
   color: #ffffff;
-  background-color: #0d0d48;
+  background-color: #5d87ff;
 }
 
 .page-item.disabled .page-link {
-  color: #6c757d;
   pointer-events: none;
   cursor: auto;
 }

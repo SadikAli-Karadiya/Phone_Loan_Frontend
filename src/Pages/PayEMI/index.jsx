@@ -67,7 +67,7 @@ function PayEMI() {
     <>
       <div className=' sm:px-5 xl:px-10 pt-5 h-full'>
         <div className=' py-5 px-5'>
-          <h1 className='text-[#0d0d48] text-2xl font-bold'>Pay EMI</h1>
+          <h1 className='text-2xl font-bold'>Pay EMI</h1>
           <div className='flex justify-center items-center mt-10 '>
             <input
               type="search"
@@ -79,7 +79,7 @@ function PayEMI() {
             />
             <button
               onClick={handleSearch}
-              className="bg-[#0d0d48] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
+              className="bg-[#5d88ff] px-2 py-1 rounded-r-lg shadow-2xl transition duration-200 hover:text-gray-300"
             >
               <AiOutlineSearch className="text-3xl font-bold hover:scale-125  text-white transition duration-400" />
           </button>
@@ -95,10 +95,10 @@ function PayEMI() {
               <div className="bg-white shadow-md  xs:overflow-x-scroll xl:overflow-x-hidden mx-10 pt-5 mt-10">
                 <h1 className='font-bold text-lg pl-7'>Customer List</h1>
                 <table
-                  className="w-full text-sm text-center rounded-xl  text-white  mt-5"
+                  className="w-full text-sm text-center rounded-xl  text-white mt-5"
                   id="table-to-xls">
-                  <thead className="text-xs  bg-gray-100 text-[#0d0d48]">
-                    <tr className=" text-sm">
+                  <thead className="text-black border-b h-12 ">
+                    <tr className="">
                       <th scope="col" className="px-6 py-4">
                         Name
                       </th>
@@ -134,7 +134,7 @@ function PayEMI() {
                         return (
                           <tbody key={index + idx} className={`bg-red-100 text-black items-center  overflow-x-scroll xl:overflow-x-hidden 2xl:overflow-x-hidden`}>
                             <tr className=" border-b">
-                              <td className="px-6 py-5 capitalize space-x-2">
+                              <td className="px-6 py-5 font-semibold space-x-2">
                                 <span>{item.full_name}</span>
                               </td>
                               <td className="px-6 py-5">

@@ -81,12 +81,12 @@ function ProductList() {
     <>
       <div className=" xl:px-10 h-full">
         <div className='w-full justify-between items-center flex py-8 px-5'>
-          <h1 className='text-[#0d0d48] xs:text-xl xl:text-2xl font-bold'>All Models</h1>
+          <h1 className='xs:text-xl xl:text-2xl text-[#0d0d48] font-bold'>All Models</h1>
           <div className='flex items-center justify-end pb-5'>
             <Tippy content="Add New Model">
               <div
                 onClick={handleAddModel}
-                className=' bg-white border  text-[#0d0d48] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
+                className=' bg-white border text-[#5d88ff] rounded-full xs:h-7 xs:w-7 sm:h-11 sm:w-11 cursor-pointer duration-300 flex justify-center items-center hover:bg-[#0d0d48] hover:text-white'>
                 <BiFolderPlus className='xs:text-base sm:text-xl' />
               </div>
             </Tippy>
@@ -101,7 +101,7 @@ function ProductList() {
             placeholder='Search Receipt (BY : Company Name , Model Name)'
             className='drop-shadow-lg border px-4 py-[6px]  focus:outline-none rounded-l-lg w-2/3'
           />
-          <div className='bg-[#0d0d48] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
+          <div className='bg-[#5d87ff] px-3 py-[7px] group rounded-r-lg flex justify-center items-center
             shadow-xl cursor-pointer text-white text-2xl '>
             <BiSearch className='search group-hover:scale-125 duration-300' />
           </div>
@@ -136,8 +136,8 @@ function ProductList() {
             <table
               className="w-full text-sm text-center rounded-xl  text-white "
               id="table-to-xls">
-              <thead className="text-xs uppercase bg-[#0d0d48]">
-                <tr className="text-white text-sm ">
+              <thead className="text-sm  text-black border-b ">
+                <tr className="">
                   <th scope="col" className="pl-3 py-4">
                     Sr No
                   </th>
@@ -168,55 +168,55 @@ function ProductList() {
                     SelectedCompany?.length > 0 ? (
                       SelectedCompany?.map((item, index) => {
                         return (
-                            <tr key={index} className=" border-b">
-                              <td className="px-6 py-5 font-bold">
-                                {index + 1}
-                              </td>
-                              <td className="px-6 py-5 capitalize">
-                                {item.company.company_name}
-                              </td>
-                              <td className="px-6 py-5">
-                                {item.model_name}
-                              </td>
-                              <td className="px-6 py-5">
-                                {
-                                  item.specifications.length > 0
+                          <tr key={index} className=" border-b">
+                            <td className="px-6 py-5 ">
+                              {index + 1}
+                            </td>
+                            <td className="px-6 py-5  font-semibold">
+                              {item.company.company_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {item.model_name}
+                            </td>
+                            <td className="px-6 py-5">
+                              {
+                                item.specifications.length > 0
                                   ?
-                                    item.specifications.map((specs, i)=>{
-                                      return(
-                                        <span key={i}>
-                                          {`${specs.ram}/${specs.storage}`}
-                                          {
-                                            i < item.specifications.length - 1
+                                  item.specifications.map((specs, i) => {
+                                    return (
+                                      <span key={i}>
+                                        {`${specs.ram}/${specs.storage}`}
+                                        {
+                                          i < item.specifications.length - 1
                                             ?
-                                              ', '
+                                            ', '
                                             :
-                                              null
+                                            null
 
-                                          }
-                                        </span>
-                                      )
-                                    })
+                                        }
+                                      </span>
+                                    )
+                                  })
                                   :
-                                    '--'
-                                }
-                              </td>
-                              <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
-                                <div className='flex justify-center items-center space-x-3 ' >
-                                  <Tippy content="Show Specifiaction">
-                                    <div onClick={() =>
-                                      navigate(`/Product/product-details/${item.id}`)}>
-                                      <AiFillEye className='text-[18px] cursor-pointer' />
-                                    </div>
-                                  </Tippy>
-                                  <Tippy content="Update Model">
-                                    <div onClick={() => handleUpdatemodel(item.id)}>
-                                      <FiEdit className='text-[17px] cursor-pointer' />
-                                    </div>
-                                  </Tippy>
-                                </div>
-                              </td>
-                            </tr>
+                                  '--'
+                              }
+                            </td>
+                            <td className="px-6 py-5 font-semibold text-[15px] cursor-pointer">
+                              <div className='flex justify-center items-center space-x-3 ' >
+                                <Tippy content="Show Specifiaction">
+                                  <div onClick={() =>
+                                    navigate(`/Product/product-details/${item.id}`)}>
+                                    <AiFillEye className='text-[18px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                                <Tippy content="Update Model">
+                                  <div onClick={() => handleUpdatemodel(item.id)}>
+                                    <FiEdit className='text-[17px] cursor-pointer' />
+                                  </div>
+                                </Tippy>
+                              </div>
+                            </td>
+                          </tr>
                         )
                       })
                     ) : (
