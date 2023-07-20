@@ -108,7 +108,7 @@ function Login() {
                                                 null}
                                         </div>
                                     </div>
-                                    <div className="mt-6">
+                                    <div className="mt-10">
                                         <button
                                             type="submit"
                                             className=" bg-[#0F0673] w-64 py-2 rounded-md "
@@ -124,7 +124,7 @@ function Login() {
                                         Forgot Password?
                                     </span>
                                 </div> */}
-                                <div className="mt-5 flex justify-center">
+                                {/* <div className="mt-5 flex justify-center">
                                     <span className="text-sm text-gray-500 cursor-pointer mr-1">
                                         Already have an account?
                                     </span>
@@ -133,7 +133,7 @@ function Login() {
                                         className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
                                         Login
                                     </span>
-                                </div>
+                                </div> */}
                             </div>
                         </section>
                     </div>

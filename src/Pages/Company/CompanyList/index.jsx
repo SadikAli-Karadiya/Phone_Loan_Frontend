@@ -5,15 +5,17 @@ import { BiFolderPlus } from "react-icons/bi";
 import { IoMdInformationCircle } from "react-icons/io";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import CompanyFormModal from '../../../Pages/Company/CompanyDetails/CompanyAddEditModel';
+import CompanyFormModal from '../CompanyAddEdit/CompanyAddEditModel';
 import { DeleteCompany, getAllCompanies } from '../../../utils/apiCalls';
 import { useQuery } from 'react-query'
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 
 function CompanyList() {
 
+    const navigate = useNavigate();
     const [is_Edit, setIsEdit] = useState(false);
     const [CompanyDetails, setCompanyDetails] = useState();
     const [CompanyModal, setCompanyModal] = useState(false);
@@ -21,13 +23,22 @@ function CompanyList() {
     const [isHoverDelete, setIsHoverDelete] = useState(false);
     const companies = useQuery('companies', getAllCompanies)
 
-    const headingBgColor = [
+    const headingColor = [
         "#0072b8",
         "#16a34a",
         "#000000",
         "#eb0029",
         "#FF6600",
         "#ffc916",
+    ];
+
+    const headingBGColor = [
+        "#0072b82d",
+        "#16a34a2f",
+        "#0000002f",
+        "#eb002734",
+        "#ff660030",
+        "#ffc91634",
     ];
 
     const handleMouseEnterEdit = () => {
@@ -59,7 +70,6 @@ function CompanyList() {
         setCompanyModal(true);
         setIsEdit(false)
     }
-
 
     const handleDeleteCompany = async (id) => {
         Swal.fire({
@@ -99,31 +109,53 @@ function CompanyList() {
                             return (
                                 <div
                                     key={index}
-                                    className='bg-white drop-shadow-md px-5 py-5 rounded-lg w-60 h-30 group'>
+                                    onClick={() =>
+                                        navigate(`/Company/CompanyDetails/${item.id}`,
+                                            {
+                                                state: {
+                                                    company_name : item.company_name,
+                                                    id : item.id
+                                                }
+                                            })
+                                    }
+                                    className='bg-white drop-shadow-md cursor-pointer px-5 py-5 rounded-lg w-60 h-30 group' >
                                     <div className='flex items-center justify-between mb-5'>
                                         <div className='py-2 rounded-md '>
                                             <h1
                                                 style={{
                                                     color:
-                                                        headingBgColor[
-                                                        index % headingBgColor.length
+                                                        headingColor[
+                                                        index % headingColor.length
                                                         ],
                                                 }}
-                                                className='uppercase font-semibold  font-roboto text-2xl'>{item.company_name}</h1>
+                                                className='uppercase font-semibold font-roboto text-2xl'>{item.company_name}</h1>
                                         </div>
                                     </div>
                                     <div className='flex items-center justify-between'>
                                         <div
                                             style={{
                                                 background:
-                                                    headingBgColor[
-                                                    index % headingBgColor.length
+                                                    headingBGColor[
+                                                    index % headingBGColor.length
                                                     ],
                                             }}
                                             className='w-full mr-2 px-3 py-0.5 rounded-md flex items-center space-x-2 text-sm'>
                                             <h1
-                                                className='font-semibold text-white'>Total Models : </h1>
-                                            <span className='font-semibold text-white'>{item.phones.length}</span>
+                                                style={{
+                                                    color:
+                                                        headingColor[
+                                                        index % headingColor.length
+                                                        ],
+                                                }}
+                                                className='font-semibold text-[#ffc91634]'>Total Models : </h1>
+                                            <span
+                                                style={{
+                                                    color:
+                                                        headingColor[
+                                                        index % headingColor.length
+                                                        ],
+                                                }}
+                                                className='font-semibold text-white'>{item.phones.length}</span>
 
                                         </div>
                                         <div className=''>
@@ -134,8 +166,8 @@ function CompanyList() {
                                                             color: "#fff",
 
                                                             backgroundColor:
-                                                                headingBgColor[
-                                                                index % headingBgColor.length
+                                                                headingColor[
+                                                                index % headingColor.length
                                                                 ]
                                                         }}
                                                         onMouseEnter={handleMouseEnterEdit}
@@ -151,8 +183,8 @@ function CompanyList() {
                                                             color: "#fff",
 
                                                             backgroundColor:
-                                                                headingBgColor[
-                                                                index % headingBgColor.length
+                                                                headingColor[
+                                                                index % headingColor.length
                                                                 ]
                                                         }}
                                                         onMouseEnter={handleMouseEnterDelete}
@@ -164,7 +196,7 @@ function CompanyList() {
                                                 </Tippy>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             );
                         })
@@ -282,7 +314,7 @@ function CompanyList() {
                         </div>
                     </div> */}
                 </div>
-            </div>
+            </div >
             <CompanyFormModal
                 showModal={CompanyModal}
                 refetchCompanies={companies.refetch}

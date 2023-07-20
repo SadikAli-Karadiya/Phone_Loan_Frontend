@@ -157,12 +157,8 @@ function Dashboard() {
               placeholder='Search Customer'
               value={search}
               onChange={handleSearchCustomers}
-              className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full'
+              className='border px-4 py-[6px] focus:outline-none text-sm rounded-lg placeholder-black/70 w-2/3'
             />
-            <div className='bg-[#5d87ff]  px-3 py-[7px] group rounded-r-lg flex justify-center items-center
-                         shadow-xl cursor-pointer text-white text-2xl '>
-              <BiSearch className='search group-hover:scale-125 duration-300' />
-            </div>
           </div>
           <div className="right flex items-center space-x-3 pr-6">
             <div className='flex items-center space-x-3'>

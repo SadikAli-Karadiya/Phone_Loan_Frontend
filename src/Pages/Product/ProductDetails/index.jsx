@@ -1,7 +1,7 @@
 import React from 'react'
 import { BiSearch } from "react-icons/bi"
 import "../../../App.css"
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate , useParams } from "react-router-dom";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
@@ -92,8 +92,8 @@ function ProductDetails() {
                     <table
                         className="w-full text-sm text-center rounded-xl  text-white "
                         id="table-to-xls">
-                        <thead className="text-xs uppercase bg-[#0d0d48]">
-                            <tr className="text-white text-sm ">
+                        <thead className="text-sm text-black border-b">
+                            <tr className="">
                                 <th scope="col" className="pl-3 py-4">
                                     Sr No
                                 </th>

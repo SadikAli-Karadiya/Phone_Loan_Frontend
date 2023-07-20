@@ -313,16 +313,12 @@ function InstallmentList() {
                                 placeholder='Search Customer'
                                 value={search}
                                 onChange={handleSearchCustomer}
-                                className='drop-shadow-lg border px-4 py-[6px] focus:outline-none rounded-l-lg w-full '
+                                className='border px-4 py-[6px] focus:outline-none text-sm rounded-lg placeholder-black/70 w-2/3 '
                             />
-                            <div className='bg-[#5d87ff] px-3 py-[6px] group rounded-r-lg flex justify-center items-center
-                drop-shadow-lg cursor-pointer text-white text-2xl '>
-                                <BiSearch className='search group-hover:scale-125 duration-300' />
-                            </div>
                         </div>
                         <div
                             id="year-btn"
-                            className=" flex items-center border bg-white px-1 shadow-md xl:py-2 rounded-lg  space-x-1 outline-none xs:mt-8 sm:mt-0">
+                            className=" flex items-center border bg-white px-1 shadow-md xl:py-1 rounded-lg  space-x-1 outline-none xs:mt-8 sm:mt-0">
                             <select
                                 onChange={handlePendingPaidUpClick}
                                 name=""
@@ -383,7 +379,7 @@ function InstallmentList() {
                                                 <th className="py-5 px-6 font-normal">
                                                     {index + 1}
                                                 </th>
-                                                <td className="px-6 py-5 font-semibold font-roboto text-slate-700 ">
+                                                <td className="px-6 py-5 font-semibold  text-slate-700 ">
                                                     {item.customer.full_name}
                                                 </td>
                                                 <td className="px-6 py-5 capitalize">

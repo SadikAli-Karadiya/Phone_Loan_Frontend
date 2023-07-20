@@ -84,7 +84,7 @@ export const getAllInstallment = () => {
     'method': 'GET',
     'url': '/installment',
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -115,7 +115,7 @@ export const Admindetails = (id) => {
 }
 
 export const UpdateAdmin = (data) => {
-  console.log(data , "apicalls")
+  console.log(data, "apicalls")
   return instance({
     'url': `/admin/update`,
     'method': 'PUT',
@@ -131,7 +131,7 @@ export const AddCustomer = (data) => {
     'method': 'POST',
     'data': data,
     'headers': {
-      'content-type': "multipart/form-data" 
+      'content-type': "multipart/form-data"
     },
   })
 }
@@ -141,7 +141,7 @@ export const getAllCustomer = (pageNo, searchedValue) => {
     'url': `/customer/List/${pageNo}/${searchedValue}`,
     'method': 'GET',
     'headers': {
-      'content-type': "multipart/form-data" 
+      'content-type': "multipart/form-data"
     },
   })
 }
@@ -205,7 +205,7 @@ export const getAllCompanies = () => {
     'method': 'GET',
     'url': '/company',
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -248,7 +248,17 @@ export const getAllPhone = (pageNo) => {
     'method': 'GET',
     'url': `/phone/List/${pageNo.pageNo}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
+    },
+  })
+}
+
+export const getModelByCompany = (id) => {
+  return instance({
+    'method': 'GET',
+    'url': `/phone/getModelByCompany/${id}`,
+    'headers': {
+      'content-type': 'application/json'
     },
   })
 }
@@ -269,7 +279,7 @@ export const getAllPurchase = (pageNo) => {
     'method': 'GET',
     'url': `/purchase/List/${pageNo.pageNo}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -279,7 +289,7 @@ export const getPurchaseCustomerbyId = (id) => {
     'method': 'GET',
     'url': `/purchase/Customer_details/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -300,7 +310,7 @@ export const getEmiPurchasebyId = (id) => {
     'method': 'GET',
     'url': `/emi/Emi_details/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -310,7 +320,7 @@ export const getPendingEmi = (pageNo) => {
     'method': 'GET',
     'url': `/emi/pending/${pageNo}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -320,7 +330,7 @@ export const getEMICustomers = (searchedValue) => {
     'method': 'GET',
     'url': `/emi/search/${searchedValue.pageNo}/${searchedValue.search}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -330,7 +340,7 @@ export const getSingleEmi = (id) => {
     'method': 'GET',
     'url': `/emi/details/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -359,7 +369,7 @@ export const getReceiptbyReceiptId = (id) => {
     'method': 'GET',
     'url': `/transaction/ReceiptId/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -377,17 +387,17 @@ export const getReceiptbyPurchaseId = (id) => {
     'method': 'GET',
     'url': `/receipt/search/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
 
-export const deleteReceiptById = (id) =>{
+export const deleteReceiptById = (id) => {
   return instance({
     'method': 'DELETE',
     'url': `/receipt/delete/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -397,7 +407,7 @@ export const getReceiptbyEmiId = (id) => {
     'method': 'GET',
     'url': `/receipt/searchbyEmi/${id}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
@@ -407,7 +417,7 @@ export const onerecieptDetailsbyNumber = (search) => {
     'method': 'GET',
     'url': `/receipt/search/${search.pageNo}/${search.search}`,
     'headers': {
-      'content-type': 'application/json' 
+      'content-type': 'application/json'
     },
   })
 }
